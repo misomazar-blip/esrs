@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
+import { colors, buttonStyles, cardStyles, fonts, inputStyles, spacing, shadows, headingStyles, borderRadius } from "@/lib/styles";
 
 type Topic = { id: string; code: string; name?: string };
 type Question = {
@@ -13,17 +15,21 @@ type Question = {
   order_index: number | null;
 };
 type AnswerRow = { question_id: string; value_text: string | null };
+type Report = { id: string; report_year: number; status: string };
 
 export default function G1Page() {
   const supabase = createSupabaseBrowserClient();
   const searchParams = useSearchParams();
   const reportId = searchParams.get("reportId") ?? "";
 
+  const [email, setEmail] = useState<string | null>(null);
   const [topic, setTopic] = useState<Topic | null>(null);
+  const [report, setReport] = useState<Report | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [err, setErr] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const orderedQuestions = useMemo(() => {
     return [...questions].sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0));
@@ -77,7 +83,29 @@ export default function G1Page() {
   }
 
   useEffect(() => {
-    loadAll();
+    async function checkAuth() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user?.email) setEmail(user.email);
+    }
+    checkAuth();
+  }, []);
+
+  useEffect(() => {
+    async function loadReport() {
+      if (!reportId) return;
+      const { data, error } = await supabase
+        .from("report")
+        .select("id, company_id, report_year, status")
+        .eq("id", reportId)
+        .maybeSingle();
+      if (!error && data) setReport(data as Report);
+    }
+    loadReport();
+  }, [reportId]);
+
+  useEffect(() => {
+    setLoading(true);
+    loadAll().finally(() => setLoading(false));
   }, [reportId]);
 
   function setAnswer(qId: string, value: string) {
@@ -117,43 +145,226 @@ export default function G1Page() {
   }
 
   return (
-    <div style={{ display: "grid", gap: 12, maxWidth: 1000 }}>
-      <h2>G1 {topic?.name ? `— ${topic.name}` : ""}</h2>
+    <div style={{ minHeight: "100vh", backgroundColor: colors.bgPrimary }}>
+      {/* TOP NAVIGATION (shared look) */}
+      <div
+        style={{
+          borderBottom: `1px solid ${colors.borderGray}`,
+          boxShadow: shadows.sm,
+          backgroundColor: colors.white,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: `${spacing.md} ${spacing.xl}`,
+            maxWidth: "1200px",
+            margin: "0 auto",
+          }}
+        >
+          <Link
+            href="/"
+            style={{
+              fontSize: fonts.size.h3,
+              fontWeight: fonts.weight.bold,
+              margin: 0,
+              color: colors.primary,
+              textDecoration: "none",
+            }}
+          >
+            ESRS
+          </Link>
 
-      {!reportId && (
-        <div style={{ color: "crimson" }}>
-          Missing reportId. Open via <code>/topics/g1?reportId=...</code>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: spacing.lg,
+            }}
+          >
+            {/* USER INFO */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: spacing.sm,
+                padding: `${spacing.sm} ${spacing.md}`,
+                borderRadius: "6px",
+                backgroundColor: colors.bgSecondary,
+              }}
+            >
+              <span
+                style={{
+                  fontSize: fonts.size.sm,
+                  color: colors.textSecondary,
+                  fontWeight: fonts.weight.semibold,
+                }}
+              >
+                User
+              </span>
+              <div
+                style={{
+                  width: "32px",
+                  height: "32px",
+                  borderRadius: "50%",
+                  backgroundColor: colors.primary,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: colors.white,
+                  fontWeight: fonts.weight.bold,
+                  fontSize: fonts.size.sm,
+                }}
+              >
+                {email?.[0]?.toUpperCase()}
+              </div>
+              <span
+                style={{
+                  fontSize: fonts.size.sm,
+                  color: colors.textPrimary,
+                  fontWeight: fonts.weight.medium,
+                  maxWidth: "150px",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {email}
+              </span>
+            </div>
+
+            {/* SIGN OUT BUTTON */}
+            <button
+              onClick={async () => {
+                await supabase.auth.signOut();
+                window.location.href = "/";
+              }}
+              style={buttonStyles.danger}
+            >
+              Sign Out
+            </button>
+          </div>
         </div>
-      )}
-
-      <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-        <button onClick={saveAll} disabled={saving || !reportId}>
-          {saving ? "Saving..." : "Save"}
-        </button>
-        <button onClick={exportTxt} disabled={!reportId}>
-          Export
-        </button>
-        <button onClick={loadAll} disabled={!reportId}>
-          Reload
-        </button>
       </div>
 
-      {err && <div style={{ color: "crimson" }}>{err}</div>}
-
-      {orderedQuestions.map((q) => (
-        <div key={q.id} style={{ border: "1px solid #ddd", padding: 12, borderRadius: 8 }}>
-          <div style={{ fontWeight: 700 }}>
-            {q.code} — {q.question_text}
-          </div>
-          {q.help_text && <div style={{ opacity: 0.75, marginTop: 4 }}>{q.help_text}</div>}
-          <textarea
-            value={answers[q.id] ?? ""}
-            onChange={(e) => setAnswer(q.id, e.target.value)}
-            rows={4}
-            style={{ width: "100%", marginTop: 8 }}
-          />
+      {/* Main Content */}
+      <div
+        style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+          display: "flex",
+          flexDirection: "column",
+          gap: spacing.xl,
+          padding: `${spacing.xl} ${spacing.xl}`,
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <h1 style={{ fontSize: fonts.size.h2, fontWeight: fonts.weight.bold, margin: 0, color: colors.textPrimary }}>
+            G1 {topic?.name ? `— ${topic.name}` : ""}
+          </h1>
+          <Link href="/topics" style={{ ...buttonStyles.secondary, textDecoration: "none", display: "inline-flex", alignItems: "center" }}>
+            ← Back to Topics
+          </Link>
         </div>
-      ))}
+
+        {/* Error Display */}
+        {err && (
+          <div
+            style={{
+              backgroundColor: "#fee",
+              border: `1px solid ${colors.error}`,
+              color: colors.error,
+              padding: 16,
+              borderRadius: borderRadius.md,
+              marginBottom: 24,
+              fontSize: fonts.size.sm,
+            }}
+          >
+            {err}
+          </div>
+        )}
+
+        {/* Action Buttons */}
+        <div style={{ display: "flex", gap: 12, marginBottom: 32, flexWrap: "wrap" }}>
+          <button
+            onClick={saveAll}
+            disabled={saving || !reportId}
+            style={{
+              ...buttonStyles.primary,
+              opacity: saving || !reportId ? 0.5 : 1,
+              cursor: saving || !reportId ? "not-allowed" : "pointer",
+            }}
+          >
+            {saving ? "Saving..." : "Save"}
+          </button>
+          <button
+            onClick={exportTxt}
+            disabled={!reportId}
+            style={{
+              ...buttonStyles.secondary,
+              opacity: !reportId ? 0.5 : 1,
+              cursor: !reportId ? "not-allowed" : "pointer",
+            }}
+          >
+            Export
+          </button>
+          <button
+            onClick={loadAll}
+            disabled={!reportId}
+            style={{
+              ...buttonStyles.secondary,
+              opacity: !reportId ? 0.5 : 1,
+              cursor: !reportId ? "not-allowed" : "pointer",
+            }}
+          >
+            Reload
+          </button>
+        </div>
+
+        {/* Questions List */}
+        {loading ? (
+          <p style={{ color: colors.textSecondary }}>Loading questions...</p>
+        ) : orderedQuestions.length === 0 ? (
+          <p style={{ color: colors.textSecondary }}>No questions found for G1.</p>
+        ) : (
+          <div style={{ display: "grid", gap: 24 }}>
+            {orderedQuestions.map((q, idx) => (
+              <div key={q.id} style={cardStyles.base}>
+                <div style={{ marginBottom: 12 }}>
+                  <div style={{ ...headingStyles.h3, marginBottom: 8 }}>
+                    {idx + 1}. {q.code} — {q.question_text}
+                  </div>
+                  {q.help_text && (
+                    <p
+                      style={{
+                        color: colors.textSecondary,
+                        fontSize: fonts.size.sm,
+                        lineHeight: "1.5",
+                        margin: 0,
+                      }}
+                    >
+                      {q.help_text}
+                    </p>
+                  )}
+                </div>
+                <textarea
+                  value={answers[q.id] ?? ""}
+                  onChange={(e) => setAnswer(q.id, e.target.value)}
+                  rows={4}
+                  placeholder="Enter your answer here..."
+                  style={{
+                    ...inputStyles.base,
+                    fontFamily: "monospace",
+                    padding: 12,
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
