@@ -5,16 +5,11 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useParams } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, buttonStyles, cardStyles, fonts, inputStyles, spacing, shadows, headingStyles, borderRadius } from "@/lib/styles";
+import DynamicQuestionInput from "@/components/DynamicQuestionInput";
+import VersionSelector from "@/components/VersionSelector";
+import { VersionedQuestion, VersionedAnswer } from "@/types/esrs";
 
 type Topic = { id: string; code: string; name?: string };
-type Question = {
-  id: string;
-  code: string;
-  question_text: string;
-  help_text: string | null;
-  order_index: number | null;
-};
-type AnswerRow = { question_id: string; value_text: string | null };
 type Report = { id: string; report_year: number; status: string };
 
 export default function TopicPage() {
@@ -27,8 +22,8 @@ export default function TopicPage() {
   const [email, setEmail] = useState<string | null>(null);
   const [topic, setTopic] = useState<Topic | null>(null);
   const [report, setReport] = useState<Report | null>(null);
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [questions, setQuestions] = useState<VersionedQuestion[]>([]);
+  const [answers, setAnswers] = useState<Record<string, VersionedAnswer>>({});
   const [err, setErr] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -60,14 +55,25 @@ export default function TopicPage() {
     if (!topicRes.data) return setErr(`Topic ${topicCode} not found`);
     setTopic(topicRes.data as Topic);
 
+    // Get active ESRS version
+    const versionRes = await supabase
+      .from("esrs_version")
+      .select("id")
+      .eq("is_active", true)
+      .maybeSingle();
+
+    const activeVersionId = versionRes.data?.id;
+
+    // Load questions for this topic and active version
     const qRes = await supabase
       .from("disclosure_question")
-      .select("id, code, question_text, help_text, order_index")
+      .select("*")
       .eq("topic_id", topicRes.data.id)
+      .eq("version_id", activeVersionId)
       .order("order_index", { ascending: true });
 
     if (qRes.error) return setErr(qRes.error.message);
-    setQuestions((qRes.data as Question[]) ?? []);
+    setQuestions((qRes.data as VersionedQuestion[]) ?? []);
 
     const qIds = (qRes.data ?? []).map((q: any) => q.id);
     if (qIds.length === 0) {
@@ -75,17 +81,18 @@ export default function TopicPage() {
       return;
     }
 
+    // Load existing answers
     const aRes = await supabase
       .from("disclosure_answer")
-      .select("question_id, value_text")
+      .select("*")
       .eq("report_id", reportId)
       .in("question_id", qIds);
 
     if (aRes.error) return setErr(aRes.error.message);
 
-    const map: Record<string, string> = {};
-    (aRes.data as AnswerRow[] | null)?.forEach((a) => {
-      map[a.question_id] = a.value_text ?? "";
+    const map: Record<string, VersionedAnswer> = {};
+    (aRes.data as VersionedAnswer[] | null)?.forEach((a) => {
+      map[a.question_id] = a;
     });
     setAnswers(map);
   }
@@ -116,8 +123,16 @@ export default function TopicPage() {
     loadAll().finally(() => setLoading(false));
   }, [reportId, topicCode]);
 
-  function setAnswer(qId: string, value: string) {
-    setAnswers((prev) => ({ ...prev, [qId]: value }));
+  function updateAnswer(qId: string, updates: Partial<VersionedAnswer>) {
+    setAnswers((prev) => ({
+      ...prev,
+      [qId]: {
+        ...(prev[qId] || {}),
+        ...updates,
+        question_id: qId,
+        report_id: reportId,
+      } as VersionedAnswer,
+    }));
   }
 
   async function saveAll() {
@@ -126,10 +141,18 @@ export default function TopicPage() {
     setErr(null);
 
     try {
-      const rows = orderedQuestions.map((q) => ({
+      const rows = Object.values(answers).map((answer) => ({
         report_id: reportId,
-        question_id: q.id,
-        value_text: answers[q.id] ?? "",
+        question_id: answer.question_id,
+        // Save all value fields
+        value_text: answer.value_text || null,
+        value_numeric: answer.value_numeric ?? null,
+        value_boolean: answer.value_boolean ?? null,
+        value_date: answer.value_date || null,
+        value_json: answer.value_json || null,
+        answer_text: answer.answer_text || answer.value_text || null, // Backwards compatibility
+        unit: answer.unit || null,
+        notes: answer.notes || null,
       }));
 
       const { error } = await supabase
@@ -191,6 +214,9 @@ export default function TopicPage() {
               gap: spacing.lg,
             }}
           >
+            {/* VERSION SELECTOR */}
+            <VersionSelector />
+            
             {/* USER INFO */}
             <div
               style={{
@@ -413,33 +439,16 @@ export default function TopicPage() {
           <div style={{ display: "grid", gap: 24 }}>
             {orderedQuestions.map((q, idx) => (
               <div key={q.id} style={cardStyles.base}>
-                <div style={{ marginBottom: 12 }}>
-                  <div style={{ ...headingStyles.h3, marginBottom: 8 }}>
-                    {idx + 1}. {q.code} — {q.question_text}
+                <div style={{ marginBottom: 16 }}>
+                  <div style={{ ...headingStyles.h3, marginBottom: 4 }}>
+                    {idx + 1}. {q.code}
                   </div>
-                  {q.help_text && (
-                    <p
-                      style={{
-                        color: colors.textSecondary,
-                        fontSize: fonts.size.sm,
-                        lineHeight: "1.5",
-                        margin: 0,
-                      }}
-                    >
-                      {q.help_text}
-                    </p>
-                  )}
                 </div>
-                <textarea
-                  value={answers[q.id] ?? ""}
-                  onChange={(e) => setAnswer(q.id, e.target.value)}
-                  rows={4}
-                  placeholder="Enter your answer here..."
-                  style={{
-                    ...inputStyles.base,
-                    fontFamily: "monospace",
-                    padding: 12,
-                  }}
+                <DynamicQuestionInput
+                  question={q}
+                  value={answers[q.id]}
+                  onChange={(updates) => updateAnswer(q.id, updates)}
+                  disabled={saving}
                 />
               </div>
             ))}
