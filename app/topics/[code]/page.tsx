@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useParams } from "next/navigation";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, buttonStyles, cardStyles, fonts, inputStyles, spacing, shadows, headingStyles, borderRadius } from "@/lib/styles";
 
@@ -17,9 +17,11 @@ type Question = {
 type AnswerRow = { question_id: string; value_text: string | null };
 type Report = { id: string; report_year: number; status: string };
 
-export default function G1Page() {
+export default function TopicPage() {
   const supabase = createSupabaseBrowserClient();
+  const params = useParams();
   const searchParams = useSearchParams();
+  const topicCode = (params.code as string)?.toUpperCase() ?? "";
   const reportId = searchParams.get("reportId") ?? "";
 
   const [email, setEmail] = useState<string | null>(null);
@@ -30,6 +32,7 @@ export default function G1Page() {
   const [err, setErr] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const orderedQuestions = useMemo(() => {
     return [...questions].sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0));
@@ -38,18 +41,23 @@ export default function G1Page() {
   async function loadAll() {
     setErr(null);
     if (!reportId) {
-      setErr("Missing reportId in URL. Open via /topics/g1?reportId=...");
+      setErr(`Missing reportId in URL. Open via /topics/${topicCode.toLowerCase()}?reportId=...`);
+      return;
+    }
+
+    if (!topicCode) {
+      setErr("Invalid topic code");
       return;
     }
 
     const topicRes = await supabase
       .from("topic")
       .select("id, code, name")
-      .eq("code", "G1")
+      .eq("code", topicCode)
       .maybeSingle();
 
     if (topicRes.error) return setErr(topicRes.error.message);
-    if (!topicRes.data) return setErr("Topic G1 not found");
+    if (!topicRes.data) return setErr(`Topic ${topicCode} not found`);
     setTopic(topicRes.data as Topic);
 
     const qRes = await supabase
@@ -106,7 +114,7 @@ export default function G1Page() {
   useEffect(() => {
     setLoading(true);
     loadAll().finally(() => setLoading(false));
-  }, [reportId]);
+  }, [reportId, topicCode]);
 
   function setAnswer(qId: string, value: string) {
     setAnswers((prev) => ({ ...prev, [qId]: value }));
@@ -124,7 +132,6 @@ export default function G1Page() {
         value_text: answers[q.id] ?? "",
       }));
 
-      // upsert potrebuje unique(report_id, question_id) v DB (odporúčané)
       const { error } = await supabase
         .from("disclosure_answer")
         .upsert(rows, { onConflict: "report_id,question_id" });
@@ -141,12 +148,12 @@ export default function G1Page() {
 
   async function exportTxt() {
     if (!reportId) return;
-    window.location.href = `/api/export/g1?reportId=${reportId}`;
+    window.location.href = `/api/export/${topicCode.toLowerCase()}?reportId=${reportId}`;
   }
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: colors.bgPrimary }}>
-      {/* TOP NAVIGATION (shared look) */}
+      {/* TOP NAVIGATION */}
       <div
         style={{
           borderBottom: `1px solid ${colors.borderGray}`,
@@ -235,16 +242,90 @@ export default function G1Page() {
               </span>
             </div>
 
-            {/* SIGN OUT BUTTON */}
-            <button
-              onClick={async () => {
-                await supabase.auth.signOut();
-                window.location.href = "/";
-              }}
-              style={buttonStyles.danger}
-            >
-              Sign Out
-            </button>
+            {/* USER DROPDOWN */}
+            <div style={{ position: "relative" }}>
+              <div
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: spacing.md,
+                  cursor: "pointer",
+                  padding: spacing.sm,
+                  borderRadius: "8px",
+                  backgroundColor: dropdownOpen ? colors.bgSecondary : "transparent",
+                }}
+              >
+                <div
+                  style={{
+                    width: "32px",
+                    height: "32px",
+                    borderRadius: "50%",
+                    backgroundColor: colors.primary,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: colors.white,
+                    fontWeight: fonts.weight.bold,
+                    fontSize: fonts.size.sm,
+                  }}
+                >
+                  {email?.[0]?.toUpperCase()}
+                </div>
+                <span style={{ fontSize: fonts.size.sm, color: colors.textPrimary }}>
+                  {email}
+                </span>
+                <span style={{ fontSize: "10px", color: colors.textSecondary }}>▼</span>
+              </div>
+
+              {dropdownOpen && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "calc(100% + 8px)",
+                    right: 0,
+                    backgroundColor: colors.white,
+                    border: `1px solid ${colors.borderGray}`,
+                    borderRadius: "8px",
+                    boxShadow: shadows.md,
+                    minWidth: "180px",
+                    zIndex: 1000,
+                  }}
+                >
+                  <Link
+                    href="/profile"
+                    style={{
+                      display: "block",
+                      padding: `${spacing.sm} ${spacing.md}`,
+                      fontSize: fonts.size.sm,
+                      color: colors.textPrimary,
+                      textDecoration: "none",
+                    }}
+                  >
+                    Edit Profile
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      await supabase.auth.signOut();
+                      window.location.href = "/";
+                    }}
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      padding: `${spacing.sm} ${spacing.md}`,
+                      fontSize: fonts.size.sm,
+                      color: colors.error,
+                      textAlign: "left",
+                      border: "none",
+                      backgroundColor: "transparent",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -262,10 +343,10 @@ export default function G1Page() {
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h1 style={{ fontSize: fonts.size.h2, fontWeight: fonts.weight.bold, margin: 0, color: colors.textPrimary }}>
-            G1 {topic?.name ? `— ${topic.name}` : ""}
+            {topicCode} {topic?.name ? `— ${topic.name}` : ""}
           </h1>
-          <Link href="/topics" style={{ ...buttonStyles.secondary, textDecoration: "none", display: "inline-flex", alignItems: "center" }}>
-            ← Back to Topics
+          <Link href="/report" style={{ ...buttonStyles.secondary, textDecoration: "none", display: "inline-flex", alignItems: "center" }}>
+            ← Back to Report
           </Link>
         </div>
 
@@ -327,7 +408,7 @@ export default function G1Page() {
         {loading ? (
           <p style={{ color: colors.textSecondary }}>Loading questions...</p>
         ) : orderedQuestions.length === 0 ? (
-          <p style={{ color: colors.textSecondary }}>No questions found for G1.</p>
+          <p style={{ color: colors.textSecondary }}>No questions found for {topicCode}.</p>
         ) : (
           <div style={{ display: "grid", gap: 24 }}>
             {orderedQuestions.map((q, idx) => (

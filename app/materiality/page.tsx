@@ -254,16 +254,90 @@ export default function MaterialityPage() {
               </span>
             </div>
 
-            {/* SIGN OUT BUTTON */}
-            <button
-              onClick={async () => {
-                await supabase.auth.signOut();
-                window.location.href = "/";
-              }}
-              style={buttonStyles.danger}
-            >
-              Sign Out
-            </button>
+            {/* USER DROPDOWN */}
+            <div style={{ position: "relative" }}>
+              <div
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: spacing.md,
+                  cursor: "pointer",
+                  padding: spacing.sm,
+                  borderRadius: "8px",
+                  backgroundColor: dropdownOpen ? colors.bgSecondary : "transparent",
+                }}
+              >
+                <div
+                  style={{
+                    width: "32px",
+                    height: "32px",
+                    borderRadius: "50%",
+                    backgroundColor: colors.primary,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: colors.white,
+                    fontWeight: fonts.weight.bold,
+                    fontSize: fonts.size.sm,
+                  }}
+                >
+                  {email?.[0]?.toUpperCase()}
+                </div>
+                <span style={{ fontSize: fonts.size.sm, color: colors.textPrimary }}>
+                  {email}
+                </span>
+                <span style={{ fontSize: "10px", color: colors.textSecondary }}>▼</span>
+              </div>
+
+              {dropdownOpen && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "calc(100% + 8px)",
+                    right: 0,
+                    backgroundColor: colors.white,
+                    border: `1px solid ${colors.borderGray}`,
+                    borderRadius: "8px",
+                    boxShadow: shadows.md,
+                    minWidth: "180px",
+                    zIndex: 1000,
+                  }}
+                >
+                  <Link
+                    href="/profile"
+                    style={{
+                      display: "block",
+                      padding: `${spacing.sm} ${spacing.md}`,
+                      fontSize: fonts.size.sm,
+                      color: colors.textPrimary,
+                      textDecoration: "none",
+                    }}
+                  >
+                    Edit Profile
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      await supabase.auth.signOut();
+                      window.location.href = "/";
+                    }}
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      padding: `${spacing.sm} ${spacing.md}`,
+                      fontSize: fonts.size.sm,
+                      color: colors.error,
+                      textAlign: "left",
+                      border: "none",
+                      backgroundColor: "transparent",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

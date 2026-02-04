@@ -44,6 +44,7 @@ export default function ReportPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expandedTopicId, setExpandedTopicId] = useState<string | null>(null);
   const [rationaleText, setRationaleText] = useState<string>("");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -68,8 +69,12 @@ export default function ReportPage() {
     if (error) setErr(error.message);
     const list = (data as Company[]) ?? [];
     setCompanies(list);
-    const initialCompany = list.find((c) => c.id === companyId)?.id || list[0]?.id || "";
+    
+    const stored = typeof window !== "undefined" ? localStorage.getItem("selectedCompanyId") : null;
+    const initialCompany = (stored && list.find((c) => c.id === stored)?.id) || list[0]?.id || "";
     setCompanyId(initialCompany);
+    if (initialCompany && typeof window !== "undefined") localStorage.setItem("selectedCompanyId", initialCompany);
+    
     await loadReports(initialCompany, list);
     await loadTopics();
   }
@@ -88,12 +93,14 @@ export default function ReportPage() {
     const reportList = (data as Report[]) ?? [];
     setReports(reportList);
 
+    const storageKey = `selectedReportId:${activeCompanyId}`;
+    const storedReportId = typeof window !== "undefined" ? localStorage.getItem(storageKey) : null;
     const initialReport =
-      selectedReportId && reportList.find((r) => r.id === selectedReportId)
-        ? selectedReportId
-        : reportList.find((r) => r.company_id === activeCompanyId)?.id ?? reportList[0]?.id ?? "";
+      (storedReportId && reportList.find((r) => r.id === storedReportId)?.id) ??
+      reportList.find((r) => r.company_id === activeCompanyId)?.id ?? reportList[0]?.id ?? "";
 
     setSelectedReportId(initialReport);
+    if (initialReport && typeof window !== "undefined") localStorage.setItem(storageKey, initialReport);
     if (initialReport) await loadReportTopics(initialReport);
     setLoading(false);
   }
@@ -306,7 +313,10 @@ export default function ReportPage() {
                 onChange={(e) => {
                   const val = e.target.value;
                   setCompanyId(val);
-                  if (val) loadReports(val);
+                  if (val) {
+                    if (typeof window !== "undefined") localStorage.setItem("selectedCompanyId", val);
+                    loadReports(val);
+                  }
                 }}
                 style={{
                   padding: `${spacing.sm} ${spacing.md}`,
@@ -351,7 +361,12 @@ export default function ReportPage() {
                 onChange={(e) => {
                   const rid = e.target.value;
                   setSelectedReportId(rid);
-                  if (rid) loadReportTopics(rid);
+                  if (rid) {
+                    if (companyId && typeof window !== "undefined") {
+                      localStorage.setItem(`selectedReportId:${companyId}`, rid);
+                    }
+                    loadReportTopics(rid);
+                  }
                 }}
                 style={{
                   padding: `${spacing.sm} ${spacing.md}`,
@@ -372,66 +387,100 @@ export default function ReportPage() {
             </div>
 
             {/* USER INFO */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: spacing.sm,
-                padding: `${spacing.sm} ${spacing.md}`,
-                borderRadius: "6px",
-                backgroundColor: colors.bgSecondary,
-              }}
-            >
-              <span
-                style={{
-                  fontSize: fonts.size.sm,
-                  color: colors.textSecondary,
-                  fontWeight: fonts.weight.semibold,
-                }}
-              >
-                User
-              </span>
+            {/* USER DROPDOWN */}
+            <div style={{ position: "relative" }}>
               <div
+                onClick={() => setDropdownOpen(!dropdownOpen)}
                 style={{
-                  width: "32px",
-                  height: "32px",
-                  borderRadius: "50%",
-                  backgroundColor: colors.primary,
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
-                  color: colors.white,
-                  fontWeight: fonts.weight.bold,
-                  fontSize: fonts.size.sm,
+                  gap: spacing.md,
+                  cursor: "pointer",
+                  padding: spacing.sm,
+                  borderRadius: "8px",
+                  backgroundColor: dropdownOpen ? colors.bgSecondary : "transparent",
                 }}
               >
-                {email?.[0]?.toUpperCase()}
+                <div
+                  style={{
+                    width: "32px",
+                    height: "32px",
+                    borderRadius: "50%",
+                    backgroundColor: colors.primary,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: colors.white,
+                    fontWeight: fonts.weight.bold,
+                    fontSize: fonts.size.sm,
+                  }}
+                >
+                  {email?.[0]?.toUpperCase()}
+                </div>
+                <span
+                  style={{
+                    fontSize: fonts.size.sm,
+                    color: colors.textPrimary,
+                    fontWeight: fonts.weight.medium,
+                    maxWidth: "150px",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {email}
+                </span>
+                <span style={{ fontSize: "10px", color: colors.textSecondary }}>▼</span>
               </div>
-              <span
-                style={{
-                  fontSize: fonts.size.sm,
-                  color: colors.textPrimary,
-                  fontWeight: fonts.weight.medium,
-                  maxWidth: "150px",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {email}
-              </span>
-            </div>
 
-            {/* SIGN OUT BUTTON */}
-            <button
-              onClick={async () => {
-                await supabase.auth.signOut();
-                window.location.href = "/";
-              }}
-              style={buttonStyles.danger}
-            >
-              Sign Out
-            </button>
+              {dropdownOpen && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "calc(100% + 8px)",
+                    right: 0,
+                    backgroundColor: colors.white,
+                    border: `1px solid ${colors.borderGray}`,
+                    borderRadius: "8px",
+                    boxShadow: shadows.md,
+                    minWidth: "180px",
+                    zIndex: 1000,
+                  }}
+                >
+                  <Link
+                    href="/profile"
+                    style={{
+                      display: "block",
+                      padding: `${spacing.sm} ${spacing.md}`,
+                      fontSize: fonts.size.sm,
+                      color: colors.textPrimary,
+                      textDecoration: "none",
+                    }}
+                  >
+                    Edit Profile
+                  </Link>
+                  <button
+                    onClick={async () => {
+                      await supabase.auth.signOut();
+                      window.location.href = "/";
+                    }}
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      padding: `${spacing.sm} ${spacing.md}`,
+                      fontSize: fonts.size.sm,
+                      color: colors.error,
+                      textAlign: "left",
+                      border: "none",
+                      backgroundColor: "transparent",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

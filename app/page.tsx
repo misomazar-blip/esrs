@@ -5,9 +5,11 @@ import { useEffect, useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, buttonStyles, inputStyles, cardStyles, fonts, spacing, shadows, layouts } from "@/lib/styles";
 
-type Company = { id: string; name: string; country_code: string | null; industry_code: string | null };
+type Company = { id: string; name: string; country_code: string | null; industry_code: string | null; address: string | null; city: string | null; postal_code: string | null; identification_number: string | null };
 type Report = { id: string; reporting_year: number; status: string };
 type ReportTopic = { topic_id: string; is_material: boolean };
+type Topic = { id: string; code: string; name: string | null };
+type MaterialTopicProgress = { topicId: string; code: string; name: string | null; answered: number; total: number };
 
 export default function HomePage() {
   const supabase = createSupabaseBrowserClient();
@@ -23,7 +25,8 @@ export default function HomePage() {
   const [reports, setReports] = useState<Report[]>([]);
   const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
   const [materialTopics, setMaterialTopics] = useState(0);
-  const [g1Progress, setG1Progress] = useState({ answered: 0, total: 0 });
+  const [materialTopicsProgress, setMaterialTopicsProgress] = useState<MaterialTopicProgress[]>([]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -47,7 +50,7 @@ export default function HomePage() {
   async function loadCompanies(uid: string) {
     const { data } = await supabase
       .from("company")
-      .select("id, name, country_code, industry_code")
+      .select("id, name, country_code, industry_code, address, city, postal_code, identification_number")
       .eq("user_id", uid)
       .order("created_at", { ascending: false });
 
@@ -67,7 +70,7 @@ export default function HomePage() {
       setReports([]);
       setSelectedReportId(null);
       setMaterialTopics(0);
-      setG1Progress({ answered: 0, total: 0 });
+      setMaterialTopicsProgress([]);
     }
   }
 
@@ -79,7 +82,7 @@ export default function HomePage() {
     if (!selected) {
       const { data: oneCompany } = await supabase
         .from("company")
-        .select("id, name, country_code, industry_code")
+        .select("id, name, country_code, industry_code, address, city, postal_code, identification_number")
         .eq("id", companyId)
         .maybeSingle();
       selected = (oneCompany as Company) ?? null;
@@ -113,50 +116,71 @@ export default function HomePage() {
 
     if (!activeReport) {
       setMaterialTopics(0);
-      setG1Progress({ answered: 0, total: 0 });
+      setMaterialTopicsProgress([]);
       return;
     }
 
-    // Material topics count
+    // Get material topics with details
     const { data: reportTopics } = await supabase
       .from("report_topic")
       .select("topic_id, is_material")
-      .eq("report_id", activeReport.id);
-    const materialCount = (reportTopics ?? []).filter((rt) => rt.is_material).length;
-    setMaterialTopics(materialCount);
-
-    // G1 progress: fetch questions for G1, then answers for those question_ids
-    const { data: g1Topic } = await supabase
-      .from("topic")
-      .select("id")
-      .eq("code", "G1")
-      .maybeSingle();
-
-    if (!g1Topic) {
-      setG1Progress({ answered: 0, total: 0 });
-      return;
-    }
-
-    const { data: questions } = await supabase
-      .from("disclosure_question")
-      .select("id")
-      .eq("topic_id", g1Topic.id);
-
-    const questionIds = (questions ?? []).map((q: any) => q.id);
-    if (questionIds.length === 0) {
-      setG1Progress({ answered: 0, total: 0 });
-      return;
-    }
-
-    const { data: answers } = await supabase
-      .from("disclosure_answer")
-      .select("question_id")
       .eq("report_id", activeReport.id)
-      .in("question_id", questionIds);
+      .eq("is_material", true);
 
-    const answeredCount = (answers ?? []).length;
-    const totalCount = questionIds.length;
-    setG1Progress({ answered: answeredCount, total: totalCount });
+    const materialTopicIds = (reportTopics ?? []).map((rt) => rt.topic_id);
+    setMaterialTopics(materialTopicIds.length);
+
+    if (materialTopicIds.length === 0) {
+      setMaterialTopicsProgress([]);
+      return;
+    }
+
+    // Get topic details
+    const { data: topics } = await supabase
+      .from("topic")
+      .select("id, code, name")
+      .in("id", materialTopicIds);
+
+    const topicsList = (topics as Topic[]) ?? [];
+
+    // Calculate progress for each material topic
+    const progressPromises = topicsList.map(async (topic) => {
+      // Get questions for this topic
+      const { data: questions } = await supabase
+        .from("disclosure_question")
+        .select("id")
+        .eq("topic_id", topic.id);
+
+      const questionIds = (questions ?? []).map((q: any) => q.id);
+      
+      if (questionIds.length === 0) {
+        return {
+          topicId: topic.id,
+          code: topic.code,
+          name: topic.name,
+          answered: 0,
+          total: 0,
+        };
+      }
+
+      // Get answers for these questions
+      const { data: answers } = await supabase
+        .from("disclosure_answer")
+        .select("question_id")
+        .eq("report_id", activeReport.id)
+        .in("question_id", questionIds);
+
+      return {
+        topicId: topic.id,
+        code: topic.code,
+        name: topic.name,
+        answered: (answers ?? []).length,
+        total: questionIds.length,
+      };
+    });
+
+    const progress = await Promise.all(progressPromises);
+    setMaterialTopicsProgress(progress);
   }
 
   async function handleSignIn() {
@@ -251,175 +275,114 @@ export default function HomePage() {
                 gap: spacing.lg,
               }}
             >
-              {/* COMPANY SELECTOR */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: spacing.sm,
-                  padding: `${spacing.sm} ${spacing.md}`,
-                  borderRadius: "6px",
-                  backgroundColor: colors.bgSecondary,
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: fonts.size.sm,
-                    color: colors.textSecondary,
-                    fontWeight: fonts.weight.semibold,
-                  }}
-                >
-                  Company
-                </span>
-                <select
-                  value={selectedCompanyId ?? ""}
-                  onChange={(e) => {
-                    const val = e.target.value || null;
-                    if (val === "__new__") {
-                      window.location.href = "/company";
-                      return;
-                    }
-                    setSelectedCompanyId(val);
-                    if (val) {
-                      if (typeof window !== "undefined") localStorage.setItem("selectedCompanyId", val);
-                      loadDashboardData(val);
-                    }
-                  }}
-                  style={{
-                    padding: `${spacing.sm} ${spacing.md}`,
-                    border: `1px solid ${colors.borderGray}`,
-                    borderRadius: "6px",
-                    fontSize: fonts.size.body,
-                    backgroundColor: colors.white,
-                    minWidth: "200px",
-                  }}
-                >
-                  {companies.length === 0 && <option value="">No company</option>}
-                  {companies.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                  <option value="__new__">+ New company…</option>
-                </select>
-              </div>
-
-              {/* REPORT YEAR SELECTOR */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: spacing.sm,
-                  padding: `${spacing.sm} ${spacing.md}`,
-                  borderRadius: "6px",
-                  backgroundColor: colors.bgSecondary,
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: fonts.size.sm,
-                    color: colors.textSecondary,
-                    fontWeight: fonts.weight.semibold,
-                  }}
-                >
-                  Report year
-                </span>
-                <select
-                  value={selectedReportId ?? ""}
-                  onChange={(e) => {
-                    const val = e.target.value || null;
-                    if (val === "__new_report__") {
-                      const target = selectedCompanyId
-                        ? `/report?companyId=${selectedCompanyId}`
-                        : "/report";
-                      window.location.href = target;
-                      return;
-                    }
-                    setSelectedReportId(val);
-                    if (selectedCompanyId && val && typeof window !== "undefined") {
-                      localStorage.setItem(`selectedReportId:${selectedCompanyId}`, val);
-                    }
-                    const nextReport = reports.find((r) => r.id === val) ?? null;
-                    loadReportDetails(nextReport);
-                  }}
-                  style={{
-                    padding: `${spacing.sm} ${spacing.md}`,
-                    border: `1px solid ${colors.borderGray}`,
-                    borderRadius: "6px",
-                    fontSize: fonts.size.body,
-                    backgroundColor: colors.white,
-                    minWidth: "160px",
-                  }}
-                >
-                  {reports.length === 0 && (
-                    <option value="" disabled>
-                      No reports yet
-                    </option>
-                  )}
-                  {reports.map((r) => (
-                    <option key={r.id} value={r.id}>
-                      {r.reporting_year} ({r.status})
-                    </option>
-                  ))}
-                  <option value="__new_report__">+ New year…</option>
-                </select>
-              </div>
-
-              {/* USER INFO */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: spacing.sm,
-                  padding: `${spacing.sm} ${spacing.md}`,
-                  borderRadius: "6px",
-                  backgroundColor: colors.bgSecondary,
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: fonts.size.sm,
-                    color: colors.textSecondary,
-                    fontWeight: fonts.weight.semibold,
-                  }}
-                >
-                  User
-                </span>
+              {/* Selectors moved to respective cards below */}
+              
+              {/* USER DROPDOWN */}
+              <div style={{ position: "relative" }}>
                 <div
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
                   style={{
-                    width: "32px",
-                    height: "32px",
-                    borderRadius: "50%",
-                    backgroundColor: colors.primary,
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "center",
-                    color: colors.white,
-                    fontWeight: fonts.weight.bold,
-                    fontSize: fonts.size.sm,
+                    gap: spacing.md,
+                    cursor: "pointer",
+                    padding: spacing.sm,
+                    borderRadius: "8px",
+                    transition: "background-color 0.2s",
+                    backgroundColor: dropdownOpen ? colors.bgSecondary : "transparent",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!dropdownOpen) e.currentTarget.style.backgroundColor = colors.bgSecondary;
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!dropdownOpen) e.currentTarget.style.backgroundColor = "transparent";
                   }}
                 >
-                  {email?.[0]?.toUpperCase()}
+                  <div
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      borderRadius: "50%",
+                      backgroundColor: colors.primary,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: colors.white,
+                      fontWeight: fonts.weight.bold,
+                      fontSize: fonts.size.sm,
+                    }}
+                  >
+                    {email?.[0]?.toUpperCase()}
+                  </div>
+                  <span
+                    style={{
+                      fontSize: fonts.size.sm,
+                      color: colors.textPrimary,
+                      fontWeight: fonts.weight.medium,
+                      maxWidth: "150px",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {email}
+                  </span>
+                  <span style={{ fontSize: "10px", color: colors.textSecondary }}>▼</span>
                 </div>
-                <span
-                  style={{
-                    fontSize: fonts.size.sm,
-                    color: colors.textPrimary,
-                    fontWeight: fonts.weight.medium,
-                    maxWidth: "150px",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {email}
-                </span>
-              </div>
 
-              {/* SIGN OUT BUTTON */}
-              <button onClick={signOut} style={buttonStyles.danger}>
-                Sign Out
-              </button>
+                {/* DROPDOWN MENU */}
+                {dropdownOpen && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "calc(100% + 8px)",
+                      right: 0,
+                      backgroundColor: colors.white,
+                      border: `1px solid ${colors.borderGray}`,
+                      borderRadius: "8px",
+                      boxShadow: shadows.md,
+                      minWidth: "180px",
+                      zIndex: 1000,
+                      overflow: "hidden",
+                    }}
+                  >
+                    <Link
+                      href="/profile"
+                      style={{
+                        display: "block",
+                        padding: `${spacing.sm} ${spacing.md}`,
+                        fontSize: fonts.size.sm,
+                        color: colors.textPrimary,
+                        textDecoration: "none",
+                        transition: "background-color 0.2s",
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = colors.bgSecondary)}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                    >
+                      Edit Profile
+                    </Link>
+                    <button
+                      onClick={signOut}
+                      style={{
+                        display: "block",
+                        width: "100%",
+                        padding: `${spacing.sm} ${spacing.md}`,
+                        fontSize: fonts.size.sm,
+                        color: colors.error,
+                        textAlign: "left",
+                        border: "none",
+                        backgroundColor: "transparent",
+                        cursor: "pointer",
+                        transition: "background-color 0.2s",
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = colors.bgSecondary)}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "transparent")}
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -457,24 +420,77 @@ export default function HomePage() {
               <h3 style={{ fontSize: fonts.size.lg, fontWeight: fonts.weight.bold, margin: `0 0 ${spacing.md} 0` }}>
                 📋 Company
               </h3>
+              
+              {/* Company Selector */}
+              <div style={{ marginBottom: spacing.md }}>
+                <label style={{ display: "block", marginBottom: spacing.xs, fontSize: fonts.size.sm, color: colors.textSecondary, fontWeight: fonts.weight.semibold }}>
+                  Select Company
+                </label>
+                <select
+                  value={selectedCompanyId ?? ""}
+                  onChange={(e) => {
+                    const val = e.target.value || null;
+                    setSelectedCompanyId(val);
+                    if (val) {
+                      if (typeof window !== "undefined") localStorage.setItem("selectedCompanyId", val);
+                      loadDashboardData(val);
+                    }
+                  }}
+                  style={{
+                    ...inputStyles.base,
+                    width: "100%",
+                  }}
+                >
+                  {companies.length === 0 && <option value="">No company</option>}
+                  {companies.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               {company ? (
                 <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
                   <div style={{ flex: 1 }}>
-                    <p style={{ margin: `0 0 ${spacing.sm} 0`, color: colors.textSecondary, fontSize: fonts.size.sm }}>
-                      Name
-                    </p>
-                    <p style={{ margin: 0, fontSize: fonts.size.body, fontWeight: fonts.weight.semibold, color: colors.textPrimary }}>
+                    <h4 style={{ 
+                      margin: `0 0 ${spacing.md} 0`, 
+                      fontSize: fonts.size.lg, 
+                      fontWeight: fonts.weight.bold, 
+                      color: colors.textPrimary 
+                    }}>
                       {company.name}
-                    </p>
-                    {company.country_code && (
-                      <p style={{ margin: `${spacing.sm} 0 0 0`, color: colors.textSecondary, fontSize: fonts.size.sm }}>
-                        Country: {company.country_code}
-                      </p>
-                    )}
+                    </h4>
+                    
+                    {/* Company ID */}
+                    <div style={{ marginBottom: spacing.sm }}>
+                      <span style={{ fontSize: fonts.size.sm, color: colors.textSecondary }}>ID: </span>
+                      <span style={{ fontSize: fonts.size.sm, color: colors.textPrimary, fontWeight: fonts.weight.medium }}>
+                        {company.identification_number || "—"}
+                      </span>
+                    </div>
+                    
+                    {/* Address */}
+                    <div style={{ marginBottom: spacing.sm }}>
+                      <span style={{ fontSize: fonts.size.sm, color: colors.textSecondary }}>📍 Address: </span>
+                      <span style={{ fontSize: fonts.size.sm, color: colors.textPrimary }}>
+                        {company.address || "—"}
+                        {company.city && `, ${company.city}`}
+                        {company.postal_code && ` ${company.postal_code}`}
+                      </span>
+                    </div>
+                    
+                    {/* Country */}
+                    <div style={{ marginBottom: spacing.sm }}>
+                      <span style={{ fontSize: fonts.size.sm, color: colors.textSecondary }}>Country: </span>
+                      <span style={{ fontSize: fonts.size.sm, color: colors.textPrimary }}>
+                        {company.country_code || "—"}
+                      </span>
+                    </div>
                   </div>
                   <Link href="/company">
                     <button style={{ ...buttonStyles.secondary, width: "100%", marginTop: spacing.md }}>
-                      View All
+                      Manage Companies
                     </button>
                   </Link>
                 </div>
@@ -488,6 +504,49 @@ export default function HomePage() {
               <h3 style={{ fontSize: fonts.size.lg, fontWeight: fonts.weight.bold, margin: `0 0 ${spacing.md} 0` }}>
                 📊 Report
               </h3>
+              
+              {/* Report Year Selector */}
+              <div style={{ marginBottom: spacing.md }}>
+                <label style={{ display: "block", marginBottom: spacing.xs, fontSize: fonts.size.sm, color: colors.textSecondary, fontWeight: fonts.weight.semibold }}>
+                  Select Report Year
+                </label>
+                <select
+                  value={selectedReportId ?? ""}
+                  onChange={(e) => {
+                    const val = e.target.value || null;
+                    if (val === "__new_report__") {
+                      const target = selectedCompanyId
+                        ? `/report?companyId=${selectedCompanyId}`
+                        : "/report";
+                      window.location.href = target;
+                      return;
+                    }
+                    setSelectedReportId(val);
+                    if (selectedCompanyId && val && typeof window !== "undefined") {
+                      localStorage.setItem(`selectedReportId:${selectedCompanyId}`, val);
+                    }
+                    const nextReport = reports.find((r) => r.id === val) ?? null;
+                    loadReportDetails(nextReport);
+                  }}
+                  style={{
+                    ...inputStyles.base,
+                    width: "100%",
+                  }}
+                >
+                  {reports.length === 0 && (
+                    <option value="" disabled>
+                      No reports yet
+                    </option>
+                  )}
+                  {reports.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.reporting_year} ({r.status})
+                    </option>
+                  ))}
+                  <option value="__new_report__">+ Create New Report</option>
+                </select>
+              </div>
+
               {report ? (
                 <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
                   <div style={{ flex: 1 }}>
@@ -514,55 +573,75 @@ export default function HomePage() {
                 <p style={{ color: colors.textSecondary }}>No report yet</p>
               )}
             </div>
-
-            {/* G1 PROGRESS CARD */}
-            <div style={{ ...cardStyles.base, display: "flex", flexDirection: "column" }}>
-              <h3 style={{ fontSize: fonts.size.lg, fontWeight: fonts.weight.bold, margin: `0 0 ${spacing.md} 0` }}>
-                📚 G1 Progress
-              </h3>
-              {report && g1Progress.total > 0 ? (
-                <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-                  <div style={{ flex: 1 }}>
-                    <p style={{ margin: `0 0 ${spacing.sm} 0`, color: colors.textSecondary, fontSize: fonts.size.sm }}>
-                      Questions Answered
-                    </p>
-                    <p style={{ margin: 0, fontSize: fonts.size.h3, fontWeight: fonts.weight.bold, color: colors.success }}>
-                      {g1Progress.answered}/{g1Progress.total}
-                    </p>
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "8px",
-                        backgroundColor: colors.borderGray,
-                        borderRadius: "4px",
-                        marginTop: spacing.md,
-                        overflow: "hidden",
-                      }}
-                    >
-                      <div
-                        style={{
-                          height: "100%",
-                          backgroundColor: colors.success,
-                          width: `${g1Progress.total > 0 ? (g1Progress.answered / g1Progress.total) * 100 : 0}%`,
-                          transition: "width 0.3s ease",
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <Link href="/topics">
-                    <button style={{ ...buttonStyles.secondary, width: "100%", marginTop: spacing.md }}>
-                      Complete
-                    </button>
-                  </Link>
-                </div>
-              ) : (
-                <p style={{ color: colors.textSecondary }}>No report yet</p>
-              )}
-            </div>
           </div>
 
+          {/* MATERIAL TOPICS SECTION */}
+          {materialTopicsProgress.length > 0 && (
+            <>
+              <h3 style={{ fontSize: fonts.size.lg, fontWeight: fonts.weight.bold, marginTop: spacing.xl, marginBottom: spacing.lg }}>
+                📋 Material Topics
+              </h3>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: spacing.lg }}>
+                {materialTopicsProgress.map((topicProgress) => (
+                  <Link
+                    key={topicProgress.topicId}
+                    href={`/topics/${topicProgress.code.toLowerCase()}?reportId=${selectedReportId}`}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <div
+                      style={{
+                        ...cardStyles.base,
+                        display: "flex",
+                        flexDirection: "column",
+                        cursor: "pointer",
+                        transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = "translateY(-2px)";
+                        e.currentTarget.style.boxShadow = shadows.md;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = "translateY(0)";
+                        e.currentTarget.style.boxShadow = shadows.sm;
+                      }}
+                    >
+                      <h4 style={{ fontSize: fonts.size.md, fontWeight: fonts.weight.bold, margin: `0 0 ${spacing.sm} 0`, color: colors.primary }}>
+                        <span style={{ fontFamily: "monospace" }}>{topicProgress.code}</span> {topicProgress.name}
+                      </h4>
+                      <p style={{ margin: `0 0 ${spacing.sm} 0`, color: colors.textSecondary, fontSize: fonts.size.sm }}>
+                        Questions Answered
+                      </p>
+                      <p style={{ margin: 0, fontSize: fonts.size.h3, fontWeight: fonts.weight.bold, color: topicProgress.total > 0 && topicProgress.answered === topicProgress.total ? colors.success : colors.textPrimary }}>
+                        {topicProgress.answered}/{topicProgress.total}
+                      </p>
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "8px",
+                          backgroundColor: colors.borderGray,
+                          borderRadius: "4px",
+                          marginTop: spacing.md,
+                          overflow: "hidden",
+                        }}
+                      >
+                        <div
+                          style={{
+                            height: "100%",
+                            backgroundColor: colors.success,
+                            width: `${topicProgress.total > 0 ? (topicProgress.answered / topicProgress.total) * 100 : 0}%`,
+                            transition: "width 0.3s ease",
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </>
+          )}
+
           {/* ACTION BUTTONS */}
-          <h3 style={{ fontSize: fonts.size.lg, fontWeight: fonts.weight.bold, marginBottom: spacing.lg }}>
+          <h3 style={{ fontSize: fonts.size.lg, fontWeight: fonts.weight.bold, marginTop: spacing.xl, marginBottom: spacing.lg }}>
             Quick Actions
           </h3>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: spacing.lg }}>
@@ -581,9 +660,9 @@ export default function HomePage() {
                 Assess Materiality
               </button>
             </Link>
-            <Link href="/topics">
+            <Link href="/report">
               <button style={{ ...buttonStyles.primary, width: "100%", padding: spacing.lg }}>
-                Fill Topics
+                View Report
               </button>
             </Link>
           </div>
