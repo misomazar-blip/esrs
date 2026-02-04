@@ -1,13 +1,14 @@
 'use client';
 
 import { VersionedQuestion, VersionedAnswer, DataType } from '@/types/esrs';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface DynamicQuestionInputProps {
   question: VersionedQuestion;
   value?: VersionedAnswer;
   onChange: (value: Partial<VersionedAnswer>) => void;
   disabled?: boolean;
+  showValidation?: boolean;
 }
 
 export default function DynamicQuestionInput({
@@ -15,8 +16,103 @@ export default function DynamicQuestionInput({
   value,
   onChange,
   disabled = false,
+  showValidation = false,
 }: DynamicQuestionInputProps) {
   const dataType = question.data_type || 'narrative';
+  const [validationError, setValidationError] = useState<string | null>(null);
+
+  // Validate current value
+  useEffect(() => {
+    if (!showValidation) {
+      setValidationError(null);
+      return;
+    }
+
+    const error = validateValue();
+    setValidationError(error);
+  }, [value, showValidation]);
+
+  const validateValue = (): string | null => {
+    const currentValue = getCurrentValue();
+
+    // Check if mandatory field is empty
+    if (question.is_mandatory) {
+      if (dataType === 'boolean') {
+        // Boolean is always valid (can be true or false)
+      } else if (dataType === 'narrative' || dataType === 'text') {
+        if (!currentValue || (currentValue as string).trim() === '') {
+          return 'Toto pole je povinné';
+        }
+      } else if (dataType === 'percentage' || dataType === 'percent' || 
+                 dataType === 'monetary' || dataType === 'numeric' || 
+                 dataType === 'integer') {
+        if (currentValue === null || currentValue === undefined || currentValue === '') {
+          return 'Toto pole je povinné';
+        }
+      } else if (dataType === 'date') {
+        if (!currentValue || currentValue === '') {
+          return 'Toto pole je povinné';
+        }
+      }
+    }
+
+    // Type-specific validation
+    if (currentValue !== null && currentValue !== undefined && currentValue !== '') {
+      switch (dataType) {
+        case 'percentage':
+        case 'percent':
+          const percentValue = parseFloat(currentValue as string);
+          if (isNaN(percentValue)) {
+            return 'Neplatné číslo';
+          }
+          if (percentValue < 0 || percentValue > 100) {
+            return 'Percento musí byť medzi 0 a 100';
+          }
+          break;
+
+        case 'monetary':
+          const monetaryValue = parseFloat(currentValue as string);
+          if (isNaN(monetaryValue)) {
+            return 'Neplatná suma';
+          }
+          if (monetaryValue < 0) {
+            return 'Suma nemôže byť záporná';
+          }
+          break;
+
+        case 'integer':
+          const intValue = parseFloat(currentValue as string);
+          if (isNaN(intValue)) {
+            return 'Neplatné číslo';
+          }
+          if (!Number.isInteger(intValue)) {
+            return 'Musí byť celé číslo';
+          }
+          break;
+
+        case 'numeric':
+          const numValue = parseFloat(currentValue as string);
+          if (isNaN(numValue)) {
+            return 'Neplatné číslo';
+          }
+          break;
+
+        case 'date':
+          const dateValue = currentValue as string;
+          if (dateValue && !isValidDate(dateValue)) {
+            return 'Neplatný dátum';
+          }
+          break;
+      }
+    }
+
+    return null;
+  };
+
+  const isValidDate = (dateString: string): boolean => {
+    const date = new Date(dateString);
+    return date instanceof Date && !isNaN(date.getTime());
+  };
 
   // Helper to update specific value field based on data type
   const handleChange = (newValue: any) => {
@@ -72,6 +168,9 @@ export default function DynamicQuestionInput({
 
   const currentValue = getCurrentValue();
 
+  const hasError = showValidation && validationError !== null;
+  const errorBorderClass = hasError ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 focus:ring-blue-500';
+
   // Render different input based on data type
   const renderInput = () => {
     switch (dataType) {
@@ -81,7 +180,7 @@ export default function DynamicQuestionInput({
             value={currentValue as string}
             onChange={(e) => handleChange(e.target.value)}
             disabled={disabled}
-            className="w-full min-h-[120px] px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500"
+            className={`w-full min-h-[120px] px-4 py-3 border rounded-lg focus:ring-2 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500 ${errorBorderClass}`}
             placeholder="Zadajte podrobný popis..."
           />
         );
@@ -93,7 +192,7 @@ export default function DynamicQuestionInput({
             value={currentValue as string}
             onChange={(e) => handleChange(e.target.value)}
             disabled={disabled}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500"
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500 ${errorBorderClass}`}
             placeholder="Zadajte text..."
           />
         );
@@ -110,7 +209,7 @@ export default function DynamicQuestionInput({
               min="0"
               max="100"
               step="0.01"
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500"
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500 ${errorBorderClass}`}
               placeholder="0.00"
             />
             <span className="text-gray-600 font-medium">%</span>
@@ -127,7 +226,7 @@ export default function DynamicQuestionInput({
               disabled={disabled}
               min="0"
               step="0.01"
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500"
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500 ${errorBorderClass}`}
               placeholder="0.00"
             />
             <span className="text-gray-600 font-medium">€</span>
@@ -144,7 +243,7 @@ export default function DynamicQuestionInput({
               onChange={(e) => handleChange(e.target.value)}
               disabled={disabled}
               step={dataType === 'integer' ? '1' : '0.01'}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500"
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500 ${errorBorderClass}`}
               placeholder="0"
             />
             {question.unit && (
@@ -160,7 +259,7 @@ export default function DynamicQuestionInput({
             value={currentValue as string}
             onChange={(e) => handleChange(e.target.value)}
             disabled={disabled}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500"
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500 ${errorBorderClass}`}
           />
         );
 
@@ -187,7 +286,7 @@ export default function DynamicQuestionInput({
             value={currentValue as string}
             onChange={(e) => handleChange(e.target.value)}
             disabled={disabled}
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500"
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500 ${errorBorderClass}`}
           />
         );
     }
@@ -206,10 +305,10 @@ export default function DynamicQuestionInput({
             )}
             {question.is_mandatory && (
               <span className="text-xs font-medium text-red-600 bg-red-50 px-2 py-0.5 rounded">
-                Povinné
+                ★ Povinné
               </span>
             )}
-            {question.is_voluntary && (
+            {!question.is_mandatory && (
               <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
                 Dobrovoľné
               </span>
@@ -231,6 +330,14 @@ export default function DynamicQuestionInput({
 
       {/* Input */}
       {renderInput()}
+
+      {/* Validation Error */}
+      {hasError && (
+        <div className="flex items-start gap-2 text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">
+          <span className="font-medium">⚠️</span>
+          <span>{validationError}</span>
+        </div>
+      )}
 
       {/* Notes field (optional) */}
       {value && (

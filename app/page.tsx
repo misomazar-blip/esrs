@@ -9,7 +9,7 @@ type Company = { id: string; name: string; country_code: string | null; industry
 type Report = { id: string; reporting_year: number; status: string };
 type ReportTopic = { topic_id: string; is_material: boolean };
 type Topic = { id: string; code: string; name: string | null };
-type MaterialTopicProgress = { topicId: string; code: string; name: string | null; answered: number; total: number };
+type MaterialTopicProgress = { topicId: string; code: string; name: string | null; answered: number; total: number; mandatoryAnswered: number; mandatoryTotal: number };
 
 export default function HomePage() {
   const supabase = createSupabaseBrowserClient();
@@ -26,6 +26,7 @@ export default function HomePage() {
   const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
   const [materialTopics, setMaterialTopics] = useState(0);
   const [materialTopicsProgress, setMaterialTopicsProgress] = useState<MaterialTopicProgress[]>([]);
+  const [activeVersion, setActiveVersion] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const [loginEmail, setLoginEmail] = useState("");
@@ -117,8 +118,19 @@ export default function HomePage() {
     if (!activeReport) {
       setMaterialTopics(0);
       setMaterialTopicsProgress([]);
+      setActiveVersion(null);
       return;
     }
+
+    // Get active ESRS version
+    const { data: versionData } = await supabase
+      .from("esrs_version")
+      .select("id, version_name")
+      .eq("is_active", true)
+      .maybeSingle();
+
+    const activeVersionId = versionData?.id;
+    setActiveVersion(versionData?.version_name ?? null);
 
     // Get material topics with details
     const { data: reportTopics } = await supabase
@@ -145,13 +157,16 @@ export default function HomePage() {
 
     // Calculate progress for each material topic
     const progressPromises = topicsList.map(async (topic) => {
-      // Get questions for this topic
+      // Get questions for this topic (filtered by active version)
       const { data: questions } = await supabase
         .from("disclosure_question")
-        .select("id")
-        .eq("topic_id", topic.id);
+        .select("id, is_mandatory")
+        .eq("topic_id", topic.id)
+        .eq("version_id", activeVersionId);
 
-      const questionIds = (questions ?? []).map((q: any) => q.id);
+      const allQuestions = questions ?? [];
+      const questionIds = allQuestions.map((q: any) => q.id);
+      const mandatoryQuestions = allQuestions.filter((q: any) => q.is_mandatory);
       
       if (questionIds.length === 0) {
         return {
@@ -160,22 +175,42 @@ export default function HomePage() {
           name: topic.name,
           answered: 0,
           total: 0,
+          mandatoryAnswered: 0,
+          mandatoryTotal: 0,
         };
       }
 
-      // Get answers for these questions
+      // Get answers for these questions (check if has any value)
       const { data: answers } = await supabase
         .from("disclosure_answer")
-        .select("question_id")
+        .select("question_id, value_text, value_numeric, value_boolean, value_date")
         .eq("report_id", activeReport.id)
         .in("question_id", questionIds);
+
+      // Count answered (has any value set)
+      const answeredCount = (answers ?? []).filter((a: any) => 
+        (a.value_text && a.value_text.trim()) || 
+        a.value_numeric !== null || 
+        a.value_boolean !== null || 
+        a.value_date
+      ).length;
+
+      const mandatoryAnswered = (answers ?? []).filter((a: any) => 
+        mandatoryQuestions.some((q: any) => q.id === a.question_id) &&
+        ((a.value_text && a.value_text.trim()) || 
+         a.value_numeric !== null || 
+         a.value_boolean !== null || 
+         a.value_date)
+      ).length;
 
       return {
         topicId: topic.id,
         code: topic.code,
         name: topic.name,
-        answered: (answers ?? []).length,
+        answered: answeredCount,
         total: questionIds.length,
+        mandatoryAnswered,
+        mandatoryTotal: mandatoryQuestions.length,
       };
     });
 
@@ -562,6 +597,11 @@ export default function HomePage() {
                     <p style={{ margin: `${spacing.sm} 0 0 0`, color: colors.textSecondary, fontSize: fonts.size.sm }}>
                       Material topics: <b style={{ color: colors.primary }}>{materialTopics}</b>
                     </p>
+                    {activeVersion && (
+                      <p style={{ margin: `${spacing.sm} 0 0 0`, color: colors.textSecondary, fontSize: fonts.size.sm }}>
+                        ESRS Version: <b style={{ color: colors.primary }}>{activeVersion}</b>
+                      </p>
+                    )}
                   </div>
                   <Link href="/report">
                     <button style={{ ...buttonStyles.secondary, width: "100%", marginTop: spacing.md }}>
@@ -579,63 +619,203 @@ export default function HomePage() {
           {materialTopicsProgress.length > 0 && (
             <>
               <h3 style={{ fontSize: fonts.size.lg, fontWeight: fonts.weight.bold, marginTop: spacing.xl, marginBottom: spacing.lg }}>
+                � Overall Progress
+              </h3>
+              
+              {/* Overall Progress Card */}
+              <div style={{ ...cardStyles.base, marginBottom: spacing.xl }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: spacing.lg }}>
+                  {(() => {
+                    const totalAnswered = materialTopicsProgress.reduce((sum, t) => sum + t.answered, 0);
+                    const totalQuestions = materialTopicsProgress.reduce((sum, t) => sum + t.total, 0);
+                    const totalMandatoryAnswered = materialTopicsProgress.reduce((sum, t) => sum + t.mandatoryAnswered, 0);
+                    const totalMandatory = materialTopicsProgress.reduce((sum, t) => sum + t.mandatoryTotal, 0);
+                    const overallPercent = totalQuestions > 0 ? Math.round((totalAnswered / totalQuestions) * 100) : 0;
+                    const mandatoryPercent = totalMandatory > 0 ? Math.round((totalMandatoryAnswered / totalMandatory) * 100) : 100;
+
+                    return (
+                      <>
+                        {/* All Questions */}
+                        <div>
+                          <p style={{ margin: `0 0 ${spacing.xs} 0`, fontSize: fonts.size.sm, color: colors.textSecondary }}>
+                            All Questions
+                          </p>
+                          <p style={{ margin: `0 0 ${spacing.sm} 0`, fontSize: fonts.size.h2, fontWeight: fonts.weight.bold, color: colors.textPrimary }}>
+                            {totalAnswered}/{totalQuestions}
+                          </p>
+                          <div style={{ 
+                            width: "100%", 
+                            height: "8px", 
+                            backgroundColor: colors.borderGray, 
+                            borderRadius: "4px", 
+                            overflow: "hidden" 
+                          }}>
+                            <div style={{ 
+                              height: "100%", 
+                              backgroundColor: colors.primary, 
+                              width: `${overallPercent}%`,
+                              transition: "width 0.3s ease" 
+                            }} />
+                          </div>
+                          <p style={{ margin: `${spacing.xs} 0 0 0`, fontSize: fonts.size.sm, color: colors.textSecondary }}>
+                            {overallPercent}% complete
+                          </p>
+                        </div>
+
+                        {/* Mandatory Questions */}
+                        <div>
+                          <p style={{ margin: `0 0 ${spacing.xs} 0`, fontSize: fonts.size.sm, color: colors.textSecondary }}>
+                            ★ Mandatory Questions
+                          </p>
+                          <p style={{ margin: `0 0 ${spacing.sm} 0`, fontSize: fonts.size.h2, fontWeight: fonts.weight.bold, color: mandatoryPercent === 100 ? colors.success : colors.error }}>
+                            {totalMandatoryAnswered}/{totalMandatory}
+                          </p>
+                          <div style={{ 
+                            width: "100%", 
+                            height: "8px", 
+                            backgroundColor: colors.borderGray, 
+                            borderRadius: "4px", 
+                            overflow: "hidden" 
+                          }}>
+                            <div style={{ 
+                              height: "100%", 
+                              backgroundColor: mandatoryPercent === 100 ? colors.success : colors.error, 
+                              width: `${mandatoryPercent}%`,
+                              transition: "width 0.3s ease" 
+                            }} />
+                          </div>
+                          <p style={{ margin: `${spacing.xs} 0 0 0`, fontSize: fonts.size.sm, color: colors.textSecondary }}>
+                            {mandatoryPercent}% complete
+                          </p>
+                        </div>
+
+                        {/* Material Topics */}
+                        <div>
+                          <p style={{ margin: `0 0 ${spacing.xs} 0`, fontSize: fonts.size.sm, color: colors.textSecondary }}>
+                            Material Topics
+                          </p>
+                          <p style={{ margin: `0 0 ${spacing.sm} 0`, fontSize: fonts.size.h2, fontWeight: fonts.weight.bold, color: colors.primary }}>
+                            {materialTopics}
+                          </p>
+                          <p style={{ margin: `${spacing.sm} 0 0 0`, fontSize: fonts.size.sm, color: colors.textSecondary }}>
+                            topics assessed
+                          </p>
+                        </div>
+                      </>
+                    );
+                  })()}
+                </div>
+              </div>
+
+              <h3 style={{ fontSize: fonts.size.lg, fontWeight: fonts.weight.bold, marginBottom: spacing.lg }}>
                 📋 Material Topics
               </h3>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: spacing.lg }}>
-                {materialTopicsProgress.map((topicProgress) => (
-                  <Link
-                    key={topicProgress.topicId}
-                    href={`/topics/${topicProgress.code.toLowerCase()}?reportId=${selectedReportId}`}
-                    style={{ textDecoration: "none" }}
-                  >
-                    <div
-                      style={{
-                        ...cardStyles.base,
-                        display: "flex",
-                        flexDirection: "column",
-                        cursor: "pointer",
-                        transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "translateY(-2px)";
-                        e.currentTarget.style.boxShadow = shadows.md;
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow = shadows.sm;
-                      }}
+                {materialTopicsProgress.map((topicProgress) => {
+                  const percent = topicProgress.total > 0 ? Math.round((topicProgress.answered / topicProgress.total) * 100) : 0;
+                  const mandatoryPercent = topicProgress.mandatoryTotal > 0 ? Math.round((topicProgress.mandatoryAnswered / topicProgress.mandatoryTotal) * 100) : 100;
+                  const isComplete = topicProgress.answered === topicProgress.total;
+                  const mandatoryComplete = topicProgress.mandatoryAnswered === topicProgress.mandatoryTotal;
+
+                  return (
+                    <Link
+                      key={topicProgress.topicId}
+                      href={`/topics/${topicProgress.code.toLowerCase()}?reportId=${selectedReportId}`}
+                      style={{ textDecoration: "none" }}
                     >
-                      <h4 style={{ fontSize: fonts.size.md, fontWeight: fonts.weight.bold, margin: `0 0 ${spacing.sm} 0`, color: colors.primary }}>
-                        <span style={{ fontFamily: "monospace" }}>{topicProgress.code}</span> {topicProgress.name}
-                      </h4>
-                      <p style={{ margin: `0 0 ${spacing.sm} 0`, color: colors.textSecondary, fontSize: fonts.size.sm }}>
-                        Questions Answered
-                      </p>
-                      <p style={{ margin: 0, fontSize: fonts.size.h3, fontWeight: fonts.weight.bold, color: topicProgress.total > 0 && topicProgress.answered === topicProgress.total ? colors.success : colors.textPrimary }}>
-                        {topicProgress.answered}/{topicProgress.total}
-                      </p>
                       <div
                         style={{
-                          width: "100%",
-                          height: "8px",
-                          backgroundColor: colors.borderGray,
-                          borderRadius: "4px",
-                          marginTop: spacing.md,
-                          overflow: "hidden",
+                          ...cardStyles.base,
+                          display: "flex",
+                          flexDirection: "column",
+                          cursor: "pointer",
+                          transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                          borderLeft: `4px solid ${isComplete ? colors.success : mandatoryComplete ? colors.primary : colors.error}`,
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.transform = "translateY(-2px)";
+                          e.currentTarget.style.boxShadow = shadows.md;
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform = "translateY(0)";
+                          e.currentTarget.style.boxShadow = shadows.sm;
                         }}
                       >
-                        <div
-                          style={{
-                            height: "100%",
-                            backgroundColor: colors.success,
-                            width: `${topicProgress.total > 0 ? (topicProgress.answered / topicProgress.total) * 100 : 0}%`,
-                            transition: "width 0.3s ease",
-                          }}
-                        />
+                        <h4 style={{ fontSize: fonts.size.md, fontWeight: fonts.weight.bold, margin: `0 0 ${spacing.sm} 0`, color: colors.primary }}>
+                          <span style={{ fontFamily: "monospace" }}>{topicProgress.code}</span> {topicProgress.name}
+                        </h4>
+                        
+                        {/* All Questions */}
+                        <div style={{ marginBottom: spacing.md }}>
+                          <p style={{ margin: `0 0 ${spacing.xs} 0`, color: colors.textSecondary, fontSize: fonts.size.sm }}>
+                            All Questions
+                          </p>
+                          <p style={{ margin: 0, fontSize: fonts.size.h3, fontWeight: fonts.weight.bold, color: isComplete ? colors.success : colors.textPrimary }}>
+                            {topicProgress.answered}/{topicProgress.total}
+                          </p>
+                          <div
+                            style={{
+                              width: "100%",
+                              height: "8px",
+                              backgroundColor: colors.borderGray,
+                              borderRadius: "4px",
+                              marginTop: spacing.sm,
+                              overflow: "hidden",
+                            }}
+                          >
+                            <div
+                              style={{
+                                height: "100%",
+                                backgroundColor: isComplete ? colors.success : colors.primary,
+                                width: `${percent}%`,
+                                transition: "width 0.3s ease",
+                              }}
+                            />
+                          </div>
+                          <p style={{ margin: `${spacing.xs} 0 0 0`, fontSize: fonts.size.xs, color: colors.textSecondary }}>
+                            {percent}%
+                          </p>
+                        </div>
+
+                        {/* Mandatory Questions */}
+                        {topicProgress.mandatoryTotal > 0 && (
+                          <div>
+                            <p style={{ margin: `0 0 ${spacing.xs} 0`, color: colors.textSecondary, fontSize: fonts.size.sm }}>
+                              ★ Mandatory
+                            </p>
+                            <p style={{ margin: 0, fontSize: fonts.size.body, fontWeight: fonts.weight.semibold, color: mandatoryComplete ? colors.success : colors.error }}>
+                              {topicProgress.mandatoryAnswered}/{topicProgress.mandatoryTotal}
+                            </p>
+                            <div
+                              style={{
+                                width: "100%",
+                                height: "6px",
+                                backgroundColor: colors.borderGray,
+                                borderRadius: "4px",
+                                marginTop: spacing.xs,
+                                overflow: "hidden",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  height: "100%",
+                                  backgroundColor: mandatoryComplete ? colors.success : colors.error,
+                                  width: `${mandatoryPercent}%`,
+                                  transition: "width 0.3s ease",
+                                }}
+                              />
+                            </div>
+                            {!mandatoryComplete && (
+                              <p style={{ margin: `${spacing.xs} 0 0 0`, fontSize: fonts.size.xs, color: colors.error, fontWeight: fonts.weight.semibold }}>
+                                ⚠️ Missing mandatory fields
+                              </p>
+                            )}
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  );
+                })}
               </div>
             </>
           )}

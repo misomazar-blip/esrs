@@ -4,6 +4,7 @@ import Link from "next/link";
 import React, { useEffect, useMemo, useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, buttonStyles, inputStyles, cardStyles, fonts, spacing, shadows } from "@/lib/styles";
+import { VersionedQuestion } from "@/types/esrs";
 
 type Company = { id: string; name: string };
 type Report = {
@@ -45,6 +46,9 @@ export default function ReportPage() {
   const [expandedTopicId, setExpandedTopicId] = useState<string | null>(null);
   const [rationaleText, setRationaleText] = useState<string>("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [allQuestions, setAllQuestions] = useState<VersionedQuestion[]>([]);
+  const [loadingQuestions, setLoadingQuestions] = useState(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -102,6 +106,10 @@ export default function ReportPage() {
     setSelectedReportId(initialReport);
     if (initialReport && typeof window !== "undefined") localStorage.setItem(storageKey, initialReport);
     if (initialReport) await loadReportTopics(initialReport);
+    
+    // Load all questions for search
+    await loadAllQuestions();
+    
     setLoading(false);
   }
 
@@ -109,6 +117,39 @@ export default function ReportPage() {
     const { data, error } = await supabase.from("topic").select("id, code, name").order("code");
     if (error) setErr(error.message);
     setTopics((data as Topic[]) ?? []);
+  }
+
+  async function loadAllQuestions() {
+    setLoadingQuestions(true);
+    
+    // Get active ESRS version
+    const versionRes = await supabase
+      .from("esrs_version")
+      .select("id")
+      .eq("is_active", true)
+      .maybeSingle();
+
+    const activeVersionId = versionRes.data?.id;
+    
+    if (!activeVersionId) {
+      setLoadingQuestions(false);
+      return;
+    }
+
+    // Load all questions for active version
+    const { data, error } = await supabase
+      .from("disclosure_question")
+      .select("*")
+      .eq("version_id", activeVersionId)
+      .order("order_index", { ascending: true });
+
+    if (error) {
+      setErr(error.message);
+    } else {
+      setAllQuestions((data as VersionedQuestion[]) ?? []);
+    }
+    
+    setLoadingQuestions(false);
   }
 
   async function loadReportTopics(rid: string) {
@@ -178,6 +219,39 @@ export default function ReportPage() {
     reportTopics.forEach((rt) => m.set(rt.topic_id, rt));
     return m;
   }, [reportTopics]);
+
+  const filteredTopics = useMemo(() => {
+    if (!searchTerm.trim()) return topics;
+    
+    const term = searchTerm.toLowerCase();
+    return topics.filter((t) => {
+      return (
+        t.code?.toLowerCase().includes(term) ||
+        t.name?.toLowerCase().includes(term)
+      );
+    });
+  }, [topics, searchTerm]);
+
+  const searchResults = useMemo(() => {
+    if (!searchTerm.trim()) return [];
+    
+    const term = searchTerm.toLowerCase();
+    const results = allQuestions.filter((q) => {
+      return (
+        q.question_text?.toLowerCase().includes(term) ||
+        q.code?.toLowerCase().includes(term) ||
+        q.datapoint_id?.toLowerCase().includes(term) ||
+        q.disclosure_requirement?.toLowerCase().includes(term) ||
+        q.esrs_paragraph?.toLowerCase().includes(term)
+      );
+    });
+    
+    // Add topic info to results
+    return results.map((q) => {
+      const topic = topics.find((t) => t.id === q.topic_id);
+      return { ...q, topic };
+    });
+  }, [allQuestions, topics, searchTerm]);
 
   async function setMaterialityStatus(topicId: string, isMaterial: boolean | null, rationale?: string) {
     if (!selectedReportId) return;
@@ -569,7 +643,9 @@ export default function ReportPage() {
         {/* Materiality */}
         <div style={{ ...cardStyles.base }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: spacing.md }}>
-            <h3 style={{ fontSize: fonts.size.lg, fontWeight: fonts.weight.bold, margin: 0 }}>Materiality</h3>
+            <h3 style={{ fontSize: fonts.size.lg, fontWeight: fonts.weight.bold, margin: 0 }}>
+              {searchTerm.trim() ? "Search Results" : "Materiality"}
+            </h3>
             <span style={{ fontSize: fonts.size.sm, color: colors.textSecondary }}>
               {selectedReportId ? `${reportTopics.length} marked` : "Select a report"}
             </span>
@@ -595,11 +671,151 @@ export default function ReportPage() {
             </select>
           </div>
 
-          {!selectedReportId ? (
+          {/* Search Box */}
+          <div style={{ marginBottom: spacing.md }}>
+            <div style={{ display: "flex", alignItems: "center", gap: spacing.md }}>
+              <label 
+                htmlFor="question-search"
+                style={{ 
+                  fontSize: fonts.size.md, 
+                  fontWeight: fonts.weight.semibold,
+                  color: colors.textPrimary,
+                  whiteSpace: "nowrap"
+                }}
+              >
+                🔍 Search:
+              </label>
+              <div style={{ flex: 1, position: "relative" }}>
+                <input
+                  id="question-search"
+                  type="text"
+                  placeholder="Search questions by text, code, datapoint ID, DR, or paragraph..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  disabled={loadingQuestions}
+                  style={{
+                    ...inputStyles.base,
+                    width: "100%",
+                    paddingRight: searchTerm ? "40px" : spacing.md,
+                    opacity: loadingQuestions ? 0.6 : 1,
+                  }}
+                />
+                {searchTerm && (
+                  <button
+                    onClick={() => setSearchTerm("")}
+                    style={{
+                      position: "absolute",
+                      right: "12px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      background: "none",
+                      border: "none",
+                      color: colors.textSecondary,
+                      cursor: "pointer",
+                      fontSize: fonts.size.lg,
+                      padding: "4px 8px",
+                    }}
+                    title="Clear search"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+              <div style={{ 
+                fontSize: fonts.size.sm, 
+                color: colors.textSecondary,
+                whiteSpace: "nowrap" 
+              }}>
+                {searchTerm.trim() 
+                  ? `${searchResults.length} results` 
+                  : `${allQuestions.length} questions`}
+              </div>
+            </div>
+          </div>
+
+          {/* Search Results View */}
+          {searchTerm.trim() && selectedReportId ? (
+            searchResults.length === 0 ? (
+              <div style={{ 
+                textAlign: "center", 
+                padding: spacing.xl, 
+                color: colors.textSecondary 
+              }}>
+                <p style={{ fontSize: fonts.size.lg, marginBottom: spacing.sm }}>
+                  No questions match "{searchTerm}"
+                </p>
+                <button
+                  onClick={() => setSearchTerm("")}
+                  style={{
+                    ...buttonStyles.secondary,
+                    marginTop: spacing.md,
+                  }}
+                >
+                  Clear search
+                </button>
+              </div>
+            ) : (
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse" }}>
+                  <thead>
+                    <tr>
+                      <th style={tableHeaderCell}>Topic</th>
+                      <th style={tableHeaderCell}>Code</th>
+                      <th style={{ ...tableHeaderCell, minWidth: "400px" }}>Question</th>
+                      <th style={tableHeaderCell}>DR</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {searchResults.map((q) => {
+                      const rt = rtMap.get(q.topic_id);
+                      const isMaterial = rt?.is_material === true;
+                      
+                      return (
+                        <tr key={q.id}>
+                          <td style={tableCell}>
+                            {isMaterial ? (
+                              <Link 
+                                href={`/topics/${q.topic?.code.toLowerCase()}?reportId=${selectedReportId}`}
+                                style={{ 
+                                  color: colors.primary, 
+                                  textDecoration: "none",
+                                  fontFamily: "monospace",
+                                  fontWeight: fonts.weight.semibold,
+                                }}
+                              >
+                                {q.topic?.code}
+                              </Link>
+                            ) : (
+                              <span style={{ fontFamily: "monospace", color: colors.textSecondary }}>
+                                {q.topic?.code}
+                              </span>
+                            )}
+                          </td>
+                          <td style={{ ...tableCell, fontFamily: "monospace", fontSize: fonts.size.sm }}>
+                            {q.code}
+                          </td>
+                          <td style={{ ...tableCell, fontSize: fonts.size.sm }}>
+                            {q.question_text}
+                          </td>
+                          <td style={{ ...tableCell, fontSize: fonts.size.sm, color: colors.textSecondary }}>
+                            {q.disclosure_requirement}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )
+          ) : 
+          
+          /* Materiality Assessment View */
+          !selectedReportId ? (
             <p style={{ color: colors.textSecondary, margin: 0 }}>Select a report to manage material topics.</p>
           ) : topics.length === 0 ? (
             <p style={{ color: colors.textSecondary, margin: 0 }}>No topics available.</p>
           ) : (
+            <>
             <div style={{ overflowX: "auto" }}>
               <table style={{ width: "100%", borderCollapse: "collapse" }}>
                 <thead>
@@ -785,6 +1001,7 @@ export default function ReportPage() {
                 </tbody>
               </table>
             </div>
+            </>
           )}
         </div>
       </div>

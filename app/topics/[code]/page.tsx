@@ -28,10 +28,27 @@ export default function TopicPage() {
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showValidation, setShowValidation] = useState(false);
 
   const orderedQuestions = useMemo(() => {
     return [...questions].sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0));
   }, [questions]);
+
+  const filteredQuestions = useMemo(() => {
+    if (!searchTerm.trim()) return orderedQuestions;
+    
+    const term = searchTerm.toLowerCase();
+    return orderedQuestions.filter((q) => {
+      return (
+        q.question_text?.toLowerCase().includes(term) ||
+        q.code?.toLowerCase().includes(term) ||
+        q.datapoint_id?.toLowerCase().includes(term) ||
+        q.disclosure_requirement?.toLowerCase().includes(term) ||
+        q.esrs_paragraph?.toLowerCase().includes(term)
+      );
+    });
+  }, [orderedQuestions, searchTerm]);
 
   async function loadAll() {
     setErr(null);
@@ -137,6 +154,40 @@ export default function TopicPage() {
 
   async function saveAll() {
     if (!reportId) return;
+    
+    // Show validation errors
+    setShowValidation(true);
+    
+    // Check for mandatory field violations
+    const mandatoryErrors: string[] = [];
+    orderedQuestions.forEach((q) => {
+      if (q.is_mandatory) {
+        const answer = answers[q.id];
+        const hasValue = answer && (
+          (answer.value_text && answer.value_text.trim()) ||
+          answer.value_numeric !== null ||
+          answer.value_boolean !== null ||
+          answer.value_date
+        );
+        
+        if (!hasValue) {
+          mandatoryErrors.push(`${q.code}: ${q.question_text?.substring(0, 50)}...`);
+        }
+      }
+    });
+    
+    if (mandatoryErrors.length > 0) {
+      setErr(`Vyplňte všetky povinné polia (${mandatoryErrors.length}). Skrolujte dole a pozrite si červené označenia.`);
+      // Scroll to first error
+      setTimeout(() => {
+        const firstError = document.querySelector('.border-red-500');
+        if (firstError) {
+          firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+      return;
+    }
+    
     setSaving(true);
     setErr(null);
 
@@ -162,6 +213,8 @@ export default function TopicPage() {
       if (error) throw error;
 
       await loadAll();
+      setShowValidation(false); // Hide validation after successful save
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (e: any) {
       setErr(e.message ?? "Save failed");
     } finally {
@@ -171,7 +224,7 @@ export default function TopicPage() {
 
   async function exportTxt() {
     if (!reportId) return;
-    window.location.href = `/api/export/${topicCode.toLowerCase()}?reportId=${reportId}`;
+    window.location.href = `/api/export/${topicCode}?reportId=${reportId}`;
   }
 
   return (
@@ -430,14 +483,91 @@ export default function TopicPage() {
           </button>
         </div>
 
+        {/* Search Box */}
+        <div style={{ marginBottom: spacing.lg }}>
+          <div style={{ display: "flex", alignItems: "center", gap: spacing.md }}>
+            <label 
+              htmlFor="question-search"
+              style={{ 
+                fontSize: fonts.size.md, 
+                fontWeight: fonts.weight.semibold,
+                color: colors.textPrimary,
+                whiteSpace: "nowrap"
+              }}
+            >
+              🔍 Search:
+            </label>
+            <div style={{ flex: 1, position: "relative" }}>
+              <input
+                id="question-search"
+                type="text"
+                placeholder="Search questions by text, code, datapoint ID, DR, or paragraph..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{
+                  ...inputStyles.base,
+                  width: "100%",
+                  paddingRight: searchTerm ? "40px" : spacing.md,
+                }}
+              />
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  style={{
+                    position: "absolute",
+                    right: "12px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "none",
+                    border: "none",
+                    color: colors.textSecondary,
+                    cursor: "pointer",
+                    fontSize: fonts.size.lg,
+                    padding: "4px 8px",
+                  }}
+                  title="Clear search"
+                >
+                  ×
+                </button>
+              )}
+            </div>
+            <div style={{ 
+              fontSize: fonts.size.sm, 
+              color: colors.textSecondary,
+              whiteSpace: "nowrap" 
+            }}>
+              {filteredQuestions.length} / {orderedQuestions.length} questions
+            </div>
+          </div>
+        </div>
+
         {/* Questions List */}
         {loading ? (
           <p style={{ color: colors.textSecondary }}>Loading questions...</p>
         ) : orderedQuestions.length === 0 ? (
           <p style={{ color: colors.textSecondary }}>No questions found for {topicCode}.</p>
+        ) : filteredQuestions.length === 0 ? (
+          <div style={{ 
+            textAlign: "center", 
+            padding: spacing.xl, 
+            color: colors.textSecondary 
+          }}>
+            <p style={{ fontSize: fonts.size.lg, marginBottom: spacing.sm }}>
+              No questions match "{searchTerm}"
+            </p>
+            <button
+              onClick={() => setSearchTerm("")}
+              style={{
+                ...buttonStyles.secondary,
+                marginTop: spacing.md,
+              }}
+            >
+              Clear search
+            </button>
+          </div>
         ) : (
           <div style={{ display: "grid", gap: 24 }}>
-            {orderedQuestions.map((q, idx) => (
+            {filteredQuestions.map((q, idx) => (
               <div key={q.id} style={cardStyles.base}>
                 <div style={{ marginBottom: 16 }}>
                   <div style={{ ...headingStyles.h3, marginBottom: 4 }}>
@@ -449,6 +579,7 @@ export default function TopicPage() {
                   value={answers[q.id]}
                   onChange={(updates) => updateAnswer(q.id, updates)}
                   disabled={saving}
+                  showValidation={showValidation}
                 />
               </div>
             ))}

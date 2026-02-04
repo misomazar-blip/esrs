@@ -319,7 +319,7 @@ class CSVImporter:
             datapoint['is_conditional'] = True
         
         # Optional: May [V] - voluntary
-        is_voluntary = self.parse_boolean(row.get('May \n[V]', ''))
+        is_voluntary = self.parse_boolean(row.get('May [V]', ''))
         if is_voluntary:
             datapoint['is_mandatory'] = False
         else:
