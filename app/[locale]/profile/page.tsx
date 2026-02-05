@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, buttonStyles, inputStyles, cardStyles, fonts, spacing, shadows } from "@/lib/styles";
 import CompanyMembersManager from "@/app/company/CompanyMembersManager";
@@ -23,6 +24,9 @@ type Company = {
 };
 
 export default function ProfilePage() {
+  const t = useTranslations('common');
+  const tNav = useTranslations('nav');
+  const tAuth = useTranslations('auth');
   const supabase = createSupabaseBrowserClient();
   const [userId, setUserId] = useState<string | null>(null);
   const [email, setEmail] = useState("");
@@ -275,7 +279,7 @@ export default function ProfilePage() {
   if (loading) {
     return (
       <div style={{ minHeight: "100vh", backgroundColor: colors.bgPrimary, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <p style={{ color: colors.textSecondary }}>Loading...</p>
+        <p style={{ color: colors.textSecondary }}>{t('loading')}</p>
       </div>
     );
   }
@@ -315,7 +319,7 @@ export default function ProfilePage() {
 
           <div style={{ display: "flex", alignItems: "center", gap: spacing.lg }}>
             <Link href="/" style={{ ...buttonStyles.secondary, textDecoration: "none" }}>
-              ← Back to Dashboard
+              ← {tNav('home')}
             </Link>
             <button
               onClick={async () => {
@@ -324,7 +328,7 @@ export default function ProfilePage() {
               }}
               style={buttonStyles.danger}
             >
-              Sign Out
+              {tAuth('signOut')}
             </button>
           </div>
         </div>

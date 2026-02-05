@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import React, { useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, buttonStyles, inputStyles, cardStyles, fonts, spacing, shadows } from "@/lib/styles";
 import { VersionedQuestion } from "@/types/esrs";
@@ -27,6 +28,11 @@ type ReportTopic = {
 const STATUS_OPTIONS = ["draft", "submitted", "published"] as const;
 
 export default function ReportPage() {
+  const t = useTranslations('report');
+  const tCommon = useTranslations('common');
+  const tNav = useTranslations('nav');
+  const tAuth = useTranslations('auth');
+  const tMateriality = useTranslations('materiality');
   const supabase = createSupabaseBrowserClient();
 
   const [email, setEmail] = useState<string | null>(null);
@@ -531,7 +537,7 @@ export default function ReportPage() {
                       textDecoration: "none",
                     }}
                   >
-                    Edit Profile
+                    {tNav('profile')}
                   </Link>
                   <button
                     onClick={async () => {
@@ -550,7 +556,7 @@ export default function ReportPage() {
                       cursor: "pointer",
                     }}
                   >
-                    Sign Out
+                    {tAuth('signOut')}
                   </button>
                 </div>
               )}
@@ -571,10 +577,10 @@ export default function ReportPage() {
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h1 style={{ fontSize: fonts.size.h2, fontWeight: fonts.weight.bold, margin: 0, color: colors.textPrimary }}>
-            Reports
+            {t('title')}
           </h1>
           <Link href="/" style={{ ...buttonStyles.secondary, textDecoration: "none", display: "inline-flex", alignItems: "center" }}>
-            ← Back to Dashboard
+            ← {tNav('home')}
           </Link>
         </div>
 
@@ -588,7 +594,7 @@ export default function ReportPage() {
             fontWeight: fonts.weight.semibold,
           }}
         >
-          + Add New Report
+          + {t('createNew')}
         </button>
 
         {/* Reports List */}

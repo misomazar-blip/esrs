@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, fonts, spacing } from "@/lib/styles";
 
@@ -27,6 +28,7 @@ export default function QuestionAttachments({
   reportId: string;
   currentUserEmail: string;
 }) {
+  const t = useTranslations('attachments');
   const supabase = createSupabaseBrowserClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -115,7 +117,7 @@ export default function QuestionAttachments({
   };
 
   const handleDelete = async (attachmentId: string, storagePath: string) => {
-    if (!confirm("Are you sure you want to delete this attachment?")) return;
+    if (!confirm(t('deleteConfirm'))) return;
 
     try {
       const response = await fetch(
@@ -219,7 +221,7 @@ export default function QuestionAttachments({
             {expanded ? "▼" : "▶"}
           </span>
           <span style={{ fontSize: fonts.size.body, fontWeight: fonts.weight.semibold }}>
-            📎 Attachments ({attachments.length})
+            📎 {t('title')} ({attachments.length})
           </span>
         </div>
       </div>
@@ -282,19 +284,19 @@ export default function QuestionAttachments({
                 {uploading ? (
                   <>
                     <span>⏳</span>
-                    <span>Uploading...</span>
+                    <span>{t('uploading')}</span>
                   </>
                 ) : (
                   <>
                     <span>📎</span>
-                    <span>Choose File</span>
+                    <span>{t('chooseFile')}</span>
                   </>
                 )}
               </button>
               
               <input
                 type="text"
-                placeholder="Description (optional)"
+                placeholder={t('descriptionPlaceholder')}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 disabled={uploading}
@@ -309,7 +311,7 @@ export default function QuestionAttachments({
             </div>
             
             <p style={{ fontSize: fonts.size.xs, color: colors.textSecondary }}>
-              Max 10MB • Images, PDF, Office docs, CSV, TXT
+              {t('maxSize')}
             </p>
           </div>
 
@@ -336,7 +338,7 @@ export default function QuestionAttachments({
             </p>
           ) : attachments.length === 0 ? (
             <p style={{ fontSize: fonts.size.sm, color: colors.textSecondary }}>
-              No attachments yet
+              {t('noAttachments')}
             </p>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: spacing.sm }}>

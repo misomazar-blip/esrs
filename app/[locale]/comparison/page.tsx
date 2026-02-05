@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, buttonStyles, inputStyles, cardStyles, fonts, spacing, shadows } from "@/lib/styles";
 
@@ -24,6 +25,10 @@ type TopicComparison = {
 };
 
 export default function ComparisonPage() {
+  const t = useTranslations('comparison');
+  const tCommon = useTranslations('common');
+  const tNav = useTranslations('nav');
+  const tAuth = useTranslations('auth');
   const supabase = createSupabaseBrowserClient();
   const [email, setEmail] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -290,7 +295,7 @@ export default function ComparisonPage() {
   };
 
   if (loading) {
-    return <div style={{ padding: spacing.xl }}>Loading...</div>;
+    return <div style={{ padding: spacing.xl }}>{tCommon('loading')}</div>;
   }
 
   if (!email) {
@@ -427,7 +432,7 @@ export default function ComparisonPage() {
                       textDecoration: "none",
                     }}
                   >
-                    Edit Profile
+                    {tNav('profile')}
                   </Link>
                   <button
                     onClick={async () => {
@@ -446,7 +451,7 @@ export default function ComparisonPage() {
                       cursor: "pointer",
                     }}
                   >
-                    Sign Out
+                    {tAuth('signOut')}
                   </button>
                 </div>
               )}
@@ -458,7 +463,7 @@ export default function ComparisonPage() {
       {/* MAIN CONTENT */}
       <div style={{ maxWidth: "1400px", margin: "0 auto", padding: spacing.xl }}>
         <h1 style={{ fontSize: fonts.size.h1, fontWeight: fonts.weight.bold, marginBottom: spacing.sm }}>
-          🔍 Version Comparison
+          🔍 {t('title')}
         </h1>
         <p style={{ fontSize: fonts.size.body, color: colors.textSecondary, marginBottom: spacing.xl }}>
           Compare answers between different reporting years to track changes over time

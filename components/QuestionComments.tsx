@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, buttonStyles, inputStyles, fonts, spacing } from "@/lib/styles";
 
@@ -25,6 +26,7 @@ type CommentsProps = {
 };
 
 export default function QuestionComments({ questionId, reportId, currentUserEmail }: CommentsProps) {
+  const t = useTranslations('comments');
   const supabase = createSupabaseBrowserClient();
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -131,7 +133,7 @@ export default function QuestionComments({ questionId, reportId, currentUserEmai
   }
 
   async function deleteComment(commentId: string) {
-    if (!confirm("Are you sure you want to delete this comment?")) return;
+    if (!confirm(t('deleteConfirm'))) return;
 
     const { error } = await supabase
       .from("question_comment")
@@ -214,7 +216,7 @@ export default function QuestionComments({ questionId, reportId, currentUserEmai
                     padding: `${spacing.xs} ${spacing.sm}`,
                   }}
                 >
-                  Edit
+                  {t('edit')}
                 </button>
                 <button
                   onClick={() => deleteComment(comment.id)}
@@ -227,7 +229,7 @@ export default function QuestionComments({ questionId, reportId, currentUserEmai
                     padding: `${spacing.xs} ${spacing.sm}`,
                   }}
                 >
-                  Delete
+                  {t('delete')}
                 </button>
               </div>
             )}
@@ -256,7 +258,7 @@ export default function QuestionComments({ questionId, reportId, currentUserEmai
                     fontSize: fonts.size.sm,
                   }}
                 >
-                  Save
+                  {t('save')}
                 </button>
                 <button
                   onClick={() => {
@@ -269,7 +271,7 @@ export default function QuestionComments({ questionId, reportId, currentUserEmai
                     fontSize: fonts.size.sm,
                   }}
                 >
-                  Cancel
+                  {t('cancel')}
                 </button>
               </div>
             </div>
@@ -405,7 +407,7 @@ export default function QuestionComments({ questionId, reportId, currentUserEmai
             <textarea
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Add a comment..."
+              placeholder={t('addComment')}
               style={{
                 ...inputStyles.base,
                 width: "100%",

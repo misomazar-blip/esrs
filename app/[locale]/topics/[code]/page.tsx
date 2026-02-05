@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, buttonStyles, cardStyles, fonts, inputStyles, spacing, shadows, headingStyles, borderRadius } from "@/lib/styles";
 import DynamicQuestionInput from "@/components/DynamicQuestionInput";
@@ -15,6 +16,10 @@ type Topic = { id: string; code: string; name?: string };
 type Report = { id: string; report_year: number; status: string };
 
 export default function TopicPage() {
+  const t = useTranslations('topics');
+  const tCommon = useTranslations('common');
+  const tNav = useTranslations('nav');
+  const tAuth = useTranslations('auth');
   const supabase = createSupabaseBrowserClient();
   const params = useParams();
   const searchParams = useSearchParams();
@@ -388,7 +393,7 @@ export default function TopicPage() {
                     fontWeight: fonts.weight.medium,
                   }}
                 >
-                  Auto-save
+                  {t('autoSave')}
                 </span>
               </div>
 
@@ -422,12 +427,12 @@ export default function TopicPage() {
                   {autoSaving ? (
                     <>
                       <span>🔄</span>
-                      <span>Saving...</span>
+                      <span>{t('saving')}</span>
                     </>
                   ) : hasUnsavedChanges ? (
                     <>
                       <span>⚠️</span>
-                      <span>Unsaved</span>
+                      <span>{t('unsaved')}</span>
                     </>
                   ) : lastSaved ? (
                     <>
@@ -460,7 +465,7 @@ export default function TopicPage() {
                   gap: spacing.xs,
                 }}
               >
-                📊 Analytics
+                📊 {tNav('analytics')}
               </button>
             </Link>
 
@@ -524,7 +529,7 @@ export default function TopicPage() {
                       textDecoration: "none",
                     }}
                   >
-                    Edit Profile
+                    {tNav('profile')}
                   </Link>
                   <button
                     onClick={async () => {
@@ -543,7 +548,7 @@ export default function TopicPage() {
                       cursor: "pointer",
                     }}
                   >
-                    Sign Out
+                    {tAuth('signOut')}
                   </button>
                 </div>
               )}
@@ -568,7 +573,7 @@ export default function TopicPage() {
             {topicCode} {topic?.name ? `— ${topic.name}` : ""}
           </h1>
           <Link href="/report" style={{ ...buttonStyles.secondary, textDecoration: "none", display: "inline-flex", alignItems: "center" }}>
-            ← Back to Report
+            ← {tNav('reports')}
           </Link>
         </div>
 
@@ -600,7 +605,7 @@ export default function TopicPage() {
               cursor: saving || !reportId ? "not-allowed" : "pointer",
             }}
           >
-            {saving ? "Saving..." : "Save"}
+            {saving ? t('saving') : t('saveAnswers')}
           </button>
           <button
             onClick={exportTxt}
@@ -611,7 +616,7 @@ export default function TopicPage() {
               cursor: !reportId ? "not-allowed" : "pointer",
             }}
           >
-            Export
+            {tCommon('download')}
           </button>
           <button
             onClick={loadAll}
@@ -622,7 +627,7 @@ export default function TopicPage() {
               cursor: !reportId ? "not-allowed" : "pointer",
             }}
           >
-            Reload
+            {tCommon('loading')}
           </button>
         </div>
 
@@ -644,7 +649,7 @@ export default function TopicPage() {
               <input
                 id="question-search"
                 type="text"
-                placeholder="Search questions by text, code, datapoint ID, DR, or paragraph..."
+                placeholder={t('searchPlaceholder')}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 style={{
@@ -668,7 +673,7 @@ export default function TopicPage() {
                     fontSize: fonts.size.lg,
                     padding: "4px 8px",
                   }}
-                  title="Clear search"
+                  title={t('clearSearch')}
                 >
                   ×
                 </button>
@@ -679,16 +684,16 @@ export default function TopicPage() {
               color: colors.textSecondary,
               whiteSpace: "nowrap" 
             }}>
-              {filteredQuestions.length} / {orderedQuestions.length} questions
+              {filteredQuestions.length} / {orderedQuestions.length} {t('questions')}
             </div>
           </div>
         </div>
 
         {/* Questions List */}
         {loading ? (
-          <p style={{ color: colors.textSecondary }}>Loading questions...</p>
+          <p style={{ color: colors.textSecondary }}>{tCommon('loading')}</p>
         ) : orderedQuestions.length === 0 ? (
-          <p style={{ color: colors.textSecondary }}>No questions found for {topicCode}.</p>
+          <p style={{ color: colors.textSecondary }}>{t('noQuestionsFound').replace('{searchTerm}', topicCode)}</p>
         ) : filteredQuestions.length === 0 ? (
           <div style={{ 
             textAlign: "center", 
@@ -696,7 +701,7 @@ export default function TopicPage() {
             color: colors.textSecondary 
           }}>
             <p style={{ fontSize: fonts.size.lg, marginBottom: spacing.sm }}>
-              No questions match "{searchTerm}"
+              {t('noQuestionsFound').replace('{searchTerm}', searchTerm)}
             </p>
             <button
               onClick={() => setSearchTerm("")}
@@ -705,7 +710,7 @@ export default function TopicPage() {
                 marginTop: spacing.md,
               }}
             >
-              Clear search
+              {t('clearSearch')}
             </button>
           </div>
         ) : (

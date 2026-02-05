@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, buttonStyles, inputStyles, cardStyles, fonts, spacing, shadows } from "@/lib/styles";
 
@@ -18,6 +19,10 @@ type ReportTopic = {
 };
 
 export default function MaterialityPage() {
+  const t = useTranslations('materiality');
+  const tCommon = useTranslations('common');
+  const tNav = useTranslations('nav');
+  const tAuth = useTranslations('auth');
   const supabase = createSupabaseBrowserClient();
   const searchParams = useSearchParams();
   const reportIdFromUrl = searchParams.get("reportId");
@@ -314,7 +319,7 @@ export default function MaterialityPage() {
                       textDecoration: "none",
                     }}
                   >
-                    Edit Profile
+                    {tNav('profile')}
                   </Link>
                   <button
                     onClick={async () => {
@@ -333,7 +338,7 @@ export default function MaterialityPage() {
                       cursor: "pointer",
                     }}
                   >
-                    Sign Out
+                    {tAuth('signOut')}
                   </button>
                 </div>
               )}
@@ -354,10 +359,10 @@ export default function MaterialityPage() {
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <h1 style={{ fontSize: fonts.size.h2, fontWeight: fonts.weight.bold, margin: 0, color: colors.textPrimary }}>
-            Materiality
+            {t('title')}
           </h1>
           <Link href="/" style={{ ...buttonStyles.secondary, textDecoration: "none", display: "inline-flex", alignItems: "center" }}>
-            ← Back to Dashboard
+            ← {tNav('home')}
           </Link>
         </div>
 

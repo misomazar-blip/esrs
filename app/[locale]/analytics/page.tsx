@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, fonts } from "@/lib/styles";
 import Link from "next/link";
@@ -52,6 +53,9 @@ type YearComparison = {
 };
 
 export default function AnalyticsPage() {
+  const t = useTranslations('analytics');
+  const tCommon = useTranslations('common');
+  const tNav = useTranslations('nav');
   const supabase = createSupabaseBrowserClient();
   const [loading, setLoading] = useState(true);
   const [company, setCompany] = useState<Company | null>(null);
@@ -255,7 +259,7 @@ export default function AnalyticsPage() {
   if (loading) {
     return (
       <div style={{ padding: "2rem", textAlign: "center" }}>
-        <p style={{ fontSize: fonts.size.lg }}>Loading analytics...</p>
+        <p style={{ fontSize: fonts.size.lg }}>{tCommon('loading')}</p>
       </div>
     );
   }
@@ -264,10 +268,10 @@ export default function AnalyticsPage() {
     return (
       <div style={{ padding: "2rem", textAlign: "center" }}>
         <h2 style={{ fontSize: fonts.size.h2, marginBottom: "1rem" }}>
-          No Reports Available
+          {t('title')}
         </h2>
         <p style={{ fontSize: fonts.size.body, marginBottom: "1.5rem" }}>
-          Create a report to view analytics.
+          {/* Create a report to view analytics */}
         </p>
         <Link
           href="/report"
@@ -281,7 +285,7 @@ export default function AnalyticsPage() {
             fontSize: fonts.size.body,
           }}
         >
-          Go to Reports
+          {tNav('reports')}
         </Link>
       </div>
     );
@@ -294,7 +298,7 @@ export default function AnalyticsPage() {
       {/* Header */}
       <div style={{ marginBottom: "2rem" }}>
         <h1 style={{ fontSize: fonts.size.h1, marginBottom: "0.5rem" }}>
-          📊 Analytics Dashboard
+          📊 {t('title')}
         </h1>
         <p style={{ fontSize: fonts.size.body, color: colors.textSecondary }}>
           {company.name}
