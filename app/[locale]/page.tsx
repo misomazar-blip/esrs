@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, buttonStyles, inputStyles, cardStyles, fonts, spacing, shadows, layouts } from "@/lib/styles";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -18,6 +18,7 @@ export default function HomePage() {
   const tAuth = useTranslations('auth');
   const tNav = useTranslations('nav');
   const tCommon = useTranslations('common');
+  const locale = useLocale();
   const supabase = createSupabaseBrowserClient();
   const [email, setEmail] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
@@ -389,7 +390,7 @@ export default function HomePage() {
                     }}
                   >
                     <Link
-                      href="/profile"
+                      href={`/${locale}/profile`}
                       style={{
                         display: "block",
                         padding: `${spacing.sm} ${spacing.md}`,
@@ -530,7 +531,7 @@ export default function HomePage() {
                       </span>
                     </div>
                   </div>
-                  <Link href="/company">
+                  <Link href={`/${locale}/company`}>
                     <button style={{ ...buttonStyles.secondary, width: "100%", marginTop: spacing.md }}>
                       {t('manageCompanies')}
                     </button>
@@ -610,7 +611,7 @@ export default function HomePage() {
                       </p>
                     )}
                   </div>
-                  <Link href="/report">
+                  <Link href={`/${locale}/report`}>
                     <button style={{ ...buttonStyles.secondary, width: "100%", marginTop: spacing.md }}>
                       {t('viewReport')}
                     </button>
@@ -727,7 +728,7 @@ export default function HomePage() {
                   return (
                     <Link
                       key={topicProgress.topicId}
-                      href={`/topics/${topicProgress.code.toLowerCase()}?reportId=${selectedReportId}`}
+                      href={`/${locale}/topics/${topicProgress.code.toLowerCase()}?reportId=${selectedReportId}`}
                       style={{ textDecoration: "none" }}
                     >
                       <div
@@ -832,27 +833,27 @@ export default function HomePage() {
             {t('quickActions')}
           </h3>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: spacing.lg }}>
-            <Link href="/company">
+            <Link href={`/${locale}/company`}>
               <button style={{ ...buttonStyles.primary, width: "100%", padding: spacing.lg }}>
                 + {t('newCompany')}
               </button>
             </Link>
-            <Link href="/report">
+            <Link href={`/${locale}/report`}>
               <button style={{ ...buttonStyles.primary, width: "100%", padding: spacing.lg }}>
                 + {t('newReport')}
               </button>
             </Link>
-            <Link href="/materiality">
+            <Link href={`/${locale}/materiality`}>
               <button style={{ ...buttonStyles.primary, width: "100%", padding: spacing.lg }}>
                 {t('assessMateriality')}
               </button>
             </Link>
-            <Link href="/comparison">
+            <Link href={`/${locale}/comparison`}>
               <button style={{ ...buttonStyles.primary, width: "100%", padding: spacing.lg }}>
                 🔍 {t('compareReports')}
               </button>
             </Link>
-            <Link href="/analytics">
+            <Link href={`/${locale}/analytics`}>
               <button style={{ ...buttonStyles.primary, width: "100%", padding: spacing.lg }}>
                 📊 {t('viewAnalytics')}
               </button>
