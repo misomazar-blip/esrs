@@ -532,12 +532,12 @@ export default function HomePage() {
                   </div>
                   <Link href="/company">
                     <button style={{ ...buttonStyles.secondary, width: "100%", marginTop: spacing.md }}>
-                      Manage Companies
+                      {t('manageCompanies')}
                     </button>
                   </Link>
                 </div>
               ) : (
-                <p style={{ color: colors.textSecondary }}>No company yet</p>
+                <p style={{ color: colors.textSecondary }}>{t('noCompanyYet')}</p>
               )}
             </div>
 
@@ -612,12 +612,12 @@ export default function HomePage() {
                   </div>
                   <Link href="/report">
                     <button style={{ ...buttonStyles.secondary, width: "100%", marginTop: spacing.md }}>
-                      View report
+                      {t('viewReport')}
                     </button>
                   </Link>
                 </div>
               ) : (
-                <p style={{ color: colors.textSecondary }}>No report yet</p>
+                <p style={{ color: colors.textSecondary }}>{t('noReportYet')}</p>
               )}
             </div>
           </div>
@@ -645,7 +645,7 @@ export default function HomePage() {
                         {/* All Questions */}
                         <div>
                           <p style={{ margin: `0 0 ${spacing.xs} 0`, fontSize: fonts.size.sm, color: colors.textSecondary }}>
-                            All Questions
+                            {t('allQuestions')}
                           </p>
                           <p style={{ margin: `0 0 ${spacing.sm} 0`, fontSize: fonts.size.h2, fontWeight: fonts.weight.bold, color: colors.textPrimary }}>
                             {totalAnswered}/{totalQuestions}
@@ -665,14 +665,14 @@ export default function HomePage() {
                             }} />
                           </div>
                           <p style={{ margin: `${spacing.xs} 0 0 0`, fontSize: fonts.size.sm, color: colors.textSecondary }}>
-                            {overallPercent}% complete
+                            {overallPercent}% {t('complete')}
                           </p>
                         </div>
 
                         {/* Mandatory Questions */}
                         <div>
                           <p style={{ margin: `0 0 ${spacing.xs} 0`, fontSize: fonts.size.sm, color: colors.textSecondary }}>
-                            ★ Mandatory Questions
+                            ★ {t('mandatoryQuestions')}
                           </p>
                           <p style={{ margin: `0 0 ${spacing.sm} 0`, fontSize: fonts.size.h2, fontWeight: fonts.weight.bold, color: mandatoryPercent === 100 ? colors.success : colors.error }}>
                             {totalMandatoryAnswered}/{totalMandatory}
@@ -699,13 +699,13 @@ export default function HomePage() {
                         {/* Material Topics */}
                         <div>
                           <p style={{ margin: `0 0 ${spacing.xs} 0`, fontSize: fonts.size.sm, color: colors.textSecondary }}>
-                            Material Topics
+                            {t('materialTopics')}
                           </p>
                           <p style={{ margin: `0 0 ${spacing.sm} 0`, fontSize: fonts.size.h2, fontWeight: fonts.weight.bold, color: colors.primary }}>
                             {materialTopics}
                           </p>
                           <p style={{ margin: `${spacing.sm} 0 0 0`, fontSize: fonts.size.sm, color: colors.textSecondary }}>
-                            topics assessed
+                            {t('topicsAssessed')}
                           </p>
                         </div>
                       </>
@@ -715,7 +715,7 @@ export default function HomePage() {
               </div>
 
               <h3 style={{ fontSize: fonts.size.lg, fontWeight: fonts.weight.bold, marginBottom: spacing.lg }}>
-                📋 Material Topics
+                📋 {t('materialTopics')}
               </h3>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: spacing.lg }}>
                 {materialTopicsProgress.map((topicProgress) => {
@@ -788,7 +788,7 @@ export default function HomePage() {
                         {topicProgress.mandatoryTotal > 0 && (
                           <div>
                             <p style={{ margin: `0 0 ${spacing.xs} 0`, color: colors.textSecondary, fontSize: fonts.size.sm }}>
-                              ★ Mandatory
+                              ★ {t('mandatory')}
                             </p>
                             <p style={{ margin: 0, fontSize: fonts.size.body, fontWeight: fonts.weight.semibold, color: mandatoryComplete ? colors.success : colors.error }}>
                               {topicProgress.mandatoryAnswered}/{topicProgress.mandatoryTotal}
@@ -814,7 +814,7 @@ export default function HomePage() {
                             </div>
                             {!mandatoryComplete && (
                               <p style={{ margin: `${spacing.xs} 0 0 0`, fontSize: fonts.size.xs, color: colors.error, fontWeight: fonts.weight.semibold }}>
-                                ⚠️ Missing mandatory fields
+                                ⚠️ {t('missingMandatory')}
                               </p>
                             )}
                           </div>
@@ -829,32 +829,32 @@ export default function HomePage() {
 
           {/* ACTION BUTTONS */}
           <h3 style={{ fontSize: fonts.size.lg, fontWeight: fonts.weight.bold, marginTop: spacing.xl, marginBottom: spacing.lg }}>
-            Quick Actions
+            {t('quickActions')}
           </h3>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: spacing.lg }}>
             <Link href="/company">
               <button style={{ ...buttonStyles.primary, width: "100%", padding: spacing.lg }}>
-                + New Company
+                + {t('newCompany')}
               </button>
             </Link>
             <Link href="/report">
               <button style={{ ...buttonStyles.primary, width: "100%", padding: spacing.lg }}>
-                + New Report
+                + {t('newReport')}
               </button>
             </Link>
             <Link href="/materiality">
               <button style={{ ...buttonStyles.primary, width: "100%", padding: spacing.lg }}>
-                Assess Materiality
+                {t('assessMateriality')}
               </button>
             </Link>
             <Link href="/comparison">
               <button style={{ ...buttonStyles.primary, width: "100%", padding: spacing.lg }}>
-                🔍 Compare Versions
+                🔍 {t('compareReports')}
               </button>
             </Link>
             <Link href="/analytics">
               <button style={{ ...buttonStyles.primary, width: "100%", padding: spacing.lg }}>
-                📊 Analytics Dashboard
+                📊 {t('viewAnalytics')}
               </button>
             </Link>
           </div>
