@@ -1,0 +1,72 @@
+﻿"INSTRUCTIONS
+1) The DPs reported in ESRS E3 are subject to Materiality Assessment.
+2) With the exception of DPs in IRO1 (E3.IRO-1_01-02) that are to be disclosed irrespective of the outcome of its materiality assessment [ESRS 1 par. 29], none of these DPs is applicable if the topic is not material.
+3) Not all DPs are to be reported if the undertaking has not adopted the respective policies, implemented the respective actions or set the respective targets in relation to  a sustainability matter that has been assessed to be material [see ESRS 1 par. 33].
+4) Column L identifies DPs subject to phased-in  [see Appendix C of ESRS 1].
+5) Metrics to be disclosed, in addition to the ones explicitly requried by ESRS, also include entity-specific ones, as well as those arising from other legislation or standard.";;;;;;;;;;;;;
+ID;ESRS;DR;Paragraph;Related AR ;Name;Data Type;Conditional or alternative DP;"May 
+[V]";"Appendix B - ESRS 2 
+(SFDR + PILLAR 3 + Benchmark + CL)";"Appendix C - ESRS 1
+DPs subject to phasing-in provisions applicable to undertaking with less than 750 employees";"Appendix C - ESRS 1
+DPs subject to phasing-in provisions applicable to all undertakings ";;
+E3.IRO-1_01;E3;E3.IRO-1;8 a;AR 1- AR 15;Disclosure of whether and how assets and activities have been screened in order to identify actual and potential water and marine resources-related impacts, risks and opportunities in own operations and upstream and downstream value chain and methodologies, assumptions and tools used in screening [text block];narrative;;;;;;;
+E3.IRO-1_02;E3;E3.IRO-1;8 b;AR 1- AR 15;Disclosure of how consultations have been conducted (water and marine resources) [text block];narrative;;;;;;;
+E3.MDR-P_01-06;E3;E3-1;11;"AR 16 - 
+AR 18";Policies to manage its material impacts, risks and opportunities related to water and marine resources [see ESRS 2 MDR-P];MDR-P;;;SFDR;;;;
+E3-1_01;E3;E3-1;12a;"AR 16 - 
+AR 18";Disclosure of whether and how policy adresses water management ;narrative;;;;;;;
+E3-1_02;E3;E3-1;12a i;"AR 16 - 
+AR 18";Disclosure of whether and how policy adresses the use and sourcing of water and marine resources in own operations ;narrative;;;;;;;
+E3-1_03;E3;E3-1;12a ii;"AR 16 - 
+AR 18";Disclosure of whether and  how policy adresses water treatment;narrative;;;;;;;
+E3-1_04;E3;E3-1;12a iii;"AR 16 - 
+AR 18";Disclosure of whether and how policy adresses prevention and abatment of water pollution;narrative;;;;;;;
+E3-1_05;E3;E3-1;12 b;"AR 16 - 
+AR 18";Disclosure of whether and how policy adresses product and service design in view of addressing water-related issues and preservation of marine resources ;narrative;;;;;;;
+E3-1_06;E3;E3-1;12 c;"AR 16 - 
+AR 18";Disclosure of whether and how policy adresses commitment to reduce material water consumption in areas at water risk ;narrative;;;;;;;
+E3-1_07;E3;E3-1;13;"AR 16 - 
+AR 18";Disclosure of reasons for not having adopted policies in areas of high-water stress ;narrative;Conditional;;SFDR;;;;
+E3-1_08;E3;E3-1;13;;Disclosure of timeframe in which policies in areas of high-water stress will be adopted ;narrative;Conditional;V;SFDR;;;;
+E3-1_09;E3;E3-1;14;;Policies or practices related to sustainable oceans and seas have been adopted;semi-narrative;;;SFDR;;;;
+E3-1_10;E3;E3-1;AR 18a;;"The policly contributes to good ecological and chemical quality of surface water bodies and good chemical quality and quantity of groundwater bodies, in order to protect human health, water supply, natural ecosystems and biodiversity, the good environmental status of marine waters and the protection of the resource base upon which marine related activities depend;";semi-narrative;;V;;;;;
+E3-1_11;E3;E3-1;AR 18b;;The policy minimise material impacts and risks and implement mitigation measures that aim to maintain the value and functionality of priority services and to increase resource efficiency on own operations;semi-narrative;;V;;;;;
+E3-1_12;E3;E3-1;AR 18c;;The policy avoid impacts on affected communities.;semi-narrative;;V;;;;;
+E3.MDR-P_07-08;ESRS 2;;62;;Disclosures to be reported in case the undertaking has not adopted policies;;;;;;;;
+E3.MDR-A_01-12;E3;E3-2;17;"AR 19 - AR 21
+AR 21";Actions and resources in relation to water and marine resources [see ESRS 2 MDR-A];MDR-A;;;;;;;
+E3-2_01;E3;E3-2;18;AR 19 - AR 21;Layer in mitigation hierarchy to which action and resources can be allocated to (water and marine resources);semi-narrative;;V;;;;;
+E3-2_02;E3;E3-2;AR20;AR 19 - AR 21;Information about specific collective action for water and marine resources ;narrative;;V;;;;;
+E3-2_03;E3;E3-2;19;AR 19 - AR 21;Disclosure of actions and resources  in relation to areas at water risk ;narrative;;;;;;;
+E3.MDR-A_13-14;ESRS 2;;62;;Disclosures to be reported if the undertaking has not adopted actions;;;;;;;;
+E3.MDR-T_01-13;E3;E3-3;22;;Tracking effectiveness of policies and actions through targets [see ESRS 2 MDR-T ];MDR-T;;;;;;;
+E3-3_01;E3;E3-3;23 a;;Disclosure of whether and  how target relates to management of material impacts, risks and opportunities related to areas at water risk ;narrative;;;;;;;
+E3-3_02;E3;E3-3;23 b;;Disclosure of whether and  how target relates to responsible management of marine resources impacts, risks and opportunities ;narrative;;;;;;;
+E3-3_03;E3;E3-3;23 c;;Disclosure of whether and how target relates to reduction of water consumption ;narrative;;;;;;;
+E3-3_04;E3;E3-3;24;AR 22;(Local) ecological threshold and entity-specific allocation were taken into consideration when setting water and marine resources target;semi-narrative;;V;;;;;
+E3-3_05;E3;E3-3;24 a;AR 22;Disclosure of ecological threshold identified and methodology used to identify ecological threshold (water and marine resources) ;narrative/monetary;;V;;;;;
+E3-3_06;E3;E3-3;24 b;AR 22;Disclosure of how ecological entity-specific threshold was determined (water and marine resources) ;narrative/monetary;;V;;;;;
+E3-3_07;E3;E3-3;24 c;AR 22;Disclosure of how responsibility for respecting identified ecological threshold is allocated (water and marine resources) ;narrative;;V;;;;;
+E3-3_08;E3;E3-3;25;;Adopted and presented water and marine resources-related target is mandatory (based on legislation);semi-narrative;;;;;;;
+E3-3_09;E3;E3-3;AR 23 a;AR 24, AR26;Target relates to reduction of water withdrawals;semi-narrative;;V;;;;;
+E3-3_10;E3;E3-3;AR 23 b;AR 25, AR26;Target relates to reduction of water discharges;semi-narrative;;V;;;;;
+E3.MDR-T_14-19;ESRS 2;;81;;Disclosures to be reported if the undertaking has not adopted targets;;;;;;;;
+E3-4_01;E3;E3-4;28 a;;Total water consumption;Volume;;;;;;;
+E3-4_02;E3;E3-4;28 b;AR 28;Total water consumption in areas at water risk, including areas of high-water stress;Volume;;;;;;;
+E3-4_03;E3;E3-4;28 c;;Total water recycled and reused;Volume;;;SFDR;;;;
+E3-4_04;E3;E3-4;28 d;;Total water stored;Volume;;;;;;;
+E3-4_05;E3;E3-4;28 d;;Changes in water storage;Volume;;;;;;;
+E3-4_06;E3;E3-4;28 e;AR 29;Disclosure of contextual information regarding warter consumption;narrative;;;;;;;
+E3-4_07;E3;E3-4;28 e;AR 29;Share of the measure obtained from direct measurement, from sampling and extrapolation, or from best estimates;Percent;;;;;;;
+E3-4_08;E3;E3-4;29;;Water intensity ratio;Intensity;;;SFDR;;;;
+E3-4_09;E3;E3-4;AR30;;Water consumption - sectors/SEGMENTS [table];Table/Volume;;V;;;;;
+E3-4_10;E3;E3-4;AR 31;;Additional water intensity ratio;Percent;;V;;;;;
+E3-4_11;E3;E3-4;AR 32;;Total water withdrawals;Volume;;V;;;;;
+E3-4_12;E3;E3-4;AR 32;;Total water discharges;Volume;;V;;;;;
+E3-5_01;E3;E3-5;33 a;AR 34;Disclosure of quantitative information about anticipated financial effects of material risks and opportunities arising from water and marine resources-related impacts ;Monetary;;;;;3 years;;
+E3-5_02;E3;E3-5;33 a;;Disclosure of qualitative information of anticipated financial effects of material risks and opportunities arising from water and marine resources-related impacts ;narrative;;;;;1 year;;
+E3-5_03;E3;E3-5;33 b;;Description of effects considered and related impacts (water and marine resources) ;narrative;;;;;1 year;;
+E3-5_04;E3;E3-5;33 c;;Disclosure of critical assumptions used in estimates of financial effects of material risks and opportunities arising from water and marine resources-related impacts ;narrative;;;;;1 year;;
+E3-5_05;E3;E3-5;AR 33;;Description of related products and services at risk (water and marine resources) ;narrative;;V;;;1 year;;
+E3-5_06;E3;E3-5;AR 33;;Explanation of how time horizons are defined, financial amounts are estimated and critical assumptions made (water and marine resources) ;narrative;;V;;;1 year;;
+;;;;;;;;;;;;;

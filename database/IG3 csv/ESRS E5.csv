@@ -1,0 +1,106 @@
+﻿"INSTRUCTIONS
+1) The DPs reported in ESRS E5 are subject to Materiality Assessment.
+2) With the exception of DPs in IRO1 (E5.IRO-1_01-02) that are to be disclosed irrespective of the outcome of its materiality assessment [ESRS 1 par. 29], none of these DPs is applicable if the topic is not material.
+3) Not all DPs are to be reported if the undertaking has not adopted the respective policies, implemented the respective actions or set the respective targets in relation to  a sustainability matter that has been assessed to be material [see ESRS 1 par. 33].
+4) Column L identifies DPs subject to phased-in [see Appendix C of ESRS 1].
+5) Metrics to be disclosed, in addition to the ones explicitly requried by ESRS, also include entity-specific ones, as well as those arising from other legislation or standard.";;;;;;;;;;;
+ID;ESRS;DR;Paragraph;Related AR;Name;Data Type;Conditional or alternative DP;"May 
+[V]";"Appendix B - ESRS 2 
+(SFDR + PILLAR 3 + Benchmark + CL)";"Appendix C - ESRS 1
+DPs subject to phasing-in provisions applicable to undertaking with less than 750 employees";"Appendix C - ESRS 1
+DPs subject to phasing-in provisions applicable to all undertakings "
+E5.IRO-1_01;E5;E5.IRO-1;11a ;AR 1 - AR 7;Disclosure of whether the undertaking has screened its assets and activities in order to identify actual and potential impacts, risks and opportunities in own operations and upstream and downstream value chain, and if so, methodologies, assumptions and tools used;narrative;;;;;
+E5.IRO-1_02;E5;E5.IRO-1;11 b;;Disclosure of whether and how the undertaking has conducted consultations (resource and circular economy) ;narrative;;;;;
+E5.MDR-P_01-06;E5;E5-1;14;;Policies to manage its material impacts, risks and opportunities related to resource use and circular economy [see ESRS 2 MDR-P];MDR-P;;;;;
+E5-1_01;E5;E5-1;15a;;Disclosure of whether and how policy addresses transitioning away from use of virgin resources, including relative increases in use of secondary (recycled) resources;narrative;;;;;
+E5-1_02;E5;E5-1;15b;;Disclosure of whether and how policy addresses sustainable sourcing and use of renewable resources;narrative;;;;;
+E5-1_03;E5;E5-1;AR 9 a;;Description of whether and how policy addresses waste hierarchy (prevention, preparing for re-use, recycling, other recovery, disposal) ;narrative;;V;;;
+E5-1_04;E5;E5-1;AR 9 b;;Description of  whether and how policy addresses prioritisation of strategies to avoid or minimise waste over waste treatment strategies ;narrative;;V;;;
+E5.MDR-P_07-08;ESRS 2;;62;;Disclosures to be reported in case the undertaking has not adopted policies;;;;;;
+E5.MDR-A_01-12;E5;E5-2;19;;Actions and resources in relation to resource use and circular economy [see ESRS 2 MDR-A];MDR-A;;;;;
+E5-2_01;E5;E5-2;20 a;;Description of higher levels of resource efficiency in use of technical and biological materials and water;narrative;;V;;;
+E5-2_02;E5;E5-2;20b;;Description of higher rates of use of secondary raw materials;narrative;;V;;;
+E5-2_03;E5;E5-2;20c;;Description of application of circular design;narrative;;V;;;
+E5-2_04;E5;E5-2;20d;;Description of application of circular business practices;narrative;;V;;;
+E5-2_05;E5;E5-2;20e;AR 13;Description of actions taken to prevent waste generation in the undertaking's upstream and downstram value chain;narrative;;V;;;
+E5-2_06;E5;E5-2;20f;;Description of Optimistation of waste management;narrative;;V;;;
+E5-2_07;E5;E5-2;AR 11;;Information about collective action on development of collaborations or initiatives increasing circularity of products and materials ;narrative;;V;;;
+E5-2_08;E5;E5-2;AR 12 a;;Description of contribution to circular economy ;narrative;;V;;;
+E5-2_09;E5;E5-2;AR 12 b;;Description of other stakeholders involved in collective action (resource use and circular economy) ;narrative;;V;;;
+E5-2_10;E5;E5-2;AR 12 c;;Description of organisation of project (resource use and circular economy) ;narrative;;V;;;
+E5.MDR-A_13-14;ESRS 2;;62;;Disclosures to be reported if the undertaking has not adopted actions;;;;;;
+E5.MDR-T_01-13;E5;E5-3;23;;Tracking effectiveness of policies and actions through targets [see ESRS 2 MDR-T ];MDR-T;;;;;
+E5-3_01;E5;E5-3;24;AR 16;Disclosure of how target relates to resources (resource use and circular economy) ;narrative;;;;;
+E5-3_02;E5;E5-3;24 a;;Disclosure of how target relates to increase of circular design ;narrative;;;;;
+E5-3_03;E5;E5-3;24 b;;Disclosure of how target relates to increase of circular material use rate ;narrative;;;;;
+E5-3_04;E5;E5-3;24 c;AR 17;Disclosure of how target relates to minimisation of primary raw material ;narrative;;;;;
+E5-3_05;E5;E5-3;24 d;;Disclosure of how target relates to reversal of depletion of stock of renewable resources ;narrative;;;;;
+E5-3_06;E5;E5-3;24 e;;Target relates to waste management;semi-narrative;;;;;
+E5-3_07;E5;E5-3;24 e;;Disclosure of how target relates to waste management ;narrative;;;;;
+E5-3_08;E5;E5-3;24 f;AR 18;Disclosure of how target relates to other matters related to resource use or circular economy;narrative;;;;;
+E5-3_09;E5;E5-3;25;;Layer in waste hierarchy to which target relates;semi-narrative;;;;;
+E5-3_10;E5;E5-3;26 a;AR 14;Disclosure of ecological threshold identified and methodology used to identify ecological threshold (resource use and circular economy) ;narrative;;V;;;
+E5-3_11;E5;E5-3;26 b;AR 14;Disclosure of how ecological entity-specific threshold was determined (resource use and circular economy) ;narrative;;V;;;
+E5-3_12;E5;E5-3;26 c;AR 14;Disclosure of how responsibility for respecting identified ecological threshold is allocated (resource use and circular economy) ;narrative;;V;;;
+E5-3_13;E5;E5-3;27;AR 20;The targets being  set and presented are mandatory (required by legislation);semi-narrative;;;;;
+E5.MDR-T_14-19;ESRS 2;;81;;Disclosures to be reported if the undertaking has not adopted targets;;;;;;
+E5-4_01;E5;E5-4;30;AR 21;Disclosure of information on material resource inflows ;narrative;;;;;
+E5-4_02;E5;E5-4;31a;;Overall total weight of products and technical and biological materials used during the reporting period;Mass;;;;;
+E5-4_03;E5;E5-4;31b;AR 23;Percentage of biological materials (and biofuels used for non-energy purposes);Percent;;;;;
+E5-4_04;E5;E5-4;31c;AR 23;The absolute weight of secondary reused or recycled components, secondary intermediary products and secondary materials used to manufacture the undertaking’s products and services (including packaging);Mass;;;;;
+E5-4_05;E5;E5-4;31c;AR 23;Percentage of secondary reused or recycled components, secondary intermediary products and secondary materials;Percent;;;;;
+E5-4_06;E5;E5-4;32;AR 24;Description of methodologies used to calculate data and key assumptions used;narrative;;;;;
+E5-4_07;E5;E5-4;AR 22;;Description of materials that are sourced from by-products or waste stream ;narrative;;V;;;
+E5-4_08;E5;E5-4;AR 25;;Description of how double counting was avoided and of choices made ;narrative;Conditional;;;;
+E5-5_01;E5;E5-5;35;AR 26;Description of the key products and materials that come out of the undertaking’s production process;narrative;;;;;
+E5-5_02;E5;E5-5;36a;;Disclosure of the expected durability of the products placed on the market, in relation to the industry average for each product group;Table/Percent;;;;;
+E5-5_03;E5;E5-5;36b;;Disclosure of the reparability of products;narrative;;;;;
+E5-5_04;E5;E5-5;36c;AR 27;The rates of recyclable content in products;Percent;;;;;
+E5-5_05;E5;E5-5;36c;AR 27;The rates of recyclable content in products packaging;Percent;;;;;
+E5-5_06;E5;E5-5;40;;Description of methodologies used to calculate data (resource outflows) ;narrative;;;;;
+E5-5_07;E5;E5-5;37 a;;Total Waste generated;Mass;;;;;
+E5-5_08;E5;E5-5;37 b;AR 31;Waste diverted from disposal, breakdown by hazardous and non-hazardous waste and treatment type;Table/Mass;;;;;
+E5-5_09;E5;E5-5;37 c;AR 32;Waste directed to disposal, breakdown by hazardous and non-hazardous waste and treatment type;Table/Mass;;;;;
+E5-5_10;E5;E5-5;37 d;;Non-recycled waste;Mass;;;SFDR;;
+E5-5_11;E5;E5-5;37 d;;Percentage of non-recycled waste;Percent;;;SFDR;;
+E5-5_12;E5;E5-5;38;;Disclosure of composition of waste ;narrative;;;;;
+E5-5_13;E5;E5-5;38 a;;Disclosure of waste streams relevant to undertaking's sector or activities ;narrative;;;;;
+E5-5_14;E5;E5-5;38 b;;Disclosure of materials that are present in waste ;narrative;;;;;
+E5-5_15;E5;E5-5;39;;Total amount of hazardous waste;Mass;;;SFDR;;
+E5-5_16;E5;E5-5;39;;Total amount of radioactive waste;Mass;;;SFDR;;
+E5-5_17;E5;E5-5;40;AR 33;Description of methodologies used to calculate data (waste generated) ;narrative;;;;;
+E5-5_18;E5;E5-5;AR 28;;Disclosure of its engagement in product end-of-life waste management;narrative;;V;;;
+E5-6_01;E5;E5-6;43 a;AR 36;Disclosure of quantitative information about anticipated financial effects of material risks and opportunities arising from resource use and circular economy-related impacts ;Monetary;;;;;3 years
+E5-6_02;E5;E5-6;43 a;;Disclosure of qualitative information of anticipated financial effects of material risks and opportunities arising from resource use and circular economy-related impacts ;narrative;;;;;1 year
+E5-6_03;E5;E5-6;43 b;;Description of effects considered and related impacts (resource use and circular economy) ;narrative;;;;;1 year
+E5-6_04;E5;E5-6;43 c;;Disclosure of critical assumptions used in estimates of financial effects of material risks and opportunities arising from resource use and circular economy-related impacts ;narrative;;;;;1 year
+E5-6_05;E5;E5-6;AR 35;;Description of related products and services at risk (resource use and circular economy) ;narrative;;V;;;1 year
+E5-6_06;E5;E5-6;AR 35;;Explanation of how time horizons are defined, financial amounts are estimated and of critical assumptions made (resource use and circular economy) ;narrative;;V;;;1 year
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;
+;;;;;;;;;;;

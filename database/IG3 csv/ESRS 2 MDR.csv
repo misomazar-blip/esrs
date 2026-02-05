@@ -1,0 +1,66 @@
+﻿"INSTRUCTIONS
+The DPs in Minimum Disclosure Requirements (MDR) are to be disclosed for the sustainability matters that have been assessed as material according to the undertaking's materiality assessment: E1-2; E1-3; E1-4; E2-1; E2-2; E2-3; E3-1; E3-2; E3-3; E4-2; E4-3; E4-4; E5-1;E5-2; E5-3; S1-1; S1-4; S1-5; S2-1; S2-4; S2-5; S3-1; S3-4; S3-5; S4-1; S4-4; S4-5; G1-1 (Policies); G1-4 (Actions)";;;;;;;;;;
+ID;ESRS;DR;Paragraph;Related AR;Name;Data Type;Conditional or alternative DP;"May 
+[V]";"Appendix B - ESRS 2 
+(SFDR + PILLAR 3 + Benchmark + CL)";"Appendix C - ESRS 1
+[DPs subject to phased-in]"
+MDR-P_01;ESRS 2;MDR-P;65 a;AR 21;Description of key contents of policy ;narrative;; ; ;
+MDR-P_02;ESRS 2;MDR-P;65 b;;Description of scope of policy or of its exclusions ;narrative;; ; ;
+MDR-P_03;ESRS 2;MDR-P;65 c;;Description of most senior level in organisation that is accountable for implementation of policy ;narrative;; ; ;
+MDR-P_04;ESRS 2;MDR-P;65 d;;Disclosure of third-party standards or initiatives that are respected through implementation of policy ;narrative;Conditional; ; ;
+MDR-P_05;ESRS 2;MDR-P;65 e;;Description of consideration given to interests of key stakeholders in setting policy ;narrative;Conditional; ; ;
+MDR-P_06;ESRS 2;MDR-P;65 f;;Explanation of whether and how policy is made available to potentially affected stakeholders and stakeholders who need to help implement it ;narrative;Conditional; ; ;
+MDR-A_01;ESRS 2;MDR-A;68 a;AR 22;Disclosure of key action ;narrative;Conditional; ; ;
+MDR-A_02;ESRS 2;MDR-A;68 b;;Description of scope of key action ;narrative;Conditional; ; ;
+MDR-A_03;ESRS 2;MDR-A;68 c;;Time horizon under which key action is to be completed;semi-narrative;Conditional; ; ;
+MDR-A_04;ESRS 2;MDR-A;68 d;;Description of key action taken, and its results, to provide for and cooperate in or support provision of remedy for those harmed by actual material impacts ;narrative;Conditional; ; ;
+MDR-A_05;ESRS 2;MDR-A;68 e;;Disclosure of quantitative and qualitative information regarding progress of actions or action plans disclosed in prior periods ;narrative;Conditional; ; ;
+MDR-A_06;ESRS 2;MDR-A;69 a;;Disclosure of the type of current and future financial and other resources allocated to the action plan (Capex and Opex);narrative;Conditional; ; ;
+MDR-A_07;ESRS 2;MDR-A;69 b  ;;Explanation of how current financial resources relate to most relevant amounts presented in financial statements;narrative;Conditional;;;
+MDR-A_08;ESRS 2;MDR-A;AR 23;;Current and future financial resources allocated to action plan, breakdown by time horizon and resources;Table/monetary;Conditional;V;;
+MDR-A_09;ESRS 2;MDR-A;69 b  ;;Current financial resources allocated to action plan (Capex);Monerary;Conditional; ; ;
+MDR-A_10;ESRS 2;MDR-A;69 b  ;;Current financial resources allocated to action plan (Opex);Monerary;Conditional; ; ;
+MDR-A_11;ESRS 2;MDR-A;69 c;;Future financial resources allocated to action plan (Capex);Monerary;Conditional; ; ;
+MDR-A_12;ESRS 2;MDR-A;69 c;;Future financial resources allocated to action plan (Opex);Monerary;Conditional; ; ;
+MDR-M_01;ESRS 2;MDR-M;75;;Description of metric used to evaluate performance and effectiveness, in relation to material impact, risk or opportunity ;narrative;; ; ;
+MDR-M_02;ESRS 2;MDR-M;77 a;;Disclosure of methodologies and significant assumptions behind metric ;narrative;; ; ;
+MDR-M_03;ESRS 2;MDR-M;77 b;;Type of external body other than assurance provider that provides validation ;narrative;; ; ;
+MDR-T_01;ESRS 2;MDR-T;80 a;"AR 24 - 
+AR 26";Relationship with policy objectives;narrative;; ; ;
+MDR-T_02;ESRS 2;MDR-T;80 b;"AR 24 - 
+AR 26";Measurable target;Decimal/Percent/narrative;; ; ;
+MDR-T_03;ESRS 2;MDR-T;80 b;"AR 24 - 
+AR 26";Nature of target;semi-narrative;Conditional; ; ;
+MDR-T_04;ESRS 2;MDR-T;80 c;"AR 24 - 
+AR 26";Description of scope of target ;narrative;; ; ;
+MDR-T_05;ESRS 2;MDR-T;80 d  ;"AR 24 - 
+AR 26";Baseline value ;Integer;; ; ;
+MDR-T_06;ESRS 2;MDR-T;80 d  ;"AR 24 - 
+AR 26";Baseline year;Integer;; ; ;
+MDR-T_07;ESRS 2;MDR-T;80 e;"AR 24 - 
+AR 26";Period to which target applies;semi-narrative;; ; ;
+MDR-T_08;ESRS 2;MDR-T;80 e;"AR 24 - 
+AR 26";Indication of milestones or interim targets ;narrative;Conditional; ; ;
+MDR-T_09;ESRS 2;MDR-T;80 f;"AR 24 - 
+AR 26";Description of methodologies and significant assumptions used to define target ;narrative;; ; ;
+MDR-T_10;ESRS 2;MDR-T;80 g;"AR 24 - 
+AR 26";Target related to environmental matters is based on conclusive scientific evidence;semi-narrative;; ; ;
+MDR-T_11;ESRS 2;MDR-T;80 h;"AR 24 - 
+AR 26";Disclosure of whether and how stakeholders have been involved in target setting ;narrative;; ; ;
+MDR-T_12;ESRS 2;MDR-T;80 i;"AR 24 - 
+AR 26";Description of any changes in target and corresponding metrics or underlying measurement methodologies, significant assumptions, limitations, sources and adopted processes to collect data ;narrative;; ; ;
+MDR-T_13;ESRS 2;MDR-T;80 j;"AR 24 - 
+AR 26";Description of performance against disclosed target ;narrative;; ; ;
+;;;;;;;;;;
+Disclosures to be reported in case the undertaking has not adopted policies and/or actions or set any measurable outcome-oriented targets [see chapter 4.2 MDR - ESRS 2];;;;;;;;;;
+MDR-P_07;ESRS 2;MDR-P;62;;Disclosure of reasons for not having adopted policies;narrative;Conditional;;;
+MDR-P_08;ESRS 2;MDR-P;62;;Disclosure of timeframe in which the undertakings aims to adopt policies;narrative;Conditional;V;;
+MDR-A_13;ESRS 2;MDR-A;62;;Disclosure of reasons for not having adopted actions;narrative;Conditional;;;
+MDR-A_14;ESRS 2;MDR-A;62;;Disclosure of timeframe in which the undertakings aims to adopt actions;narrative;Conditional;V;;
+MDR-T_14;ESRS 2;MDR-T;81 a;;Disclosure of timeframe for setting of measurable outcome-oriented targets ;narrative;Conditional;V; ;
+MDR-T_15;ESRS 2;MDR-T;81 a;;Description of reasons why there are no plans to set measurable outcome-oriented targets ;narrative;Conditional;V; ;
+MDR-T_16;ESRS 2;MDR-T;81 b;;Effectiveness of policies and actions is tracked in relation to material sustainability-related impact, risk and opportunity;semi-narrative;Conditional; ; ;
+MDR-T_17;ESRS 2;MDR-T;81 b i;;Description of processes through which effectiveness of policies and actions is tracked in relation to material sustainability-related impact, risk and opportunity ;narrative;Conditional; ; ;
+MDR-T_18;ESRS 2;MDR-T;81 b ii;;Description of defined level of ambition to be achieved and of any qualitative or quantitative indicators used to evaluate progress ;narrative/numerical;Conditional; ; ;
+MDR-T_19;ESRS 2;MDR-T;81 b ii  80 d;;Base year from which progress is measured;GYear;Conditional; ; ;
+;;;;;;;;;;

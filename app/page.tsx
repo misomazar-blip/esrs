@@ -840,12 +840,81 @@ export default function HomePage() {
                 Assess Materiality
               </button>
             </Link>
-            <Link href="/report">
+            <Link href="/comparison">
               <button style={{ ...buttonStyles.primary, width: "100%", padding: spacing.lg }}>
-                View Report
+                🔍 Compare Versions
+              </button>
+            </Link>
+            <Link href="/analytics">
+              <button style={{ ...buttonStyles.primary, width: "100%", padding: spacing.lg }}>
+                📊 Analytics Dashboard
               </button>
             </Link>
           </div>
+
+          {/* BULK EXPORT */}
+          {report && materialTopics > 0 && (
+            <>
+              <h3 style={{ fontSize: fonts.size.lg, fontWeight: fonts.weight.bold, marginTop: spacing.xl, marginBottom: spacing.lg }}>
+                📦 Bulk Export
+              </h3>
+              <p style={{ fontSize: fonts.size.sm, color: colors.textSecondary, marginBottom: spacing.md }}>
+                Download all {materialTopics} material topics as a ZIP archive
+              </p>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: spacing.md }}>
+                <button
+                  onClick={() => window.open(`/api/export/bulk?reportId=${report.id}&format=txt`, '_blank')}
+                  style={{
+                    ...buttonStyles.secondary,
+                    width: "100%",
+                    padding: spacing.lg,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: spacing.xs,
+                  }}
+                >
+                  <span style={{ fontSize: fonts.size.h3 }}>📄</span>
+                  <span>TXT Format</span>
+                  <span style={{ fontSize: fonts.size.xs, color: colors.textSecondary }}>Plain text</span>
+                </button>
+                
+                <button
+                  onClick={() => window.open(`/api/export/bulk?reportId=${report.id}&format=csv`, '_blank')}
+                  style={{
+                    ...buttonStyles.secondary,
+                    width: "100%",
+                    padding: spacing.lg,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: spacing.xs,
+                  }}
+                >
+                  <span style={{ fontSize: fonts.size.h3 }}>📊</span>
+                  <span>CSV Format</span>
+                  <span style={{ fontSize: fonts.size.xs, color: colors.textSecondary }}>Spreadsheets</span>
+                </button>
+                
+                <button
+                  onClick={() => window.open(`/api/export/bulk?reportId=${report.id}&format=json`, '_blank')}
+                  style={{
+                    ...buttonStyles.secondary,
+                    width: "100%",
+                    padding: spacing.lg,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: spacing.xs,
+                  }}
+                >
+                  <span style={{ fontSize: fonts.size.h3 }}>🔧</span>
+                  <span>JSON Format</span>
+                  <span style={{ fontSize: fonts.size.xs, color: colors.textSecondary }}>APIs & code</span>
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     );

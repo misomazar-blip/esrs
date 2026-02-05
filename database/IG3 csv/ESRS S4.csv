@@ -1,0 +1,81 @@
+﻿"INSTRUCTIONS
+1) the DPs reported in ESRS S4 are subject to Materiality Assessment.
+2) Not all DPs are to be reported if the undertaking has not adopted the respective policies, implemented the respective actions or set the respective targets in relation to  a sustainability matter that has been assessed to be material [see ESRS 1 par. 33].
+3) Undertakings or groups not exceeding on their balance sheet dates the average number of 750 employees during the financial year (on a consolidated basis where applicable) may omit the DPs reported in ESRS S4 for the first 2 years of preparation of their sustainability statement [see ESRS 1 Appendix C: List of phased-in Disclosure Requirements].  If S4 is material, the undertaking shall nevertheless disclose DPs reported under par. 17-BP2 of ESRS 2 [see column K]
+4) The column L is not applicable as there are not DPs subject to phased-in [see Appendix C of ESRS 1].
+5) Metrics to be disclosed, in addition to the ones explicitly requried by ESRS, also include entity-specific ones, as well as those arising from other legislation or standard";;;;;;;;;;;
+ID;ESRS;DR;Paragraph;Related AR;Name;Data Type;Conditional or alternative DP;"May 
+[V]";"Appendix B - ESRS 2 
+(SFDR + PILLAR 3 + Benchmark + CL)";"Appendix C - ESRS 1
+DPs subject to phasing-in provisions applicable to undertaking with less than 750 employees";"Appendix C - ESRS 1
+DPs subject to phasing-in provisions applicable to all undertakings "
+S4.SBM-3_01;S4;S4.SBM-3;10;AR 5  -AR 6;All  consumers and end-users who can be materially impacted by undertaking are included in scope of disclosure under ESRS 2;semi-narrative;;;;2 years;
+S4.SBM-3_02;S4;S4.SBM-3;10 a;;Description of types of consumers and end-users subject to material impacts;narrative;;;;2 years;
+S4.SBM-3_03;S4;S4.SBM-3;10 a i-iv;;Type of consumers and end-users subject to material impacts by own operations or through value chain;semi-narrative;;;;2 years;
+S4.SBM-3_04;S4;S4.SBM-3;10 b;;Material negative impacts occurrence (consumers and end-users);semi-narrative;Conditional;;;2 years;
+S4.SBM-3_05;S4;S4.SBM-3;10 c;;Description of activities that result in positive impacts and types of  consumers and end-users that are positively affected or could be positively affected ;narrative;Conditional;;;2 years;
+S4.SBM-3_06;S4;S4.SBM-3;10 d;;Description of material risks and opportunities arising from impacts and dependencies on  consumers and end-users   ;narrative;;;;2 years;
+S4.SBM-3_07;S4;S4.SBM-3;11;AR 7;Disclosure of whether and how understanding of how consumers and end-users with particular characteristics, working in particular contexts, or undertaking particular activities may be at greater risk of harm has been developed;narrative;;;;2 years;
+S4.SBM-3_08;S4;S4.SBM-3;12;AR 8;Disclosure of which of material risks and opportunities arising from impacts and dependencies on consumers and end-users are impacts on specific groups ;narrative;;;;2 years;
+S4.MDR-P_01-06;S4;S4-1;15;;Policies to manage material impacts, risks and opportunities related to consumers and end-users [see ESRS 2 MDR-P];MDR-P;;;;2 years;
+S4-1_01;S4;S4-1;15;;Policies to manage material impacts, risks and opportunities related to affected consumers and end-users, including specific groups or all consumers / end-users;narrative;;;;2 years;
+S4-1_02;S4;S4-1;16;;Description of relevant human rights policy commitments relevant to consumers and/or end-users;narrative;;;SFDR;2 years;
+S4-1_03;S4;S4-1;16 a;;Disclosure of general approach in relation to respect for human rights of consumers and end-users;narrative;;;SFDR;2 years;
+S4-1_04;S4;S4-1;16 b;;Disclosure of general approach in relation to engagement with consumers and/or end-users;narrative;;;SFDR;2 years;
+S4-1_05;S4;S4-1;16 c;;Disclosure of general approach in relation to measures to provide and (or) enable remedy for human rights impacts ;narrative;;;SFDR;2 years;
+S4-1_06;S4;S4-1;17;AR 11;Description of whether and how policies are aligned with relevant internationally recognised instruments ;narrative;;;SFDR;2 years;
+S4-1_07;S4;S4-1;17;;Disclosure of extent and indication of nature of cases of non-respect of the UN Guiding Principles on Business and Human Rights, ILO Declaration on Fundamental Principles and Rights at Work or OECD Guidelines for Multinational Enterprises that involve consumers and/or end-users;narrative;;;SFDR + Benchmark;2 years;
+S4-1_08;S4;S4-1;AR 9;;Disclosure of explanations of significant changes to policies adopted during reporting year ;narrative;;V;;2 years;
+S4-1_09;S4;S4-1;AR 13;;Disclosure on an illustration of the types of communication of its policies to those individuals, group of individuals or entities for whom they are relevant;narrative;;V;;2 years;
+S4.MDR-P_07-08;ESRS 2;;62;;Disclosures to be reported in case the undertaking has not adopted policies;;;;;2 years;
+S4-2_01;S4;S4-2;20;AR 17;Disclosure of whether and how perspectives of consumers and end-users inform decisions or activities aimed at managing actual and potential impacts ;narrative;;;;2 years;
+S4-2_02;S4;S4-2;20 a;AR 14;Engagement occurs with consumers and end-users  or their legitimate representatives directly, or with credible proxies;semi-narrative;Conditional;;;2 years;
+S4-2_03;S4;S4-2;20 b;AR 16;Disclosure of stage at which engagement occurs, type of engagement and frequency of engagement ;narrative;Conditional;;;2 years;
+S4-2_04;S4;S4-2;20 c;AR 15 - AR 16;Disclosure of function and most senior role within undertaking that has operational responsibility for ensuring that engagement happens and that results inform undertakings approach ;narrative;Conditional;;;2 years;
+S4-2_05;S4;S4-2;20 d;;Disclosure of how effectiveness of engagement with  consumers and end-users   is assessed ;narrative;Conditional;;;2 years;
+S4-2_06;S4;S4-2;21;;Disclosure of steps taken to gain insight into perspectives of  consumers and end-users  / consumers and end-users that may be particularly vulnerable to impacts and (or) marginalised ;narrative;Conditional;;;2 years;
+S4-2_07;S4;S4-2;22;;Statement in case the undertaking has not adopted a general process to engage with consumers and/or end-users;narrative;Conditional;;;2 years;
+S4-2_08;S4;S4-2;22;;Disclosure of timeframe for adoption of general process to engage with  consumers and end-users   in case the undertaking has not adopted a general process for engageme;narrative;Conditional;V;;2 years;
+S4-2_09;S4;S4-2;AR 15;;Type of role or function handling with engagement;semi-narrative;;V;;2 years;
+S4-3_01;S4;S4-3;25 a ;AR 18;Disclosure of general approach to and processes for providing or contributing to remedy where undertaking has identified that it connected with a material negative impact on consumers and end-users   ;narrative;;;;2 years;
+S4-3_02;S4;S4-3;25 b ;AR 19;Disclosure of specific channels in place for consumers and end-users to raise concerns or needs directly with undertaking and have them addressed ;narrative;;;;2 years;
+S4-3_03;S4;S4-3;25 c ;;Disclosure of processes through which undertaking supports or requires availability of channels ;narrative;;;;2 years;
+S4-3_04;S4;S4-3;25 d ;AR 24 ;Disclosure of how issues raised and addressed are tracked and monitored and how effectiveness of channels is ensured ;narrative;;;;2 years;
+S4-3_05;S4;S4-3;26;AR 23;Disclosure of whether and how it is assessed that consumers and end-users are aware of and trust structures or processes as way to raise their concerns or needs and have them addressed ;narrative;;;;2 years;
+S4-3_06;S4;S4-3;26;;Policies regarding protection against retaliation for individuals that use channels to raise concerns or needs are in place;semi-narrative;;;;2 years;
+S4-3_07;S4;S4-3;27;;Statement in case the undertaking has not adopted a general process to engage with consumers and/or end-users;narrative;;;;2 years;
+S4-3_08;S4;S4-3;27;;Disclosure of timeframe for channel or processes for raising concerns to be in place ;narrative;Conditional;V;;2 years;
+S4-3_09;S4;S4-3;AR 20;;Disclosure of whether and how consumers and/or end-users are able to access channels at level of undertaking they are affected by;narrative;;V;;2 years;
+S4-3_10;S4;S4-3;AR 21;;Third-party mechanisms are accessible to all consumers and/or end-users;narrative;;V;;2 years;
+S4-3_11;S4;S4-3;AR 22;;Grievances are treated confidentially and with respect to rights of privacy and data protection;semi-narrative;;V;;2 years;
+S4-3_12;S4;S4-3;AR 22;;consumers and end-users   are allowed to use anonymously channels to raise concerns or needs;semi-narrative;;V;;2 years;
+S4-3_13;S4;S4-3;AR 23;;Number of complaints received from consumers and/or end users during the reporting period;Integer;;V;;2 years;
+S4.MDR-A_01-12;S4;S4-4;30;;Action plans and resources to manage its material impacts, risks, and opportunities related to consumers and end-users [see ESRS 2 - MDR-A];MDR-A;;;;2 years;
+S4-4_01;S4;S4-4;31 a ;AR 35;Description of action planned or underway to prevent, mitigate or remediate material negative impacts on consumers and end-users   ;narrative;;;;2 years;
+S4-4_02;S4;S4-4;31 b;;Description of whether and how action has been taken to provide or enable remedy in relation to an actual material impact;narrative;;;;2 years;
+S4-4_03;S4;S4-4;31 c;AR 36;Description of additional initiatives or processes with primary purpose of delivering positive impacts for consumers and end-users  ;narrative;;;;2 years;
+S4-4_04;S4;S4-4;31 d;AR 30 - AR 32;Description of how effectiveness of actions or initiatives in delivering outcomes for consumers and end-users is tracked and assessed ;narrative;;;;2 years;
+S4-4_05;S4;S4-4;32 a;AR 26;Description of approach to identifying what action is needed and appropriate in response to particular actual or potential material negative impact on  consumers and end-users   ;narrative;;;;2 years;
+S4-4_06;S4;S4-4;32 b;;Description of approach to taking action in relation to specific material impacts on consumers and end-users   ;narrative;;;;2 years;
+S4-4_07;S4;S4-4;32 c;;Description of approach to ensuring that processes to provide or enable remedy in event of material negative impacts on  consumers and end-users are available and effective in their implementation and outcomes ;narrative;;;;2 years;
+S4-4_08;S4;S4-4;33 a;AR 37 - AR 38, AR 40;Description of what action is planned or underway to mitigate material risks arising from impacts and dependencies on consumers and end-users and how effectiveness is tracked ;narrative;;;;2 years;
+S4-4_09;S4;S4-4;33 b;;Description of what action is planned or underway to pursue material opportunities in relation to consumers and end-users   ;narrative;;;;2 years;
+S4-4_10;S4;S4-4;34;AR 29;Disclosure of whether and how it is ensured that own practices do not cause or contribute to material negative impacts on consumers and end-users   ;narrative;;;;2 years;
+S4-4_11;S4;S4-4;35;;Disclosure of severe human rights issues and incidents connected to consumers and/or end-users;narrative;;;SFDR;2 years;
+S4-4_12;S4;S4-4;37;;Disclosure of resources allocated to management of material impacts ;narrative;;;;2 years;
+S4-4_13;S4;S4-4;AR 27;AR 29;Disclosure of whether and how undertaking seeks to use leverage with relevant business relationships to manage material negative impacts affecting  consumers and end-users   ;narrative;;V;;2 years;
+S4-4_14;S4;S4-4;AR 28;;Disclosure of how participation in industry or multi-stakeholder initiative and undertaking's own involvement is aiming to address material impacts ;narrative;;V;;2 years;
+S4-4_15;S4;S4-4;AR 33 a;;Disclosure of how consumers and end-users play role in decisions regarding design and implementation of programmes or processes ;narrative;;V;;2 years;
+S4-4_16;S4;S4-4;AR 33 b;;Information about intended or achieved positive outcomes of programmes or processes for consumers and end-users   ;narrative;;V;;2 years;
+S4-4_17;S4;S4-4;AR 34;;Initiatives or processes whose primary aim is to deliver positive impacts for consumers and/or end-users are designed also to support achievement of one or more of Sustainable Development Goals;semi-narrative;;V;;2 years;
+S4-4_18;S4;S4-4;AR 41;;Description of internal functions that are involved in managing impacts and types of action taken by internal functions to address negative and advance positive impacts ;narrative;;V;;2 years;
+S4.MDR-A_13-14;ESRS 2;;62;;Disclosures to be reported if the undertaking has not adopted actions;;;;;2 years;
+S4.MDR-T_01-13;S4;S4-5;41;AR 43 - AR 45;Targets set to manage material impacts, risks and opportunities related to consumers and end-users [see ESRS 2 - MDR-T];MDR-T;;;;2 years;
+S4-5_01;S4;S4-5;41 a ;;Disclosure of whether and how consumers and end-users were engaged directly in setting targets;narrative;;;;2 years;
+S4-5_02;S4;S4-5;41 b;;Disclosure of whether and how consumers and end-users were engaged directly in tracking performance against targets;narrative;;;;2 years;
+S4-5_03;S4;S4-5;41 c;;Disclosure of whether and how consumers and end-users were engaged directly in identifying lessons or improvements as result of undertaking’s performance;narrative;;;;2 years;
+S4-5_04;S4;S4-5;AR 42 a;;Disclosure of intended outcomes to be achieved in lives of consumers and end-users   ;narrative;;V;;2 years;
+S4-5_05;S4;S4-5;AR 42 b;;Information about stability over time of target in terms of definitions and methodologies to enable comparability ;narrative;;V;;2 years;
+S4-5_06;S4;S4-5;AR 42 c;;Disclosure of references to standards or commitments on which target is based ;narrative;;V;;2 years;
+S4.MDR-T_14-19;ESRS 2;;81;;Disclosures to be reported if the undertaking has not adopted targets;;;;;2 years;
+;;;;;;;;;;;

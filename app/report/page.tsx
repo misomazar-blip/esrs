@@ -671,6 +671,68 @@ export default function ReportPage() {
             </select>
           </div>
 
+          {/* Bulk Export Buttons */}
+          {selectedReportId && reportTopics.filter(rt => rt.is_material).length > 0 && (
+            <div style={{ 
+              display: "flex", 
+              gap: spacing.sm, 
+              marginBottom: spacing.md, 
+              padding: spacing.md,
+              backgroundColor: colors.bgSecondary,
+              borderRadius: "6px",
+              flexWrap: "wrap",
+              alignItems: "center"
+            }}>
+              <span style={{ fontSize: fonts.size.sm, color: colors.textSecondary, fontWeight: fonts.weight.semibold }}>
+                📦 Bulk Export:
+              </span>
+              <button
+                onClick={() => window.open(`/api/export/bulk?reportId=${selectedReportId}&format=txt`, '_blank')}
+                style={{
+                  ...buttonStyles.secondary,
+                  padding: `${spacing.xs} ${spacing.md}`,
+                  fontSize: fonts.size.sm,
+                }}
+              >
+                📄 TXT
+              </button>
+              <button
+                onClick={() => window.open(`/api/export/bulk?reportId=${selectedReportId}&format=csv`, '_blank')}
+                style={{
+                  ...buttonStyles.secondary,
+                  padding: `${spacing.xs} ${spacing.md}`,
+                  fontSize: fonts.size.sm,
+                }}
+              >
+                📊 CSV
+              </button>
+              <button
+                onClick={() => window.open(`/api/export/bulk?reportId=${selectedReportId}&format=json`, '_blank')}
+                style={{
+                  ...buttonStyles.secondary,
+                  padding: `${spacing.xs} ${spacing.md}`,
+                  fontSize: fonts.size.sm,
+                }}
+              >
+                🔧 JSON
+              </button>
+              <Link href="/analytics" style={{ marginLeft: "auto" }}>
+                <button
+                  style={{
+                    ...buttonStyles.primary,
+                    padding: `${spacing.xs} ${spacing.md}`,
+                    fontSize: fonts.size.sm,
+                  }}
+                >
+                  📊 View Analytics
+                </button>
+              </Link>
+              <span style={{ fontSize: fonts.size.xs, color: colors.textSecondary }}>
+                {reportTopics.filter(rt => rt.is_material).length} material topics
+              </span>
+            </div>
+          )}
+
           {/* Search Box */}
           <div style={{ marginBottom: spacing.md }}>
             <div style={{ display: "flex", alignItems: "center", gap: spacing.md }}>

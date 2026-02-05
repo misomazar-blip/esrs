@@ -1,0 +1,83 @@
+﻿"INSTRUCTIONS
+1) The DPs reported in ESRS E2 are subject to Materiality Assessment.
+2) With the exception of DPs in IRO1 (E2.IRO-1_01-03) that are to be disclosed irrespective of the outcome of its materiality assessment [ESRS 1 par. 29], none of these DPs is applicable if the topic is not material.
+3) Not all DPs are to be reported if the undertaking has not adopted the respective policies, implemented the respective actions or set the respective targets in relation to  a sustainability matter that has been assessed to be material [see ESRS 1 par. 33].
+4) Column L identifies DPs subject to phased-in [see Appendix C of ESRS 1].
+5) Metrics to be disclosed, in addition to the ones explicitly requried by ESRS, also include entity-specific ones, as well as those arising from other legislation or standard.";;;;;;;;;;;;
+ID;ESRS;DR;Paragraph;Related AR;Name;Data Type;Conditional or alternative DP;"May 
+[V]";"Appendix B - ESRS 2 
+(SFDR + PILLAR 3 + Benchmark + CL)";"Appendix C - ESRS 1
+DPs subject to phasing-in provisions applicable to undertaking with less than 750 employees";"Appendix C - ESRS 1
+DPs subject to phasing-in provisions applicable to all undertakings ";
+E2.IRO-1_01;E2; E2.IRO-1 ;11 a;AR 1- AR 8;Information about the process to identify actual and potential pollution-related impacts, risks and opportuntities;narrative;;;;;;
+E2.IRO-1_02;E2; E2.IRO-1 ;11 b;;Disclosure of whether and how consultations have been conducted (pollution) ;narrative;;;;;;
+E2.IRO-1_03;E2; E2.IRO-1 ;AR 9;;Disclosure of results of materiality assessment (pollution) ;narrative;;;;;;
+E2.MDR-P_01-06;E2; E2-1 ;14;AR 10;Policies to manage its material impacts, risks and opportunities related to pollution [see ESRS 2 MDR-P];MDR-P;;;;;;
+E2-1_01;E2; E2-1 ;15 a;AR 11;Disclosure of whether and how policy addresses mitigating negative impacts related to pollution of air, water and soil ;narrative;;;;;;
+E2-1_02;E2; E2-1 ;15 b;AR 11;Disclosure of  whether and how policy addresses substituting and minimising use of substances of concern and phasing out substances of very high concern ;narrative;;;;;;
+E2-1_03;E2; E2-1 ;15 c;;Disclosure of  whether and how policy addresses avoiding incidents and emergency situations, and if and when they occur, controlling and limiting their impact on people and environment ;narrative;;;;;;
+E2-1_04;E2; E2-1 ;AR 12;;Disclosure of contextual information on relations between policies implemented and how policies contribute to EU Action Plan Towards Zero Pollution for Air, Water and Soil ;narrative;;V;;;;
+E2.MDR-P_07-08;ESRS 2;;62;;Disclosures to be reported in case the undertaking has not adopted policies;;;;;;;
+E2.MDR-A_01-12;E2; E2-2 ;18;;Actions and resources in relation to pollution [see ESRS 2 MDR-A];MDR-A;;;;;;
+E2-2_01;E2; E2-2 ;19;;Layer in mitigation hierarchy to which action can be allocated to (pollution);semi-narrative;;V;;;;
+E2-2_02;E2; E2-2 ;AR 13;;Action related to pollution extends to upstream/downstream value chain engagements;semi-narrative;;;;;;
+E2-2_03;E2; E2-2 ;19;AR 14;Layer in mitigation hierarchy to which resources can be allocated to (pollution);semi-narrative;;V;;;;
+E2-2_04;E2; E2-2 ;AR 15;;Information about action plans that have been implemented at site-level (pollution) ;narrative;Conditional;V;;;;
+E2.MDR-A_13-14;ESRS 2;;62;;Disclosures to be reported if the undertaking has not adopted actions;;;;;;;
+E2.MDR-T_01-13;E2; E2-3 ;22;AR 19;Tracking effectiveness of policies and actions through targets [see ESRS 2 MDR-T ];MDR-T;;;;;;
+E2-3_01;E2; E2-3 ;23 a;;Disclosure of  whether and  how target relates to prevention and control of air pollutants and respective specific loads ;narrative;;;;;;
+E2-3_02;E2; E2-3 ;23 b;;Disclosure of  whether and how target relates to prevention and control of emissions to water and respective specific loads ;narrative;;;;;;
+E2-3_03;E2; E2-3 ;23 c;;Disclosure of  whether and how target relates to prevention and control of pollution to soil and respective specific loads ;narrative;;;;;;
+E2-3_04;E2; E2-3 ;23 d;;Disclosure of  whether and how target relates to prevention and control of  substances of concern and substances of very high concern;narrative;;;;;;
+E2-3_05;E2; E2-3 ;24;AR 16;Ecological thresholds and entity-specific allocations were taken into consideration when setting pollution-related target;semi-narrative;;V;;;;
+E2-3_06;E2; E2-3 ;24 a;AR 16;Disclosure of ecological thresholds identified and methodology used to identify ecological thresholds (pollution) ;narrative;Conditional;V;;;;
+E2-3_07;E2; E2-3 ;24 b;AR 16;Disclosure of how ecological entity-specific thresholds were determined (pollution) ;narrative;Conditional;V;;;;
+E2-3_08;E2; E2-3 ;24 c;AR 16;Disclosure of how responsibility for respecting identified ecological thresholds is allocated (pollution) ;narrative;Conditional;V;;;;
+E2-3_09;E2; E2-3 ;25;;Pollution-related target is mandatory (required by legislation)/voluntary;semi-narrative;;;;;;
+E2-3_10;E2; E2-3 ;AR 17;;Pollution-related target addresses shortcomings related to Substantial Contribution criteria for Pollution Prevention and Control;semi-narrative;;V;;;;
+E2-3_11;E2; E2-3 ;AR 18;;Information about targets that have been implemented at site-level (pollution) ;narrative;Conditional;V;;;;
+E2.MDR-T_14-19;ESRS 2;;81;;Disclosures to be reported if the undertaking has not adopted targets;;;;;;;
+E2-4_01;E2; E2-4 ;28 a;AR 21 - 22;Pollution of air, water and soil [multiple dimensions: at site level or  by type of source, by sector or by geographical area;Table;;;;;;
+E2-4_02;E2; E2-4 ;28 a;AR 21 - 22;Emissions to air by pollutant ;Table/mass;;;SFDR;;;
+E2-4_03;E2; E2-4 ;28 a;AR 21 - 22;Emissions to water by pollutant  [+ by sectors/Geographical Area/Type of source/Site location];Table/mass;;;SFDR;;;
+E2-4_04;E2; E2-4 ;28 a;AR 21 - 22;Emissions to soil by pollutant  [+ by sectors/Geographical Area/Type of source/Site location];Table/mass;;;SFDR;;;
+E2-4_05;E2; E2-4 ;28 b;AR 20;Microplastics generated and used;mass;Alternative;;;;;
+E2-4_06;E2; E2-4 ;28 b;AR 20;Microplastics generated;mass;Alternative;;;;;
+E2-4_07;E2; E2-4 ;28 b;AR 20;Microplastics used;mass;Alternative;;;;;
+E2-4_08;E2; E2-4 ;30 a;;Description of changes over time (pollution of air, water and soil) ;narrative;;;;;;
+E2-4_09;E2; E2-4 ;30 b ;AR 26-AR 27;Description of measurement methodologies (pollution of air, water and soil) ;narrative;;;;;;
+E2-4_10;E2; E2-4 ;30 c;AR 27;Description of process(es) to collect data for pollution-related accounting and reporting ;narrative;;;;;;
+E2-4_11;E2; E2-4 ;AR 23 c;;Percentage of total emissions of pollutants to water occurring in areas at water risk;percent;;V;;;;
+E2-4_12;E2; E2-4 ;AR 23 c;;Percentage of total emissions of pollutants to water occurring in areas of high-water stress;percent;;V;;;;
+E2-4_13;E2; E2-4 ;AR 23 c;;Percentage of total emissions of pollutants to soil occurring in areas at water risk;percent;;V;;;;
+E2-4_14;E2; E2-4 ;AR 23 c;;Percentage of total emissions of pollutants to soil occurring in areas of high-water stress;percent;;V;;;;
+E2-4_15;E2; E2-4 ;31;;Disclosure of reasons for choosing inferior methodology to quantify emissions ;narrative;Conditional;;;;;
+E2-4_16;E2; E2-4 ;AR 25a;;Disclosure of list of installations operated that fall under IED and EU BAT Conclusions ;narrative;Conditional;V;;;;
+E2-4_17;E2; E2-4 ;AR 25b;;Disclosure of list of any non-compliance incidents or enforcement actions necessary to ensure compliance in case of breaches of permit conditions ;narrative;Conditional;V;;;;
+E2-4_18;E2; E2-4 ;AR 25c;;Disclosure of actual performance and comparison of environmental performance against emission levels associated with best available techniques (BAT-AEL) as described in EU-BAT conclusions ;narrative;Conditional;V;;;;
+E2-4_19;E2; E2-4 ;AR 25d;;Disclosure of actual performance against environmental performance levels associated with best available techniques (BAT-AEPLs) applicable to sector and installation ;narrative;Conditional;V;;;;
+E2-4_20;E2; E2-4 ;AR 25e;;Disclosure of list of any compliance schedules or derogations granted by competent authorities according to Article 15(4) IED that are associated with implementation of BAT-AELs ;narrative;Conditional;V;;;;
+E2-5_01;E2; E2-5 ;34;AR 28-AR 30;Total amount of substances of concern that are generated or used during production or that are procured, breakdown by main hazard classes of substances of concern;TABLE;;;;;;
+E2-5_02;E2; E2-5 ;34;;Total amount of substances of concern that are generated or used during production or that are procured;Table/mass;;;;;;
+E2-5_03;E2; E2-5 ;34;;Total amount of substances of concern that leave facilities as emissions, as products, or as part of products or services ;Table/mass;;;;;;
+E2-5_04;E2; E2-5 ;34;;Amount of substances of concern that leave facilities as emissions by main hazard classes of substances of concern;Table/mass;;;;;;
+E2-5_05;E2; E2-5 ;34;;Amount of substances of concern that leave facilities as products by main hazard classes of substances of concern;Table/mass;;;;;;
+E2-5_06;E2; E2-5 ;34;;Amount of substances of concern that leave facilities as part of products by main hazard classes of substances of concern;Table/mass;;;;;;
+E2-5_07;E2; E2-5 ;34;;Amount of substances of concern that leave facilities as services by main hazard classes of substances of concern;Table/mass;;;;;;
+E2-5_08;E2; E2-5 ;35;;Total amount of substances of very high concern that are generated or used during production or that are procured by main hazard classes of substances of concern;Table/mass;;;;;;
+E2-5_09;E2; E2-5 ;35;;Total amount of substances of very high concern that leave facilities as emissions, as products, or as part of products or services by main hazard classes of substances of concern;Table/mass;;;;;;
+E2-5_10;E2; E2-5 ;35;;Amount of substances of very high concern that leave facilities as emissions by main hazard classes of substances of concern;Table/mass;;;;;;
+E2-5_11;E2; E2-5 ;35;;Amount of substances of very high concern that leave facilities as products by main hazard classes of substances of concern;Table/mass;;;;;;
+E2-5_12;E2; E2-5 ;35;;Amount of substances of very high concern that leave facilities as part of products by main hazard classes of substances of concern;Table/mass;;;;;;
+E2-5_13;E2; E2-5 ;35;;Amount of substances of very high concern that leave facilities as services by main hazard classes of substances of concern;Table/mass;;;;;;
+E2-6_01;E2; E2-6 ;39 a;"AR 32; AR 34";Disclosure of quantitative information about anticipated financial effects of material risks and opportunities arising from pollution-related impacts ;Monetary;;;;;3 years;
+E2-6_02;E2; E2-6 ;40 a;;Percentage of net revenue made with products and services that are or that contain substances of concern;percent;;;;;3 years;
+E2-6_03;E2; E2-6 ;40 a;;Percentage of net revenue made with products and services that are or that contain substances of very high concern;percent;;;;;3 years;
+E2-6_04;E2; E2-6 ;40 b;AR 31;Operating expenditures (OpEx) in conjunction with major incidents and deposits (pollution);monetary;;;;;;
+E2-6_05;E2; E2-6 ;40 b;AR 31;Capital expenditures (CapEx) in conjunction with major incidents and deposits (pollution);monetary;;;;;;
+E2-6_06;E2; E2-6 ;40 c;AR 31 a;Provisions for environmental protection and remediation costs (pollution);monetary;;;;;3 years;
+E2-6_07;E2; E2-6 ;39 a;;Disclosure of qualitative information about anticipated financial effects of material risks and opportunities arising from pollution-related impacts ;narrative;;;;;1 year;
+E2-6_08;E2; E2-6 ;39 b;;Description of effects considered, related impacts and time horizons in which they are likely to materialise (pollution) ;narrative;;;;;1 year;
+E2-6_09;E2; E2-6 ;39 c;AR 33;Disclosure of critical assumptions used to quantify anticipated financial effects, sources and level of uncertainty of assumptions (pollution) ;narrative;;;;;1 year;
+E2-6_10;E2; E2-6 ;41;;Description of material incidents and deposits whereby pollution had negative impacts on environment and (or) is expected to have negative effects on financial cash flows, financial position and financial performance ;narrative;;;;;1 year;
+E2-6_11;E2; E2-6 ;AR 33;;Disclosure of assessment of related products and services at risk and explanation how time horizon is defined, financial amounts are estimated, and which critical assumptions are made (pollution) ;narrative;;V;;;1 year;

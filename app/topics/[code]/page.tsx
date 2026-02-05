@@ -7,6 +7,8 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, buttonStyles, cardStyles, fonts, inputStyles, spacing, shadows, headingStyles, borderRadius } from "@/lib/styles";
 import DynamicQuestionInput from "@/components/DynamicQuestionInput";
 import VersionSelector from "@/components/VersionSelector";
+import QuestionComments from "@/components/QuestionComments";
+import QuestionAttachments from "@/components/QuestionAttachments";
 import { VersionedQuestion, VersionedAnswer } from "@/types/esrs";
 
 type Topic = { id: string; code: string; name?: string };
@@ -30,6 +32,10 @@ export default function TopicPage() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [showValidation, setShowValidation] = useState(false);
+  const [autoSaving, setAutoSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [autoSaveEnabled, setAutoSaveEnabled] = useState(true); // Default to true, will be updated from localStorage
 
   const orderedQuestions = useMemo(() => {
     return [...questions].sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0));
@@ -122,6 +128,16 @@ export default function TopicPage() {
     checkAuth();
   }, []);
 
+  // Load auto-save preference from localStorage after mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('autoSaveEnabled');
+      if (saved !== null) {
+        setAutoSaveEnabled(saved === 'true');
+      }
+    }
+  }, []);
+
   useEffect(() => {
     async function loadReport() {
       if (!reportId) return;
@@ -150,6 +166,58 @@ export default function TopicPage() {
         report_id: reportId,
       } as VersionedAnswer,
     }));
+    setHasUnsavedChanges(true);
+  }
+
+  // Save auto-save preference to localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('autoSaveEnabled', String(autoSaveEnabled));
+    }
+  }, [autoSaveEnabled]);
+
+  // Auto-save with debounce
+  useEffect(() => {
+    if (!autoSaveEnabled || !hasUnsavedChanges || !reportId || loading) return;
+
+    const timeoutId = setTimeout(() => {
+      autoSaveAnswers();
+    }, 2000); // 2 second debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [answers, hasUnsavedChanges, reportId, loading, autoSaveEnabled]);
+
+  async function autoSaveAnswers() {
+    if (!reportId || autoSaving) return;
+    
+    setAutoSaving(true);
+    
+    try {
+      const rows = Object.values(answers).map((answer) => ({
+        report_id: reportId,
+        question_id: answer.question_id,
+        value_text: answer.value_text || null,
+        value_numeric: answer.value_numeric ?? null,
+        value_boolean: answer.value_boolean ?? null,
+        value_date: answer.value_date || null,
+        value_json: answer.value_json || null,
+        answer_text: answer.answer_text || answer.value_text || null,
+        unit: answer.unit || null,
+        notes: answer.notes || null,
+      }));
+
+      await supabase
+        .from("disclosure_answer")
+        .upsert(rows, { onConflict: "report_id,question_id" });
+
+      setLastSaved(new Date());
+      setHasUnsavedChanges(false);
+    } catch (e: any) {
+      // Silent fail for auto-save, don't disturb user
+      console.error("Auto-save failed:", e);
+    } finally {
+      setAutoSaving(false);
+    }
   }
 
   async function saveAll() {
@@ -214,6 +282,8 @@ export default function TopicPage() {
 
       await loadAll();
       setShowValidation(false); // Hide validation after successful save
+      setLastSaved(new Date());
+      setHasUnsavedChanges(false);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (e: any) {
       setErr(e.message ?? "Save failed");
@@ -267,59 +337,132 @@ export default function TopicPage() {
               gap: spacing.lg,
             }}
           >
-            {/* VERSION SELECTOR */}
-            <VersionSelector />
-            
-            {/* USER INFO */}
+            {/* AUTO-SAVE TOGGLE & STATUS */}
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 gap: spacing.sm,
-                padding: `${spacing.sm} ${spacing.md}`,
-                borderRadius: "6px",
-                backgroundColor: colors.bgSecondary,
               }}
             >
-              <span
-                style={{
-                  fontSize: fonts.size.sm,
-                  color: colors.textSecondary,
-                  fontWeight: fonts.weight.semibold,
-                }}
-              >
-                User
-              </span>
+              {/* Toggle Switch */}
               <div
                 style={{
-                  width: "32px",
-                  height: "32px",
-                  borderRadius: "50%",
-                  backgroundColor: colors.primary,
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
-                  color: colors.white,
-                  fontWeight: fonts.weight.bold,
-                  fontSize: fonts.size.sm,
+                  gap: spacing.xs,
+                  cursor: "pointer",
+                  userSelect: "none",
                 }}
+                onClick={() => setAutoSaveEnabled(!autoSaveEnabled)}
+                title={autoSaveEnabled ? "Disable auto-save" : "Enable auto-save"}
               >
-                {email?.[0]?.toUpperCase()}
+                <div
+                  style={{
+                    width: "40px",
+                    height: "20px",
+                    borderRadius: "10px",
+                    backgroundColor: autoSaveEnabled ? colors.success : colors.borderGray,
+                    position: "relative",
+                    transition: "background-color 0.3s",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: "16px",
+                      height: "16px",
+                      borderRadius: "50%",
+                      backgroundColor: colors.white,
+                      position: "absolute",
+                      top: "2px",
+                      left: autoSaveEnabled ? "22px" : "2px",
+                      transition: "left 0.3s",
+                      boxShadow: shadows.sm,
+                    }}
+                  />
+                </div>
+                <span
+                  style={{
+                    fontSize: fonts.size.xs,
+                    color: colors.textSecondary,
+                    fontWeight: fonts.weight.medium,
+                  }}
+                >
+                  Auto-save
+                </span>
               </div>
-              <span
+
+              {/* Status Indicator */}
+              {autoSaveEnabled && (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: spacing.xs,
+                    padding: `${spacing.xs} ${spacing.sm}`,
+                    borderRadius: "6px",
+                    fontSize: fonts.size.xs,
+                    fontWeight: fonts.weight.medium,
+                    backgroundColor: autoSaving
+                      ? colors.bgSecondary
+                      : hasUnsavedChanges
+                      ? "#fff3cd"
+                      : lastSaved
+                      ? "#d1f2eb"
+                      : "transparent",
+                    color: autoSaving
+                      ? colors.textSecondary
+                      : hasUnsavedChanges
+                      ? "#856404"
+                      : lastSaved
+                      ? "#0c5640"
+                      : colors.textSecondary,
+                  }}
+                >
+                  {autoSaving ? (
+                    <>
+                      <span>🔄</span>
+                      <span>Saving...</span>
+                    </>
+                  ) : hasUnsavedChanges ? (
+                    <>
+                      <span>⚠️</span>
+                      <span>Unsaved</span>
+                    </>
+                  ) : lastSaved ? (
+                    <>
+                      <span>✅</span>
+                      <span>
+                        {lastSaved.toLocaleTimeString("sk-SK", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                        })}
+                      </span>
+                    </>
+                  ) : null}
+                </div>
+              )}
+            </div>
+
+            {/* VERSION SELECTOR */}
+            <VersionSelector />
+            
+            {/* Analytics Link */}
+            <Link href="/analytics">
+              <button
                 style={{
+                  ...buttonStyles.secondary,
+                  padding: `${spacing.xs} ${spacing.md}`,
                   fontSize: fonts.size.sm,
-                  color: colors.textPrimary,
-                  fontWeight: fonts.weight.medium,
-                  maxWidth: "150px",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: spacing.xs,
                 }}
               >
-                {email}
-              </span>
-            </div>
+                📊 Analytics
+              </button>
+            </Link>
 
             {/* USER DROPDOWN */}
             <div style={{ position: "relative" }}>
@@ -568,10 +711,26 @@ export default function TopicPage() {
         ) : (
           <div style={{ display: "grid", gap: 24 }}>
             {filteredQuestions.map((q, idx) => (
-              <div key={q.id} style={cardStyles.base}>
+              <div 
+                key={q.id} 
+                style={{
+                  ...cardStyles.base,
+                  border: `2px solid ${colors.borderGray}`,
+                  boxShadow: shadows.md,
+                  transition: "box-shadow 0.2s, border-color 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = shadows.lg;
+                  e.currentTarget.style.borderColor = colors.primary;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = shadows.md;
+                  e.currentTarget.style.borderColor = colors.borderGray;
+                }}
+              >
                 <div style={{ marginBottom: 16 }}>
-                  <div style={{ ...headingStyles.h3, marginBottom: 4 }}>
-                    {idx + 1}. {q.code}
+                  <div style={{ ...headingStyles.h3, marginBottom: 8 }}>
+                    {idx + 1}. {q.question_text || "Question"}
                   </div>
                 </div>
                 <DynamicQuestionInput
@@ -581,6 +740,24 @@ export default function TopicPage() {
                   disabled={saving}
                   showValidation={showValidation}
                 />
+                
+                {/* Attachments Section */}
+                {reportId && email && (
+                  <QuestionAttachments
+                    questionId={q.id}
+                    reportId={reportId}
+                    currentUserEmail={email}
+                  />
+                )}
+                
+                {/* Comments Section */}
+                {reportId && email && (
+                  <QuestionComments
+                    questionId={q.id}
+                    reportId={reportId}
+                    currentUserEmail={email}
+                  />
+                )}
               </div>
             ))}
           </div>

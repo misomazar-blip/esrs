@@ -1,0 +1,137 @@
+﻿"INSTRUCTIONS
+1) The DPs reported in ESRS E4 are subject to Materiality Assessment.
+2) With the exception of DPs in IRO1 (E4.IRO-1_01-16) that are to be disclosed irrespective of the outcome of its materiality assessment [ESRS 1 par. 29], none of these DPs is applicable if the topic is not material.
+3) Not all DPs are to be reported if the undertaking has not adopted the respective policies, implemented the respective actions or set the respective targets in relation to  a sustainability matter that has been assessed to be material [see ESRS 1 par. 33].
+4) Undertakings or groups not exceeding on their balance sheet dates the average number of 750 employees during the financial year (on a consolidated basis where applicable) may omit all the DPs reported in ESRS E4 [other than IRO 1] for the first 2 years of preparation of their sustainability statement [see ESRS 1 Appendix C: List of phased-in Disclosure Requirements].  If E4 is material, the undertaking shall nevertheless disclose DPs reported under par. 17-BP2 of ESRS 2.
+5) Column L identifies DPs subject to phased-in [see Appendix C of ESRS 1].
+6) Metrics to be disclosed, in addition to the ones explicitly requried by ESRS, also include entity-specific ones, as well as those arising from other legislation or standard.";;;;;;;;;;;
+ID;ESRS;DR;Paragraph;Related AR;Name;Data Type;Conditional or alternative DP;"May 
+[V]";"Appendix B - ESRS 2 
+(SFDR + PILLAR 3 + Benchmark + CL)";"Appendix C - ESRS 1
+DPs subject to phasing-in provisions applicable to undertaking with less than 750 employees";"Appendix C - ESRS 1
+DPs subject to phasing-in provisions applicable to all undertakings "
+E4.SBM-3_01;E4;E4.SBM-3;16 a;;List of material sites in own operation;narrative;;;;2 years;
+E4.SBM-3_02;E4;E4.SBM-3;16 a i;;Disclosure of activities negatively affecting biodiversity sensitive areeas;narrative;;;SFDR;2 years;
+E4.SBM-3_03;E4;E4.SBM-3;16 a ii;;Disclosure of list of material sites in own operations based on results of identification and assessment of actual and potential impacts on biodiversity and ecosystems;narrative;;;;2 years;
+E4.SBM-3_04;E4;E4.SBM-3;16 a iii;;Disclosure of biodiversity-sensitive areas impacted ;narrative;;;;2 years;
+E4.SBM-3_05;E4;E4.SBM-3;16 b;;Material negative impacts with regards to land degradation, desertification or soil sealing have been identified;semi-narrative;;;SFDR;2 years;
+E4.SBM-3_06;E4;E4.SBM-3;16 c;;Own operations affect threatened species;semi-narrative;;;SFDR;2 years;
+E4.IRO-1_01;E4;E4.IRO-1; 17 a;AR 4-AR 9;Disclosure of whether and how actual and potential impacts on biodiversity and ecosystems at own site locations and in value chain have been identified and assessed ;narrative;;;;2 years;
+E4.IRO-1_02;E4;E4.IRO-1; 17 b;AR 8;Disclosure of whether and how dependencies on biodiversity and ecosystems and their services have been identified and assessed at own site locations and in value chain ;narrative;;;;2 years;
+E4.IRO-1_03;E4;E4.IRO-1; 17 c;AR 9;Disclosure of whether and how transition and physical risks and opportunities related to biodiversity and ecosystems have been identified and assessed ;narrative;;;;2 years;
+E4.IRO-1_04;E4;E4.IRO-1; 17 d;AR 9;Disclosure of whether and how systemic risks have been considered (biodiversity and ecosystems);narrative;;;;2 years;
+E4.IRO-1_05;E4;E4.IRO-1; 17 e;;Disclosure of whether and how consultations with affected communities on sustainability assessments of shared biological resources and ecosystems have been conducted ;narrative;;;;2 years;
+E4.IRO-1_06;E4;E4.IRO-1; 17 e i;;Disclosure of whether and how specific sites, raw materials production or sourcing with negative or potential negative impacts on affected communities ;narrative;;;;2 years;
+E4.IRO-1_07;E4;E4.IRO-1; 17 e ii;;Disclosure of whether and how communities were involved in materiality assessment ;narrative;;;;2 years;
+E4.IRO-1_08;E4;E4.IRO-1; 17 e iii;;Disclosure of whether and how negative impacts on priority ecosystem services of relevance to affected communities may be avoided ;narrative;;;;2 years;
+E4.IRO-1_09;E4;E4.IRO-1; 17 e iii;;Disclosure of plans to minimise unavoidable negative impacts and implement mitigation measures that aim to maintain value and functionality of priority services ;narrative;;V;;2 years;
+E4.IRO-1_10;E4;E4.IRO-1;18;;Disclosure of whether and how tthe business model(s) has been verified using range of biodiversity and ecosystems scenarios, or other scenarios with modelling of biodiversity and ecosystems related consequences, with different possible pathways;narrative;;V;;2 years;
+E4.IRO-1_11;E4;E4.IRO-1; 18 a;;Disclosure of why considered scenarios were taken into consideration ;narrative;Conditional;V;;2 years;
+E4.IRO-1_12;E4;E4.IRO-1; 18 b;;Disclosure of how considered scenarios are updated according to evolving conditions and emerging trends ;narrative;Conditional;V;;2 years;
+E4.IRO-1_13;E4;E4.IRO-1; 18 c;;Scenarios are informed by expectations in authoritative intergovernmental instruments and by scientific consensus;semi-narrative;Conditional;V;;2 years;
+E4.IRO-1_14;E4;E4.IRO-1; 19a;AR 7d;Undertaking has sites located in or near biodiversity-sensitive areas;semi-narrative;;;;2 years;
+E4.IRO-1_15;E4;E4.IRO-1; 19a;AR  7d;Activities related to sites located in or near biodiversity-sensitive areas negatively affect these areas by leading to deterioration of natural habitats and habitats of species and to disturbance of species for which protected area has been designated;semi-narrative;;;;2 years;
+E4.IRO-1_16;E4;E4.IRO-1; 19b;;It has been concluded that it is necessary to implement biodiversity mitigation measures;semi-narrative;;;;2 years;
+E4-1_01;E4;E4-1;13 a;AR 1- AR 3;Disclosure of resilience of current business model(s) and strategy to biodiversity and ecosystems-related physical, transition and systemic risks and opportunities ;narrative;;;;2 years;
+E4-1_02;E4;E4-1;13 b;AR 1- AR 3;Disclosure of scope of resilience analysis along own operations and related upstream and downstream value chain ;narrative;;;;2 years;
+E4-1_03;E4;E4-1;13 c;AR 1- AR 3;Disclosure of key assumptions made (biodiversity and ecosystems) ;narrative;;;;2 years;
+E4-1_04;E4;E4-1;13 d;AR 1- AR 3;Disclosure of time horizons used for analysis (biodiversity and ecosystems) ;narrative;;;;2 years;
+E4-1_05;E4;E4-1;13 e;AR 1- AR 3;Disclosure of results of resilience analysis (biodiversity and ecosystems) ;narrative;;;;2 years;
+E4-1_06;E4;E4-1;13 f;AR 1- AR 3;Disclosure of involvement of stakeholders (biodiversity and ecosystems) ;narrative;;;;2 years;
+E4-1_07;E4;E4-1;15;AR 1- AR 3;Disclosure of transition plan to improve and achieve alignment of its business model and strategy;narrative;;V;;2 years;
+E4-1_08;E4;E4-1;AR 1 a;;Explanation of how strategy and business model will be adjusted to improve and, ultimately, achieve alignment with relevant local, national and global public policy goals;narrative;;V;;2 years;
+E4-1_09;E4;E4-1;AR 1 b;;Include information about  its own operations and  explain how it is responding to material impacts in its related value chain;narrative;;V; ;2 years;
+E4-1_10;E4;E4-1;AR 1 c;;Explanation of how b strategy interacts with  transition plan ;narrative;;V;;2 years;
+E4-1_11;E4;E4-1;AR 1 d;;Disclosure of contribution to impact drivers and possible mitigation actions following mitigation hierarchy and main path-dependencies and locked-in assets and resources that are associated with biodiversity and ecosystems change ;narrative;;V;;2 years;
+E4-1_12;E4;E4-1;AR 1 e;;Explanation and quantification of investments and funding supporting the implementation of its transition plan;narrative;;V;;2 years;
+E4-1_13;E4;E4-1;AR 1  f;;Disclosure of objectives or plans for aligning economic activities (revenues, CapEx);narrative;;V;;2 years;
+E4-1_14;E4;E4-1;AR 1 g;;Biodiversity offsets are part of transition plan;narrative;;V;;2 years;
+E4-1_15;E4;E4-1;AR 1  h;;Information about how process of implementing and updating transition plan is managed ;narrative;;V;;2 years;
+E4-1_16;E4;E4-1;AR 1  i;;Indication of metrics and related tools used to measure progress that are integrated in measurement approach (biodiversity and ecosystems) ;narrative;;V;;2 years;
+E4-1_17;E4;E4-1;AR 1  j;;Administrative, management and supervisory bodies have approved transition plan;narrative;;V;;2 years;
+E4-1_18;E4;E4-1;AR 1  k;;Indication of current challenges and limitations to draft plan in relation to areas of significant impact and actions company is taking to address them (biodiversity and ecosystems) ;narrative;;V;;2 years;
+E4.MDR-P_01-06;E4;E4-2;22;AR 11;Policies to manage material impacts, risks, dependencies and opportunities related to biodiversity and ecosystems [see ESRS 2 - MDR-P];MDR-P;;;;2 years;
+E4-2_01;E4;E4-2;23 a;;Disclosure on whether and how biodiversity and ecosystems-related policies relate to matters reported in E4 AR4;narrative;;;;2 years;
+E4-2_02;E4;E4-2;23 b;;Explanation of whether and  how biodiversity and ecosystems-related policy relates to material biodiversity and ecosystems-related impacts ;narrative;;;;2 years;
+E4-2_03;E4;E4-2;23 c;;Explanation of whether and  how biodiversity and ecosystems-related policy relates to material dependencies and material physical and transition risks and opportunities ;narrative;;;;2 years;
+E4-2_04;E4;E4-2;23 d;;Explanation of whether and how biodiversity and ecosystems-related policy supports traceability of products, components and raw materials with significant actual or potential impacts on biodiversity and ecosystems along value chain ;narrative;;;;2 years;
+E4-2_05;E4;E4-2;23 e;;Explanation of whether and how biodiversity and ecosystems-related policy addresses production, sourcing or consumption from ecosystems that are managed to maintain or enhance conditions for biodiversity ;narrative;;;;2 years;
+E4-2_06;E4;E4-2;23 f;AR 14 - AR 15;Explanation of whether and how biodiversity and ecosystems-related policy addresses social consequences of biodiversity and ecosystems-related impacts ;narrative;;;;2 years;
+E4-2_07;E4;E4-2;AR 12;;Disclosure of how policy refers to production, sourcing or consumption of raw materials ;narrative;;V;;2 years;
+E4-2_08;E4;E4-2;AR 12 a;;Disclosure of how policy refers to policies limiting procurement from suppliers that cannot demonstrate that they are not contributing to significant conversion of protected areas or key biodiversity areas ;narrative;;V;;2 years;
+E4-2_09;E4;E4-2;AR 12 b;;Disclosure of how policy refers to recognised standards or third-party certifications overseen by regulators ;narrative;;V;;2 years;
+E4-2_10;E4;E4-2;AR 12 c;;Disclosure of how policy addresses raw materials originating from ecosystems that have been managed to maintain or enhance conditions for biodiversity, as demonstrated by regular monitoring and reporting of biodiversity status and gains or losses;narrative;;V;;2 years;
+E4-2_11;E4;E4-2;AR 16;;Disclosure of how the policy enables to a), b), c) and d);narrative;;V;;2 years;
+E4-2_12;E4;E4-2;AR 17 a;;Third-party standard of conduct used in policy is objective and achievable based on scientific approach to identifying issues and realistic in assessing how these issues can be addressed under variety of practical circumstances;semi-narrative;;V;;2 years;
+E4-2_13;E4;E4-2;AR 17 b;;Third-party standard of conduct used in policy is developed or maintained through process of ongoing consultation with relevant stakeholders with balanced input from all relevant stakeholder groups with no group holding undue authority or veto power over content;semi-narrative;;V;;2 years;
+E4-2_14;E4;E4-2;AR 17 c;;Third-party standard of conduct used in policy encourages step-wise approach and continuous improvement in standard and its application of better management practices and requires establishment of meaningful targets and specific milestones to indicate progress against principles and criteria over time;semi-narrative;;V;;2 years;
+E4-2_15;E4;E4-2;AR 17 d;;Third-party standard of conduct used in policy is verifiable through independent certifying or verifying bodies, which have defined and rigorous assessment procedures that avoid conflicts of interest and are compliant with ISO guidance on accreditation and verification procedures or Article 5(2) of Regulation (EC) No 765/2008;semi-narrative;;V;;2 years;
+E4-2_16;E4;E4-2;AR 17 e;;Third-party standard of conduct used in policy conforms to ISEAL Code of Good Practice;semi-narrative;;V;;2 years;
+E4-2_17;E4;E4-2;24 a;;Biodiversity and ecosystem protection policy covering operational sites owned, leased, managed in or near protected area or biodiversity-sensitive area outside protected areas has been adopted;semi-narrative;;;;2 years;
+E4-2_18;E4;E4-2;24 b;;Sustainable land or agriculture practices or policies have been adopted;semi-narrative;;;SFDR;2 years;
+E4-2_19;E4;E4-2;24 c ;;Sustainable oceans or seas practices or policies have been adopted;semi-narrative;;;SFDR;2 years;
+E4-2_20;E4;E4-2;24 d;;Policies to address deforestation have been adopted;semi-narrative;;;SFDR;2 years;
+E4.MDR-P_07-08;ESRS 2;;62;;Disclosures to be reported in case the undertaking has not adopted policies;;;;;2 years;
+E4.MDR-A_01-12;E4;E4-3;27;;Actions and resources in relation to biodiversity and ecosystems [see ESRS 2 - MDR-A];MDR-A;;;;2 years;
+E4-3_01;E4;E4-3;28 a;AR 19;Disclosure on how the mitigation hierarchy has been applied with regard to biodiversity and ecosystem actions;narrative;;V;;2 years;
+E4-3_02;E4;E4-3;28 b;;Biodiversity offsets were used in action plan;semi-narrative;;;;2 years;
+E4-3_03;E4;E4-3;28 b i;;Disclosure of aim of biodiversity offset and key performance indicators used ;narrative;Conditional;;;2 years;
+E4-3_04;E4;E4-3;28 b ii;AR 18;Financing effects (direct and indirect costs) of biodiversity offsets;Monetary;Conditional;;;2 years;
+E4-3_05;E4;E4-3;AR 18 a;;Explanation of rekationship of significant Capex and Opex required to impelement actions taken or planned to relevant line items or notes in the financial statements;narrative;Conditional;V;;2 years;
+E4-3_06;E4;E4-3;AR 18 b;;Explanation of rekationship of significant Capex and Opex required to impelement actions taken or planned to key  performance indicators required under Commission Delegated Regulation (EU) 2021/2178;narrative;Conditional;V;;2 years;
+E4-3_07;E4;E4-3;AR 18 c;;Explanation of rekationship of significant Capex and Opex required to impelement actions taken or planned to Capex plan required under Commission Delegated Regulation (EU) 2021/2178;narrative;Conditional;V;;2 years;
+E4-3_08;E4;E4-3;28 b iii;;Description of biodiversity offsets ;narrative;Conditional;;;2 years;
+E4-3_09;E4;E4-3;28 c;AR 21;Description of whether and how local and indigenous knowledge and nature-based solutions have been incorporated into biodiversity and ecosystems-related action ;narrative;;;;2 years;
+E4-3_10;E4;E4-3;AR 20 a;;Disclosure of key stakeholders involved and how they are involved, key stakeholders negatively or positively impacted by action and how they are impacted ;narrative;;V;;2 years;
+E4-3_11;E4;E4-3;AR 20 b;;Explanation of need for appropriate consultations and need to respect decisions of affected communities ;narrative;Conditional;V;;2 years;
+E4-3_12;E4;E4-3;AR 20 c;;Description of whether key action may induce significant negative sustainability impacts (biodiversity and ecosystems) ;narrative;;V;;2 years;
+E4-3_13;E4;E4-3;AR 20 d;;Explanation of whether the key action is intended to be a one-time initiative or systematic practice;narrative;;V;;2 years;
+E4-3_14;E4;E4-3;AR 20 e;;Key action plan is carried out only by undertaking (individual action) using its resources (biodiversity and ecosystems);semi-narrative;;V;;2 years;
+E4-3_15;E4;E4-3;AR 20 e;;Key action plan is part of wider action plan (collective action), of which undertaking is member (biodiversity and ecosystems);semi-narrative;;V;;2 years;
+E4-3_16;E4;E4-3;AR 20 f;;Additional information about project, its sponsors and other participants (biodiversity and ecosystems) ;narrative;;V;;2 years;
+E4.MDR-A_13-14;ESRS 2;;62;;Disclosures to be reported if the undertaking has not adopted actions;;;;;2 years;
+E4.MDR-T_01-13;E4;E4-4;31;AR 23-AR 26;Tracking effectiveness of policies and actions through targets [see ESRS 2 MDR-T ];MDR-T;;;;2 years;
+E4-4_01;E4;E4-4;32 a;;Ecological threshold and allocation of impacts to undertaking were applied when setting target (biodiversity and ecosystems);semi-narrative;;;;2 years;
+E4-4_02;E4;E4-4;32 a i;;Disclosure of ecological threshold identified and methodology used to identify threshold (biodiversity and ecosystems) ;narrative;Conditional;;;2 years;
+E4-4_03;E4;E4-4;32 a ii;;Disclosure of how entity-specific threshold was determined (biodiversity and ecosystems) ;narrative;Conditional;;;2 years;
+E4-4_04;E4;E4-4;32 a iii;;Disclosure of how responsibility for respecting identified ecological threshold is allocated (biodiversity and ecosystems) ;narrative;Conditional;;;2 years;
+E4-4_05;E4;E4-4;32 b;;Target is informed by relevant aspect of EU Biodiversity Strategy for 2030;semi-narrative;;;;2 years;
+E4-4_06;E4;E4-4;32 c;;Disclosure of how the targets relate to the biodiversity and ecosystem impacts, dependencies, risks and opportunities identified in relation to own operations and upstream and downstream value chain;narrative;;;;2 years;
+E4-4_07;E4;E4-4;32 d;;Disclosure of the geographical scope of the targets;narrative;Conditional;;;2 years;
+E4-4_08;E4;E4-4;32 e;;Biodiversity offsets were used in setting target;semi-narrative;;;;2 years;
+E4-4_09;E4;E4-4;32 f;;Layer in mitigation hierarchy to which target can be allocated (biodiversity and ecosystems);semi-narrative;;;;2 years;
+E4-4_10;E4;E4-4;AR 22;;The target addresses shortcomings related to the Substantial Contribution criteria ;semi-narrative;;V;;2 years;
+E4.MDR-T_14-19;ESRS 2;;81;;Disclosures to be reported if the undertaking has not adopted targets;;;;;2 years;
+E4-5_01;E4;E4-5;35;;Number of sites owned, leased or managed in or near protected areas or key biodiversity areas that undertaking is negatively affecting;Integer;Conditional;;;2 years;
+E4-5_02;E4;E4-5;35;;Area of sites owned, leased or managed in or near protected areas or key biodiversity areas that undertaking is negatively affecting;Area;Conditional;;;2 years;
+E4-5_03;E4;E4-5;36;;Disclosure of land-use based on Life Cycle Assessment ;narrative;Conditional;V;;2 years;
+E4-5_04;E4;E4-5;38;AR 27 - AR 38;Disclosure of metrics considered relevant (land-use change, freshwater-use change and (or) sea-use change) ;narrative;Conditional;;;2 years;
+E4-5_05;E4;E4-5;38 a;;Disclosure of conversion over time of land cover ;narrative;Conditional;V;;2 years;
+E4-5_06;E4;E4-5;38 b;;Disclosure of changes over time in management of ecosystem ;narrative;Conditional;V;;2 years;
+E4-5_07;E4;E4-5;38 c;;Disclosure of changes in spatial configuration of landscape ;narrative;Conditional;V;;2 years;
+E4-5_08;E4;E4-5;38 d;;Disclosure of changes in ecosystem structural connectivity ;narrative;Conditional;V;;2 years;
+E4-5_09;E4;E4-5;38 e;;Disclosure of functional connectivity ;narrative;Conditional;V;;2 years;
+E4-5_10;E4;E4-5;AR 34 a;;Total use of land area;Area;Conditional;V;;2 years;
+E4-5_11;E4;E4-5;AR 34 b;;Total sealed area;Area;Conditional;V;;2 years;
+E4-5_12;E4;E4-5;AR 34 c;;Nature-oriented area on site;Area;Conditional;V;;2 years;
+E4-5_13;E4;E4-5;AR 34 d;;Nature-oriented area off site;Area;Conditional;V;;2 years;
+E4-5_14;E4;E4-5;39;;Disclosure of how pathways of introduction and spread of invasive alien species and risks posed by invasive alien species are managed ;narrative;Conditional;V;;2 years;
+E4-5_15;E4;E4-5;AR 32;;Number of invasive alien species;Integer;Conditional;V;;2 years;
+E4-5_16;E4;E4-5;AR 32;;Area covered by invasive alien species;Area;Conditional;V;;2 years;
+E4-5_17;E4;E4-5;40;;Disclosure of metrics considered relevant (state of species) ;narrative;Conditional;V;;2 years;
+E4-5_18;E4;E4-5;40 a;;Disclosure of paragraph in another environment-related standard in which metric is referred to ;narrative;Conditional;V;;2 years;
+E4-5_19;E4;E4-5;40 b;;Disclosure of population size, range within specific ecosystems and extinction risk ;narrative;Conditional;V;;2 years;
+E4-5_20;E4;E4-5;40 c;;Disclosure of changes in number of individuals of species within specific area ;narrative;Conditional;V;;2 years;
+E4-5_21;E4;E4-5;40 d;;Information about species at global extinction risk ;narrative;Conditional;V;;2 years;
+E4-5_22;E4;E4-5;40 d i;;Disclosure of threat status of species and how activities or pressures may affect threat status ;narrative;Conditional;V;;2 years;
+E4-5_23;E4;E4-5;40 d ii;;Disclosure of change in relevant habitat for threatened species as proxy for impact on local population's extinction risk ;narrative;Conditional;V;;2 years;
+E4-5_24;E4;E4-5;41 a ;;Disclosure of ecosystem area coverage ;narrative;Conditional;V;;2 years;
+E4-5_25;E4;E4-5;41 b i;;Disclosure of quality of ecosystems relative to pre-determined reference state ;narrative;Conditional;V;;2 years;
+E4-5_26;E4;E4-5;41 b ii;;Disclosure of multiple species within ecosystem ;narrative;Conditional;V;;2 years;
+E4-5_27;E4;E4-5;41 b iii;;Disclosure of structural components of ecosystem condition ;narrative;Conditional;V;;2 years;
+E4-6_01;E4;E4-6;45 a;AR 40;Disclosure of quantitative information about anticipated financial effects of material risks and opportunities arising from biodiversity- and ecosystem-related impacts and dependencies ;Monetary;;;;3 years;3 years
+E4-6_02;E4;E4-6;45 a;;Disclosure of qualitative information about anticipated financial effects of material risks and opportunities arising from biodiversity- and ecosystem-related impacts and dependencies ;narrative;;;;2 years;1 year
+E4-6_03;E4;E4-6;45 b;;Description of effects considered, related impacts and dependencies (biodiversity and ecosystems) ;narrative;;;;2 years;1 year
+E4-6_04;E4;E4-6;45 c;;Disclosure of critical assumptions used in estimates of financial effects of material risks and opportunities arising from biodiversity- and ecosystem-related impacts and dependencies ;narrative;;;;2 years;1 year
+E4-6_05;E4;E4-6;AR 39;;Description of related products and services at risk (biodiversity and ecosystems) over the short-, medium- and long-term;narrative;;V;;2 years;1 year
+E4-6_06;E4;E4-6;AR 39;;Explanation of how financial amounts are estimated and critical assumptions made (biodiversity and ecosystems) ;narrative/monetary;;V;;2 years;1 year

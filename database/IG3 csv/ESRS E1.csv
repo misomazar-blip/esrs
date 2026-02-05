@@ -1,0 +1,230 @@
+﻿"INSTRUCTIONS
+1) The DPs reported in ESRS E1 are subject to Materiality Assessment.
+2) With the exception of DPs in IRO1 (E1.IRO-1_01-16) that are to be disclosed irrespective of the outcome of its materiality assessment [ESRS 1 par. 29], none of these DPs is applicable if the topic is not material.
+3) Not all DPs are to be reported if the undertaking has not adopted the respective policies, implemented the respective actions or set the respective targets in relation to  a sustainability matter that has been assessed to be material [see ESRS 1 par. 33].
+4) Undertakings or groups not exceeding on their balance sheet dates the average number of 750 employees during the financial year (on a consolidated basis where applicable) may omit the datapoints under E1-6 on scope 3 emissions and total GHG emissions for the first year of preparation of their sustainability statement [see column K]. 
+5) Column L identifies DPs subject to phased-in  [see Appendix C of ESRS 1].
+6) Metrics to be disclosed, in addition to the ones explicitly requried by ESRS, also include entity-specific ones, as well as those arising from other legislation or standard.";;;;;;;;;;;
+ID;ESRS;DR;Paragraph;Related AR;Name;Data Type;Conditional or alternative DP;"May 
+[V]";"Appendix B - ESRS 2 
+(SFDR + PILLAR 3 + Benchmark + CL)";"Appendix C - ESRS 1
+DPs subject to phasing-in provisions applicable to undertaking with less than 750 employees";"Appendix C - ESRS 1
+DPs subject to phasing-in provisions applicable to all undertakings "
+E1.GOV-3_01;E1; E1.GOV-3 ;13;;Disclosure of whether and how climate-related considerations are factored into remuneration of members of administrative, management and supervisory bodies;narrative;;;;;
+E1.GOV-3_02;E1; E1.GOV-3 ;13;;Percentage of remuneration recognised that is linked to climate related considerations;percent;;;;;
+E1.GOV-3_03;E1; E1.GOV-3 ;13;;Explanation of climate-related considerations that are factored into remuneration of members of administrative, management and supervisory bodies ;narrative;;;;;
+E1-1_01;E1; E1-1 ;14;AR 1;Disclosure of transition plan  for climate change mitigation;narrative;;;CL;;
+E1-1_02;E1; E1-1 ;16 a;AR 2;Explanation of how targets are compatible with limiting of global warming to one and half degrees Celsius in line with Paris Agreement ;narrative;;;;;
+E1-1_03;E1; E1-1 ;16 b;;Disclosure of decarbonisation levers and key action ;narrative;;;;;
+E1-1_04;E1; E1-1 ;16 c;;Disclosure of significant operational expenditures (Opex) and (or) capital expenditures (Capex) required for implementation of action plan ;narrative;;;;;
+E1-1_05;E1; E1-1 ;16 c;;Financial resources allocated to action plan (OpEx);monetary;;;;;
+E1-1_06;E1; E1-1 ;16 c;;Financial resources allocated to action plan (CapEx);monetary;;;;;
+E1-1_07;E1; E1-1 ;16 d;AR 3;Explanation of potential locked-in GHG emissions from key assets and products and of how locked-in GHG emissions may jeopardise achievement of GHG emission reduction targets and drive transition risk ;narrative;;;;;
+E1-1_08;E1; E1-1 ;16 e;AR 4;Explanation of any objective or plans (CapEx, CapEx plans, OpEx) for aligning economic activities (revenues, CapEx, OpEx) with criteria established in Commission Delegated Regulation 2021/2139 ;narrative;Conditional;;;;
+E1-1_09;E1; E1-1 ;16 f;AR 5;Significant CapEx for coal-related economic activities;monetary;Conditional;;;;
+E1-1_10;E1; E1-1 ;16 f;AR 5;Significant CapEx for oil-related economic activities;monetary;Conditional;;;;
+E1-1_11;E1; E1-1 ;16 f;AR 5;Significant CapEx for gas-related economic activities;monetary;Conditional;;;;
+E1-1_12;E1; E1-1 ;16 g;;Undertaking is excluded from EU Paris-aligned Benchmarks;semi-narrative;;;PILLAR 3 + Benchmark;;
+E1-1_13;E1; E1-1;16 h;;Explanation of how transition plan is embedded in and aligned with overall business strategy and financial planning ;narrative;;;;;
+E1-1_14;E1; E1-1 ;16 i;;Transition plan is approved by administrative, management and supervisory bodies;semi-narrative;;;;;
+E1-1_15;E1; E1-1 ;16 j;;Explanation of progress in implementing transition plan ;narrative;;;;;
+E1-1_16;E1; E1-1 ;17;;Date of adoption of transition plan for undertakings not having adopted transition plan yet;gYear;Conditional;;;;
+E1.SBM-3_01;E1; E1.SBM-3 ;18;;Type of climate-related risk;semi-narrative;;;;;
+E1.SBM-3_02;E1; E1.SBM-3 ;19 a;AR 6, AR 13;Description of scope of resilience analysis ;narrative;;;;;
+E1.SBM-3_03;E1; E1.SBM-3 ;19 b;AR 7a, AR 13;Disclosure of how resilience analysis has been conducted ;narrative;;;;;
+E1.SBM-3_04;E1; E1.SBM-3 ;19 b;AR 7a, AR 13;Disclosure of how resilience analysis has been conducted ;date;;;;;
+E1.SBM-3_05;E1; E1.SBM-3 ;AR 7b;;Time horizons applied for resilience analysis;semi-narrative;;;;;
+E1.SBM-3_06;E1; E1.SBM-3 ;19 c;AR 8a, AR 13;Description of results of resilience analysis ;narrative;;;;;
+E1.SBM-3_07;E1; E1.SBM-3 ;AR 8 b;;Description of ability to adjust or adapt strategy and business model to climate change ;narrative;;;;;
+E1.IRO-1_01;E1; E1.IRO-1 ;20 a, AR 9;AR 10;Description of process in relation to impacts on climate change ;narrative;;;;;
+E1.IRO-1_02;E1; E1.IRO-1 ;20 b;AR 13-AR 14;Description of process in relation to climate-related physical risks in own operations and along value chain ;narrative;;;;;
+E1.IRO-1_03;E1; E1.IRO-1 ;AR 11 a;AR 13-AR 14;Climate-related hazards have been identified over short-, medium- and long-term time horizons;semi-narrative;;;;;
+E1.IRO-1_04;E1; E1.IRO-1 ;AR 11 a;AR 13-AR 14;Undertaking has screened whether assets and business activities may be exposed to climate-related hazards;semi-narrative;;;;;
+E1.IRO-1_05;E1; E1.IRO-1 ;AR 11 b;AR 13-AR 14;Short-, medium- and long-term time horizons have been defined;semi-narrative;;;;;
+E1.IRO-1_06;E1; E1.IRO-1 ;AR 11 c;AR 13-AR 14;Extent to which assets and business activities may be exposed and are sensitive to identified climate-related hazards has been assessed;semi-narrative;;;;;
+E1.IRO-1_07;E1; E1.IRO-1 ;AR 11 d;AR 13-AR 14;Identification of climate-related hazards and assessment of exposure and sensitivity are informed by high emissions climate scenarios;semi-narrative;;;;;
+E1.IRO-1_08;E1; E1.IRO-1 ;21;AR 13-AR 14;Explanation of how climate-related scenario analysis has been used to inform identification and assessment of physical risks over short, medium and long-term ;narrative;;;;;
+E1.IRO-1_09;E1; E1.IRO-1 ;20 c;AR 13-AR 14;Description of process in relation to climate-related transition risks and opportunities in own operations and along value chain ;narrative;;;;;
+E1.IRO-1_10;E1; E1.IRO-1 ;AR 12 a;AR 13-AR 14;Transition events have been identified over short-, medium- and long-term time horizons;semi-narrative;;;;;
+E1.IRO-1_11;E1; E1.IRO-1 ;AR 12 a;AR 13-AR 14;Undertaking has screened whether assets and business activities may be exposed to transition events;semi-narrative;;;;;
+E1.IRO-1_12;E1; E1.IRO-1 ;AR 12 b;AR 13-AR 14;Extent to which assets and business activities may be exposed and are sensitive to identified transition events has been assessed;semi-narrative;;;;;
+E1.IRO-1_13;E1; E1.IRO-1 ;AR 12 c;AR 13-AR 14;Identification of transition events and assessment of exposure has been informed by climate-related scenario analysis;semi-narrative;;;;;
+E1.IRO-1_14;E1; E1.IRO-1 ;AR 12 d;AR 13-AR 14;Assets and business activities that are incompatible with or need significant efforts to be compatible with transition to climate-neutral economy have been identified;semi-narrative;;;;;
+E1.IRO-1_15;E1; E1.IRO-1 ;21;AR 13-AR 14;Explanation of how climate-related scenario analysis has been used to inform identification and assessment of transition risks and opportunities over short, medium and long-term ;narrative;;;;;
+E1.IRO-1_16;E1; E1.IRO-1 ;AR 15;AR 13-AR 14;Explanation of how climate scenarios used are compatible with critical climate-related assumptions made in financial statements ;narrative;;;;;
+E1.MDR-P_01-06;E1; E1-2 ;24;;Policies in place to manage its material impacts, risks and opportunities related to climate change mitigation and adaptation [see ESRS 2 MDR-P];MDR-P;;;;;
+E1-2_01;E1; E1-2;25;AR 16-AR18;Sustainability matters addressed by policy for climate change;semi-narrative;;;;;
+E1.MDR-P_07-08;ESRS 2;;62;;Disclosures to be reported in case the undertaking has not adopted policies;;;;;;
+E1.MDR-A_01-12;E1; E1-3 ;28;;Actions and Resources related to climate change mitigation and adaptation [see ESRS 2 MDR-A];MDR-A;;;;;
+E1-3_01;E1; E1-3 ;29 a;;Decarbonisation lever type;semi-narrative;;;;;
+E1-3_02;E1; E1-3;AR19d;;Adaptation solution type;semi-narrative;;V;;;
+E1-3_03;E1; E1-3;29 b;;Achieved GHG emission reductions;ghgEmissions;;;;;
+E1-3_04;E1; E1-3;29 b;;Expected GHG emission reductions;ghgEmissions;;;;;
+E1-3_05;E1; E1-3;AR21;;Explanation of extent to which ability to implement action depends on availability and allocation of resources ;narrative;;;;;
+E1-3_06;E1; E1-3;29 c i;AR 20;Explanation of relationship of significant CapEx and OpEx required to implement actions taken or planned to relevant line items or notes in financial statements ;narrative/monetary;;;;;
+E1-3_07;E1; E1-3;29 c ii,16 c;AR 22;Explanation of relationship of significant CapEx and OpEx required to implement actions taken or planned to key performance indicators required under Commission Delegated Regulation (EU) 2021/2178 ;narrative;;;;;
+E1-3_08;E1; E1-3;29 c iii,16 c;AR 20;Explanation of relationship of significant CapEx and OpEx required to implement actions taken or planned to CapEx plan required by Commission Delegated Regulation (EU) 2021/2178 ;narrative;Conditional;;;;
+E1.MDR-A_13-14;ESRS 2;;62;;Disclosure to be reported if the undertaking has not adopted actions;;;;;;
+E1.MDR-T_01-13;E1; E1-4 ;32;;Tracking effectiveness of policies and actions through targets [see ESRS 2 MDR-T ];MDR-T;;;;;
+E1-4_01;E1; E1-4 ;33;AR 27-AR 29;Disclosure of whether and how GHG emissions reduction targets and (or) any other targets have been set to manage material climate-related impacts, risks and opportunities ;narrative;;;;;
+E1-4_02;E1; E1-4 ;34 a + 34  b;AR 23-AR 24, AR 27-AR 29, AR31;"Tables: Multiple Dimensions (baseline year and targets; GHG Types, Scope 3 Categories, Decarbonisation levers, entity-specific denominators for intensity value)";Table ;Conditional;;;;
+E1-4_03;E1; E1-4 ;34 a + 34 b;;Absolute value of total Greenhouse gas emissions reduction;Table/ghgEmissions;Conditional;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-4_04;E1; E1-4 ;34 a + 34 b;;Percentage of total Greenhouse gas emissions reduction (as of emissions of base year);Table/percent;Conditional;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-4_05;E1; E1-4 ;34 a + 34 b;;Intensity value of total Greenhouse gas emissions reduction;Table/decimal;Conditional;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-4_06;E1; E1-4 ;34 a + 34 b;;Absolute value of Scope 1 Greenhouse gas emissions reduction;Table/ghgEmissions;Conditional;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-4_07;E1; E1-4 ;34 a + 34 b;;Percentage of Scope 1 Greenhouse gas emissions reduction (as of emissions of base year);Table/percent;Conditional;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-4_08;E1; E1-4 ;34 a + 34 b;;Intensity value of Scope 1 Greenhouse gas emissions reduction;Table/decimal;Conditional;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-4_09;E1; E1-4 ;34 a + 34 b;;Absolute value of location-based Scope 2 Greenhouse gas emissions reduction;Table/ghgEmissions;Conditional;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-4_10;E1; E1-4 ;34 a + 34 b;;Percentage of location-based Scope 2 Greenhouse gas emissions reduction (as of emissions of base year);Table/percent;Conditional;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-4_11;E1; E1-4 ;34 a + 34 b;;Intensity value of location-based Scope 2 Greenhouse gas emissions reduction;Table/decimal;Conditional;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-4_12;E1; E1-4 ;34 a + 34 b;;Absolute value of market-based Scope 2 Greenhouse gas emissions reduction;Table/ghgEmissions;Conditional;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-4_13;E1; E1-4 ;34 a + 34 b;;Percentage of market-based Scope 2 Greenhouse gas emissions reduction (as of emissions of base year);Table/percent;Conditional;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-4_14;E1; E1-4 ;34 a + 34 b;;Intensity value of market-based Scope 2 Greenhouse gas emissions reduction;Table/decimal;Conditional;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-4_15;E1; E1-4 ;34 a + 34 b;;Absolute value of Scope 3 Greenhouse gas emissions reduction;Table/ghgEmissions;Conditional;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-4_16;E1; E1-4 ;34 a + 34 b;;Percentage of Scope 3 Greenhouse gas emissions reduction (as of emissions of base year);Table/percent;Conditional;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-4_17;E1; E1-4 ;34 a + 34 b;;Intensity value of Scope 3 Greenhouse gas emissions reduction;Table/decimal;Conditional;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-4_18;E1; E1-4 ;34 b;;Explanation of how consistency of GHG emission reduction targets with GHG inventory boundaries has been ensured ;narrative;;;;;
+E1-4_19;E1; E1-4 ;34 c;;Disclosure of past progress made in meeting target before current base year ;narrative;;V;;;
+E1-4_20;E1; E1-4 ;AR 25 a;;Description of how it has been ensured that baseline value is representative in terms of activities covered and influences from external factors ;narrative;;;;;
+E1-4_21;E1; E1-4 ;AR 25 b;;Description of how new baseline value affects new target, its achievement and presentation of progress over time ;narrative;;;;;
+E1-4_22;E1; E1-4;34 e, 16 a;AR 26;GHG emission reduction target is science based and compatible with limiting global warming to one and half degrees Celsius;semi-narrative;;;;;
+E1-4_23;E1; E1-4 ;34 f, 16 b;AR 30;Description of expected decarbonisation levers and their overall quantitative contributions to achieve GHG emission reduction target ;narrative;;;;;
+E1-4_24;E1; E1-4;AR 30 c;;Diverse range of climate scenarios have been considered to detect relevant environmental, societal, technology, market and policy-related developments and determine decarbonisation levers;narrative;;;;;
+E1.MDR-T_14-19;ESRS 2; E1-4;81;;Disclosure to be reported if the undertaking has not set any measurable outcome-oriented targets;;;;;;
+E1-5_01;E1; E1-5;37;AR 35;Total energy consumption related to own operations;energy;;;SFDR;;
+E1-5_02;E1; E1-5;37 a;AR 33, AR 32;Total energy consumption from fossil sources;energy;;;SFDR;;
+E1-5_03;E1; E1-5;37 b;;Total energy consumption from nuclear sources;energy;;;SFDR;;
+E1-5_04;E1; E1-5;AR 34;;Percentage of energy consumption from nuclear sources in total energy consumption;percent;;;;;
+E1-5_05;E1; E1-5;37 c;;Total energy consumption from renewable sources;energy;;;SFDR;;
+E1-5_06;E1; E1-5;37 c i;;Fuel consumption from renewable sources;energy;;;SFDR;;
+E1-5_07;E1; E1-5;37 c ii;;Consumption of purchased or acquired electricity, heat, steam, and cooling from renewable sources;energy;;;SFDR;;
+E1-5_08;E1; E1-5;37 c iii;;Consumption of self-generated non-fuel renewable energy;energy;;;SFDR;;
+E1-5_09;E1; E1-5;AR 34;;Percentage of renewable sources in total energy consumption;percent;;;;;
+E1-5_10;E1; E1-5;38 a;AR 33;Fuel consumption from coal and coal products;energy;Conditional;;SFDR;;
+E1-5_11;E1; E1-5;38 b;AR 33;Fuel consumption from crude oil and petroleum products;energy;Conditional;;SFDR;;
+E1-5_12;E1; E1-5;38 c;AR 33;Fuel consumption from natural gas;energy;Conditional;;SFDR;;
+E1-5_13;E1; E1-5;38 d;AR 33;Fuel consumption from other fossil sources;energy;Conditional;;SFDR;;
+E1-5_14;E1; E1-5;38 e;AR 33;Consumption of purchased or acquired electricity, heat, steam, or cooling from fossil sources;energy;Conditional;;SFDR;;
+E1-5_15;E1; E1-5;AR 34;;Percentage of fossil sources in total energy consumption;percent;Conditional;;;;
+E1-5_16;E1; E1-5;39;;Non-renewable energy production;energy;Conditional;;;;
+E1-5_17;E1; E1-5;39;;Renewable energy production;energy;Conditional;;;;
+E1-5_18;E1; E1-5;40;AR 36;Energy intensity from activities in high climate impact sectors (total energy consumption per net revenue);percent;Conditional;;SFDR;;
+E1-5_19;E1; E1-5;41;;Total energy consumption from activities in high climate impact sectors;Intensity;Conditional;;SFDR;;
+E1-5_20;E1; E1-5;42;;High climate impact sectors used to determine energy intensity;semi-narrative;Conditional;;SFDR;;
+E1-5_21;E1; E1-5;43;AR 38;Disclosure of reconciliation to relevant line item or notes in financial statements of net revenue from activities in high climate impact sectors ;narrative;Conditional;;SFDR;;
+E1-5_22;E1; E1-5;AR 38 b;;Net revenue from activities in high climate impact sectors;monetary;Conditional;V;;;
+E1-5_23;E1; E1-5;AR 38 b;;Net revenue from activities other than in high climate impact sectors;monetary;Conditional;V;;;
+E1-6_01;E1; E1-6;44;AR 39;Gross Scopes 1, 2, 3 and Total GHG emissions - GHG emissions per scope [table];Table ;;;;;
+E1-6_02;E1; E1-6 ;50;;Gross Scopes 1, 2, 3 and Total GHG emissions - financial and operational control [table];Table ;;;;;
+E1-6_03;E1; E1-6 ;AR 41;;Disaggregation of GHG emissions - by country, operating segments, economic activity, subsidiary, GHG category or source type;Table ;;;;;
+E1-6_04;E1; E1-6 ;AR 46 d;;Gross Scopes 1, 2, 3 and Total GHG emissions - Scope 3 GHG emissions (GHG Protocol) [table];Table ;Alternative;;;1 year;
+E1-6_05;E1; E1-6 ;AR 50;;Gross Scopes 1, 2, 3 and Total GHG emissions - Scope 3 GHG emissions (ISO 14064-1) [table];Table ;Alternative;;;1 year;
+E1-6_06;E1; E1-6 ;AR 52;;Gross Scopes 1, 2, 3 and Total GHG emissions - total GHG emissions - value chain [table];Table ;;;;1 year;
+E1-6_07;E1;E1-6;48 a;AR 43;Gross Scope 1 greenhouse gas emissions ;Table/GhgEmissions;;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-6_08;E1;E1-6;48 b;AR 44;Percentage of Scope 1 GHG emissions from regulated emission trading schemes;Table/Percent;;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-6_09;E1;E1-6;49 a, 52 a;AR 45, AR 47;Gross location-based Scope 2 greenhouse gas emissions;Table/GhgEmissions;;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-6_10;E1;E1-6;49 b, 52 b;AR 45, AR 47;Gross market-based Scope 2 greenhouse gas emissions;Table/GhgEmissions;;;SFDR+PILLAR 3+ BENCHMARK;;
+E1-6_11;E1;E1-6;51;AR 46;Gross Scope 3 greenhouse gas emissions;Table/GhgEmissions;;;SFDR+PILLAR 3+ BENCHMARK;1 year;
+E1-6_12;E1;E1-6;44, 52 a;AR 47;Total GHG emissions location based;Table/GhgEmissions;;;SFDR+PILLAR 3+ BENCHMARK;1 year;
+E1-6_13;E1;E1-6;44, 52 b;AR 47;Total GHG emissions market based;Table/GhgEmissions;;;SFDR+PILLAR 3+ BENCHMARK;1 year;
+E1-6_14;E1;E1-6;47;;Disclosure of significant changes in definition of what constitutes reporting undertaking and its value chain and explanation of their effect on year-to-year comparability of reported GHG emissions;narrative;Conditional;;;;
+E1-6_15;E1;E1-6;AR 39 b;;Disclosure of methodologies, significant assumptions and emissions factors used to calculate or measure GHG emissions ;narrative;;;;;
+E1-6_16;E1;E1-6;AR 42 c;;Disclosure of the effects of significant events and changes in circumstances (relevant to its GHG emissions) that occur between the reporting dates of the entities in its value chain and the date of the undertaking’s general purpose financial statements;narrative;Conditional;;;;
+E1-6_17;E1;E1-6 ;AR 43 c;;biogenic emissions of CO2 from the combustion or bio-degradation of biomassnot included in Scope 1 GHG emissions;ghgEmissions;;;;;
+E1-6_18;E1;E1-6 ;AR 45 d;;Percentage of contractual instruments, Scope 2 GHG emissions;percent;;;;;
+E1-6_19;E1;E1-6 ;AR 45 d;;Disclosure of types of contractual instruments, Scope 2 GHG emissions ;percent;;;;;
+E1-6_20;E1;E1-6 ;AR 45 d;;Percentage of market-based Scope 2 GHG emissions linked to purchased electricity bundled with instruments;percent;;V;;;
+E1-6_21;E1;E1-6 ;AR 45 d;;Percentage of contractual instruments used for sale and purchase of energy bundled with attributes about energy generation in relation to Scope 2 GHG emissions;percent;;;;;
+E1-6_22;E1;E1-6 ;AR 45 d;;Percentage of contractual instruments used for sale and purchase of unbundled energy attribute claims in relation to Scope 2 GHG emissions;percent;;;;;
+E1-6_23;E1;E1-6 ;AR 45 d;;Disclosure of types of contractual instruments used for sale and purchase of energy bundled with attributes about energy generation or for unbundled energy attribute claims ;narrative;;;;;
+E1-6_24;E1;E1-6 ;AR 45 e;;Biogenic emissions of CO2 from combustion or bio-degradation of biomass not included in Scope 2 GHG emissions;ghgEmissions;;;;;
+E1-6_25;E1;E1-6;AR 46 g;;Percentage of GHG Scope 3 calculated using primary data ;Percent;;;;1 year;
+E1-6_26;E1;E1-6;AR 46 i;;Disclosure of why Scope 3 GHG emissions category has been excluded ;narrative;;;;1 year;
+E1-6_27;E1;E1-6;AR 46 i;;List of Scope 3 GHG emissions categories included in inventory;semi-narrative;;;;1 year;
+E1-6_28;E1;E1-6 ;AR 46 j;;Biogenic emissions of CO2 from combustion or bio-degradation of biomass that occur in value chain not included in Scope 3 GHG emissions;ghgEmissions;;;;1 year;
+E1-6_29;E1;E1-6;AR 46 h;;Disclosure of reporting boundaries considered and calculation methods for estimating Scope 3 GHG emissions;narrative;;;;1 year;
+E1-6_30;E1; E1-6 ;53;AR 53;GHG emissions intensity, location-based (total GHG emissions per net revenue);Intensity;;;SFDR+PILLAR 3+ BENCHMARK;1 year;
+E1-6_31;E1; E1-6 ;53;AR 53;GHG emissions intensity, market-based (total GHG emissions per net revenue);Intensity;;;SFDR+PILLAR 3+ BENCHMARK;1 year;
+E1-6_32;E1; E1-6 ;55;;Disclosure of reconciliation to financial statements of net revenue used for calculation of GHG emissions intensity ;narrative;;;SFDR+PILLAR 3+ BENCHMARK;1 year;
+E1-6_33;E1; E1-6;AR 55;;Net revenue;monetary;Conditional;;;;
+E1-6_34;E1;E1-6;AR 55;;Net revenue used to calculate GHG intensity;monetary;Conditional;;;;
+E1-6_35;E1;E1-6;AR 55;;Net revenue other than used to calculate GHG intensity;monetary;Conditional;;;;
+E1-7_01;E1; E1-7 ;56 a;AR 56 - AR 57;Disclosure of GHG removals and storage resulting from projects developed in own operations or contributed to in upstream and downstream value chain ;narrative;;;CL;;
+E1-7_02;E1; E1-7 ;56b;AR 56;Disclosure of GHG emission reductions or removals from climate change mitigation projects outside value chain financed or to be financed through any purchase of carbon credits ;narrative;;;CL;;
+E1-7_03;E1; E1-7 ;58;AR 56;Removals and carbon credits are used;semi-narrative;Conditional;;;;
+E1-7_04;E1; E1-7 ;58a;AR 59;GHG Removals and storage Activity by undertaking scope (breakdown by own operations and value chain) and by removal and storage activity;TABLE;Conditional;;;;
+E1-7_05;E1; E1-7 ;58a;;Total GHG removals and storage;Table/ghgEmissions;Conditional;;;;
+E1-7_06;E1; E1-7 ;AR 58 f;;GHG emissions associated with removal activity;Table/ghgEmissions;Conditional;;;;
+E1-7_07;E1; E1-7 ;AR 60;;Reversals;ghgEmissions;Conditional;;;;
+E1-7_08;E1; E1-7 ;58b;;Disclosure of calculation assumptions, methodologies and frameworks applied (GHG removals and storage) ;narrative;Conditional;;;;
+E1-7_09;E1; E1-7 ;AR 58e;;Removal activity has been converted into carbon credits and sold on to other parties on voluntary market;semi-narrative;Conditional;;;;
+E1-7_10;E1; E1-7 ;59a;;Total amount of carbon credits outside value chain that are verified against recognised quality standards and cancelled;ghgEmissions;Conditional;;;;
+E1-7_11;E1; E1-7 ;59b;;Total amount of carbon credits outside value chain planned to be cancelled in future;ghgEmissions;Conditional;;;;
+E1-7_12;E1; E1-7 ;AR 61;;Disclosure of extent of use and quality criteria used for carbon credits ;narrative;;;;;
+E1-7_13;E1; E1-7 ;AR 62 a;;Percentage of reduction projects;percent;;;;;
+E1-7_14;E1; E1-7 ;AR 62 a;;Percentage of removal projects;percent;;;;;
+E1-7_15;E1; E1-7 ;AR 62b;;Type of carbon credits from removal projects;semi-narrative;;;;;
+E1-7_16;E1; E1-7 ;AR 62 c;;Percentage for recognised quality standard;percent;;;;;
+E1-7_17;E1; E1-7 ;AR 62d;;Percentage issued from projects in European Union;percent;;;;;
+E1-7_18;E1; E1-7 ;AR 62 e;;Percentage that qualifies as corresponding adjustment;percent;;;;;
+E1-7_19;E1; E1-7 ;AR 64;;Date when carbon credits outside value chain are planned to be cancelled;gYear;;;;;
+E1-7_20;E1; E1-7 ;60;;Explanation of scope, methodologies and frameworks applied and how residual GHG emissions are intended to be neutralised ;narrative;Conditional;;;;
+E1-7_21;E1; E1-7 ;61;;Public claims of GHG neutrality that involve use of carbon credits have been made;semi-narrative;;;;;
+E1-7_22;E1; E1-7 ;61 a;;Public claims of GHG neutrality that involve use of carbon credits are accompanied by GHG emission reduction targets;semi-narrative;Conditional;;;;
+E1-7_23;E1; E1-7 ;61 b;;Claims of GHG neutrality and reliance on carbon credits neither impede nor reduce achievement of GHG emission reduction targets or net zero target;semi-narrative;Conditional;;;;
+E1-7_24;E1; E1-7 ;61 a, b;;Explanation of whether and how public claims of GHG neutrality that involve use of carbon credits are accompanied by GHG emission reduction targets and how claims of GHG neutrality and reliance on carbon credits neither impede nor reduce achievement of GHG emission reduction targets or net zero target ;narrative;Conditional;;;;
+E1-7_25;E1; E1-7 ;61c;;Explanation of credibility and integrity of carbon credits used ;narrative;Conditional;;;;
+E1-8_01;E1; E1-8 ;63 a;;Carbon pricing scheme by type;Table;;;;;
+E1-8_02;E1; E1-8 ;63 a;;Type of internal carbon pricing scheme;Table/Narrative;;;;;
+E1-8_03;E1; E1-8 ;63 b;;Description of specific scope of application of carbon pricing scheme ;Table/Narrative;;;;;
+E1-8_04;E1; E1-8 ;63 c;;Carbon price applied for each metric tonne of greenhouse gas emission;Table/monetary;;;;;
+E1-8_05;E1; E1-8 ;63 c;;Description of critical assumptions made to determine carbon price applied ;Table/Narrative;;;;;
+E1-8_06;E1; E1-8 ;63 d;;Percentage of gross Scope 1 greenhouse gas emissions covered by internal carbon pricing scheme;Table/percent;;;;;
+E1-8_07;E1; E1-8 ;63 d;;Percentage of gross Scope 2 greenhouse gas emissions covered by internal carbon pricing scheme;Table/percent;;;;;
+E1-8_08;E1; E1-8 ;63 d;;Percentage of gross Scope 3 greenhouse gas emissions covered by internal carbon pricing scheme;Table/percent;Conditional;;;;
+E1-8_09;E1; E1-8 ;AR 65;;Disclosure of whether and how carbon price used in internal carbon pricing scheme is consistent with carbon price used in financial statements ;Table/Narrative;Conditional;;;;
+E1-9_01;E1; E1-9 ;66 a;AR 70;Assets at material physical risk before considering climate change adaptation actions;monetary;;;PILLAR 3 ;;3 years
+E1-9_02;E1; E1-9 ;66 a;AR 70;Assets at acute material physical risk before considering climate change adaptation actions;monetary;;;PILLAR 3 ;;3 years
+E1-9_03;E1; E1-9 ;66 a;AR 70;Assets at chronic material physical risk before considering climate change adaptation actions;monetary;;;PILLAR 3 ;;3 years
+E1-9_04;E1; E1-9 ;66 a;AR 70;Percentage of assets at material physical risk before considering climate change adaptation actions;percent;;;PILLAR 3 ;;3 years
+E1-9_05;E1; E1-9 ;66 c;AR 70;Disclosure of location of significant assets at material physical risk ;narrative;;;PILLAR 3 ;;1 year
+E1-9_06;E1; E1-9 ;AR 70 c i;;Disclosure of location of its significant assets at material physical risk (disaggregated by NUTS codes);Table/narrative;;;PILLAR 3 ;;1 year
+E1-9_07;E1; E1-9 ;66 b;;Percentage of assets at material physical risk addressed by climate change adaptation actions;percent;;;;;3 years
+E1-9_08;E1; E1-9 ;66 d;AR 71;Net revenue from business activities at material physical risk;monetary;;;;;3 years
+E1-9_09;E1; E1-9 ;66 d;AR 71;Percentage of net revenue from business activities at material physical risk;percent;;;;;3 years
+E1-9_10;E1; E1-9 ;AR 69 a;;Disclosure of whether and how anticipated financial effects for assets and business activities at material physical risk have been assessed ;narrative;;;;;1 year
+E1-9_11;E1; E1-9 ;AR 69 b;;Disclosure of whether and how assessment of assets and business activities considered to be at material physical risk relies on or is part of process to determine material physical risk and to determine climate scenarios ;narrative;;;;;1 year
+E1-9_12;E1; E1-9 ;AR 71 b;;Disclosure of risk factors for net revenue from business activities at material physical risk ;narrative;;V;;;1 year
+E1-9_13;E1; E1-9 ;AR 71 b;;Disclosure of magnitude of anticipated financial effects in terms of margin erosion for business activities at material physical risk ;narrative;Conditional;V;;;1 year
+E1-9_14;E1; E1-9 ;67 a;;Assets at material transition risk before considering climate mitigation actions;monetary;;;;;3 years
+E1-9_15;E1; E1-9 ;67 a;;Percentage of assets at material transition risk before considering climate mitigation actions;percent;;;;;3 years
+E1-9_16;E1; E1-9 ;67 b;;Percentage of assets at material transition risk addressed by climate change mitigation actions;percent;;;;;3 years
+E1-9_17;E1; E1-9 ;67 c;;Total carrying amount of real estate assets by energy efficiency classes;Table/monetary;;;PILLAR 3 ;;3 years
+E1-9_18;E1; E1-9 ;AR 72 a, AR 73 a;;Disclosure of whether and how potential effects on future financial performance and position for assets and business activities at material transition risk have been assessed ;narrative;;;;;1 year
+E1-9_19;E1; E1-9 ;AR 72 b;;Disclosure of whether and how assessment of assets and business activities considered to be at material transition risk relies on or is part of process to determine material transition risks and to determine scenarios ;narrative;;;;;1 year
+E1-9_20;E1; E1-9 ;AR 73 a;;Estimated amount of potentially stranded assets;monetary;;;;;3 years
+E1-9_21;E1; E1-9 ;AR 73 a;;Percentage of estimated share of potentially stranded assets of total assets at material transition risk;percent;;;;;3 years
+E1-9_22;E1; E1-9 ;AR 73 b;;Total carrying amount of real estate assets for which energy consumption is based on internal estimates;monetary;;;;;3 years
+E1-9_23;E1; E1-9 ;67 d;;Liabilities from material transition risks that may have to be recognised in financial statements;monetary;;;;;3 years
+E1-9_24;E1; E1-9 ;AR 74 c;;Number of Scope 1 GHG emission allowances within regulated emission trading schemes;integer;;V;;;3 years
+E1-9_25;E1; E1-9 ;AR 74 c;;Number of emission allowances stored (from previous allowances) at beginning of reporting period;integer;;V;;;3 years
+E1-9_26;E1; E1-9 ;AR 74 d;;Potential future liabilities, based on existing contractual agreements, associated with carbon credits planned to be cancelled in near future;monetary;;V;;;3 years
+E1-9_27;E1; E1-9 ;AR 74 e;;Monetised gross Scope 1 and 2 GHG emissions;monetary;;V;;;3 years
+E1-9_28;E1; E1-9 ;AR 74 e;;Monetised total GHG emissions;monetary;;V;;;3 years
+E1-9_29;E1; E1-9 ;67 e;;Net revenue from business activities at material transition risk;monetary;;;;;3 years
+E1-9_30;E1; E1-9 ;67 e;;Net revenue from customers operating in coal-related activities;monetary;Conditional;;;;3 years
+E1-9_31;E1; E1-9 ;67 e;;Net revenue from customers operating in oil-related activities;monetary;Conditional;;;;3 years
+E1-9_32;E1; E1-9 ;67 e;;Net revenue from customers operating in gas-related activities;monetary;Conditional;;;;3 years
+E1-9_33;E1; E1-9 ;67 e;;Percentage of net revenue from customers operating in coal-related activities;percent;Conditional;;;;3 years
+E1-9_34;E1; E1-9 ;67 e;;Percentage of net revenue from customers operating in oil-related activities;percent;Conditional;;;;3 years
+E1-9_35;E1; E1-9 ;67 e;;Percentage of net revenue from customers operating in gas-related activities;percent;Conditional;;;;3 years
+E1-9_36;E1; E1-9 ;AR 76;;Percentage of net revenue from business activities at material transition risk;Table/percent;;V;;;3 years
+E1-9_37;E1; E1-9 ;AR 76 b;;Disclosure of risk factors for net revenue from business activities at material transition risk ;narrative;;V;;;1 year
+E1-9_38;E1; E1-9 ;AR 76 b;;Disclosure of anticipated financial effects in terms of margin erosion for business activities at material transition risk ;narrative/monetary;;V;;;1 year
+E1-9_39;E1; E1-9 ;68 a;;Disclosure of reconciliations with financial statements of significant amounts of assets and net revenue at material physical risk ;narrative;;;;;1 year
+E1-9_40;E1; E1-9 ;68 b;;Disclosure of reconciliations with financial statements of significant amounts of assets, liabilities and net revenue at material transition risk ;narrative;;;;;1 year
+E1-9_41;E1; E1-9 ;69 a;AR 80;Expected cost savings from climate change mitigation actions;monetary;;;BENCHMARK;;3 years
+E1-9_42;E1; E1-9 ;69 a;AR 80;Expected cost savings from climate change adaptation actions;monetary;;;BENCHMARK;;3 years
+E1-9_43;E1; E1-9 ;69 b;AR 81;Potential market size of low-carbon products and services or adaptation solutions to which undertaking has or may have access;monetary;;;BENCHMARK;;3 years
+E1-9_44;E1; E1-9 ;69 b;AR 81;Expected changes to net revenue from low-carbon products and services or adaptation solutions to which undertaking has or may have access;monetary;;;BENCHMARK;;3 years
+;;;;;;;;;;;
