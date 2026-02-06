@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, buttonStyles, inputStyles, cardStyles, fonts, spacing, shadows } from "@/lib/styles";
 
@@ -19,6 +19,7 @@ type ReportTopic = {
 };
 
 export default function MaterialityPage() {
+  const locale = useLocale();
   const t = useTranslations('materiality');
   const tCommon = useTranslations('common');
   const tNav = useTranslations('nav');
@@ -189,7 +190,7 @@ export default function MaterialityPage() {
           }}
         >
           <Link
-            href="/"
+            href={`/${locale}`}
             style={{
               fontSize: fonts.size.h3,
               fontWeight: fonts.weight.bold,
@@ -310,7 +311,7 @@ export default function MaterialityPage() {
                   }}
                 >
                   <Link
-                    href="/profile"
+                    href={`/${locale}/profile`}
                     style={{
                       display: "block",
                       padding: `${spacing.sm} ${spacing.md}`,
@@ -324,7 +325,7 @@ export default function MaterialityPage() {
                   <button
                     onClick={async () => {
                       await supabase.auth.signOut();
-                      window.location.href = "/";
+                      window.location.href = `/${locale}`;
                     }}
                     style={{
                       display: "block",
@@ -361,7 +362,7 @@ export default function MaterialityPage() {
           <h1 style={{ fontSize: fonts.size.h2, fontWeight: fonts.weight.bold, margin: 0, color: colors.textPrimary }}>
             {t('title')}
           </h1>
-          <Link href="/" style={{ ...buttonStyles.secondary, textDecoration: "none", display: "inline-flex", alignItems: "center" }}>
+          <Link href={`/${locale}`} style={{ ...buttonStyles.secondary, textDecoration: "none", display: "inline-flex", alignItems: "center" }}>
             ← {tNav('home')}
           </Link>
         </div>

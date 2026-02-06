@@ -31,6 +31,7 @@ export interface VersionedQuestion {
   code: string;
   datapoint_id?: string;
   question_text: string;
+  translations?: { [locale: string]: string }; // JSONB with translations: { en: "...", sk: "..." }
   description?: string;
   answer_type: AnswerType;
   order_index?: number;

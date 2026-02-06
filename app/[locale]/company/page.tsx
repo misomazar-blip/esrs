@@ -1,17 +1,18 @@
 "use client";
 
 import { useEffect } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 
 export default function CompanyPage() {
+  const locale = useLocale();
   const t = useTranslations('common');
   const router = useRouter();
 
   useEffect(() => {
     // Redirect to profile page where company management is now located
-    router.replace("/profile");
-  }, [router]);
+    router.replace(`/${locale}/profile`);
+  }, [router, locale]);
 
   return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>

@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, buttonStyles, inputStyles, cardStyles, fonts, spacing, shadows } from "@/lib/styles";
-import CompanyMembersManager from "@/app/company/CompanyMembersManager";
+import CompanyMembersManager from "@/app/[locale]/company/CompanyMembersManager";
 
 type Company = {
   id: string;
@@ -24,6 +24,7 @@ type Company = {
 };
 
 export default function ProfilePage() {
+  const locale = useLocale();
   const t = useTranslations('common');
   const tNav = useTranslations('nav');
   const tAuth = useTranslations('auth');
@@ -286,54 +287,6 @@ export default function ProfilePage() {
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: colors.bgPrimary }}>
-      {/* TOP NAVIGATION */}
-      <div
-        style={{
-          borderBottom: `1px solid ${colors.borderGray}`,
-          boxShadow: shadows.sm,
-          backgroundColor: colors.white,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: `${spacing.md} ${spacing.xl}`,
-            maxWidth: "1200px",
-            margin: "0 auto",
-          }}
-        >
-          <Link
-            href="/"
-            style={{
-              fontSize: fonts.size.h3,
-              fontWeight: fonts.weight.bold,
-              margin: 0,
-              color: colors.primary,
-              textDecoration: "none",
-            }}
-          >
-            ESRS
-          </Link>
-
-          <div style={{ display: "flex", alignItems: "center", gap: spacing.lg }}>
-            <Link href="/" style={{ ...buttonStyles.secondary, textDecoration: "none" }}>
-              ← {tNav('home')}
-            </Link>
-            <button
-              onClick={async () => {
-                await supabase.auth.signOut();
-                window.location.href = "/";
-              }}
-              style={buttonStyles.danger}
-            >
-              {tAuth('signOut')}
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* Main Content */}
       <div
         style={{

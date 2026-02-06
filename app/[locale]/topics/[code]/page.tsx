@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, buttonStyles, cardStyles, fonts, inputStyles, spacing, shadows, headingStyles, borderRadius } from "@/lib/styles";
 import DynamicQuestionInput from "@/components/DynamicQuestionInput";
@@ -13,9 +13,10 @@ import QuestionAttachments from "@/components/QuestionAttachments";
 import { VersionedQuestion, VersionedAnswer } from "@/types/esrs";
 
 type Topic = { id: string; code: string; name?: string };
-type Report = { id: string; report_year: number; status: string };
+type Report = { id: string; reporting_year: number; status: string };
 
 export default function TopicPage() {
+  const locale = useLocale();
   const t = useTranslations('topics');
   const tCommon = useTranslations('common');
   const tNav = useTranslations('nav');
@@ -46,20 +47,33 @@ export default function TopicPage() {
     return [...questions].sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0));
   }, [questions]);
 
+  // Helper function to get translated question text
+  const getQuestionText = (question: VersionedQuestion): string => {
+    // Try to get translation from JSONB column
+    if (question.translations && typeof question.translations === 'object') {
+      const translations = question.translations as Record<string, string>;
+      // Try current locale first, then fallback to English, then original question_text
+      return translations[locale] || translations['en'] || question.question_text || 'Question';
+    }
+    // Fallback to question_text if translations not available
+    return question.question_text || 'Question';
+  };
+
   const filteredQuestions = useMemo(() => {
     if (!searchTerm.trim()) return orderedQuestions;
     
     const term = searchTerm.toLowerCase();
     return orderedQuestions.filter((q) => {
+      const questionText = getQuestionText(q);
       return (
-        q.question_text?.toLowerCase().includes(term) ||
+        questionText.toLowerCase().includes(term) ||
         q.code?.toLowerCase().includes(term) ||
         q.datapoint_id?.toLowerCase().includes(term) ||
         q.disclosure_requirement?.toLowerCase().includes(term) ||
         q.esrs_paragraph?.toLowerCase().includes(term)
       );
     });
-  }, [orderedQuestions, searchTerm]);
+  }, [orderedQuestions, searchTerm, locale]);
 
   async function loadAll() {
     setErr(null);
@@ -148,7 +162,7 @@ export default function TopicPage() {
       if (!reportId) return;
       const { data, error } = await supabase
         .from("report")
-        .select("id, company_id, report_year, status")
+        .select("id, company_id, reporting_year, status")
         .eq("id", reportId)
         .maybeSingle();
       if (!error && data) setReport(data as Report);
@@ -304,7 +318,7 @@ export default function TopicPage() {
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: colors.bgPrimary }}>
-      {/* TOP NAVIGATION */}
+      {/* SECONDARY NAVIGATION - Topic specific */}
       <div
         style={{
           borderBottom: `1px solid ${colors.borderGray}`,
@@ -322,17 +336,16 @@ export default function TopicPage() {
             margin: "0 auto",
           }}
         >
-          <Link
-            href="/"
-            style={{
-              fontSize: fonts.size.h3,
-              fontWeight: fonts.weight.bold,
-              margin: 0,
-              color: colors.primary,
-              textDecoration: "none",
+          <Link 
+            href={`/${locale}/report`} 
+            style={{ 
+              ...buttonStyles.secondary, 
+              textDecoration: "none", 
+              display: "inline-flex", 
+              alignItems: "center" 
             }}
           >
-            ESRS
+            ← {tNav('reports')}
           </Link>
 
           <div
@@ -452,107 +465,6 @@ export default function TopicPage() {
 
             {/* VERSION SELECTOR */}
             <VersionSelector />
-            
-            {/* Analytics Link */}
-            <Link href="/analytics">
-              <button
-                style={{
-                  ...buttonStyles.secondary,
-                  padding: `${spacing.xs} ${spacing.md}`,
-                  fontSize: fonts.size.sm,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: spacing.xs,
-                }}
-              >
-                📊 {tNav('analytics')}
-              </button>
-            </Link>
-
-            {/* USER DROPDOWN */}
-            <div style={{ position: "relative" }}>
-              <div
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: spacing.md,
-                  cursor: "pointer",
-                  padding: spacing.sm,
-                  borderRadius: "8px",
-                  backgroundColor: dropdownOpen ? colors.bgSecondary : "transparent",
-                }}
-              >
-                <div
-                  style={{
-                    width: "32px",
-                    height: "32px",
-                    borderRadius: "50%",
-                    backgroundColor: colors.primary,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: colors.white,
-                    fontWeight: fonts.weight.bold,
-                    fontSize: fonts.size.sm,
-                  }}
-                >
-                  {email?.[0]?.toUpperCase()}
-                </div>
-                <span style={{ fontSize: fonts.size.sm, color: colors.textPrimary }}>
-                  {email}
-                </span>
-                <span style={{ fontSize: "10px", color: colors.textSecondary }}>▼</span>
-              </div>
-
-              {dropdownOpen && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "calc(100% + 8px)",
-                    right: 0,
-                    backgroundColor: colors.white,
-                    border: `1px solid ${colors.borderGray}`,
-                    borderRadius: "8px",
-                    boxShadow: shadows.md,
-                    minWidth: "180px",
-                    zIndex: 1000,
-                  }}
-                >
-                  <Link
-                    href="/profile"
-                    style={{
-                      display: "block",
-                      padding: `${spacing.sm} ${spacing.md}`,
-                      fontSize: fonts.size.sm,
-                      color: colors.textPrimary,
-                      textDecoration: "none",
-                    }}
-                  >
-                    {tNav('profile')}
-                  </Link>
-                  <button
-                    onClick={async () => {
-                      await supabase.auth.signOut();
-                      window.location.href = "/";
-                    }}
-                    style={{
-                      display: "block",
-                      width: "100%",
-                      padding: `${spacing.sm} ${spacing.md}`,
-                      fontSize: fonts.size.sm,
-                      color: colors.error,
-                      textAlign: "left",
-                      border: "none",
-                      backgroundColor: "transparent",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {tAuth('signOut')}
-                  </button>
-                </div>
-              )}
-            </div>
           </div>
         </div>
       </div>
@@ -572,9 +484,6 @@ export default function TopicPage() {
           <h1 style={{ fontSize: fonts.size.h2, fontWeight: fonts.weight.bold, margin: 0, color: colors.textPrimary }}>
             {topicCode} {topic?.name ? `— ${topic.name}` : ""}
           </h1>
-          <Link href="/report" style={{ ...buttonStyles.secondary, textDecoration: "none", display: "inline-flex", alignItems: "center" }}>
-            ← {tNav('reports')}
-          </Link>
         </div>
 
         {/* Error Display */}
@@ -627,7 +536,7 @@ export default function TopicPage() {
               cursor: !reportId ? "not-allowed" : "pointer",
             }}
           >
-            {tCommon('loading')}
+            {tCommon('reload')}
           </button>
         </div>
 
@@ -735,7 +644,7 @@ export default function TopicPage() {
               >
                 <div style={{ marginBottom: 16 }}>
                   <div style={{ ...headingStyles.h3, marginBottom: 8 }}>
-                    {idx + 1}. {q.question_text || "Question"}
+                    {idx + 1}. {getQuestionText(q)}
                   </div>
                 </div>
                 <DynamicQuestionInput

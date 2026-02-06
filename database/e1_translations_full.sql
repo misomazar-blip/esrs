@@ -1,0 +1,36 @@
+-- Complete Slovak translations for E1 (Climate Change) topic
+-- Based on ESG reporting terminology and ESRS standards
+-- Generated with professional ESG vocabulary
+
+-- This file will be populated with all E1 questions
+-- Waiting for full question export from user...
+
+-- ESG Terminology Reference (SK):
+-- GHG emissions = Emisie skleníkových plynov
+-- Scope 1/2/3 = Rozsah 1/2/3
+-- Transition plan = Plán prechodu / Transformačný plán
+-- Climate-related risks = Klimatické riziká
+-- Materiality = Významnosť / Materialita
+-- Decarbonisation = Dekarbonizácia
+-- Carbon neutrality = Uhlíková neutralita
+-- Adaptation = Adaptácia
+-- Mitigation = Zmierňovanie
+-- Physical risks = Fyzické riziká
+-- Transition risks = Transakčné riziká
+-- Climate scenario analysis = Analýza klimatických scenárov
+-- Science-based targets = Vedecky podložené ciele
+-- Net-zero = Čisté nulové emisie
+-- Carbon footprint = Uhlíková stopa
+-- Renewable energy = Obnoviteľná energia
+-- Energy efficiency = Energetická efektivita
+-- Circular economy = Obehové hospodárstvo
+-- Biodiversity = Biodiverzita
+-- Sustainable finance = Udržateľné financovanie
+-- ESG = Environmentálne, sociálne a správne (riadenie)
+-- Disclosure = Zverejnenie / Vykázanie
+-- Reporting = Vykazovanie / Reportovanie
+
+-- Template for bulk translations:
+-- UPDATE disclosure_question 
+-- SET translations = translations || jsonb_build_object('sk', 'PROFESSIONAL SLOVAK TRANSLATION')
+-- WHERE code = 'CODE';

@@ -2,6 +2,8 @@
 
 import { VersionedQuestion, VersionedAnswer, DataType } from '@/types/esrs';
 import { useState, useEffect } from 'react';
+import { useLocale } from 'next-intl';
+import { getQuestionText } from '@/lib/questionTranslations';
 
 interface DynamicQuestionInputProps {
   question: VersionedQuestion;
@@ -18,6 +20,8 @@ export default function DynamicQuestionInput({
   disabled = false,
   showValidation = false,
 }: DynamicQuestionInputProps) {
+  const locale = useLocale();
+  const questionText = getQuestionText(question, locale);
   const dataType = question.data_type || 'narrative';
   const [validationError, setValidationError] = useState<string | null>(null);
 
@@ -315,7 +319,7 @@ export default function DynamicQuestionInput({
             )}
           </div>
           <label className="text-sm font-medium text-gray-900">
-            {question.question_text}
+            {questionText}
           </label>
           {question.description && (
             <p className="text-sm text-gray-600 mt-1">{question.description}</p>

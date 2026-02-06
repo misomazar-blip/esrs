@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState, useMemo } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, buttonStyles, inputStyles, cardStyles, fonts, spacing, shadows } from "@/lib/styles";
 
@@ -25,6 +25,7 @@ type TopicComparison = {
 };
 
 export default function ComparisonPage() {
+  const locale = useLocale();
   const t = useTranslations('comparison');
   const tCommon = useTranslations('common');
   const tNav = useTranslations('nav');
@@ -302,7 +303,7 @@ export default function ComparisonPage() {
     return (
       <div style={{ padding: spacing.xl, textAlign: "center" }}>
         <p>Please log in to access version comparison</p>
-        <Link href="/login">
+        <Link href={`/${locale}/login`}>
           <button style={{ ...buttonStyles.primary, marginTop: spacing.md }}>
             Go to Login
           </button>
@@ -332,7 +333,7 @@ export default function ComparisonPage() {
           }}
         >
           <Link
-            href="/"
+            href={`/${locale}`}
             style={{
               fontSize: fonts.size.h3,
               fontWeight: fonts.weight.bold,
@@ -423,7 +424,7 @@ export default function ComparisonPage() {
                   }}
                 >
                   <Link
-                    href="/profile"
+                    href={`/${locale}/profile`}
                     style={{
                       display: "block",
                       padding: `${spacing.sm} ${spacing.md}`,
@@ -437,7 +438,7 @@ export default function ComparisonPage() {
                   <button
                     onClick={async () => {
                       await supabase.auth.signOut();
-                      window.location.href = "/";
+                      window.location.href = `/${locale}`;
                     }}
                     style={{
                       display: "block",

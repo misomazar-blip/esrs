@@ -303,7 +303,7 @@ export default function QuestionComments({ questionId, reportId, currentUserEmai
                     fontWeight: fonts.weight.semibold,
                   }}
                 >
-                  💬 Reply
+                  💬 {t('reply')}
                 </button>
               )}
             </>
@@ -316,7 +316,7 @@ export default function QuestionComments({ questionId, reportId, currentUserEmai
             <textarea
               value={replyText}
               onChange={(e) => setReplyText(e.target.value)}
-              placeholder="Write a reply..."
+              placeholder={t('addReply')}
               style={{
                 ...inputStyles.base,
                 width: "100%",
@@ -334,7 +334,7 @@ export default function QuestionComments({ questionId, reportId, currentUserEmai
                   fontSize: fonts.size.sm,
                 }}
               >
-                Reply
+                {t('reply')}
               </button>
               <button
                 onClick={() => {
@@ -347,7 +347,7 @@ export default function QuestionComments({ questionId, reportId, currentUserEmai
                   fontSize: fonts.size.sm,
                 }}
               >
-                Cancel
+                {t('cancel')}
               </button>
             </div>
           </div>
@@ -395,7 +395,7 @@ export default function QuestionComments({ questionId, reportId, currentUserEmai
             {expanded ? "▼" : "▶"}
           </span>
           <span style={{ fontSize: fonts.size.body, fontWeight: fonts.weight.semibold }}>
-            💬 Comments ({totalComments})
+            💬 {t('title')} ({totalComments})
           </span>
         </div>
       </div>
@@ -426,18 +426,18 @@ export default function QuestionComments({ questionId, reportId, currentUserEmai
                 opacity: !newComment.trim() ? 0.5 : 1,
               }}
             >
-              Add Comment
+              {t('submit')}
             </button>
           </div>
 
           {/* Comments List */}
           {loading ? (
             <div style={{ textAlign: "center", padding: spacing.md, color: colors.textSecondary }}>
-              Loading comments...
+              {t('loading')}
             </div>
           ) : comments.length === 0 ? (
             <div style={{ textAlign: "center", padding: spacing.md, color: colors.textSecondary }}>
-              No comments yet. Be the first to comment!
+              {t('noComments')}
             </div>
           ) : (
             <div>{comments.map((comment) => renderComment(comment))}</div>

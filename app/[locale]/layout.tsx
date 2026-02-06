@@ -1,5 +1,6 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import Header from "@/components/Header";
 import "../globals.css";
 
 type Params = Promise<{ locale: string }>;
@@ -12,11 +13,16 @@ export default async function LocaleLayout({
   params: Params;
 }) {
   const { locale } = await params;
-  const messages = await getMessages();
+  
+  // Explicitly pass the locale to getMessages
+  const messages = await getMessages({ locale });
 
   return (
     <NextIntlClientProvider messages={messages} locale={locale}>
-      {children}
+      <Header />
+      <main style={{ minHeight: 'calc(100vh - 64px)' }}>
+        {children}
+      </main>
     </NextIntlClientProvider>
   );
 }

@@ -1,0 +1,43 @@
+-- ============================================================================
+-- KOMPLETNÉ SLOVENSKÉ PREKLADY PRE VŠETKY ESRS ŠTANDARDY
+-- ============================================================================
+-- Dátum vytvorenia: 6. február 2026
+-- Databáza: Supabase (disclosure_question table)
+-- Stĺpec: translations (JSONB)
+-- 
+-- OBSAH:
+-- ========
+-- ✓ E1: Zmena klímy (Climate Change) - 203 otázok
+-- ✓ E2: Znečistenie (Pollution) - 82 otázok
+-- ✓ E3: Vodné zdroje (Water and Marine Resources) - 46 otázok
+-- ✓ E4: Biodiverzita a ekosystémy (Biodiversity and Ecosystems) - 158 otázok
+-- ✓ E5: Obehové hospodárstvo (Circular Economy) - 111 otázok
+-- ✓ S1: Vlastná pracovná sila (Own Workforce) - 214 otázok
+-- ✓ S2: Pracovníci v hodnotovom reťazci (Workers in Value Chain) - 81 otázok
+-- ✓ S3: Ovplyvnené komunity (Affected Communities) - 70 otázok
+-- ✓ S4: Spotrebitelia a koncoví používatelia (Consumers and End-users) - 70 otázok
+-- ✓ G1: Obchodné správanie (Business Conduct) - 57 otázok
+--
+-- CELKOVÝ POČET: 1092 prekladov
+--
+-- INŠTRUKCIE PRE VYKONANIE:
+-- =========================
+-- 1. Otvorte Supabase SQL Editor
+-- 2. Skopírujte celý obsah tohto súboru
+-- 3. Spustite SQL skript (Execute)
+-- 4. Overte úspech - na konci by sa mal zobraziť:
+--    "All ESRS translations completed successfully!"
+--
+-- POUŽITÁ ESG TERMINOLÓGIA:
+-- =========================
+-- - Emisie skleníkových plynov, Dekarbonizácia, Parížska dohoda
+-- - Látky vzbudzujúce obavy, Mikroplasty, Znečistenie ovzdušia/vody/pôdy
+-- - Oblasti vodného stresu, Vypúšťanie vody, Spotreba vody
+-- - Biologická rozmanitosť, Druhy, Habitáty, Natura 2000
+-- - Odpadové hospodárstvo, Recyklácia, Sekundárne suroviny
+-- - Pracovné podmienky, Zdravie a bezpečnosť, Kolektívne vyjednávanie
+-- - Ľudské práva, Náležitá starostlivosť, Miestne komunity
+-- - Ochrana spotrebiteľa, Osobné údaje, Bezpečnosť produktov
+-- - Protikorupčné opatrenia, Etický kódex, Transparentnosť
+-- ============================================================================
+

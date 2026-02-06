@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, fonts } from "@/lib/styles";
 import Link from "next/link";
@@ -53,6 +53,7 @@ type YearComparison = {
 };
 
 export default function AnalyticsPage() {
+  const locale = useLocale();
   const t = useTranslations('analytics');
   const tCommon = useTranslations('common');
   const tNav = useTranslations('nav');
@@ -274,7 +275,7 @@ export default function AnalyticsPage() {
           {/* Create a report to view analytics */}
         </p>
         <Link
-          href="/report"
+          href={`/${locale}/report`}
           style={{
             display: "inline-block",
             padding: "0.75rem 1.5rem",
@@ -610,7 +611,7 @@ export default function AnalyticsPage() {
         }}
       >
         <Link
-          href="/report"
+          href={`/${locale}/report`}
           style={{
             padding: "0.75rem 1.5rem",
             backgroundColor: colors.primary,
@@ -623,7 +624,7 @@ export default function AnalyticsPage() {
           Go to Reports
         </Link>
         <Link
-          href={`/topics/${topicStats[0]?.topic_code || ""}`}
+          href={`/${locale}/topics/${topicStats[0]?.topic_code || ""}`}
           style={{
             padding: "0.75rem 1.5rem",
             backgroundColor: colors.info,

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import React, { useEffect, useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, buttonStyles, inputStyles, cardStyles, fonts, spacing, shadows } from "@/lib/styles";
 import { VersionedQuestion } from "@/types/esrs";
@@ -28,6 +28,7 @@ type ReportTopic = {
 const STATUS_OPTIONS = ["draft", "submitted", "published"] as const;
 
 export default function ReportPage() {
+  const locale = useLocale();
   const t = useTranslations('report');
   const tCommon = useTranslations('common');
   const tNav = useTranslations('nav');
@@ -51,7 +52,6 @@ export default function ReportPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [expandedTopicId, setExpandedTopicId] = useState<string | null>(null);
   const [rationaleText, setRationaleText] = useState<string>("");
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [allQuestions, setAllQuestions] = useState<VersionedQuestion[]>([]);
   const [loadingQuestions, setLoadingQuestions] = useState(false);
@@ -330,241 +330,6 @@ export default function ReportPage() {
         backgroundColor: colors.bgPrimary,
       }}
     >
-      {/* TOP NAVIGATION (shared look) */}
-      <div
-        style={{
-          borderBottom: `1px solid ${colors.borderGray}`,
-          boxShadow: shadows.sm,
-          backgroundColor: colors.white,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: `${spacing.md} ${spacing.xl}`,
-            maxWidth: "1200px",
-            margin: "0 auto",
-          }}
-        >
-          <Link
-            href="/"
-            style={{
-              fontSize: fonts.size.h3,
-              fontWeight: fonts.weight.bold,
-              margin: 0,
-              color: colors.primary,
-              textDecoration: "none",
-            }}
-          >
-            ESRS
-          </Link>
-
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: spacing.lg,
-            }}
-          >
-            {/* COMPANY SELECTOR */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: spacing.sm,
-                padding: `${spacing.sm} ${spacing.md}`,
-                borderRadius: "6px",
-                backgroundColor: colors.bgSecondary,
-              }}
-            >
-              <span
-                style={{
-                  fontSize: fonts.size.sm,
-                  color: colors.textSecondary,
-                  fontWeight: fonts.weight.semibold,
-                }}
-              >
-                Company
-              </span>
-              <select
-                value={companyId}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  setCompanyId(val);
-                  if (val) {
-                    if (typeof window !== "undefined") localStorage.setItem("selectedCompanyId", val);
-                    loadReports(val);
-                  }
-                }}
-                style={{
-                  padding: `${spacing.sm} ${spacing.md}`,
-                  border: `1px solid ${colors.borderGray}`,
-                  borderRadius: "6px",
-                  fontSize: fonts.size.body,
-                  backgroundColor: colors.white,
-                  minWidth: "200px",
-                }}
-              >
-                <option value="">Select company...</option>
-                {companies.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* REPORT YEAR SELECTOR */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: spacing.sm,
-                padding: `${spacing.sm} ${spacing.md}`,
-                borderRadius: "6px",
-                backgroundColor: colors.bgSecondary,
-              }}
-            >
-              <span
-                style={{
-                  fontSize: fonts.size.sm,
-                  color: colors.textSecondary,
-                  fontWeight: fonts.weight.semibold,
-                }}
-              >
-                Report year
-              </span>
-              <select
-                value={selectedReportId}
-                onChange={(e) => {
-                  const rid = e.target.value;
-                  setSelectedReportId(rid);
-                  if (rid) {
-                    if (companyId && typeof window !== "undefined") {
-                      localStorage.setItem(`selectedReportId:${companyId}`, rid);
-                    }
-                    loadReportTopics(rid);
-                  }
-                }}
-                style={{
-                  padding: `${spacing.sm} ${spacing.md}`,
-                  border: `1px solid ${colors.borderGray}`,
-                  borderRadius: "6px",
-                  fontSize: fonts.size.body,
-                  backgroundColor: colors.white,
-                  minWidth: "160px",
-                }}
-              >
-                <option value="">Select report...</option>
-                {filteredReports.map((r) => (
-                  <option key={r.id} value={r.id}>
-                    {r.reporting_year}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* USER INFO */}
-            {/* USER DROPDOWN */}
-            <div style={{ position: "relative" }}>
-              <div
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: spacing.md,
-                  cursor: "pointer",
-                  padding: spacing.sm,
-                  borderRadius: "8px",
-                  backgroundColor: dropdownOpen ? colors.bgSecondary : "transparent",
-                }}
-              >
-                <div
-                  style={{
-                    width: "32px",
-                    height: "32px",
-                    borderRadius: "50%",
-                    backgroundColor: colors.primary,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: colors.white,
-                    fontWeight: fonts.weight.bold,
-                    fontSize: fonts.size.sm,
-                  }}
-                >
-                  {email?.[0]?.toUpperCase()}
-                </div>
-                <span
-                  style={{
-                    fontSize: fonts.size.sm,
-                    color: colors.textPrimary,
-                    fontWeight: fonts.weight.medium,
-                    maxWidth: "150px",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {email}
-                </span>
-                <span style={{ fontSize: "10px", color: colors.textSecondary }}>▼</span>
-              </div>
-
-              {dropdownOpen && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "calc(100% + 8px)",
-                    right: 0,
-                    backgroundColor: colors.white,
-                    border: `1px solid ${colors.borderGray}`,
-                    borderRadius: "8px",
-                    boxShadow: shadows.md,
-                    minWidth: "180px",
-                    zIndex: 1000,
-                  }}
-                >
-                  <Link
-                    href="/profile"
-                    style={{
-                      display: "block",
-                      padding: `${spacing.sm} ${spacing.md}`,
-                      fontSize: fonts.size.sm,
-                      color: colors.textPrimary,
-                      textDecoration: "none",
-                    }}
-                  >
-                    {tNav('profile')}
-                  </Link>
-                  <button
-                    onClick={async () => {
-                      await supabase.auth.signOut();
-                      window.location.href = "/";
-                    }}
-                    style={{
-                      display: "block",
-                      width: "100%",
-                      padding: `${spacing.sm} ${spacing.md}`,
-                      fontSize: fonts.size.sm,
-                      color: colors.error,
-                      textAlign: "left",
-                      border: "none",
-                      backgroundColor: "transparent",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {tAuth('signOut')}
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div
         style={{
           maxWidth: "1200px",
@@ -572,17 +337,12 @@ export default function ReportPage() {
           display: "flex",
           flexDirection: "column",
           gap: spacing.xl,
-          padding: `${spacing.xl} ${spacing.xl}`,
+          padding: spacing.xl,
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h1 style={{ fontSize: fonts.size.h2, fontWeight: fonts.weight.bold, margin: 0, color: colors.textPrimary }}>
-            {t('title')}
-          </h1>
-          <Link href="/" style={{ ...buttonStyles.secondary, textDecoration: "none", display: "inline-flex", alignItems: "center" }}>
-            ← {tNav('home')}
-          </Link>
-        </div>
+        <h1 style={{ fontSize: fonts.size.h2, fontWeight: fonts.weight.bold, margin: 0, color: colors.textPrimary }}>
+          {t('title')}
+        </h1>
 
         {/* Add Report Button */}
         <button
@@ -599,18 +359,56 @@ export default function ReportPage() {
 
         {/* Reports List */}
         <div style={{ ...cardStyles.base }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: spacing.md }}>
+          {/* Header with title and count */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: spacing.sm }}>
             <h3 style={{ fontSize: fonts.size.lg, fontWeight: fonts.weight.bold, margin: 0 }}>Your reports</h3>
             <span style={{ fontSize: fonts.size.sm, color: colors.textSecondary }}>
               {loading ? "Loading..." : `${filteredReports.length} shown`}
             </span>
+          </div>
+          
+          {/* Company Filter */}
+          <div style={{ marginBottom: spacing.md, display: "flex", alignItems: "center", gap: spacing.sm }}>
+            <label htmlFor="company-filter" style={{ fontSize: fonts.size.sm, color: colors.textSecondary, fontWeight: fonts.weight.medium }}>
+              Select Company:
+            </label>
+            <select
+              id="company-filter"
+              value={companyId}
+              onChange={(e) => {
+                const val = e.target.value;
+                setCompanyId(val);
+                if (val) {
+                  if (typeof window !== "undefined") localStorage.setItem("selectedCompanyId", val);
+                  loadReports(val);
+                }
+              }}
+              style={{
+                ...inputStyles.base,
+                width: "200px",
+                padding: `${spacing.sm} ${spacing.md}`,
+              }}
+            >
+              <option value="">All companies</option>
+              {companies.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           {filteredReports.length === 0 && !loading ? (
             <p style={{ color: colors.textSecondary, margin: 0 }}>No reports yet. Create one to get started.</p>
           ) : (
             <div style={{ overflowX: "auto" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed" }}>
+                <colgroup>
+                  <col style={{ width: "40%" }} />
+                  <col style={{ width: "15%" }} />
+                  <col style={{ width: "20%" }} />
+                  <col style={{ width: "25%" }} />
+                </colgroup>
                 <thead>
                   <tr>
                     <th style={tableHeaderCell}>Company</th>
@@ -657,25 +455,20 @@ export default function ReportPage() {
             </span>
           </div>
 
-          <div style={{ display: "flex", gap: spacing.sm, marginBottom: spacing.md, alignItems: "center", flexWrap: "wrap" }}>
-            <span style={{ fontSize: fonts.size.sm, color: colors.textSecondary }}>Report:</span>
-            <select
-              value={selectedReportId}
-              onChange={(e) => {
-                const rid = e.target.value;
-                setSelectedReportId(rid);
-                if (rid) loadReportTopics(rid);
-              }}
-              style={{ ...inputStyles.base, width: "260px", paddingRight: spacing.lg }}
-            >
-              <option value="">Select report</option>
-              {filteredReports.map((r) => (
-                <option key={r.id} value={r.id}>
-                  {r.reporting_year} — {companies.find((c) => c.id === r.company_id)?.name ?? r.company_id}
-                </option>
-              ))}
-            </select>
-          </div>
+          {/* Show selected report info */}
+          {selectedReportId && (
+            <div style={{ marginBottom: spacing.md, fontSize: fonts.size.sm }}>
+              <span style={{ color: colors.textSecondary, fontWeight: fonts.weight.medium }}>Report: </span>
+              <span style={{ fontWeight: fonts.weight.semibold }}>
+                {(() => {
+                  const report = filteredReports.find(r => r.id === selectedReportId);
+                  if (!report) return selectedReportId;
+                  const companyName = companies.find((c) => c.id === report.company_id)?.name ?? report.company_id;
+                  return `${companyName} — ${report.reporting_year}`;
+                })()}
+              </span>
+            </div>
+          )}
 
           {/* Bulk Export Buttons */}
           {selectedReportId && reportTopics.filter(rt => rt.is_material).length > 0 && (
@@ -843,7 +636,7 @@ export default function ReportPage() {
                           <td style={tableCell}>
                             {isMaterial ? (
                               <Link 
-                                href={`/topics/${q.topic?.code.toLowerCase()}?reportId=${selectedReportId}`}
+                                href={`/${locale}/topics/${q.topic?.code.toLowerCase()}?reportId=${selectedReportId}`}
                                 style={{ 
                                   color: colors.primary, 
                                   textDecoration: "none",
@@ -904,7 +697,7 @@ export default function ReportPage() {
                           <td style={{ ...tableCell, fontWeight: fonts.weight.semibold }}>
                             {status === "material" ? (
                               <Link 
-                                href={`/topics/${t.code.toLowerCase()}?reportId=${selectedReportId}`}
+                                href={`/${locale}/topics/${t.code.toLowerCase()}?reportId=${selectedReportId}`}
                                 style={{ 
                                   color: colors.primary, 
                                   textDecoration: "none",

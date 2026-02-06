@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getQuestionText } from "@/lib/questionTranslations";
 
 export async function GET(req: Request, { params }: { params: Promise<{ code: string }> }) {
   try {
     const { searchParams } = new URL(req.url);
     const reportId = searchParams.get("reportId");
+    const locale = searchParams.get("locale") || "en"; // Get locale from query params
     const { code } = await params;
     const topicCode = code.toUpperCase();
 
@@ -70,7 +72,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ code: st
 
     const { data: questions, error: qErr } = await supabase
       .from("disclosure_question")
-      .select("id, code, question_text, order_index, data_type, unit, disclosure_requirement, esrs_paragraph, is_mandatory")
+      .select("id, code, question_text, translations, order_index, data_type, unit, disclosure_requirement, esrs_paragraph, is_mandatory")
       .eq("topic_id", topic.id)
       .eq("version_id", activeVersionId)
       .order("order_index", { ascending: true });
@@ -168,7 +170,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ code: st
       
       lines.push("");
       lines.push("Question:");
-      lines.push(q.question_text || "[No question text]");
+      lines.push(getQuestionText(q, locale) || "[No question text]");
       lines.push("");
       lines.push("Answer:");
       lines.push(answerValue);
