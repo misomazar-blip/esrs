@@ -1,0 +1,119 @@
+C3 – GHG reduction and climate transition
+216. Emission reductions can prove  to be both  a challenge and opportunity for an undertaking, as it
+often requires changes to the strategic and operational reality of the business. The goal of reducing
+emissions may require a review of strategic and financial priorities. Decarbonisation may require
+important initial investment in, for example, electr ifying  a fleet of vehicles, implement ing new
+technologies to reduce energy consumption or develop ing new product lines that are less reliant
+on carbon -intensive materials. On the other hand, implementing l ow-carbon solutions to achieve
+GHG emission reduction can significantly lessen the costs of purchased energy and materials.
+Undertakings embarking on their decarbonisation journey are often facing important adjustments
+to their business models or daily ope rations. For instance, a logistics and delivery services
+undertaking may need to redesign its fleet management to minimise potential service disruptions
+due to the need of regular vehicle charging. A consumer goods manufacturing undertaking
+planning to rep lace a component of its product with a sustainable, low -carbon alternative may need
+to allocate time and resources to product innovation and to searching  for new suppliers. These
+efforts can, in turn, result in reducing costs, accessing new markets, creating new workplaces and
+attracting additional financing, making GHG emission reduction not only a challenge, but also a
+strategic business opportunity. In t his context, targets  for GHG reductions are an important
+measure of responding to the need for a  susta inable transition, as they allow undertaking s to
+manage the change in a systematic, controlled and organised way .
+217. A GHG emission reduction target is a commitment to reduce the undertaking’s GHG emissions in
+a future year compared to the GHG emissions measured during  a chosen base year. Actions that
+may lead to e mission reductions include,  for instance, electrification, renewable electricity,
+sustainable products development, etc. Disclosure C3 requires  that the undertaking disclose s
+GHG emission reduction targets  for its Scope 1 and Scope 2 emissions.
+218. Removals and avoided emissions shall not be accounted as reduction of the undertaking’s gross
+GHG emissions . This is due to the important distinction between accounting practices for gross
+GHG emissions (inventory accounting) and GHG removals and avoided emissions (project -based
+or intervention accounting). Gross GHG emissions of the undertaking are designed to tr ack the
+actual emissions released to the environment, providing a consistent and comparable baseline to
+set up GHG targets . Avoided emissions and carbon removals, on the other hand, relate to specific
+project activities of the undertaking, which means that their accounting is done separately from
+gross GHG emissions .
+219. To follow this practice, the undertaking need s to distinguish between its gross GHG emissions and
+other impacts  which are not captured in it, such as GHG removals and avoided emissions.
+
+VSME Standard
+Removals refer to the withdrawal of GHG from the atmosphere as a result of deliberate human
+activities. Example s of such activities can include plant growth (transfer of atmospheric CO 2
+through photosynthesis) and direct air capture of CO 2 and are typically linked to the subsequent
+storage of CO 2. Avoided GHG emissions are typically referred to as emissions that would have
+otherwise happened but that, as a result of the undertaking’s activities, did not happen. These may
+include introducing new products and technologies that reduce demand for their carbon -intensive
+equivalents, for example insulatio n solutions in a building that avoid the demand for energy
+services therein. More information on the concepts related to carbon removals and avoided
+emissions can be found in the GHG Protocol Land Sector and Removals Guidance13 as well as
+the WBCSD guidance14.
+220. A base year is a preceding year against which the undertaking’s current GHG emissions  can be
+measured . In general, the base year should be a recent and representative year of the
+undertaking’s GHG emissions in which there are verifiable data.
+221. The target year is the year in the future in which the undertaking aims to achiev e a certain absolute
+or percentage  amount  of GHG emission reductions. It should range over a period from one to three
+years from the base year to a short -term target. Longer term targets  may also be included, for
+instance, for periods of twenty or thirty years (e.g . 2040 or 2050). Undertakings are encouraged to
+include target values for the short -term target  year of 2030 at the least and, if feasible, for the long -
+term year  of 2050. From 2030 onwards,  it is recommended to update the base year and target
+year for GHG emission reduction targets  after every five -year period .
+222. To set a target, undertakings should consider the existing scientific evidence on GHG mitigation.
+The SBTi recommends a cross -sector target in GHG emissions reduction of -42% by the year 2030
+and -90% by the year 2050  (base year 2020) . The Stockholm Resilience Centre also proposes a
+‘carbon law’ that sets out concrete steps to achieve full decarbonisation by 2050 based on a flexible
+way of thinking  about reducing carbon emissions  by halving emissions every decade and
+increasing renewable energy  roll-out exponentially. The authors argued that this roadmap would
+ensure a 75% chance of keeping the Earth below 2 °C above pre -industrial temperatures  – the
+target set out in the Paris agreement15. SBTi also proposes a streamlined target -setting route for
+small - and medium -sized  undertakings16. Specific pathways also exist by sector and may be
+considered by undertakings when setting their GHG emission reduction targets .
+223. To achieve a quick reduction of both direct and indirect emissions, there are some simple actions
+that the undertaking can take. Some actions may be easy but still able to deliver a notable emission
+reduction and support the undertaking  reaching its targets . For instance, electrification of the
+vehicle fleet by replacing vehicle s running on fossil fuel with electric vehicles will lead to emission
+reduction as soon as the previous fleet is replaced. This can mean notable emission reduction
+especially for a b usiness that is reliant on transportation. Similarly, replacing commutes and
+business travels by car with low carbon alternatives such as bicycles or public transport is an
+effective, simple and achievable decarbonisation action. Another area of low-hanging fruit is to
+review the internal energy management and update it to energy -efficient equipment and integrate
+maintenance into routine business operations. By regularly maintaining equipment and machinery
+and replacing these with more energy -efficient alte rnatives when and where possible, the
+undertaking can reduce its energy consumption. Such equipment can include , for example , boilers,
+telecommunication systems, heat pumps, air -conditioning etc. Through regular maintenance their
+efficient operation can be ensured, wear and tear minimised and waste minimised. By also
+13 GHG Protocol Land Sector and Removals Guidance (https://ghgprotocol.org/land -sector -and-removals -
+guidance)
+14 World Business Council for Sustainable Development (2023), Guidance on Avoided Emissions.
+(https://www.wbcsd.org/wp -content/uploads/2023/09/Climate -Avoided -Emissions -guidance_WBCSD.pdf) .
+15 Rockström, J., Gaffney, O., Rogelj, J. et. al. 2017. A roadmap for rapid decarbonization. Science, Volume 355
+Issue 6331. Available at: https://www.stockholmresilience.org/research/research -news/2017 -03-23-curbing -
+emissions -with-a-new-carbon -law.html .
+16 SBTI https://sciencebasedtargets.org/small -and-medium -enterprise -sme-target -setting -process .  SBTI offers
+resources for SMEs to set science based targets: https://sciencebasedtargets.org/small -and-medium -enterprise -
+sme-target -setting -process .
+
+VSME Standard
+automating systems and using timers to define periods of use, the undertaking is able to lower the
+emissions of such equipment even further.
+224. A climate transition plan for climate change mitigation  is a set of present and future actions  meant
+to align the undertaking ’s business model, strategy and operations  with the key overarching global
+goal of limiting global warming to 1.5°C . Underpinned by a GHG reduction target compatible with
+that goal , the importance of having a transition plan in place lies in the ability of understanding  the
+means by which the undertaking will move towards a low -carbon economy while keeping track of
+the progress made . A transition plan serves as a mechanism for accountability and transparency ,
+prompting  undertakings to develop credible pathways for mitigating climate change through their
+actions .
+225. Establishing a credible transition plan for the undertaking is something that  should be supported
+by elements such as (a) identifying clear responsibilities and roles; (b) integrating the plan in to the
+undertaking’s business strategy and financial planning; (c) including information on
+decarbonisation levers and pathways as well as quantifiable indicators that can be monitored
+throughout predefined timeframes; (d) allowing for regular reviewing and updating after
+stakeholder consultations when appropriate; and (e) covering the entirety of its own operations
+and, to the largest possible extent, the value chain  or else providing an explanation as to any
+limitation.
+226. Undertakings that  are disclosing targets  according to the EMAS Regulation  Annex IV B (d)  may
+use its GHG reduction targets to fulfil the VSME requirement  if it has set such targets . The
+undertaking may also support this disclosure through  its implementation of the EMAS
+environmental management system  and link to  EN ISO 14001:2015 as set out by EMAS
+Regulation Annex II B A.6.2.1 and B.5 (environmental objectives).
+Guidance on how to identify manufacturing, constructions and /or packaging processes
+227. To identify manufacturing, construction and/or packaging processes, the und ertaking may refer to
+these activities that fall under Section C – Manufacturing , Section F Construction  as well as  Class
+N82.92 ‘Packaging activities ’ of Annex I to Regulation (EC) No 1893/2006.

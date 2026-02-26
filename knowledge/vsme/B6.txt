@@ -1,0 +1,156 @@
+B6 – Water
+Guidance on h ow to calculate and report on water withdrawals  and water consumption
+142. Water withdrawal  relates to the amount of water an undertaking  draws into its organi sational
+boundaries from any source during the reporting period. In practice, for most undertaking s this
+relates to the amount of water taken from the public water supply network as indicated in the utility
+bills. However, where applicable, water withdrawal also includes amounts of water taken from other
+sources  such as groundwater from own wells, water taken from rivers or lakes  or water received
+by other undertaking s. In the specific case of undertakings operating in agriculture, water
+withdrawal  would  include rainwater  if collected directly and stored  by the undertaking .
+143. Water withdrawal  data can be retrieved from measurements using flow meters or water bills;
+indeed, in practice for most undertakings water withdrawal relates to the amount of water taken
+from the public water supply network as indicated in the utility bills. In cases in w hich direct
+measurements are not feasible or are deemed not sufficient and therefore need to be
+complemented, data on water withdrawal can be estimated using , for example , calculations
+models, and industry standards.
+144. For example, in the case of a shared office or coworking space, a possible method to calculate the
+water withdrawal  could be to retrieve the overall water withdrawal of the building from the water
+bill and calculate the water withdrawal per employee  with the following equation:
+Water withdrawal per employee daily (L) = annual water withdrawal (L) / (n. of employees in the whole
+shared building x n. of working days) .
+The undertaking could then multiply the water withdrawal per employee for the number of its
+employees and the days they worked in the reporting year to obtain the final number required in
+the datapoint.
+To make a numerical example applying the proposed formula, the annual water withdrawal
+retrieved from the water bill of a coworking space is 1296 m3 (corresponding to 1296000 L),
+
+VSME Standard
+coworking space where 100 employees of different companies work together for an assumed
+number of 240 days a year. The assumption on the average number of days worked can be
+based on national statistics , for example. The water withdrawal per employee daily would be in
+this case:
+water withdrawal per employee daily = 1296000 L / (100x240) = 54 L
+145. Assuming now that that the employees  of the reporting undertaking are 25 and that they use the
+coworking space for 220 days a year, the yearly water withdrawal  of the undertaking in the
+coworking space would be the water withdrawal per employee multiplied for the number of its
+employees and the days worked, therefore 54Lx25x220 = 297000 L (corresponding to 297 m3) .
+146. This calculation could be useful when it  is possible to access the water bill of the shared building.
+This simple calculation method has some limitations, as it does not consider , for example ,
+differences in use between different parts of the building (e.g. a seven -floor building could have six
+floors dedicated to offices and one floor with a canteen or a restaurant), which the undertaking
+might be able to overcome if additional data are available, further refining the basic calculation
+provided above as an example.
+147. An alternative way to obtain water withdrawal  data in the example of shared offices when it is not
+possible to retrieve the water bill could be to calculate it using fixture flow rates and occupancy
+data as primary inputs. A possible formula could be:
+Total  water  withdrawal  =
+∑(Flow  Rate×Number  of Uses  per Day×Number  of Days  per Year×Occupancy)
+where:
+(a) flow rates or each fixture can be retrieved from the project documentation or labels of the
+fixtures, for example, or estimated basing on average data publicly available if more accurate
+information is not retrievable;
+(b) the number of uses per day can be estimated based on averages publicly available;
+(c) ‘number of days’ stands for the number of operational days for the reporting undertaking in
+a year;
+(d) ‘occupancy’ represents the number of employees  of the undertaking using the office; it  is
+often calculated as full-time equivalent (FTE) ; and
+(e) the sign ∑ indicates that the calculations for each fixture should be summed up to obtain the
+total water withdrawal of the reporting undertaking operating in a shared office.
+148. An additional  possible source that could support the reporting of water withdrawal  for
+undertaking s operating in shared offices is the JRC Level(s) indicator 3.1: Use stage water
+consumption user manual  as well as additional related documents and calculation sheets (see PG
+Section Documents | Product Bureau (europa.eu) ). Furthermore, the undertaking could consult
+EMAS Reference Document for the Public Administration sector  and EMAS Reference Document
+for the Construction sector  as well as rating systems like the National Australian Built Environment
+Rating System (NABERS)  and certifications like the Building Research Establishment
+Environmental Assessment Method (BREEM) , the Leadership in Energy and Environmental
+Design (LEED)  and the German Sustainable Building Council (DGNB) System for Buildings In Use ,
+which might provide useful indications in their methodologies on how to further refine  the
+calculation for water withdrawal in offices and shared spaces.
+149. The provided examples to obtain water withdrawal  data in the case of shared offices can be
+transposed  to and applied by undertakings operating in different sectors, with adjustments that
+might be necessary for the sectoral  and entity -specific situation the undertaking operates  in. EMAS
+Sectoral Reference Documents (SRDs)  could be consulted for sector -specific methodology and
+indicators on water withdrawal as well as industry standards and benchmarks.
+150. Water consumption  is the amount of water drawn into the boundaries of the undertaking  that is
+not discharged or planned to be discharged back into the water environment or to a third party.
+This typically relates to water evaporated – e.g. in thermal energy processes like drying or power
+production  – water embedded in products – e.g. in food production – or water for irrigation purposes
+– e.g. used in agriculture or for water ing company  premises .
+
+VSME Standard
+151. Water d ischarge  means , for example,  the amount of water transferred  directly to receiving water
+bodies such as lakes or rivers, the public sewer or to other companies for cascading water use.  It
+can be seen as the water output of the undertaking.
+152. Water consumption  can therefore be calculated as:
+Water consumption = Water Inputs – Water Outputs
+or in other words :
+Water consumption = (Water withdrawal ) – Water  discharges .
+For undertaking s that solely withdraw water from the public water network and discharge it
+into the sewer, water consumption will be close to zero and can therefore be omitted from
+the report.
+More broadly, the applicability of the disclosure requirement on water consumption relates to
+information already requested by law, already reported, and/or appropriate for the sector .
+153. A schematic view of the relationship between water withdrawal , water consumption  and water
+discharge can be seen in the image below .
+154. The undertaking  may provide additional explanatory information to contextuali se its water
+withdrawal s or consumption. For example, the undertaking  may highlight if rainwater is collected
+and used as a replacement for tap water or if water is discharged into other parties for cascading
+use.
+155. Below can be found  an example of how undertakings may present quantitative  information on their
+withdrawals, discharges  and consumption of water divided by site location .
+Water withdrawal
+E.g. m ³ Water consumption
+E.g. m³ (if applicable)
+All sites
+Sites in areas with water stress
+Guidance  for determin ing whether the undertaking operat es in an area of high -water stress
+156. The u ndertaking  can consult local (e.g. national, regional) water authorities of the place (s) it
+operate s in to inform  its assessment of water resources for th e specific location (s), includ ing the
+identification of areas of high-water stress . The undertaking  can also consult public ly available and
+free tools that map out water scarcity globally. One such tool is  the WRI’s Aqueduct Water Risk
+Atlas , which provides an interactive map of a water stress indicator  (the ‘baseline water stress’,
+which measures the ratio of total water demand to available renewable surface and groundwater
+supplies)  at sub -basin level.  With the help of this tool , undertakings can consult the water stress
+baseline set for different river basins globally.  Values of the baseline water stress indicator above
+40% indicate an area of high -water  stress.
+157. By way of  illustration, t he map below shows the main Iberian River  basins and their water stress
+classification according to the WRI Aqueduct.
+
+VSME Standard
+In this image  several water basins in the Iberian Peninsula , along with their water stress
+classification , can be observed . Most of the southern part of the peninsula sits in an area of
+significant high-water stress  – with the exception of the Guadiana basin (in yellow). Thus , if the
+undertaking has operations within the Guadalquivir basin ( e.g. the Andalucia region, which has
+a significant  high-water stress  level), the undertaking would have to disaggregate its water
+consumption  for that region/water basin. But if its operation s take place within the southern part
+of the Guadiana river basin ( where there is low water stress) , then it would not be necessary  to
+disaggregate its water consumption for that region/water basin .
+158. Other possible tools  that undertakings can consult to determine their location in water stressed
+areas are the static  map (and related dataset ) provided by the  Europe an Environment Agency
+(EEA)  Water Exploitation Index plus (WEI+) for summer and Urban Morphological Zones (UMZ)
+and the interactive map  Water exploitation index plus (WEI+) for river basin districts (1990 -2015) ,
+both presenting the water stress indicator WEI+ that measur es total water consumption  as a
+percentage of the renewable freshwater resources  at sub -basin level.  WEI+ v alues equal or greater
+than 40%  generally  indicate situations of high-water  stress.  It is worth underlining that WRI
+Aqueduct bases its  baseline water stress indicator on water demand, while the  EEA indicator of
+water stress WEI+ is based on water consumption.
+Documentation Sources:
+Data  Documentation Source
+Water withdrawal in shared offices
+(measurement)  ‘Water use in your business’, South Staff Water
+Water withdrawal in shared offices
+(measurement, estimation)  Level(s) indicator 3.1: Use stage water
+consumption user manual: introductory briefing,
+instructions and guidance (Publication version
+1.1), JRC
+Water withdrawal (general)  EMAS User Guide
+Water withdrawal in SMEs  EMAS "easy" for small and medium enterprises
+Water stress  – WRI Aqueduct  Technical Note - Aqueduct 4.0: Updated
+decision -relevant global water risk indicators,
+WRI
+
+VSME Standard
+Water stress – WEI+  Water scarcity conditions in Europe (Water
+exploitation index plus) | European Environment
+Agency's home page (europa.eu)

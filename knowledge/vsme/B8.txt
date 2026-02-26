@@ -1,0 +1,48 @@
+B8 – Workforce – General characteristics
+175. Full-time equivalent (FTE)  is the number of full -time positions in an undertaking . It can be
+calculated by dividing an employee ’s scheduled hours (total effective hours worked in a week) by
+the employer's hours for a full -time workweek (total hours performed by full -time employees) . For
+example, an employee who works 25 hours every week for a company where the full -time week is
+40 hours represents a 0,625 FTE (i .e. 25/ 40 hours) .
+12 L_2006393EN.01000101.xml (europa.eu) .
+
+VSME Standard
+176. Headcount is the  total number of  people employed by the undertaking  at a given time .
+Guidance on how to present  information about  employees’ contract types
+177. The following table shows how information on employees  may be presented  by type of
+employment contract .
+Type of contract  Number of employees ( headcount or full-time equivalents)
+Temporary contract
+Permanent contract
+Total employees
+178. The following table shows how  information on employees  may be presented by gender.
+Gender  Number of employees ( headcount or full-time equivalents)
+Male
+Female
+Other
+Not reported
+Total employees
+179. In some European Union Member States , it is possible for people to legally register themselves as
+having a third  gender , often neutral, which is to be categorised as ‘other ’ in the table above. If the
+undertaking is disclosing data about employees  where this is not possible, it may explain this and
+indicate that the ‘other ’ category is not applicable. The ‘not reported ’ category applies to employees
+who do not disclose their gender identity .
+180. The following table shows how  information on employee s may be presented by countries .
+Country  (of
+employment
+contract)  Number of employees ( headcount or full-time equivalents)
+Country A
+Country B
+Country C
+Country D
+Total employees
+181. Definitions  and types  of employment contracts  may vary depending on the countr y. If the
+undertaking has employees  working in more than one country, it shall use the legal definitions
+stipulated in the national laws of the countries where the employees are based in to calculate
+country -level data. Such country -level data shall then be added up to calculate total numbers,
+disregarding differences in national legal definitions .
+182. Employee  turnover refers to employees who leave the undertaking  voluntarily or due to dismissal,
+retirement or death in service.
+183. In order to calculate the turnover  rate, the formula below should be used .
+𝑁𝑢𝑚𝑏𝑒𝑟  𝑜𝑓 𝑒𝑚𝑝𝑙𝑜𝑦𝑒𝑒𝑠  𝑤ℎ𝑜 𝑙𝑒𝑓𝑡  𝑑𝑢𝑟𝑖𝑛𝑔  𝑡ℎ𝑒 𝑟𝑒𝑝𝑜𝑟𝑡𝑖𝑛𝑔  𝑦𝑒𝑎𝑟
+𝐴𝑣𝑒𝑟𝑎𝑔𝑒  𝑛𝑢𝑚𝑏𝑒𝑟  𝑜𝑓 𝑒𝑚𝑝𝑙𝑜𝑦𝑒𝑒𝑠  𝑑𝑢𝑟𝑖𝑛𝑔  𝑡ℎ𝑒 𝑟𝑒𝑝𝑜𝑟𝑡𝑖𝑛𝑔  𝑦𝑒𝑎𝑟 𝑥 100

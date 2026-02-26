@@ -19,6 +19,7 @@
     "preview": "Preview"
   },
   "nav": {
+    "dashboard": "Dashboard",
     "home": "Home",
     "reports": "Reports",
     "topics": "Topics",
@@ -79,7 +80,10 @@
     "csvFormat": "CSV Format",
     "spreadsheet": "Spreadsheet",
     "jsonFormat": "JSON Format",
-    "structuredData": "Structured data"
+    "structuredData": "Structured data",
+    "profileIncomplete": "Company profile incomplete",
+    "completeProfile": "Complete Profile",
+    "completeProfileDescription": "Complete your company profile to unlock all features"
   },
   "topics": {
     "title": "Questions for topic {code}",

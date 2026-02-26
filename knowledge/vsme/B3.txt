@@ -1,0 +1,213 @@
+B3 (Basic Module)
+When reporting its Scope 1 and Scope 2 emissions, if the
+undertaking discloses entity -specific information on its Scope
+3 emissions, it shall present it together with the information
+required under B3 – Energy and greenhouse gas emissions.  SFDR32
+Benchmark33
+Environment  C3 – GHG emissions reduction target
+If the undertaking has established GHG emission reduction
+targets , it shall disclose its targets in absolute values for
+Scope 1 and Scope 2 emissions. In line with paragraphs 50 to
+53 above and if it has set Scope 3 reduction targets , the
+undertaking shall also provide targets for significant Scope 3
+emissions. In particular, it shall provide:
+(a) the target year and target year value;
+(b) the base year and base year value ;
+(c) the units used for targets;
+(d) the share of Scope 1, Scope  2 and , if disclosed,
+Scope 3 that the target  concerns ; and
+(e) a list of main actions it seeks to implement to
+achieve its targets.
+If the undertaking that operates in high climate impact
+sectors34 has adopted a transition plan for climate change
+mitigation, it may provide information about it, including an
+explanation of how it is contributing to reduce GHG emissions.
+In case the undertaking operates in high -climate impact
+sectors and does not have a transition plan for climate change
+mitigation in place, it shall indicate whether and, if so, when it
+will adopt such a transition plan.  SFDR35
+Benchmark36
+EBA Pillar 337
+Benchmark38
+32 Regulation (EU) 2019/2088 (SFDR), mandatory indicators #1 and #2 in Table 1 of Annex I (“GHG emissions”;
+Carbon footprint”)
+33 Regulation (EU) 2020/1816 Benchmark Regulation, Articles 5 (1), 6 and 8 (1).
+34   High climate impact sectors are those listed in NACE Sections A to H and Section L as defined in Annex I to
+Regulation ( EC) No 1893/2006 .
+35 This information supports the information needs of financial market participants subject to Regulation (EU)
+2019/2088 (SFDR) because it is derived from an additional indicator related to principal adverse impacts as set out
+by indicator #4 in Table II of Annex I of Commission Delegated Regulation (EU) 2022/1288 with regard to disclosure
+rules on sustainable investments (“Investments in companies without carbon emission reduction initiatives”)
+36This information is aligned with the Commission Delegated Regulation (EU) 2020/1818 (Climate Benchmark
+Regulation), Article 6.
+37 This information is aligned with Article 449a Regulation (EU) No 575/2013; Commission Implementing Regulation
+(EU) 2022/2453 Template 3: Banking book – Climate change transition risk: alignment metrics
+38 This information is aligned with the Regulation (EU) 2021/1119 of the European Parliament and of the Council
+(EU Climate Law), Article 2 (1); and with Commission Delegated Regulation (EU) 2020/1818 (Climate Benchmark
+Regulation), Article 2.
+
+VSME Standard
+Environment  C4 – Climate risks
+If the  undertaking has identified climate -related hazards and
+climate -related transition events, creating gross climate -
+related risks for the undertaking, it shall:
+(a) briefly describe such climate -related hazards and
+climate -related transition events;
+(b) disclose how it has assessed the exposure and
+sensitivity of its assets, activities and value chain to
+these hazards and transition events;
+(c) disclose  the time horizons of any climate -related
+hazards and transition events identified; and
+(d) disclose whether it has undertaken climate change
+adaptation actions for any climate -related hazards
+and transition events.
+The undertaking may disclose the potential adverse effects  of
+climate risks  that may affect its financial performance or
+business operations in the short -, medium - or long -term,
+indicating  whether it assesses the risks to be  high, medium ,
+low. Benchmark39
+EBA Pillar 340
+Social  C6 – Additional own workforce information  - Human
+rights policies and processes
+The undertaking shall disclose an answer to the following
+questions.
+(a) Does the undertaking have a code of conduct or
+human rights policy for its own workforce?
+(YES/NO)
+(b) If yes, does this cover:
+i. child labour  (YES/ NO);
+ii. forced labour  (YES/ NO);
+iii. human trafficking  (YES/NO);
+iv. discrimination  (YES/NO);  Benchmark41
+SFDR42
+39 Benchmark Regulation (EU) 2020/1816 Annex II: Environmental factors to be considered by underlying assets
+of the benchmark.
+40 EBA Pillar 3: ITS - Template 5: Banking book - Climate change physical risk: Exposures subject to physical risk
+and EBA Pillar 3: ITS - Template 2: Banking book - Climate change transition risk: Loans collateralised by
+immovable property - Energy efficien cy of the collateral.
+41 This information supports the needs of benchmark administrators to disclose ESG factors subject to Regulation
+(EU) 2020/1816 as set out by indicator “Exposure of the benchmark portfolio to companies without due diligence
+policies on issues addressed by th e fundamental International Labour Organisation Conventions 1 to 8” in section
+1 and 2 of Annex II.
+42 This information supports the information needs of financial market participants subject to Regulation (EU)
+2019/2088 because it is derived from a mandatory indicator related to principal adverse impacts as set out by
+indicator #11 in Table I of Annex I (“Share of investments in investee companies without policies to monitor
+compliance with the UNGC principles or OECD Guidelines for Multinational Enterprises or grievance /complaints
+handling mechanisms to address violations of the UNGC principles or OECD Gu idelines for Multinational
+Enterprises ”) and by indicator #5 in Table III of Annex I (“Share of investments in investee companies without any
+grievance/complaints handling mechanism related to employee matters”) and by indicator #9 in Table III of Annex
+I (“Share of investments in entities without a human rights policy”)  of Commission Delegated Regulation (EU)
+2022/1288 with regard to disclosure rules on sustainable investments.
+
+VSME Standard
+v. accident prevention  (YES/NO); or
+vi. other? (YES/NO – if yes, specify).
+Does the undertaking have a complaints -handling
+mechanism for its own workforce ? (YES/ NO)
+Social  C7 – Severe human rights incidents
+The undertaking shall disclose an answer to the following
+questions:
+(a) Does the undertaking have confirmed incidents in
+its own workforce related to:
+i. child labour (YES/ NO);
+ii. forced labour (YES/ NO);
+iii. human trafficking (YES/ NO);
+iv. discrimination (YES/ NO); or
+v. other?  (YES/NO – if yes, specify).
+(b) If yes, the undertaking may describe the actions
+being taken to address the incidents described
+above.
+Is the undertaking aware of any confirmed incidents involving
+workers in the value chain, affected communities, consumers
+and end -users? If yes, specify.  SFDR43
+Benchmark44
+Governance  C8 – Revenues from certain sectors  and exclusion from
+EU reference benchmarks
+If the undertaking is active in one or more of the following
+sectors, it shall disclose its related revenues in the sector(s):
+(a) controversial weapons (anti -personnel mines,
+cluster munitions, chemical weapons and biological
+weapons);   SFDR45
+Benchmark46
+43 This information supports the information needs of financial market participants subject to Regulation (EU)
+2019/2088 because it is derived from a mandatory and additional indicator related to principal adverse impacts as
+set out by indicator #10 in Table  I of Annex I and by indicator #14 in Table III of Annex I of Commission Delegated
+Regulation (EU) 2022/1288 with regard to disclosure rules on sustainable investments (“Violations of UNGC
+principles and OECD Guidelines for Multinational Enterprises” and “ Number of identified cases of severe human
+rights issues and incidents”)
+44 This information supports the information needs of benchmark administrators to disclose ESG factors subject to
+Regulation (EU) 2020/1816 as set out by indicator “Number of benchmark constituents subject to social violations
+(absolute number and relative d ivided by all benchmark constituents), as referred to in international treaties and
+conventions, United Nations principles and, where applicable, national law” in section 1 and 2 of Annex II.
+45 This information supports the information needs of financial market participants subject to Regulation (EU)
+2019/2088 because it is derived from an additional indicator related to principal adverse impacts set out by indicator
+#14 in Table I of Annex I of  Commission Delegated Regulation (EU) 2022/1288 with regard to disclosures rules on
+sustainable investments (“Exposure to controversial weapons (anti -personnel mines, cluster munitions, chemical
+weapons and biological weapons)”).
+46 Benchmark Regulation (EU) 2020/1818 Article 12(1): "Administrators of EU -Paris aligned Benchmarks shall
+exclude all of the following companies from those benchmarks: companies involved in any activities related to
+controversial weapons; " and Benchmark Re gulation (EU) 2020/1816 Annex II: Weighted average percentage of
+benchmark constituents in the controversial weapons sector."
+
+VSME Standard
+(b) the cultivation and production of tobacco;  EBA Pillar 347
+Benchmark48
+(c)  fossil fuel (coal, oil and gas) sector (i.e. the
+undertaking derives revenues from exploration,
+mining, extraction, production, processing, storage,
+refining or distribution, including transportation,
+storage and trade, of fossil fuels as defined in
+Article 2, point (62), of Regulation (EU) 2018/1999
+of the European Parliament and the Council17),
+including a disaggregation of revenues derived
+from coal, from oil and from gas); or  SFDR49
+EBA Pillar 350
+Benchmark51
+(d) chemicals production, if the undertaking is a
+manufacturer of pesticides and other agrochemical
+products.  SFDR52
+EBA Pillar 353
+The undertaking shall disclose whether it is excluded from any
+EU reference benchmarks that are aligned with the Paris
+Agreement  as described in paragraph 241 of the guidance . EBA Pillar 354
+Benchmark55
+47 EBA Pillar 3: Template 1: Banking book - Climate change transition risk: Companies in the manufacturing of
+tobacco products excluded from EU -Paris aligned Benchmarks in accordance with points (d) to (g) of Article 12.1
+and in accordance with Article 12.2 of Climate Benchmark Standards Regulation
+48 This information supports the needs of benchmark administrators to disclose ESG factors subject to Regulation
+(EU) 2020/1818 as set out by paragraph b) of article 12.1. and Benchmark Regulation (EU) 2020/1816 Annex II:
+"Weighted average percentage of benc hmark constituents in the tobacco sector."
+49 This information supports the information needs of financial market participants subject to Regulation (EU)
+2019/2088 because it is derived from an additional indicator related to principal adverse impacts set out by indicator
+#4 in Table I of Annex I of Commission Delegated Regulation (EU) 2022/1288 with regard to disclosures rules on
+sustainable investments (“Exposure to companies active in the fossil fuel sector”)
+50 EBA Pillar 3: Template 1: Banking book - Climate change transition risk: Companies in Mining and quarrying
+excluded from EU -Paris aligned Benchmarks in accordance with points (d) to (g) of Article 12.1 and in accordance
+with Article 12.2 of Climate Benchm ark Standards Regulation
+51 Benchmark Regulation (EU) 2020/1818 Article 12(1).
+52 This information supports the information needs of financial market participants subject to Regulation (EU)
+2019/2088 because it is derived from an additional indicator related to principal adverse impacts set out by indicator
+#9 in Table II of Annex I of  Commission Delegated Regulation (EU) 2022/1288 with regard to disclosures rules on
+sustainable investments (“Investments in companies producing chemicals”).
+53 EBA Pillar 3: Template 1: Banking book - Climate change transition risk: Companies in Mining and quarrying
+excluded from EU -Paris aligned Benchmarks in accordance with points (d) to (g) of Article 12.1 and in accordance
+with Article 12.2 of Climate Benchm ark Standards Regulation
+54 This disclosure requirement is consistent with the requirements in Commission Implementing Regulation
+(EU) 2022/2453 - template 1 climate change transition risk.
+55 This disclosure requirement is aligned with Commission Delegated Regulation (EU) 2020/1818 (Climate
+Benchmark Regulation), Article 12. 1.
+
+VSME Standard
+Governance  C9 – Gender diversity ratio in governance body
+If the undertaking has a governance body in place, the
+undertaking shall disclose the related gender diversity ratio.  SFDR56
+Benchmark57
+56 This information supports the information needs of financial market participants subject to Regulation (EU)
+2019/2088 because it is derived from an additional indicator related to principal adverse impacts set out by indicator
+#13 in Table I of Annex I of  Commission Delegated Regulation (EU) 2022/1288 of 6 April 2022 supplementing
+Regulation (EU) 2019/2088 of the European Parliament and of the Council with regard to disclosures rules on
+sustainable investments (“Board gender diversity”)
+57 This information supports the information needs of benchmark administrators to disclose ESG factors subject to
+Commission Delegated Regulation (EU) 2020/1816 of 17 July 2020 supplementing Regulation (EU) 2016/1011 of
+the European Parliament and of the Cou ncil as set out by indicator “Weighted average ratio of female to male
+board members” in section 1 and 2 of Annex II.

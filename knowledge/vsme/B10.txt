@@ -1,0 +1,60 @@
+B10 – Workforce – Remuneration, collective bargaining and training
+Guidance on remuneration: minimum wage
+192. ‘Minimum wage ’ refers to the minimum compensation of employment per hour or another unit of
+time. Depending on the country, the minimum wage might be set directly by law  or through
+collective bargaining  agreements.  The undertaking  shall refer to the applicable minimum wage
+for the country it reports on .
+193. For the lowest pay category, excluding interns and apprentices, minimum wage  serves as the
+foundation for calculating entry -level wage. Therefore, entry -level wage includes pay equal to
+minimum wage as well as any additional fixed payments guaranteed to employees  in that
+category.
+Guidance on remuneration: percentage gap between female and male employe es
+194. The metric for the percentage gap between female and male employees  address es the principle
+of gender equality , which  stipulates  equal pay for equal work. The pay gap is defined as the
+difference of average pay levels between female and male employees expressed  as the
+percentage of the average pay level of male employees.
+195. In order to  compute  this metric, all employees  shall be included in the calculation. In addition,
+there should be two separate average pay calculations for female and male  employees . See the
+formula below:
+(𝐴𝑣𝑒𝑟𝑎𝑔𝑒  𝑔𝑟𝑜𝑠𝑠  ℎ𝑜𝑢𝑟𝑙𝑦  𝑝𝑎𝑦  𝑙𝑒𝑣𝑒𝑙  𝑜𝑓 𝑚𝑎𝑙𝑒  𝑒𝑚𝑝𝑙𝑜𝑦𝑒𝑒𝑠 −𝑎𝑣𝑒𝑟𝑎𝑔𝑒  𝑔𝑟𝑜𝑠𝑠  ℎ𝑜𝑢𝑟𝑙𝑦  𝑝𝑎𝑦  𝑙𝑒𝑣𝑒𝑙  𝑜𝑓 𝑓𝑒𝑚𝑎𝑙𝑒  𝑒𝑚𝑝𝑙𝑜𝑦𝑒𝑒𝑠 )
+𝐴𝑣𝑒𝑟𝑎𝑔𝑒  𝑔𝑟𝑜𝑠𝑠  ℎ𝑜𝑢𝑟𝑙𝑦  𝑝𝑎𝑦  𝑙𝑒𝑣𝑒𝑙  𝑜𝑓 𝑚𝑎𝑙𝑒  𝑒𝑚𝑝𝑙𝑜𝑦𝑒𝑒𝑠 𝑥 100
+196. Depending on the undertaking’s remuneration policies, gross pay refers to all of the following
+elements :
+
+VSME Standard
+(a) base salary, which is the sum of guaranteed, short -term, non -variable cash compensation;
+(b) benefits in cash, which constitute the sum of the base salary and cash allowances, bonuses,
+commissions, cash profit -sharing and other forms of variable cash payments;
+(c) benefits in kind such as cars, private health insurance, life insurance and wellness programs;
+and
+(d) direct remuneration, which is the sum of benefits in cash, benefits in kind and the total fair
+value of all annual long -term incentives .
+197. The gross pay is the sum of all the applicable elements listed above.
+198. The average gross hourly pay is the weekly/annual gross pay divided by the average hours worked
+per week/year.
+Example
+199. Company A has X male employees  and Y female employees  in total . Male employees ’ gross
+hourly pay is €15 and female employees’ gross hourly pay is €13.
+200. The average gross hourly pay level of male employees  is the sum of all their gross hourly
+payments divided by the total number of male employees . The average gross hourly pay level of
+female employees is the sum of all their gross hourly payments divided by the total number of
+female employees .
+201. The formula used to calculate the percentage pay gap between male and female employees  is
+15−13
+15𝑥 100 = 13.3%
+Guidance on collective bargaining  coverage
+202. The employees covered by collective bargaining  agreements are those individuals to whom the
+undertaking is obliged to apply the agreement. If an employee is covered by more than one
+collective bargaining agreement , it only needs to be counted once. If none of the employees are
+covered by a collective bargaining agreement, the percentage is zero.
+203. The percentage of employees  covered by collective bargaining  agreements is calculated by
+using the following formula .
+𝑁𝑢𝑚𝑏𝑒𝑟  𝑜𝑓 𝑒𝑚𝑝𝑙𝑜𝑦𝑒𝑒𝑠  𝑐𝑜𝑣𝑒𝑟𝑒𝑑  𝑏𝑦 𝑐𝑜𝑙𝑙𝑒𝑐𝑡𝑖𝑣𝑒  𝑏𝑎𝑟𝑔𝑎𝑖𝑛𝑖𝑛𝑔  𝑎𝑔𝑟𝑒𝑒𝑚𝑒𝑛𝑡𝑠
+𝑁𝑢𝑚𝑏𝑒𝑟  𝑜𝑓 𝑒𝑚𝑝𝑙𝑜𝑦𝑒𝑒𝑠 𝑥 100
+204. The information required by this disclosure requirement may be reported as coverage rates  if the
+collective bargaining  coverage is between 0 -19%, 20 -39%, 40 -59%, 60 -79% or 80 -100%.
+205. This requirement is not aimed at obtaining the percentage of employees  represented by a works
+council or belonging to trade unions, which can be different. The percentage of employees covered
+by collective bargaining  agreements can be higher than the percentage of unionised employees
+when the collective bargaining agreements apply to both union and non -union members.
+Basic Module Guidance – Business Conduct Metrics

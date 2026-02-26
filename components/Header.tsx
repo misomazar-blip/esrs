@@ -28,7 +28,7 @@ export default function Header() {
   };
 
   const navItems = [
-    { key: 'home', href: `/${locale}` },
+    { key: 'dashboard', href: `/${locale}/dashboard` },
     { key: 'reports', href: `/${locale}/report` },
     { key: 'analytics', href: `/${locale}/analytics` },
     { key: 'comparison', href: `/${locale}/comparison` },

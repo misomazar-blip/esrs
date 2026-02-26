@@ -1,0 +1,58 @@
+AddressOfSite	General Information	$D$450:$D$549	label=None	section=None	cell=None
+Assets	General Information	$E$326	label==template_label_size_of_balance_sheet_in & " " & template_currency	section=None	cell=None
+BasisForPreparation	General Information	$E$122	label==template_label_basis_for_preparation	section=None	cell=None
+BasisForReporting	General Information	$E$223	label==template_label_basis_for_reporting	section=None	cell=None
+CityOfSite	General Information	$F$450:$F$549	label=None	section=None	cell=None
+CountryOfPrimaryOperationsAndLocationOfSignificantAssets	General Information	$E$331	label==template_label_country_of_primary_operations_and_location_of_significant_asset	section=None	cell=None
+CountryOfSite	General Information	$G$450:$G$549	label=None	section=None	cell=None
+DescriptionOfATargetRelatedToAPolicy	General Information	$E$566	label==template_label_description_of_target_related_to_a_policy	section=None	cell=None
+DescriptionOfKeyElementsOfStrategyThatRelatesToOrAffectsSustainabilityIssues	General Information	$E$577	label==template_label_description_of_those_key_elements_in_the_strategy_that_relate_or_affect_sustainability_issues	section=None	cell=None
+DescriptionOfLimitsToTheDistributionOfProfitsConnectedToTheMutualisticNatureOrToTheNatureOfTheActivitiesConsistingInServicesOfGeneralEconomicInterestSGEI	General Information	$D$562	label==template_label_limits_to_the_distribution_of_profits	section=None	cell=None
+DescriptionOfMainBusinessRelationships	General Information	$E$573	label==template_label_description_of_main_business_relationships	section=None	cell=None
+DescriptionOfPracticesPoliciesAndOrFutureInitiatives	General Information	$E$565	label==template_label_description_of_a_practice_policy_and_or_future_initiative_towards_a_more_sustainable_future	section=None	cell=None
+DescriptionOfSignificantGroupsOfProductsAndOrServicesOffered	General Information	$E$571	label==template_label_description_of_significant_groups_of_products_and_or_services_offered	section=None	cell=None
+DescriptionOfSignificantMarketsTheUndertakingOperatesIn	General Information	$E$572	label==template_label_description_of_significant_market_the_undertaking_operates_in	section=None	cell=None
+DescriptionOfSustainabilityRelatedCertificationsOrLabels	General Information	$E$441	label==template_label_description_of_sustainability_related_certification_or_label	section=None	cell=None
+DescriptionOfTheEffectiveParticipationOfWorkersUsersOrOtherInterestedPartiesOrCommunitiesInGovernance	General Information	$D$560	label==template_label_effective_participation_of_workers_users_or_other_interested_parties_or_communities_in_governance	section=None	cell=None
+DisclosureOfAnyOtherGeneralAndOrEntitySpecificInformation	General Information	$C$581	label=None	section=None	cell=None
+EmployeeCountingMethodology	General Information	$E$329	label==template_label_employee_counting_methodology_end_of_reporting_period_or_average_during_the_reporting_period	section=None	cell=None
+FinancialInvestmentInTheCapitalOrAssetsOfSocialEconomyEntities	General Information	$D$561	label==template_label_financial_investment_in_the_capital_or_assets_of_social_economy_entities	section=None	cell=None
+GPSLocationOfSite	General Information	$H$450:$H$549	label=None	section=None	cell==IF(COUNTA(D450:G450)=COLUMNS(D450:G450), IFERROR('Technical Sheet'!G2, "-"), "-")
+IdentifierOfSiteTypedAxis	General Information	$C$450:$C$549	label=None	section=None	cell=1
+IdentifierOfSubsidiaryTypedAxis	General Information	$C$336:$C$435	label=None	section=None	cell=1
+LinkToPreviousReportContainingDisclosuresThatRemainUnchanged	General Information	$E$119	label==template_label_link_to_previous_report_containing_disclosures_that_remain_unchanged	section=None	cell=None
+ListOfDisclosuresForWhichNoChangesAreReportedComparedToThePreviousPeriodReporting	General Information	$E$19:$E$118	label==template_label_disclosures_for_which_no_changes_are_reported_compared_to_the_previous_period_reporting	section=None	cell=None
+ListOfOmittedDisclosuresDeemedToBeClassifiedOrSensitiveInformation	General Information	$E$123:$E$222	label==template_label_list_of_omitted_disclosures_deemed_to_be_classified_or_sensitive_information	section=None	cell=None
+ListOfSitesTable	General Information	$C$450:$H$549	label=None	section=None	cell=1
+ListOfSubsidiaryTable	General Information	$C$336:$E$435	label=None	section=None	cell=1
+MostSeniorLevelAccountableForImplementationOfPolicies	General Information	$E$567	label==template_label_most_senior_level_accountable_for_implementing_practices_policies_and_or_future_initiatives	section=None	cell=None
+NaceSectorClassificationCodes	General Information	$E$226:$E$325	label==template_label_nace_sector_classification_code	section=None	cell=None
+NameOfTheSubsidiary	General Information	$D$336:$D$435	label=None	section=None	cell=None
+NumberOfEmployees	General Information	$E$328	label==+template_label_number_of_employees	section=None	cell=None
+OtherUndertakingsLegalForm	General Information	$E$225	label==template_label_other_undertakings_legal_form_specification	section=None	cell=None
+PostalCodeOfSite	General Information	$E$450:$E$549	label=None	section=None	cell=None
+PracticePolicyAndOrFutureInitiativeIsPubliclyAvailable	General Information	$N$556	label=None	section=None	cell=False
+RegisteredAddressOfTheSubsidiary	General Information	$E$336:$E$435	label=None	section=None	cell=None
+ReportContainsDisclosuresFromThePreviousReportingPeriodThatRemainUnchanged	General Information	$E$18	label==template_label_disclosures_from_the_previous_reporting_period_that_remain_unchanged	section=None	cell=False
+SustainabilityIssueAddressedByPracticePolicyAndOrFutureInitiative	General Information	$D$556:$M$556	label=None	section=None	cell=False
+template_b1_basis_for_preparation_and_other_undertakings_general_information	General Information	$C$121	label=None	section=None	cell==template_label_b1_basis_for_preparation_and_other_undertakings_general_information & " " & template_label_from & " " & template_starting_date_display & " " & template_label_to & " " & template_ending_date_display & " " & template_label_always_to_be_reported
+template_b1_disclosure_of_sustainability_related_certifications_or_labels	General Information	$C$437	label=None	section=None	cell== template_label_b1_disclosure_of_sustainability_related_certification_or_label & " " & template_label_from & " " & template_starting_date_display & " " & template_label_to & " " & template_ending_date_display & " " & template_label_if_applicable
+template_b1_list_of_sites	General Information	$C$443	label=None	section=None	cell==template_label_b1_list_of_site& " " & template_label_from & " " & template_starting_date_display & " " & template_label_to & " " & template_ending_date_display & " " & template_label_always_to_be_reported
+template_b1_list_of_subsidiaries	General Information	$C$333	label=None	section=None	cell== template_label_b1_list_of_subsidiaries & " " & template_label_from & " " & template_starting_date_display & " " & template_label_to & " " & template_ending_date_display & " " & template_label_if_applicable
+template_b2_cooperative_specific_disclosures	General Information	$C$558	label=None	section=None	cell== template_label_b2_cooperative_specific_disclosures & " " & template_label_from & " " & template_starting_date_display & " " & template_label_to & " " & template_ending_date_display & " " & template_label_if_applicable
+template_b2_practices_policies_and_future_initiatives_for_transitioning_towards_a_more_sustainable_economy	General Information	$C$551	label=None	section=None	cell== template_label_b2_practices_policies_and_future_initiatives_for_transitioning_towards_a_more_sustainable_economy & " " & template_label_from & " " & template_starting_date_display & " " & template_label_to & " " & template_ending_date_display & " " & template_label_if_applicable
+template_c1_strategy_business_model_and_sustainability	General Information	$C$570	label=None	section=None	cell== template_label_c1_strategy_business_model_and_sustainability_related_initiatives & " " & template_label_from & " " & template_starting_date_display & " " & template_label_to & " " & template_ending_date_display & " " &  template_label_always_to_be_reported
+template_c2_description_of_practices_policies_and_future_initiatives_for_transitioning_towards_a_more_sustainable_economy	General Information	$C$564	label=None	section=None	cell==template_label_c2_description_of_practices_policies_and_future_initiatives_for_transitioning_towards_a_more_sustainable_economy& " " & template_label_from & " " & template_starting_date_display & " " & template_label_to & " " & template_ending_date_display & " " & template_label_if_applicable_linked_to_b2
+template_currency	General Information	$D$5	label==template_label_currency_of_the_monetary_values_in_the_report	section=None	cell=None
+template_disclosure_of_any_other_general_and_or_entity_specific_information_on_the_reporting_period	General Information	$C$579	label=None	section=None	cell== template_label_disclosure_of_any_other_general_and_or_entity_specific_information_on_the_reporting_period & " " & template_label_from & " " & template_starting_date_display & " " & template_label_to & " " & template_ending_date_display & " " & template_label_may
+template_information_on_previous_reporting_period	General Information	$C$16	label=None	section=None	cell==template_label_information_on_previous_reporting_period
+template_information_on_the_report_necessary_for_XBRL	General Information	$C$2	label=None	section=None	cell==template_label_information_on_the_report_necessary_for_xbrl & " " & template_label_always_to_be_reported
+template_reporting_entity_identifier	General Information	$E$4	label==template_label_identifier_of_the_reporting_entity	section=None	cell=None
+template_reporting_entity_identifier_scheme	General Information	$D$4	label==template_label_identifier_of_the_reporting_entity	section=None	cell=None
+template_reporting_entity_name	General Information	$D$3:$E$3	label==template_label_name_of_the_reporting_entity	section=None	cell=None
+template_reporting_period_enddate	General Information	$D$13	label==template_label_reporting_period_end_date	section=None	cell==IF(OR(ISBLANK(D10), ISBLANK(D11), ISBLANK(D12)), "-", D10 & "-" & TEXT(D11, "00") & "-" & TEXT(D12, "00"))
+template_reporting_period_startdate	General Information	$D$9	label==template_label_reporting_period_start_date	section=None	cell==IF(OR(ISBLANK(D6), ISBLANK(D7), ISBLANK(D8)), "-", D6 & "-" & TEXT(D7, "00") & "-" & TEXT(D8, "00"))
+Turnover	General Information	$E$327	label==template_label_turnover_in & " " & template_currency	section=None	cell=None
+TypeOfNumberOfEmployees	General Information	$E$330	label==template_label_employee_counting_methodology_headcount_or_fulltime_equivalent	section=None	cell=None
+UndertakingHasSetATargetWhichIsRelatedToAPolicy	General Information	$O$556	label=None	section=None	cell=False
+UndertakingsLegalForm	General Information	$E$224	label==template_label_undertakings_legal_form	section=None	cell=None

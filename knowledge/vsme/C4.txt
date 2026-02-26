@@ -1,0 +1,19 @@
+C4 –  Climate risks
+228. Climate -related hazards  are drivers of climate -related physical risks that  arise from the effects
+that climate change has on the undertaking. They can be classified into acute hazards , which arise
+from particular events (such as droughts, floods, extreme precipitations and wildfires) , and chronic
+hazards  (such as changing temperatures, sea level rise and soi l erosion) , which arise from longer -
+term changes in the climate  (Commission delegated regulation 2021/2139) . Physical risks are a
+function of climate -related hazard s, the exposure of the undertaking’s assets and activities to these
+hazards , and how sensitive the undertaking is to these hazards . Examples of climate -related
+hazards are heat waves, increased frequency of extreme weather events, sea level rise, glacial
+lake outburst  flood  and change in precipitation and wind patterns. Climate -related phys ical risks
+can be identified and modelled by using climate scenarios that consider high emissions trajectories
+such as IPCC SSP5 -8.5.
+229. Climate -related transition events  may be (according to TCFD classification ) policy - and legal -
+based  (e.g. enhanced emission -reporting obligations) , technology -based  (e.g. costs of transition
+to lower emissions technology) , market -based  (e.g. increased cost of raw materials)  and
+reputation -based  (e.g. increased stakeholder concern) .
+230. Gross climate -related risks  refer to gross physical risks and gross transition risks that may result
+from exposure of the undertaking's assets and business activities  to climate -related hazards.
+Comprehensive Module Guidance – Social Metrics

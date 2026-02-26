@@ -1,0 +1,205 @@
+-- ============================================================
+-- 02 – DATABASE SCHEMA SNAPSHOT (VSME Reporting SaaS)
+-- ============================================================
+--
+-- This file documents the logical structure of the database.
+-- It is NOT only a raw dump.
+--
+-- It defines:
+--   - domain boundaries
+--   - data ownership model
+--   - tenant vs catalog separation
+--   - security stance
+--
+-- Authoritative RLS rules are defined in:
+--   05_rls_policies.md
+--
+-- ============================================================
+-- 1. DOMAIN OVERVIEW
+-- ============================================================
+--
+-- The database contains two major data categories:
+--
+-- (A) Tenant-owned business data
+--     → scoped per company
+--     → protected by RLS
+--
+-- (B) Shared framework/catalog metadata
+--     → global reference data
+--     → read-only for authenticated users
+--
+-- ============================================================
+-- 2. CORE TENANT-OWNED DATA (RLS protected)
+-- ============================================================
+--
+-- 2.1 company
+--     Represents a tenant organization.
+--
+-- 2.2 company_member
+--     Membership table defining:
+--       - user_id
+--       - role (owner/admin/editor/viewer)
+--       - access_type (all/selected)
+--
+-- 2.3 company_member_topic_access
+--     Topic-level permissions:
+--       - can_view
+--       - can_edit
+--
+-- 2.4 report
+--     Report snapshot per:
+--       - company_id
+--       - reporting_year
+--       - framework (VSME)
+--
+-- 2.5 disclosure_answer
+--     Stores answers:
+--       - unique(report_id, question_id)
+--       - value_* typed columns
+--       - value_jsonb (contains NA flag)
+--
+-- ============================================================
+-- 3. QUESTION & FRAMEWORK CATALOG (Shared metadata)
+-- ============================================================
+--
+-- 3.1 disclosure_question
+--     Shared question catalog for:
+--       - ESRS
+--       - VSME
+--
+--     Key fields:
+--       - framework
+--       - code
+--       - topic_id
+--       - section_code
+--       - vsme_datapoint_id
+--
+--     This is framework metadata.
+--     Not company-owned.
+--     Readable to authenticated users.
+--
+-- 3.2 topic
+--     Logical grouping of questions.
+--     Catalog-level metadata.
+--
+-- ============================================================
+-- 4. VSME SCOPE CONTROL
+-- ============================================================
+--
+-- 4.1 report_pack
+--     Defines available VSME packs.
+--     Metadata catalog.
+--
+-- 4.2 vsme_datapoint_pack
+--     Mapping:
+--       vsme_datapoint_id ↔ pack_code
+--
+--     Used to compute:
+--       - core
+--       - core_plus
+--       - comprehensive
+--
+--     RLS enabled.
+--     Treated as read-only reference data.
+--
+-- 4.3 vsme_datapoint
+--     VSME datapoint catalog.
+--
+-- ============================================================
+-- 5. COLLABORATION LAYER
+-- ============================================================
+--
+-- 5.1 question_comment
+--     Threaded comments per:
+--       - report_id
+--       - question_id
+--
+-- 5.2 question_attachment
+--     File attachments per:
+--       - report_id
+--       - question_id
+--
+-- NOTE:
+-- Current policies partially gate via company.user_id.
+-- Future tightening may align fully to company_member model.
+--
+-- ============================================================
+-- 6. XBRL / EXPORT LAYER (Future-facing)
+-- ============================================================
+--
+-- 6.1 disclosure_question_xbrl
+-- 6.2 esrs_to_xbrl_mapping
+-- 6.3 xbrl_context
+-- 6.4 xbrl_element
+-- 6.5 xbrl_taxonomy
+-- 6.6 xbrl_unit
+-- 6.7 xbrl_export_log
+-- 6.8 xbrl_fact_metadata
+-- 6.9 xbrl_validation_rule
+--
+-- These tables support structured export.
+-- Mostly reference-driven.
+-- RLS enabled.
+--
+-- ============================================================
+-- 7. SECURITY STANCE
+-- ============================================================
+--
+-- Tightening applied:
+--
+-- - Removed global SELECT true policies on:
+--     company
+--     report
+--     topic
+--
+-- - RLS enabled on:
+--     report_pack
+--     vsme_datapoint_pack
+--
+-- - SECURITY DEFINER functions hardened:
+--     search_path = public
+--
+-- All tenant-owned tables require:
+--     membership-based access via company_member
+--
+-- No cross-company data leakage permitted.
+--
+-- ============================================================
+-- 8. ANSWER STORAGE MODEL
+-- ============================================================
+--
+-- Unique constraint:
+--     (report_id, question_id)
+--
+-- N/A stored as:
+--     value_jsonb -> { "na": true }
+--
+-- Answer states:
+--     - missing (no row or no value)
+--     - answered
+--     - answered as NA
+--
+-- Authoritative definition in:
+--     04_answer_contract.md
+--
+-- ============================================================
+-- 9. PERFORMANCE NOTES
+-- ============================================================
+--
+-- Core indexes:
+--     disclosure_answer(report_id, question_id)
+--     disclosure_question(framework)
+--     disclosure_question(framework, code)
+--     company_member(company_id, user_id)
+--
+-- Optional optimization (if dataset grows):
+--     disclosure_question(framework, section_code)
+--     disclosure_answer(question_id, report_id)
+--
+-- ============================================================
+-- END OF ARCHITECTURAL SNAPSHOT
+-- ============================================================
+
+
+-- Below this line may follow:
+-- ACTUAL TABLE DEFINITIONS (schema dump)

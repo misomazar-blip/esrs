@@ -1,0 +1,2183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright EFRAG - https://efrag.org/ -->
+<link:linkbase xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:ref="http://www.xbrl.org/2006/ref" xmlns:vsme="https://xbrl.efrag.org/taxonomy/vsme/2025-07-30/vsme" xmlns:xbrli="http://www.xbrl.org/2003/instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xbrl.org/2006/ref http://www.xbrl.org/2006/ref-2006-02-27.xsd http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd https://xbrl.efrag.org/taxonomy/vsme/2025-07-30/vsme vsme-all.xsd">
+  <link:referenceLink xlink:role="http://www.xbrl.org/2003/role/link" xlink:type="extended">
+    <link:loc xlink:href="vsme-all.xsd#vsme_BasisForPreparation" xlink:label="BasisForPreparation" xlink:type="locator"/>
+    <link:reference xlink:label="reference_BasisForPreparation" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/a</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="BasisForPreparation" xlink:to="reference_BasisForPreparation" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_ReportContainsDisclosuresFromThePreviousReportingPeriodThatRemainUnchanged" xlink:label="ReportContainsDisclosuresFromThePreviousReportingPeriodThatRemainUnchanged" xlink:type="locator"/>
+    <link:reference xlink:label="reference_ReportContainsDisclosuresFromThePreviousReportingPeriodThatRemainUnchanged" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic and Comprehensive Module</ref:Section>
+      <ref:Paragraph>16</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/16</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="ReportContainsDisclosuresFromThePreviousReportingPeriodThatRemainUnchanged" xlink:to="reference_ReportContainsDisclosuresFromThePreviousReportingPeriodThatRemainUnchanged" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_ListOfDisclosuresForWhichNoChangesAreReportedComparedToThePreviousPeriodReporting" xlink:label="ListOfDisclosuresForWhichNoChangesAreReportedComparedToThePreviousPeriodReporting" xlink:type="locator"/>
+    <link:reference xlink:label="reference_ListOfDisclosuresForWhichNoChangesAreReportedComparedToThePreviousPeriodReporting" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic and Comprehensive Module</ref:Section>
+      <ref:Paragraph>16</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/16</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="ListOfDisclosuresForWhichNoChangesAreReportedComparedToThePreviousPeriodReporting" xlink:to="reference_ListOfDisclosuresForWhichNoChangesAreReportedComparedToThePreviousPeriodReporting" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_LinkToPreviousReportContainingDisclosuresThatRemainUnchanged" xlink:label="LinkToPreviousReportContainingDisclosuresThatRemainUnchanged" xlink:type="locator"/>
+    <link:reference xlink:label="reference_LinkToPreviousReportContainingDisclosuresThatRemainUnchanged" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic and Comprehensive Module</ref:Section>
+      <ref:Paragraph>16</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/16</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="LinkToPreviousReportContainingDisclosuresThatRemainUnchanged" xlink:to="reference_LinkToPreviousReportContainingDisclosuresThatRemainUnchanged" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_ListOfOmittedDisclosuresDeemedToBeClassifiedOrSensitiveInformation" xlink:label="ListOfOmittedDisclosuresDeemedToBeClassifiedOrSensitiveInformation" xlink:type="locator"/>
+    <link:reference xlink:label="reference_ListOfOmittedDisclosuresDeemedToBeClassifiedOrSensitiveInformation" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/b</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="ListOfOmittedDisclosuresDeemedToBeClassifiedOrSensitiveInformation" xlink:to="reference_ListOfOmittedDisclosuresDeemedToBeClassifiedOrSensitiveInformation" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_UndertakingsLegalForm" xlink:label="UndertakingsLegalForm" xlink:type="locator"/>
+    <link:reference xlink:label="reference_UndertakingsLegalForm" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>i</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/i</ref:URI>
+      <vsme:RelatedVsmeGuidance>4</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/4</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="UndertakingsLegalForm" xlink:to="reference_UndertakingsLegalForm" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_OtherUndertakingsLegalForm" xlink:label="OtherUndertakingsLegalForm" xlink:type="locator"/>
+    <link:reference xlink:label="reference_OtherUndertakingsLegalForm_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>i</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/i</ref:URI>
+      <vsme:RelatedVsmeGuidance>4</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/4</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="OtherUndertakingsLegalForm" xlink:to="reference_OtherUndertakingsLegalForm_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NaceSectorClassificationCodes" xlink:label="NaceSectorClassificationCodes" xlink:type="locator"/>
+    <link:reference xlink:label="reference_NaceSectorClassificationCodes" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>ii</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/ii</ref:URI>
+      <vsme:RelatedVsmeGuidance>5-6</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/5</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="NaceSectorClassificationCodes" xlink:to="reference_NaceSectorClassificationCodes" xlink:type="arc"/>
+    <link:reference xlink:label="reference_NaceSectorClassificationCodes_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>Commission Delegated Regulation (EU) 2023/137 of 10 October 2022 amending Regulation (EC) No 1893/2006 of the European Parliament and of the Council establishing the statistical classification of economic activities NACE Revision 2</ref:Name>
+      <ref:Number>C/2022/7104</ref:Number>
+      <ref:URI>https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=pi_com%3AC%282022%297104</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="NaceSectorClassificationCodes" xlink:to="reference_NaceSectorClassificationCodes_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_Turnover" xlink:label="Turnover" xlink:type="locator"/>
+    <link:reference xlink:label="reference_Turnover" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>iv</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/iv</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="Turnover" xlink:to="reference_Turnover" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfEmployees" xlink:label="NumberOfEmployees" xlink:type="locator"/>
+    <link:reference xlink:label="reference_NumberOfEmployees" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>v</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/v</ref:URI>
+      <vsme:RelatedVsmeGuidance>7-8</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/7-8</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="NumberOfEmployees" xlink:to="reference_NumberOfEmployees" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TypeOfNumberOfEmployees" xlink:label="TypeOfNumberOfEmployees" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TypeOfNumberOfEmployees" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>v</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/v</ref:URI>
+      <vsme:RelatedVsmeGuidance>7-8</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/7</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TypeOfNumberOfEmployees" xlink:to="reference_TypeOfNumberOfEmployees" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_CountryOfPrimaryOperationsAndLocationOfSignificantAssets" xlink:label="CountryOfPrimaryOperationsAndLocationOfSignificantAssets" xlink:type="locator"/>
+    <link:reference xlink:label="reference_CountryOfPrimaryOperationsAndLocationOfSignificantAssets" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>vi</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/vi</ref:URI>
+      <vsme:RelatedVsmeGuidance>9-12</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/9</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="CountryOfPrimaryOperationsAndLocationOfSignificantAssets" xlink:to="reference_CountryOfPrimaryOperationsAndLocationOfSignificantAssets" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DescriptionOfSustainabilityRelatedCertificationsOrLabels" xlink:label="DescriptionOfSustainability-RelatedCertificationsOrLabels" xlink:type="locator"/>
+    <link:reference xlink:label="reference_DescriptionOfSustainability-RelatedCertificationsOrLabels" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>25</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/25</ref:URI>
+      <vsme:RelatedVsmeGuidance>77</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/12</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="DescriptionOfSustainability-RelatedCertificationsOrLabels" xlink:to="reference_DescriptionOfSustainability-RelatedCertificationsOrLabels" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NameOfTheSubsidiary" xlink:label="NameOfTheSubsidiary" xlink:type="locator"/>
+    <link:reference xlink:label="reference_NameOfTheSubsidiary" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>d</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/d</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="NameOfTheSubsidiary" xlink:to="reference_NameOfTheSubsidiary" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_RegisteredAddressOfTheSubsidiary" xlink:label="RegisteredAddressOfTheSubsidiary" xlink:type="locator"/>
+    <link:reference xlink:label="reference_RegisteredAddressOfTheSubsidiary" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>d</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/d</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="RegisteredAddressOfTheSubsidiary" xlink:to="reference_RegisteredAddressOfTheSubsidiary" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_ListOfSubsidiaryTable" xlink:label="ListOfSubsidiaryTable" xlink:type="locator"/>
+    <link:reference xlink:label="reference_ListOfSubsidiaryTable" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>d</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/d</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="ListOfSubsidiaryTable" xlink:to="reference_ListOfSubsidiaryTable" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_IdentifierOfSubsidiaryTypedAxis" xlink:label="IdentifierOfSubsidiary" xlink:type="locator"/>
+    <link:reference xlink:label="reference_IdentifierOfSubsidiary" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>d</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/d</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="IdentifierOfSubsidiary" xlink:to="reference_IdentifierOfSubsidiary" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_ListOfSubsidiariesLineItemsAbstract" xlink:label="ListOfSubsidiariesLineItemsAbstract" xlink:type="locator"/>
+    <link:reference xlink:label="reference_ListOfSubsidiariesLineItemsAbstract" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>d</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/d</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="ListOfSubsidiariesLineItemsAbstract" xlink:to="reference_ListOfSubsidiariesLineItemsAbstract" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_ListOfSitesTable" xlink:label="ListOfSitesTableAbstract" xlink:type="locator"/>
+    <link:reference xlink:label="reference_ListOfSitesTableAbstract" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>vii</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/vii</ref:URI>
+      <vsme:RelatedVsmeGuidance>9-12</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/9</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="ListOfSitesTableAbstract" xlink:to="reference_ListOfSitesTableAbstract" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_IdentifierOfSiteTypedAxis" xlink:label="IdentifierOfSite" xlink:type="locator"/>
+    <link:reference xlink:label="reference_IdentifierOfSiteTypedAxis" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>vii</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/vii</ref:URI>
+      <vsme:RelatedVsmeGuidance>9-12</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/9</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="IdentifierOfSite" xlink:to="reference_IdentifierOfSiteTypedAxis" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_ListOfSitesLineItems" xlink:label="ListOfSitesLineItemsAbstract" xlink:type="locator"/>
+    <link:reference xlink:label="reference_ListOfSitesLineItemsAbstract" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>vii</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/vii</ref:URI>
+      <vsme:RelatedVsmeGuidance>9-12</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/9</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="ListOfSitesLineItemsAbstract" xlink:to="reference_ListOfSitesLineItemsAbstract" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_AddressOfSite" xlink:label="AddressOfSite" xlink:type="locator"/>
+    <link:reference xlink:label="reference_AddressOfSite" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>vii</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/vii</ref:URI>
+      <vsme:RelatedVsmeGuidance>9-12</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/9</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="AddressOfSite" xlink:to="reference_AddressOfSite" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_PostalCodeOfSite" xlink:label="AddressPostalCodeOfSite" xlink:type="locator"/>
+    <link:reference xlink:label="reference_PostalCodeOfSite" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>vii</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/vii</ref:URI>
+      <vsme:RelatedVsmeGuidance>9-12</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/9</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="AddressPostalCodeOfSite" xlink:to="reference_PostalCodeOfSite" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_CityOfSite" xlink:label="AddressCityOfSite" xlink:type="locator"/>
+    <link:reference xlink:label="reference_CityOfSite" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>vii</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/vii</ref:URI>
+      <vsme:RelatedVsmeGuidance>9-12</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/9</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="AddressCityOfSite" xlink:to="reference_CityOfSite" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_CountryOfSite" xlink:label="CountryOfSite" xlink:type="locator"/>
+    <link:reference xlink:label="reference_CountryOfSite_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>vii</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/vii</ref:URI>
+      <vsme:RelatedVsmeGuidance>9-12</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/9</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="CountryOfSite" xlink:to="reference_CountryOfSite_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_GPSLocationOfSite" xlink:label="GPSLocationOfSite" xlink:type="locator"/>
+    <link:reference xlink:label="reference_GPSLocationOfSite_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>vii</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/vii</ref:URI>
+      <vsme:RelatedVsmeGuidance>9-12</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/9</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="GPSLocationOfSite" xlink:to="reference_GPSLocationOfSite_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_SustainabilityIssueAddressedByPracticePolicyAndOrFutureInitiative" xlink:label="SustainabilityIssueAddressedByPracticePolicyOrFutureInitiative" xlink:type="locator"/>
+    <link:reference xlink:label="reference_SustainabilityIssueAddressedByPracticePolicyOrFutureInitiative" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B2</ref:Number>
+      <ref:Paragraph>26-28</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/26-28</ref:URI>
+      <vsme:RelatedVsmeGuidance>14</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/14</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="SustainabilityIssueAddressedByPracticePolicyOrFutureInitiative" xlink:to="reference_SustainabilityIssueAddressedByPracticePolicyOrFutureInitiative" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DescriptionOfKeyElementsOfStrategyThatRelatesToOrAffectsSustainabilityIssues" xlink:label="DescriptionOfKeElementsOfStrategyThatRelatesToOrAffectsSustainabilityIssues" xlink:type="locator"/>
+    <link:reference xlink:label="reference_DescriptionOfKeElementsOfStrategyThatRelatesToOrAffectsSustainabilityIssues" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C1</ref:Number>
+      <ref:Paragraph>47</ref:Paragraph>
+      <ref:Subparagraph>d</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/47/d</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="DescriptionOfKeElementsOfStrategyThatRelatesToOrAffectsSustainabilityIssues" xlink:to="reference_DescriptionOfKeElementsOfStrategyThatRelatesToOrAffectsSustainabilityIssues" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DescriptionOfSignificantGroupsOfProductsAndOrServicesOffered" xlink:label="DescriptionOfSignificantGroupsOfProductsAndOrServicesOffered" xlink:type="locator"/>
+    <link:reference xlink:label="reference_DescriptionOfSignificantGroupsOfProductsAndOrServicesOffered" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C1</ref:Number>
+      <ref:Paragraph>47</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/47/a</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="DescriptionOfSignificantGroupsOfProductsAndOrServicesOffered" xlink:to="reference_DescriptionOfSignificantGroupsOfProductsAndOrServicesOffered" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DescriptionOfMainBusinessRelationships" xlink:label="DescriptionOfMainBusinessRelationships" xlink:type="locator"/>
+    <link:reference xlink:label="reference_DescriptionOfMainBusinessRelationships" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C1</ref:Number>
+      <ref:Paragraph>47</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/47/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>148</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/148</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="DescriptionOfMainBusinessRelationships" xlink:to="reference_DescriptionOfMainBusinessRelationships" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DescriptionOfSignificantMarketsTheUndertakingOperatesIn" xlink:label="DescriptionOfSignificantMarketsTheUndertakingOperatesIn" xlink:type="locator"/>
+    <link:reference xlink:label="reference_DescriptionOfSignificantMarketsTheUndertakingOperatesIn" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C1</ref:Number>
+      <ref:Paragraph>47</ref:Paragraph>
+      <ref:Subparagraph>b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/47/b</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="DescriptionOfSignificantMarketsTheUndertakingOperatesIn" xlink:to="reference_DescriptionOfSignificantMarketsTheUndertakingOperatesIn" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DescriptionOfPracticesPoliciesAndOrFutureInitiatives" xlink:label="DescriptionOfThePracticePolicyOrFutureInitiviate" xlink:type="locator"/>
+    <link:reference xlink:label="reference_DescriptionOfThePracticePolicyOrFutureInitiviate" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C2</ref:Number>
+      <ref:Paragraph>48</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/48</ref:URI>
+      <vsme:RelatedVsmeGuidance>149</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/149</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="DescriptionOfThePracticePolicyOrFutureInitiviate" xlink:to="reference_DescriptionOfThePracticePolicyOrFutureInitiviate" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DescriptionOfATargetRelatedToAPolicy" xlink:label="DescriptionOfTheTarget" xlink:type="locator"/>
+    <link:reference xlink:label="reference_DescriptionOfTheTarget" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C2</ref:Number>
+      <ref:Paragraph>48</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/48</ref:URI>
+      <vsme:RelatedVsmeGuidance>149</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/149</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="DescriptionOfTheTarget" xlink:to="reference_DescriptionOfTheTarget" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_MostSeniorLevelAccountableForImplementationOfPolicies" xlink:label="SeniorLevelAccountableForImplementation" xlink:type="locator"/>
+    <link:reference xlink:label="reference_SeniorLevelAccountableForImplementation" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C2</ref:Number>
+      <ref:Paragraph>49</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/49</ref:URI>
+      <vsme:RelatedVsmeGuidance>149</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/149</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="SeniorLevelAccountableForImplementation" xlink:to="reference_SeniorLevelAccountableForImplementation" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfPermanentContractEmployees" xlink:label="NumberOfPermanentContractEmployees" xlink:type="locator"/>
+    <link:reference xlink:label="reference_NumberOfPermanentContractEmployees" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B8</ref:Number>
+      <ref:Paragraph>39</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/39/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>112-118</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/112</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="NumberOfPermanentContractEmployees" xlink:to="reference_NumberOfPermanentContractEmployees" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfTemporaryContractEmployees" xlink:label="NumberOfTemporaryContactEmployees" xlink:type="locator"/>
+    <link:reference xlink:label="reference_NumberOfTemporaryContractEmployees" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B8</ref:Number>
+      <ref:Paragraph>39</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/39/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>112-118</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/112</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="NumberOfTemporaryContactEmployees" xlink:to="reference_NumberOfTemporaryContractEmployees" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfMaleEmployees" xlink:label="NumberOfMaleEmployees" xlink:type="locator"/>
+    <link:reference xlink:label="reference_NumberOfMaleEmployees" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B8</ref:Number>
+      <ref:Paragraph>39</ref:Paragraph>
+      <ref:Subparagraph>b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/39/b</ref:URI>
+      <vsme:RelatedVsmeGuidance>112-118</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/112</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="NumberOfMaleEmployees" xlink:to="reference_NumberOfMaleEmployees" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfEmployeesForCountryOfEmploymentContractLineItems" xlink:label="NumberOfEmployeesForCountryOfEmploymentContractLineItems" xlink:type="locator"/>
+    <link:reference xlink:label="reference_NumberOfEmployeesForCountryOfEmploymentContractLineItems_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B8</ref:Number>
+      <ref:Paragraph>39</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/39/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>112-118</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/112</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="NumberOfEmployeesForCountryOfEmploymentContractLineItems" xlink:to="reference_NumberOfEmployeesForCountryOfEmploymentContractLineItems_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_EmployeesTurnoverAbstract" xlink:label="EmployeesTurnoverRateLineItems" xlink:type="locator"/>
+    <link:reference xlink:label="reference_EmployeesTurnoverRateLineItems" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B8</ref:Number>
+      <ref:Paragraph>40</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/40</ref:URI>
+      <vsme:RelatedVsmeGuidance>117-118</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/117</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="EmployeesTurnoverRateLineItems" xlink:to="reference_EmployeesTurnoverRateLineItems" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_EmployeeTurnoverRate" xlink:label="EmployeeTurnoverRate" xlink:type="locator"/>
+    <link:reference xlink:label="reference_EmployeeTurnoverRate" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B8</ref:Number>
+      <ref:Paragraph>40</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/40</ref:URI>
+      <vsme:RelatedVsmeGuidance>117-118</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/117</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="EmployeeTurnoverRate" xlink:to="reference_EmployeeTurnoverRate" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfRecordableWorkRelatedAccidentsInTheReportingPeriod" xlink:label="NumberOfRecordableWorkRelatedAccidentsInTheReportingYear" xlink:type="locator"/>
+    <link:reference xlink:label="reference_NumberOfRecordableWorkRelatedAccidentsInTheReportingYear" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B9</ref:Number>
+      <ref:Paragraph>41</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/41/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>119-126</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/119</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="NumberOfRecordableWorkRelatedAccidentsInTheReportingYear" xlink:to="reference_NumberOfRecordableWorkRelatedAccidentsInTheReportingYear" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_RateOfRecordableWorkRelatedAccidentsInTheReportingPeriod" xlink:label="RateOfRecordableWorkRelatedAccidentsInTheReportingYear" xlink:type="locator"/>
+    <link:reference xlink:label="reference_RateOfRecordableWorkRelatedAccidentsInTheReportingYear" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B9</ref:Number>
+      <ref:Paragraph>41</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/41/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>119-126</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/119</ref:URI>
+      <vsme:RelatedVsmeGuidance>184-191</vsme:RelatedVsmeGuidance>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="RateOfRecordableWorkRelatedAccidentsInTheReportingYear" xlink:to="reference_RateOfRecordableWorkRelatedAccidentsInTheReportingYear" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfFatalitiesAsAResultOfWorkRelatedInjuriesAndWorkRelatedIllHealth" xlink:label="NumberOfFatalitiesAsAResultOfWorkRelatedInjuriesAndWorkRelatedIllHealth" xlink:type="locator"/>
+    <link:reference xlink:label="reference_NumberOfFatalitiesAsAResultOfWorkRelatedInjuriesAndWorkRelatedIllHealth" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B9</ref:Number>
+      <ref:Paragraph>41</ref:Paragraph>
+      <ref:Subparagraph>b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/41/b</ref:URI>
+      <vsme:RelatedVsmeGuidance>119-126</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/119</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="NumberOfFatalitiesAsAResultOfWorkRelatedInjuriesAndWorkRelatedIllHealth" xlink:to="reference_NumberOfFatalitiesAsAResultOfWorkRelatedInjuriesAndWorkRelatedIllHealth" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_CountryOfEmploymentContractAxis" xlink:label="CountryOfEmploymentContractAxis" xlink:type="locator"/>
+    <link:reference xlink:label="reference_CountryOfEmploymentContractAxis" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B8</ref:Number>
+      <ref:Paragraph>39</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/39/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>115</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/115</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="CountryOfEmploymentContractAxis" xlink:to="reference_CountryOfEmploymentContractAxis" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_EmployeesReceivePayEqualOrAboveMinimumWageDeterminedByNationalLawOrCollectiveAgreement" xlink:label="EmployeesReceivePayEqualOrAboveMinimumWageDeterminedByNationalLawOrCollectiveAgreement" xlink:type="locator"/>
+    <link:reference xlink:label="reference_EmployeesReceivePayEqualOrAboveMinimumWageDeterminedByNationalLawOrCollectiveAgreement" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B10</ref:Number>
+      <ref:Paragraph>42</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/42/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>127-128</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/127</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="EmployeesReceivePayEqualOrAboveMinimumWageDeterminedByNationalLawOrCollectiveAgreement" xlink:to="reference_EmployeesReceivePayEqualOrAboveMinimumWageDeterminedByNationalLawOrCollectiveAgreement" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_PercentageGapInPayBetweenFemaleAndMaleEmployees" xlink:label="PercentageGapBetweenFemaleAndMaleEmployees" xlink:type="locator"/>
+    <link:reference xlink:label="reference_PercentageGapBetweenFemaleAndMaleEmployees" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B10</ref:Number>
+      <ref:Paragraph>42</ref:Paragraph>
+      <ref:Subparagraph>b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/42/b</ref:URI>
+      <vsme:RelatedVsmeGuidance>129-136</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/129</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="PercentageGapBetweenFemaleAndMaleEmployees" xlink:to="reference_PercentageGapBetweenFemaleAndMaleEmployees" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_PercentageOfEmployeesCoveredByCollectiveBargainingAgreements" xlink:label="PercentageOfEmployeesCoveredByCollectiveBargainingAgreements" xlink:type="locator"/>
+    <link:reference xlink:label="reference_PercentageOfEmployeesCoveredByCollectiveBargainingAgreements_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B10</ref:Number>
+      <ref:Paragraph>42</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/42/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>137-140</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/137</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="PercentageOfEmployeesCoveredByCollectiveBargainingAgreements" xlink:to="reference_PercentageOfEmployeesCoveredByCollectiveBargainingAgreements_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_AverageNumberOfAnnualTrainingHoursPerMaleEmployee" xlink:label="AverageNumberOfAnnualTrainingHoursPerMaleEmployee" xlink:type="locator"/>
+    <link:reference xlink:label="reference_AverageNumberOfAnnualTrainingHoursPerMaleEmployee" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B10</ref:Number>
+      <ref:Paragraph>42</ref:Paragraph>
+      <ref:Subparagraph>d</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/42/d</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="AverageNumberOfAnnualTrainingHoursPerMaleEmployee" xlink:to="reference_AverageNumberOfAnnualTrainingHoursPerMaleEmployee" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_AverageNumberOfAnnualTrainingHoursPerFemaleEmployee" xlink:label="AverageNumberOfAnnualTrainingHoursPerFemaleEmployee" xlink:type="locator"/>
+    <link:reference xlink:label="reference_AverageNumberOfAnnualTrainingHoursPerFemaleEmployee" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B10</ref:Number>
+      <ref:Paragraph>42</ref:Paragraph>
+      <ref:Subparagraph>d</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/42/d</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="AverageNumberOfAnnualTrainingHoursPerFemaleEmployee" xlink:to="reference_AverageNumberOfAnnualTrainingHoursPerFemaleEmployee" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_AverageNumberOfAnnualTrainingHoursPerOtherGenderEmployee" xlink:label="AverageNumberOfAnnualTrainingHoursPerOtherGenderEmployee" xlink:type="locator"/>
+    <link:reference xlink:label="reference_AverageNumberOfAnnualTrainingHoursPerOtherGenderEmployee" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B10</ref:Number>
+      <ref:Paragraph>42</ref:Paragraph>
+      <ref:Subparagraph>d</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/42/d</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="AverageNumberOfAnnualTrainingHoursPerOtherGenderEmployee" xlink:to="reference_AverageNumberOfAnnualTrainingHoursPerOtherGenderEmployee" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_AverageNumberOfAnnualTrainingHoursPerNonReportedGenderEmployee" xlink:label="AverageNumberOfAnnualTrainingHoursPerNonReportedGenderEmployee" xlink:type="locator"/>
+    <link:reference xlink:label="reference_AverageNumberOfAnnualTrainingHoursPerNonReportedGenderEmployee" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B10</ref:Number>
+      <ref:Paragraph>42</ref:Paragraph>
+      <ref:Subparagraph>d</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/42/d</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="AverageNumberOfAnnualTrainingHoursPerNonReportedGenderEmployee" xlink:to="reference_AverageNumberOfAnnualTrainingHoursPerNonReportedGenderEmployee" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_FemaleToMaleRatioAtManagementLevelForTheReportingPeriod" xlink:label="FemaleToMaleRatioAtManagementLevelForTheReportingPeriod" xlink:type="locator"/>
+    <link:reference xlink:label="reference_FemaleToMaleRatioAtManagementLevelForTheReportingPeriod" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C5</ref:Number>
+      <ref:Paragraph>59</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/59</ref:URI>
+      <vsme:RelatedVsmeGuidance>167-169</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/167</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="FemaleToMaleRatioAtManagementLevelForTheReportingPeriod" xlink:to="reference_FemaleToMaleRatioAtManagementLevelForTheReportingPeriod" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalNumberOfSelfEmployedWorkersWithoutPersonnelThatAreWorkingExclusivelyForTheUndertaking" xlink:label="TotalSelfEmployedWorkersWithoutPersonnelThatAreWorkingExclusivelyForTheUndertaking" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalSelfEmployedWorkersWithoutPersonnelThatAreWorkingExclusivelyForTheUndertaking" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C5</ref:Number>
+      <ref:Paragraph>60</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/60</ref:URI>
+      <vsme:RelatedVsmeGuidance>170-172</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/170</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalSelfEmployedWorkersWithoutPersonnelThatAreWorkingExclusivelyForTheUndertaking" xlink:to="reference_TotalSelfEmployedWorkersWithoutPersonnelThatAreWorkingExclusivelyForTheUndertaking" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_UndertakingHasACodeOfConductOrHumanRightsPolicyForItsOwnWorkforce" xlink:label="UndertakingHasACodeOfConductOrHumanRightsPolicyForItsOwnWorkforce" xlink:type="locator"/>
+    <link:reference xlink:label="reference_UndertakingHasACodeOfConductOrHumanRightsPolicyForItsOwnWorkforce" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C6</ref:Number>
+      <ref:Paragraph>61</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/61/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>173</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/173</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="UndertakingHasACodeOfConductOrHumanRightsPolicyForItsOwnWorkforce" xlink:to="reference_UndertakingHasACodeOfConductOrHumanRightsPolicyForItsOwnWorkforce" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TypeOfContentCoveredByTheCodeOfConductOrHumanRightsPolicyForItsOwnWorkforce" xlink:label="TypeOfContentCoveredByTheCodeOfConductOrHumanRightsPolicyForItsOwnWorkforce" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TypeOfContentCoveredByTheCodeOfConductOrHumanRightsPolicyForItsOwnWorkforce" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C6</ref:Number>
+      <ref:Paragraph>61</ref:Paragraph>
+      <ref:Subparagraph>b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/61/b</ref:URI>
+      <vsme:RelatedVsmeGuidance>173</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/173</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TypeOfContentCoveredByTheCodeOfConductOrHumanRightsPolicyForItsOwnWorkforce" xlink:to="reference_TypeOfContentCoveredByTheCodeOfConductOrHumanRightsPolicyForItsOwnWorkforce" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_SpecificationOfOtherTypesOfContentCoveredByTheCodeOfConductOrHumanRightsPolicy" xlink:label="SpecificationOfOtherTypesOfContentCoveredByTheCodeOfConductOrHumanRightsPolicy" xlink:type="locator"/>
+    <link:reference xlink:label="reference_SpecificationOfOtherTypesOfContentCoveredByTheCodeOfConductOrHumanRightsPolicy" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C6</ref:Number>
+      <ref:Paragraph>61</ref:Paragraph>
+      <ref:Subparagraph>b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/61/b</ref:URI>
+      <vsme:RelatedVsmeGuidance>173</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/173</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="SpecificationOfOtherTypesOfContentCoveredByTheCodeOfConductOrHumanRightsPolicy" xlink:to="reference_SpecificationOfOtherTypesOfContentCoveredByTheCodeOfConductOrHumanRightsPolicy" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_UndertakingHasAComplaintHandlingMechanismForItsOwnWorkforce" xlink:label="UndertakingHasAComplaintHandlingMechanismForItsOwnWorkforce" xlink:type="locator"/>
+    <link:reference xlink:label="reference_UndertakingHasAComplaintHandlingMechanismForItsOwnWorkforce" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C6</ref:Number>
+      <ref:Paragraph>61</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/61/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>237</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/173</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="UndertakingHasAComplaintHandlingMechanismForItsOwnWorkforce" xlink:to="reference_UndertakingHasAComplaintHandlingMechanismForItsOwnWorkforce" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_UndertakingHasConfirmedHumanRightsIncidentsInItsOwnWorkforce" xlink:label="UndertakingHasConfirmedHumanRightsIncidentsInItsOwnWorkforce" xlink:type="locator"/>
+    <link:reference xlink:label="reference_UndertakingHasConfirmedHumanRightsIncidentsInItsOwnWorkforce" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C7</ref:Number>
+      <ref:Paragraph>62</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/62/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>174</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/174</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="UndertakingHasConfirmedHumanRightsIncidentsInItsOwnWorkforce" xlink:to="reference_UndertakingHasConfirmedHumanRightsIncidentsInItsOwnWorkforce" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TypeOfHumanRightRelatedToTheConfirmedIncident" xlink:label="TypeOfHumanRightRelatedToTheConfirmedIncident" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TypeOfHumanRightRelatedToTheConfirmedIncident" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C7</ref:Number>
+      <ref:Paragraph>62</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/62/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>174</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/174</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TypeOfHumanRightRelatedToTheConfirmedIncident" xlink:to="reference_TypeOfHumanRightRelatedToTheConfirmedIncident" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_SpecificationOfOtherHumanRightsRelatedToTheConfirmedIncident" xlink:label="SpecificationOfOtherTypesOfHumanRightRelatedToTheConfirmedIncident" xlink:type="locator"/>
+    <link:reference xlink:label="reference_SpecificationOfOtherTypesOfHumanRightRelatedToTheConfirmedIncident" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C7</ref:Number>
+      <ref:Paragraph>62</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/62/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>174</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/174</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="SpecificationOfOtherTypesOfHumanRightRelatedToTheConfirmedIncident" xlink:to="reference_SpecificationOfOtherTypesOfHumanRightRelatedToTheConfirmedIncident" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_UndertakingIsAwareOfAnyConfirmedIncidentsInvolvingWorkersInTheValueChainAffectedCommunitiesConsumersAndEndUsers" xlink:label="UndertakingIsAwareOfAnyConfirmedIncidentsInvolvingWorkersInTheValueChainAffectedCommunitiesConsumersAndEndUsers" xlink:type="locator"/>
+    <link:reference xlink:label="reference_UndertakingIsAwareOfAnyConfirmedIncidentsInvolvingWorkersInTheValueChainAffectedCommunitiesConsumersAndEndUsers" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C7</ref:Number>
+      <ref:Paragraph>62</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/62/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>174</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/174</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="UndertakingIsAwareOfAnyConfirmedIncidentsInvolvingWorkersInTheValueChainAffectedCommunitiesConsumersAndEndUsers" xlink:to="reference_UndertakingIsAwareOfAnyConfirmedIncidentsInvolvingWorkersInTheValueChainAffectedCommunitiesConsumersAndEndUsers" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_SpecificationOfAnyConfirmedIncidentInvolvingWorkersInTheValueChainAffectedCommunitiesConsumersAndEndUsers" xlink:label="SpecificationOfAnyConfirmedIncidentInvolvingWorkersInTheValueChainAffectedCommunitiesConsumersAndEndUsers" xlink:type="locator"/>
+    <link:reference xlink:label="reference_SpecificationOfAnyConfirmedIncidentInvolvingWorkersInTheValueChainAffectedCommunitiesConsumersAndEndUsers" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C7</ref:Number>
+      <ref:Paragraph>62</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/62/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>174</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/174</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="SpecificationOfAnyConfirmedIncidentInvolvingWorkersInTheValueChainAffectedCommunitiesConsumersAndEndUsers" xlink:to="reference_SpecificationOfAnyConfirmedIncidentInvolvingWorkersInTheValueChainAffectedCommunitiesConsumersAndEndUsers" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_BasisForReporting" xlink:label="BasisForReporting" xlink:type="locator"/>
+    <link:reference id="reference_BasisForReporting" xlink:label="reference_BasisForReporting" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/c</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="BasisForReporting" xlink:to="reference_BasisForReporting" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DisclosureOfAnyOtherGeneralAndOrEntitySpecificInformation" xlink:label="GeneralInformationDisclosureOfAnyOtherGeneralAndOrEntitySpecificInformation" xlink:type="locator"/>
+    <link:reference xlink:label="reference_GeneralInformationDisclosureOfAnyOtherGeneralAndOrEntitySpecificInformation" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic and Comprehensive Module</ref:Section>
+      <ref:Paragraph>10</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/10</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="GeneralInformationDisclosureOfAnyOtherGeneralAndOrEntitySpecificInformation" xlink:to="reference_GeneralInformationDisclosureOfAnyOtherGeneralAndOrEntitySpecificInformation" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DisclosureOfAnyOtherEnvironmentalAndOrEntitySpecificEnvironmentalDisclosures" xlink:label="EnvironmentalInformationDisclosureOfAnyOtherGeneralAndOrEntitySpecificInformation" xlink:type="locator"/>
+    <link:reference xlink:label="reference_EnvironmentalInformationDisclosureOfAnyOtherGeneralAndOrEntitySpecificInformation" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic and Comprehensive Module</ref:Section>
+      <ref:Paragraph>10</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/10</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="EnvironmentalInformationDisclosureOfAnyOtherGeneralAndOrEntitySpecificInformation" xlink:to="reference_EnvironmentalInformationDisclosureOfAnyOtherGeneralAndOrEntitySpecificInformation" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DisclosureOfAnyOtherSocialAndOrEntitySpecificSocialDisclosures" xlink:label="SocialInformationDisclosureOfAnyOtherGeneralAndOrEntitySpecificInformation" xlink:type="locator"/>
+    <link:reference xlink:label="reference_SocialInformationDisclosureOfAnyOtherGeneralAndOrEntitySpecificInformation" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic and Comprehensive Module</ref:Section>
+      <ref:Paragraph>10</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/10</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="SocialInformationDisclosureOfAnyOtherGeneralAndOrEntitySpecificInformation" xlink:to="reference_SocialInformationDisclosureOfAnyOtherGeneralAndOrEntitySpecificInformation" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DisclosureOfAnyOtherGovernanceAndOrEntitySpecificGovernanceDisclosures" xlink:label="GovernanceInformationDisclosureOfAnyOtherGeneralAndOrEntitySpecificInformation" xlink:type="locator"/>
+    <link:reference xlink:label="reference_GovernanceInformationDisclosureOfAnyOtherGeneralAndOrEntitySpecificInformation" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic and Comprehensive Module</ref:Section>
+      <ref:Paragraph>10</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/10</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="GovernanceInformationDisclosureOfAnyOtherGeneralAndOrEntitySpecificInformation" xlink:to="reference_GovernanceInformationDisclosureOfAnyOtherGeneralAndOrEntitySpecificInformation" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalNumberOfTemporaryWorkersProvidedByUndertakingsPrimarilyEngagedInEmploymentActivities" xlink:label="TotalTemporaryWorkersProvidedByUndertakingsPrimarilyEngagedInEmploymentActivities" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalTemporaryWorkersProvidedByUndertakingsPrimarilyEngagedInEmploymentActivities" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C5</ref:Number>
+      <ref:Paragraph>60</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/60</ref:URI>
+      <vsme:RelatedVsmeGuidance>170-171</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/170-171</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalTemporaryWorkersProvidedByUndertakingsPrimarilyEngagedInEmploymentActivities" xlink:to="reference_TotalTemporaryWorkersProvidedByUndertakingsPrimarilyEngagedInEmploymentActivities" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalNumberOfConvictionsForTheViolationOfAntiCorruptionAndAntiBriberyLaws" xlink:label="TotalNumberOfConvictionsForTheViolationOfAntiCorruptionAndAntiBriberyLaws" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalNumberOfConvictionsForTheViolationOfAntiCorruptionAndAntiBriberyLaws" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B11</ref:Number>
+      <ref:Paragraph>43</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/43</ref:URI>
+      <vsme:RelatedVsmeGuidance>141-144</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/141-144</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalNumberOfConvictionsForTheViolationOfAntiCorruptionAndAntiBriberyLaws" xlink:to="reference_TotalNumberOfConvictionsForTheViolationOfAntiCorruptionAndAntiBriberyLaws" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalAmountOfFinesForTheViolationOfAnticorruptionAndAntibriberyLaws" xlink:label="TotalAmountOfFinesForTheViolationOfAnticorruptionAndAntibriberyLaws" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalAmountOfFinesForTheViolationOfAnticorruptionAndAntibriberyLaws" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B11</ref:Number>
+      <ref:Paragraph>43</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/43</ref:URI>
+      <vsme:RelatedVsmeGuidance>141-144</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/141-144</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalAmountOfFinesForTheViolationOfAnticorruptionAndAntibriberyLaws" xlink:to="reference_TotalAmountOfFinesForTheViolationOfAnticorruptionAndAntibriberyLaws" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_RevenueDerivedFromControversialWeaponsAntiPersonnelMinesClusterMunitionsChemicalWeaponsAndBiologicalWeapons" xlink:label="RevenueDerivedFromControversialWeaponsAntiPersonnelMinesClusterMunitionsChemicalWeaponsAndBiologicalWeapons" xlink:type="locator"/>
+    <link:reference xlink:label="reference_RevenueDerivedFromControversialWeaponsAntiPersonnelMinesClusterMunitionsChemicalWeaponsAndBiologicalWeapons" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C8</ref:Number>
+      <ref:Paragraph>63</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/63/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>175-177</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/175-177</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="RevenueDerivedFromControversialWeaponsAntiPersonnelMinesClusterMunitionsChemicalWeaponsAndBiologicalWeapons" xlink:to="reference_RevenueDerivedFromControversialWeaponsAntiPersonnelMinesClusterMunitionsChemicalWeaponsAndBiologicalWeapons" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalRevenuesDerivedFromFossilFuelCoalOilAndGasSector" xlink:label="TotalRevenuesDerivedFromFossilFuelCoalOilAndGasSector" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalRevenuesDerivedFromFossilFuelCoalOilAndGasSector" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C8</ref:Number>
+      <ref:Paragraph>63</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/63/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>175-177</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/175-177</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalRevenuesDerivedFromFossilFuelCoalOilAndGasSector" xlink:to="reference_TotalRevenuesDerivedFromFossilFuelCoalOilAndGasSector" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_RevenueDerivedFromCultivationAndProductionOfTobacco" xlink:label="RevenueDerivedFromCultivationAndProductionOfTobacco" xlink:type="locator"/>
+    <link:reference xlink:label="reference_RevenueDerivedFromCultivationAndProductionOfTobacco" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C8</ref:Number>
+      <ref:Paragraph>63</ref:Paragraph>
+      <ref:Subparagraph>b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/63/b</ref:URI>
+      <vsme:RelatedVsmeGuidance>175-177</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/175-177</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="RevenueDerivedFromCultivationAndProductionOfTobacco" xlink:to="reference_RevenueDerivedFromCultivationAndProductionOfTobacco" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_RevenueDerivedFromCoal" xlink:label="RevenueDerivedFromCoal" xlink:type="locator"/>
+    <link:reference xlink:label="reference_RevenueDerivedFromCoal" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C8</ref:Number>
+      <ref:Paragraph>63</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/63/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>175-177</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/175-177</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="RevenueDerivedFromCoal" xlink:to="reference_RevenueDerivedFromCoal" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_RevenueDerivedFromOil" xlink:label="RevenueDerivedFromOil" xlink:type="locator"/>
+    <link:reference xlink:label="reference_RevenueDerivedFromOil" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C8</ref:Number>
+      <ref:Paragraph>63</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/63/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>175-177</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/175-177</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="RevenueDerivedFromOil" xlink:to="reference_RevenueDerivedFromOil" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_RevenueDerivedFromGas" xlink:label="RevenueDerivedFromGas" xlink:type="locator"/>
+    <link:reference xlink:label="reference_RevenueDerivedFromGas" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C8</ref:Number>
+      <ref:Paragraph>63</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/63/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>175-177</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/175-177</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="RevenueDerivedFromGas" xlink:to="reference_RevenueDerivedFromGas" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_RevenueDerivedFromChemicalProduction" xlink:label="RevenueDerivedFromChemicalProduction" xlink:type="locator"/>
+    <link:reference xlink:label="reference_RevenueDerivedFromChemicalProduction" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C8</ref:Number>
+      <ref:Paragraph>63</ref:Paragraph>
+      <ref:Subparagraph>d</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/63/d</ref:URI>
+      <vsme:RelatedVsmeGuidance>175-177</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/175-177</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="RevenueDerivedFromChemicalProduction" xlink:to="reference_RevenueDerivedFromChemicalProduction" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_GenderDiversityRatioInGovernanceBody" xlink:label="copyOfPercentageGapBetweenFemaleAndMaleEmployees" xlink:type="locator"/>
+    <link:reference xlink:label="reference_copyOfPercentageGapBetweenFemaleAndMaleEmployees" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C9</ref:Number>
+      <ref:Paragraph>65</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/65</ref:URI>
+      <vsme:RelatedVsmeGuidance>178-180</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/178-180</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="copyOfPercentageGapBetweenFemaleAndMaleEmployees" xlink:to="reference_copyOfPercentageGapBetweenFemaleAndMaleEmployees" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalEnergyConsumption" xlink:label="TotalEnergyConsumption" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalEnergyConsumption" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>29</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/29</ref:URI>
+      <vsme:RelatedVsmeGuidance>18-25</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/18-25</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalEnergyConsumption" xlink:to="reference_TotalEnergyConsumption" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DisclosureOfListOfMainActionsTheEntitySeeksInOrderToAchieveItsTargets" xlink:label="DisclosureOfListOfMainActionsTheEntitySeeksToAchieveItsTargets" xlink:type="locator"/>
+    <link:reference xlink:label="reference_DisclosureOfListOfMainActionsTheEntitySeeksToAchieveItsTargets" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C3</ref:Number>
+      <ref:Paragraph>54</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/54/e</ref:URI>
+      <vsme:RelatedVsmeGuidance>159</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/159</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="DisclosureOfListOfMainActionsTheEntitySeeksToAchieveItsTargets" xlink:to="reference_DisclosureOfListOfMainActionsTheEntitySeeksToAchieveItsTargets" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DescriptionOfATransitionPlanForClimateChangeMitigationIncludingAnExplanationOfHowItIsContributingToReduceGhgEmissions" xlink:label="DescriptionOfATransitionPlanForClimateChangeMitigationIncludingAnExplanationOfHowItIsContributingToReduceGhgEmissions" xlink:type="locator"/>
+    <link:reference xlink:label="reference_DescriptionOfATransitionPlanForClimateChangeMitigationIncludingAnExplanationOfHowItIsContributingToReduceGhgEmissions" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C3</ref:Number>
+      <ref:Paragraph>55</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/55</ref:URI>
+      <vsme:RelatedVsmeGuidance>160-162</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/160-162</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="DescriptionOfATransitionPlanForClimateChangeMitigationIncludingAnExplanationOfHowItIsContributingToReduceGhgEmissions" xlink:to="reference_DescriptionOfATransitionPlanForClimateChangeMitigationIncludingAnExplanationOfHowItIsContributingToReduceGhgEmissions" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DateOfAdoptionOfTransitionPlanForUndertakingNotHavingAdoptedTransitionPlanYet" xlink:label="DateOfAdoptionOfTransitionPlanForUndertakingNotHavingAdoptedTransitionPlanYet" xlink:type="locator"/>
+    <link:reference xlink:label="reference_DateOfAdoptionOfTransitionPlanForUndertakingNotHavingAdoptedTransitionPlanYet" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C3</ref:Number>
+      <ref:Paragraph>56</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/56</ref:URI>
+      <vsme:RelatedVsmeGuidance>160-162</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/160-162</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="DateOfAdoptionOfTransitionPlanForUndertakingNotHavingAdoptedTransitionPlanYet" xlink:to="reference_DateOfAdoptionOfTransitionPlanForUndertakingNotHavingAdoptedTransitionPlanYet" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_PubliclyAvailableDisclosure" xlink:label="PubliclyAvailableDisclosure" xlink:type="locator"/>
+    <link:reference xlink:label="reference_PubliclyAvailableDisclosure" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B4</ref:Number>
+      <ref:Paragraph>32</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/32</ref:URI>
+      <vsme:RelatedVsmeGuidance>46-69</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/46-69</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="PubliclyAvailableDisclosure" xlink:to="reference_PubliclyAvailableDisclosure" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_AmountOfEmissionToAir" xlink:label="AmountOfEmissionToAir" xlink:type="locator"/>
+    <link:reference xlink:label="reference_AmountOfEmissionToAir" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B4</ref:Number>
+      <ref:Paragraph>32</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/32</ref:URI>
+      <vsme:RelatedVsmeGuidance>46-69</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/46-69</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="AmountOfEmissionToAir" xlink:to="reference_AmountOfEmissionToAir" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_AmountOfEmissionToWater" xlink:label="AmountOfEmissionToWater" xlink:type="locator"/>
+    <link:reference xlink:label="reference_AmountOfEmissionToWater_25" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B4</ref:Number>
+      <ref:Paragraph>32</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/32</ref:URI>
+      <vsme:RelatedVsmeGuidance>46-69</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/46-69</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="AmountOfEmissionToWater" xlink:to="reference_AmountOfEmissionToWater_25" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_AmountOfEmissionToSoil" xlink:label="AmountOfEmissionToSoil" xlink:type="locator"/>
+    <link:reference xlink:label="reference_AmountOfEmissionToSoil_25" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B4</ref:Number>
+      <ref:Paragraph>32</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/32</ref:URI>
+      <vsme:RelatedVsmeGuidance>46-69</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/46-69</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="AmountOfEmissionToSoil" xlink:to="reference_AmountOfEmissionToSoil_25" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalSealedArea" xlink:label="TotalSealedArea" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalSealedArea" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B5</ref:Number>
+      <ref:Paragraph>34</ref:Paragraph>
+      <ref:Subparagraph>b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/34/b</ref:URI>
+      <vsme:RelatedVsmeGuidance>74-76</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/74-76</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalSealedArea" xlink:to="reference_TotalSealedArea" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalNatureOrientedAreaOnSite" xlink:label="TotalNatureOrientedAreaOnSite" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalNatureOrientedAreaOnSite_5" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B5</ref:Number>
+      <ref:Paragraph>34</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/34/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>74-76</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/74-76</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalNatureOrientedAreaOnSite" xlink:to="reference_TotalNatureOrientedAreaOnSite_5" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalNatureOrientedAreaOffSite" xlink:label="TotalNatureOrientedAreaOffSite" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalNatureOrientedAreaOffSite_5" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B5</ref:Number>
+      <ref:Paragraph>34</ref:Paragraph>
+      <ref:Subparagraph>d</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/34/d</ref:URI>
+      <vsme:RelatedVsmeGuidance>74-76</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/74-76</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalNatureOrientedAreaOffSite" xlink:to="reference_TotalNatureOrientedAreaOffSite_5" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalUseOfLand" xlink:label="TotalUseOfLand" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalUseOfLand_5" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B5</ref:Number>
+      <ref:Paragraph>34</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/34/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>74-76</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/74-76</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalUseOfLand" xlink:to="reference_TotalUseOfLand_5" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalAmountOfWaterWithdrawnFromAllSites" xlink:label="TotalAmountOfWaterWithdrawnFromAllSitesCubicMeters" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalAmountOfWaterWithdrawnFromAllSitesCubicMeters" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B6</ref:Number>
+      <ref:Paragraph>35</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/35</ref:URI>
+      <vsme:RelatedVsmeGuidance>156-158</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/156-158</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalAmountOfWaterWithdrawnFromAllSitesCubicMeters" xlink:to="reference_TotalAmountOfWaterWithdrawnFromAllSitesCubicMeters" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalWaterConsumption" xlink:label="TotalWaterConsumptionCubicMeters" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalWaterConsumption" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B6</ref:Number>
+      <ref:Paragraph>36</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/36</ref:URI>
+      <vsme:RelatedVsmeGuidance>72-90</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/72-90</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalWaterConsumptionCubicMeters" xlink:to="reference_TotalWaterConsumption" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_WaterDischargeFromUndertakingProductionProcesses" xlink:label="WaterDischargeFromUndertakingProductionProcessesCubicMeters" xlink:type="locator"/>
+    <link:reference xlink:label="reference_WaterDischargeFromUndertakingProductionProcessesCubicMeters" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B6</ref:Number>
+      <ref:Paragraph>36</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/36</ref:URI>
+      <vsme:RelatedVsmeGuidance>72-90</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/72-90</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="WaterDischargeFromUndertakingProductionProcessesCubicMeters" xlink:to="reference_WaterDischargeFromUndertakingProductionProcessesCubicMeters" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_UndertakingAppliesCircularEconomyPrinciples" xlink:label="ApplicationOfCircularEconomyPrinciples" xlink:type="locator"/>
+    <link:reference xlink:label="reference_ApplicationOfCircularEconomyPrinciples" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>37</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/37</ref:URI>
+      <vsme:RelatedVsmeGuidance>94</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/94</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="ApplicationOfCircularEconomyPrinciples" xlink:to="reference_ApplicationOfCircularEconomyPrinciples" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DescriptionOfHowCircularEconomyPrinciplesAreApplied" xlink:label="DescriptionOfHowCircularEconomyPrinciplesAreApplied" xlink:type="locator"/>
+    <link:reference xlink:label="reference_DescriptionOfHowCircularEconomyPrinciplesAreApplied" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>37</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/37</ref:URI>
+      <vsme:RelatedVsmeGuidance>94</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/94</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="DescriptionOfHowCircularEconomyPrinciplesAreApplied" xlink:to="reference_DescriptionOfHowCircularEconomyPrinciplesAreApplied" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DescriptionOfClimateRelatedHazardsAndClimateRelatedTransitionEvents" xlink:label="BriefDescriptionOfClimateRelatedHazardsAndClimateRelatedTransitionEvents" xlink:type="locator"/>
+    <link:reference xlink:label="reference_BriefDescriptionOfClimateRelatedHazardsAndClimateRelatedTransitionEvents" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C4</ref:Number>
+      <ref:Paragraph>57</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/57/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>164-166</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/164-166</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="BriefDescriptionOfClimateRelatedHazardsAndClimateRelatedTransitionEvents" xlink:to="reference_BriefDescriptionOfClimateRelatedHazardsAndClimateRelatedTransitionEvents" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DisclosureOfHowItHasAssessedTheExposureAndSensitivityOfItsAssetsActivitiesAndValueChainToTheseHazardsAndTransitionEvents" xlink:label="DisclosureOfHowItHasAssessedTheExposureAndSensitivityOfItsAssetsActivitiesAndValueChainToTheseHazardsAndTransitionEvents" xlink:type="locator"/>
+    <link:reference xlink:label="reference_DisclosureOfHowItHasAssessedTheExposureAndSensitivityOfItsAssetsActivitiesAndValueChainToTheseHazardsAndTransitionEvents" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C4</ref:Number>
+      <ref:Paragraph>57</ref:Paragraph>
+      <ref:Subparagraph>b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/57/b</ref:URI>
+      <vsme:RelatedVsmeGuidance>164-166</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/164-166</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="DisclosureOfHowItHasAssessedTheExposureAndSensitivityOfItsAssetsActivitiesAndValueChainToTheseHazardsAndTransitionEvents" xlink:to="reference_DisclosureOfHowItHasAssessedTheExposureAndSensitivityOfItsAssetsActivitiesAndValueChainToTheseHazardsAndTransitionEvents" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TimeHorizonsOfAnyClimateRelatedHazardsAndTransitionEventsIdentified" xlink:label="TimeHorizonsOfAnyClimateRelatedHazardsAndTransitionEventsIdentified" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TimeHorizonsOfAnyClimateRelatedHazardsAndTransitionEventsIdentified" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C4</ref:Number>
+      <ref:Paragraph>57</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/57/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>164-166</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/164-166</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TimeHorizonsOfAnyClimateRelatedHazardsAndTransitionEventsIdentified" xlink:to="reference_TimeHorizonsOfAnyClimateRelatedHazardsAndTransitionEventsIdentified" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DisclosureOfWhetherItHasUndertakenClimateChangeAdaptationActionsForAnyClimateRelatedHazardsAndTransitionEvents" xlink:label="DisclosureOfWhetherItHasUndertakenClimateChangeAdaptationActionsForAnyClimateRelatedHazardsAndTransitionEvents" xlink:type="locator"/>
+    <link:reference xlink:label="reference_DisclosureOfWhetherItHasUndertakenClimateChangeAdaptationActionsForAnyClimateRelatedHazardsAndTransitionEvents" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C4</ref:Number>
+      <ref:Paragraph>57</ref:Paragraph>
+      <ref:Subparagraph>d</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/57/d</ref:URI>
+      <vsme:RelatedVsmeGuidance>164-166</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/164-166</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="DisclosureOfWhetherItHasUndertakenClimateChangeAdaptationActionsForAnyClimateRelatedHazardsAndTransitionEvents" xlink:to="reference_DisclosureOfWhetherItHasUndertakenClimateChangeAdaptationActionsForAnyClimateRelatedHazardsAndTransitionEvents" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_PotentialAdverseEffectsOfClimateRisksThatMayAffectItsFinancialPerformanceOrBusinessOperationsInTheShortMediumOrLongTermIndicatingWhetherItAssessesTheRisksToBeHighMediumOrLow" xlink:label="PotentialAdverseEffectsOfClimateRisksThatMayAffectItsFinancialPerformanceOrBusinessOperationsInTheShortMediumOrLongTermIndicatingWhetherItAssessesTheRisksToBeHighMediumOrLow" xlink:type="locator"/>
+    <link:reference xlink:label="reference_PotentialAdverseEffectsOfClimateRisksThatMayAffectItsFinancialPerformanceOrBusinessOperationsInTheShortMediumOrLongTermIndicatingWhetherItAssessesTheRisksToBeHighMediumOrLow" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C4</ref:Number>
+      <ref:Paragraph>58</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/58</ref:URI>
+      <vsme:RelatedVsmeGuidance>164-166</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/164-166</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="PotentialAdverseEffectsOfClimateRisksThatMayAffectItsFinancialPerformanceOrBusinessOperationsInTheShortMediumOrLongTermIndicatingWhetherItAssessesTheRisksToBeHighMediumOrLow" xlink:to="reference_PotentialAdverseEffectsOfClimateRisksThatMayAffectItsFinancialPerformanceOrBusinessOperationsInTheShortMediumOrLongTermIndicatingWhetherItAssessesTheRisksToBeHighMediumOrLow" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_BreakdownOfEnergyConsumptionLineItems" xlink:label="BreakdownOfEnergyConsumptionInMWhLineItems" xlink:type="locator"/>
+    <link:reference xlink:label="reference_BreakdownOfEnergyConsumptionInMWhLineItems" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>29</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/29</ref:URI>
+      <vsme:RelatedVsmeGuidance>18-21</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/18-21</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="BreakdownOfEnergyConsumptionInMWhLineItems" xlink:to="reference_BreakdownOfEnergyConsumptionInMWhLineItems" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_EnergyConsumptionFromElectricity" xlink:label="RenewableEnergy" xlink:type="locator"/>
+    <link:reference xlink:label="reference_EnergyConsumptionFromElectricity" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>29</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/29</ref:URI>
+      <vsme:RelatedVsmeGuidance>18-25</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/18-25</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="RenewableEnergy" xlink:to="reference_EnergyConsumptionFromElectricity" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_EnergyConsumptionFromFuels" xlink:label="Fuels" xlink:type="locator"/>
+    <link:reference xlink:label="reference_EnergyConsumptionFromFuels" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>29</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/29</ref:URI>
+      <vsme:RelatedVsmeGuidance>18-25</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/18-25</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="Fuels" xlink:to="reference_EnergyConsumptionFromFuels" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_BreakdownOfEnergyConsumptionAxis" xlink:label="BreakdownOfEnergyConsumptionInMWhAxis" xlink:type="locator"/>
+    <link:reference xlink:label="reference_BreakdownOfEnergyConsumptionInMWhAxis" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>29</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/29</ref:URI>
+      <vsme:RelatedVsmeGuidance>18-21</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/18-21</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="BreakdownOfEnergyConsumptionInMWhAxis" xlink:to="reference_BreakdownOfEnergyConsumptionInMWhAxis" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_EstimatedGreenhouseGasEmissionsTable" xlink:label="GreenhouseGasEmissionsIntCO2EquivalentTable" xlink:type="locator"/>
+    <link:reference xlink:label="reference_EstimatedGreenhouseGasEmissionsTable" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>30</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/30</ref:URI>
+      <vsme:RelatedVsmeGuidance>26-45</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/26-45</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="GreenhouseGasEmissionsIntCO2EquivalentTable" xlink:to="reference_EstimatedGreenhouseGasEmissionsTable" xlink:type="arc"/>
+    <link:reference xlink:label="reference_EstimatedGreenhouseGasEmissionsTable_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>50-53</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/50-53</ref:URI>
+      <vsme:RelatedVsmeGuidance>150-151</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/150-151</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="GreenhouseGasEmissionsIntCO2EquivalentTable" xlink:to="reference_EstimatedGreenhouseGasEmissionsTable_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_EstimatedGreenhouseGasEmissionsLineItems" xlink:label="GreenhouseGasEmissionsIntCO2EquivalentLineItems" xlink:type="locator"/>
+    <link:reference xlink:label="reference_GreenhouseGasEmissionsIntCO2EquivalentLineItems" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>30</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/30</ref:URI>
+      <vsme:RelatedVsmeGuidance>26-45</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/26-45</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="GreenhouseGasEmissionsIntCO2EquivalentLineItems" xlink:to="reference_GreenhouseGasEmissionsIntCO2EquivalentLineItems" xlink:type="arc"/>
+    <link:reference xlink:label="reference_EstimatedGreenhouseGasEmissionsLineItems" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>50-53</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/50-53</ref:URI>
+      <vsme:RelatedVsmeGuidance>151-152</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/151-152</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="GreenhouseGasEmissionsIntCO2EquivalentLineItems" xlink:to="reference_EstimatedGreenhouseGasEmissionsLineItems" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_GrossScope1GreenhouseGasEmissions" xlink:label="Scope1EmissionsIntCO2Equivalent" xlink:type="locator"/>
+    <link:reference xlink:label="reference_Scope1EmissionsIntCO2Equivalent" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>30</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/30</ref:URI>
+      <vsme:RelatedVsmeGuidance>26-45</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/26-45</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="Scope1EmissionsIntCO2Equivalent" xlink:to="reference_Scope1EmissionsIntCO2Equivalent" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_AreaOfSiteInBiodiversitySensitiveArea" xlink:label="AreaOfSiteInBiodiversitySensitiveArea" xlink:type="locator"/>
+    <link:reference xlink:label="reference_AreaOfSiteInBiodiversitySensitiveArea_5" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B5</ref:Number>
+      <ref:Paragraph>33</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/33</ref:URI>
+      <vsme:RelatedVsmeGuidance>70</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/70</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="AreaOfSiteInBiodiversitySensitiveArea" xlink:to="reference_AreaOfSiteInBiodiversitySensitiveArea_5" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_SiteLocatedInABiodiversitySensitiveArea" xlink:label="SiteLocatedInABiodiversitySensitiveArea" xlink:type="locator"/>
+    <link:reference xlink:label="reference_SiteLocatedInABiodiversitySensitiveArea_5" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B5</ref:Number>
+      <ref:Paragraph>33</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/33</ref:URI>
+      <vsme:RelatedVsmeGuidance>70</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/70</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="SiteLocatedInABiodiversitySensitiveArea" xlink:to="reference_SiteLocatedInABiodiversitySensitiveArea_5" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_SiteLocatedNearABiodiversitySensitiveArea" xlink:label="SiteLocatedNearABiodiversitySensitiveArea" xlink:type="locator"/>
+    <link:reference xlink:label="reference_SiteLocatedNearABiodiversitySensitiveArea_5" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B5</ref:Number>
+      <ref:Paragraph>33</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/33</ref:URI>
+      <vsme:RelatedVsmeGuidance>134</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/134</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="SiteLocatedNearABiodiversitySensitiveArea" xlink:to="reference_SiteLocatedNearABiodiversitySensitiveArea_5" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_WasteGeneratedTable" xlink:label="WasteGeneratedTable" xlink:type="locator"/>
+    <link:reference xlink:label="reference_WasteGeneratedTable" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>95-107</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/95-107</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="WasteGeneratedTable" xlink:to="reference_WasteGeneratedTable" xlink:type="arc"/>
+    <link:reference xlink:label="reference_WasteGeneratedTable_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>Regulation (EU) 2024/1244 of the European Parliament and of the Council of 24 April 2024 on reporting of environmental data from industrial installations, establishing an Industrial Emissions Portal and repealing Regulation</ref:Name>
+      <ref:Number>(EC) No 166/2006</ref:Number>
+      <ref:URI>https://eur-lex.europa.eu/eli/reg/2006/166/oj/eng</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="WasteGeneratedTable" xlink:to="reference_WasteGeneratedTable_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_WasteDivertedToRecycleOrReuseVolume" xlink:label="WasteDivertedToRecycleOrReuseVolume" xlink:type="locator"/>
+    <link:reference xlink:label="reference_WasteDivertedToRecycleOrReuseVolume_27" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>a-b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/a-b</ref:URI>
+      <vsme:RelatedVsmeGuidance>95-107</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/95-107</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="WasteDivertedToRecycleOrReuseVolume" xlink:to="reference_WasteDivertedToRecycleOrReuseVolume_27" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_WasteDivertedToRecycleOrReuseMass" xlink:label="WasteDivertedToRecycleOrReuseMass" xlink:type="locator"/>
+    <link:reference xlink:label="reference_WasteDivertedToRecycleOrReuseMass" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>a-b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/a-b</ref:URI>
+      <vsme:RelatedVsmeGuidance>95-107</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/95-107</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="WasteDivertedToRecycleOrReuseMass" xlink:to="reference_WasteDivertedToRecycleOrReuseMass" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DescriptionOfActionsTakeToAddressTheConfirmedIncidents" xlink:label="DescriptionOfActionsTakeToAddressTheConfirmedIncidents" xlink:type="locator"/>
+    <link:reference xlink:label="reference_DescriptionOfActionsTakeToAddressTheConfirmedIncidents" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C7</ref:Number>
+      <ref:Paragraph>62</ref:Paragraph>
+      <ref:Subparagraph>b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/62/b</ref:URI>
+      <vsme:RelatedVsmeGuidance>174</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/174</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="DescriptionOfActionsTakeToAddressTheConfirmedIncidents" xlink:to="reference_DescriptionOfActionsTakeToAddressTheConfirmedIncidents" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_EmployeeCountingMethodology" xlink:label="EmployeeCountingMethodology" xlink:type="locator"/>
+    <link:reference xlink:label="reference_EmployeeCountingMethodology" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>v</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/v</ref:URI>
+      <vsme:RelatedVsmeGuidance>7-8</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/7-8</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="EmployeeCountingMethodology" xlink:to="reference_EmployeeCountingMethodology" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_AmountOfEmissionsTable" xlink:label="AmountOfEmissionsTable" xlink:type="locator"/>
+    <link:reference xlink:label="reference_AmountOfEmissionsTable_25" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B4</ref:Number>
+      <ref:Paragraph>32</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/32</ref:URI>
+      <vsme:RelatedVsmeGuidance>46-69</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/46-69</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="AmountOfEmissionsTable" xlink:to="reference_AmountOfEmissionsTable_25" xlink:type="arc"/>
+    <link:reference xlink:label="reference_AmountOfEmissionsTable" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>Regulation (EU) 2024/1244 of the European Parliament and of the Council of 24 April 2024 on reporting of environmental data from industrial installations, establishing an Industrial Emissions Portal and repealing Regulation (EC) No 166/2006</ref:Name>
+      <ref:Number>(EU) 2024/1244</ref:Number>
+      <ref:URI>https://eur-lex.europa.eu/eli/reg/2024/1244/oj/eng</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="AmountOfEmissionsTable" xlink:to="reference_AmountOfEmissionsTable" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_AmountOfEmissionLineItems" xlink:label="AmountOfEmissionLineItems" xlink:type="locator"/>
+    <link:reference xlink:label="reference_AmountOfEmissionLineItems" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B4</ref:Number>
+      <ref:Paragraph>32</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/32</ref:URI>
+      <vsme:RelatedVsmeGuidance>46-69</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/46-69</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="AmountOfEmissionLineItems" xlink:to="reference_AmountOfEmissionLineItems" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TypeOfPollutantAxis" xlink:label="TypeOfPollutantAxis" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TypeOfPollutantAxis_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B4</ref:Number>
+      <ref:Paragraph>32</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/32</ref:URI>
+      <vsme:RelatedVsmeGuidance>46-69</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/46-69</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TypeOfPollutantAxis" xlink:to="reference_TypeOfPollutantAxis_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_SitesInBiodiversitySensitiveAreasLineItems" xlink:label="SitesInBiodiversitySensitiveAreasLineItems" xlink:type="locator"/>
+    <link:reference xlink:label="reference_SitesInBiodiversitySensitiveAreasLineItems" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B5</ref:Number>
+      <ref:Paragraph>33</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/33</ref:URI>
+      <vsme:RelatedVsmeGuidance>70-73</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/70-73</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="SitesInBiodiversitySensitiveAreasLineItems" xlink:to="reference_SitesInBiodiversitySensitiveAreasLineItems" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfEmployeesForCountryOfEmploymentContract" xlink:label="NumberOfEmployeesForCountryOfEmploymentContract" xlink:type="locator"/>
+    <link:reference xlink:label="reference_NumberOfEmployeesForCountryOfEmploymentContract_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B8</ref:Number>
+      <ref:Paragraph>39</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/39/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>110-112</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/110-112</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="NumberOfEmployeesForCountryOfEmploymentContract" xlink:to="reference_NumberOfEmployeesForCountryOfEmploymentContract_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_Assets" xlink:label="SizeOfBalanceSheet" xlink:type="locator"/>
+    <link:reference xlink:label="reference_SizeOfBalanceSheet" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>iii</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/iii</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="SizeOfBalanceSheet" xlink:to="reference_SizeOfBalanceSheet" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_UndertakingsAreExcludedFromAnyEuReferenceBenchmarksThatAreAlignedWithTheParisAgreement" xlink:label="UndertakingsAreExcludedFromAnyEuReferenceBenchmarksThatAreAlignedWithTheParisAgreement" xlink:type="locator"/>
+    <link:reference xlink:label="reference_UndertakingsAreExcludedFromAnyEuReferenceBenchmarksThatAreAlignedWithTheParisAgreement_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C8</ref:Number>
+      <ref:Paragraph>64</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/64</ref:URI>
+      <vsme:RelatedVsmeGuidance>177</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/177</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="UndertakingsAreExcludedFromAnyEuReferenceBenchmarksThatAreAlignedWithTheParisAgreement" xlink:to="reference_UndertakingsAreExcludedFromAnyEuReferenceBenchmarksThatAreAlignedWithTheParisAgreement_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_BreakdownOfAnnualMassFlowOfRelevantMaterialsUsedByTheUndertakingHypercube" xlink:label="BreakdownOfAnnualMassFlowOfRelevantMaterialsUsedByTheUndertakingHypercube" xlink:type="locator"/>
+    <link:reference xlink:label="reference_BreakdownOfAnnualMassFlowOfRelevantMaterialsUsedByTheUndertakingHypercube" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>108-109</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/108-109</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="BreakdownOfAnnualMassFlowOfRelevantMaterialsUsedByTheUndertakingHypercube" xlink:to="reference_BreakdownOfAnnualMassFlowOfRelevantMaterialsUsedByTheUndertakingHypercube" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_IdentifierOfMaterialTypedAxis" xlink:label="IdentifierOfMaterial" xlink:type="locator"/>
+    <link:reference xlink:label="reference_IdentifierOfMaterialTypedAxis" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>108-109</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/108-109</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="IdentifierOfMaterial" xlink:to="reference_IdentifierOfMaterialTypedAxis" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NameOfMaterialUsed" xlink:label="NameOfMaterialUsed" xlink:type="locator"/>
+    <link:reference xlink:label="reference_NameOfMaterialUsed_3" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>108-109</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/108-109</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="NameOfMaterialUsed" xlink:to="reference_NameOfMaterialUsed_3" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_WeightOfMaterialUsed" xlink:label="WeightOfMaterialUsed" xlink:type="locator"/>
+    <link:reference xlink:label="reference_WeightOfMaterialUsed_3" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>108-109</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/108-109</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="WeightOfMaterialUsed" xlink:to="reference_WeightOfMaterialUsed_3" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_VolumeOfMaterialUsed" xlink:label="VolumneOfMaterialUsed" xlink:type="locator"/>
+    <link:reference xlink:label="reference_VolumeOfMaterialUsed" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>108-109</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/108-109</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="VolumneOfMaterialUsed" xlink:to="reference_VolumeOfMaterialUsed" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_SitesInBiodiversitySensitiveAreasTable" xlink:label="SitesInBiodiversitySensitiveAreasTable" xlink:type="locator"/>
+    <link:reference xlink:label="reference_SitesInBiodiversitySensitiveAreasTable" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B5</ref:Number>
+      <ref:Paragraph>33</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/33</ref:URI>
+      <vsme:RelatedVsmeGuidance>70</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/70</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="SitesInBiodiversitySensitiveAreasTable" xlink:to="reference_SitesInBiodiversitySensitiveAreasTable" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_BasisForPreparationMember" xlink:label="BasisForPreparationMember" xlink:type="locator"/>
+    <link:reference xlink:label="reference_BasisForPreparationMember" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/a</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="BasisForPreparationMember" xlink:to="reference_BasisForPreparationMember" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_ListOfDisclosuresMember" xlink:label="ListOfDisclosuresMember" xlink:type="locator"/>
+    <link:reference xlink:label="reference_ListOfDisclosuresMember" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/b</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="ListOfDisclosuresMember" xlink:to="reference_ListOfDisclosuresMember" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_ListOfUndertakingsLegalFormsMember" xlink:label="ListOfUndertakingsLegalFormsMember" xlink:type="locator"/>
+    <link:reference xlink:label="reference_ListOfUndertakingsLegalFormsMember" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>i</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/i</ref:URI>
+      <vsme:RelatedVsmeGuidance>4</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/4</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="ListOfUndertakingsLegalFormsMember" xlink:to="reference_ListOfUndertakingsLegalFormsMember" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TypeOfPracticePolicyAndFutureInitiativeMember" xlink:label="TypeOfPracticePolicyAndFutureInitiativeMember" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TypeOfPracticePolicyAndFutureInitiativeMember" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>B2</ref:Number>
+      <ref:Paragraph>26</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/26</ref:URI>
+      <vsme:RelatedVsmeGuidance>14</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/14</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TypeOfPracticePolicyAndFutureInitiativeMember" xlink:to="reference_TypeOfPracticePolicyAndFutureInitiativeMember" xlink:type="arc"/>
+    <link:reference xlink:label="reference_TypeOfPracticePolicyAndFutureInitiativeMember_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B2</ref:Number>
+      <ref:Paragraph>26</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/26</ref:URI>
+      <vsme:RelatedVsmeGuidance>15</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/15</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TypeOfPracticePolicyAndFutureInitiativeMember" xlink:to="reference_TypeOfPracticePolicyAndFutureInitiativeMember_2" xlink:type="arc"/>
+    <link:reference xlink:label="reference_TypeOfPracticePolicyAndFutureInitiativeMember_3" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B2</ref:Number>
+      <ref:Paragraph>26</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/26</ref:URI>
+      <vsme:RelatedVsmeGuidance>16</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/16</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TypeOfPracticePolicyAndFutureInitiativeMember" xlink:to="reference_TypeOfPracticePolicyAndFutureInitiativeMember_3" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_SustainabilityIssuesAddressedMember" xlink:label="SustainabilityIssuesAddressedMember" xlink:type="locator"/>
+    <link:reference xlink:label="reference_SustainabilityIssuesAddressedMember" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B2</ref:Number>
+      <ref:Paragraph>27</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/27</ref:URI>
+      <vsme:RelatedVsmeGuidance>14</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/14</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="SustainabilityIssuesAddressedMember" xlink:to="reference_SustainabilityIssuesAddressedMember" xlink:type="arc"/>
+    <link:reference xlink:label="reference_SustainabilityIssuesAddressedMember_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B2</ref:Number>
+      <ref:Paragraph>27</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/27</ref:URI>
+      <vsme:RelatedVsmeGuidance>15</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/15</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="SustainabilityIssuesAddressedMember" xlink:to="reference_SustainabilityIssuesAddressedMember_2" xlink:type="arc"/>
+    <link:reference xlink:label="reference_SustainabilityIssuesAddressedMember_3" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B2</ref:Number>
+      <ref:Paragraph>27</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/27</ref:URI>
+      <vsme:RelatedVsmeGuidance>13</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/13</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="SustainabilityIssuesAddressedMember" xlink:to="reference_SustainabilityIssuesAddressedMember_3" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TypeOfContentCoveredByTheCodeOfConductOrHumanRightsPolicyForItsOwnWorkforceMember" xlink:label="TypeOfContentCoveredByTheCodeOfConductOrHumanRightsPolicyForItsOwnWorkforceMember" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TypeOfContentCoveredByTheCodeOfConductOrHumanRightsPolicyForItsOwnWorkforceMember" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C6</ref:Number>
+      <ref:Paragraph>61</ref:Paragraph>
+      <ref:Subparagraph>b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/61/b</ref:URI>
+      <vsme:RelatedVsmeGuidance>173</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/173</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TypeOfContentCoveredByTheCodeOfConductOrHumanRightsPolicyForItsOwnWorkforceMember" xlink:to="reference_TypeOfContentCoveredByTheCodeOfConductOrHumanRightsPolicyForItsOwnWorkforceMember" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_BasisForReportingMember" xlink:label="BasisForReportingMember" xlink:type="locator"/>
+    <link:reference xlink:label="reference_BasisForReportingMember" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/c</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="BasisForReportingMember" xlink:to="reference_BasisForReportingMember" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_EmployeeCountingMethodologyMember" xlink:label="EmployeeCountingMethodologyMember" xlink:type="locator"/>
+    <link:reference xlink:label="reference_EmployeeCountingMethodologyMember" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>v</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/v</ref:URI>
+      <vsme:RelatedVsmeGuidance>7-8</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/7-8</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="EmployeeCountingMethodologyMember" xlink:to="reference_EmployeeCountingMethodologyMember" xlink:type="arc"/>
+    <link:reference xlink:label="reference_EmployeeCountingMethodologyMember_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>v</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/v</ref:URI>
+      <vsme:RelatedVsmeGuidance>7-8</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/7-8</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="EmployeeCountingMethodologyMember" xlink:to="reference_EmployeeCountingMethodologyMember_2" xlink:type="arc"/>
+    <link:loc xlink:href="https://www.xbrl.org/taxonomy/int/country/current/elts.xsd#country_CountryDomain" xlink:label="CountryDomain" xlink:type="locator"/>
+    <link:reference xlink:label="reference_CountryDomain" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>vi</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/vi</ref:URI>
+      <vsme:RelatedVsmeGuidance>9-12</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/9-12</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="CountryDomain" xlink:to="reference_CountryDomain" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalRenewableAndNonRenewableEnergyMember" xlink:label="TotalRenewableAndNonRenewableEnergyMember" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalRenewableAndNonRenewableEnergyMember" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>29</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/29</ref:URI>
+      <vsme:RelatedVsmeGuidance>18-21</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/18-21</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalRenewableAndNonRenewableEnergyMember" xlink:to="reference_TotalRenewableAndNonRenewableEnergyMember" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_CurrentlyStatedMember" xlink:label="CurrentlyStatedMember" xlink:type="locator"/>
+    <link:reference xlink:label="reference_CurrentlyStatedMember" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Comprehensive Module</ref:Section>
+      <ref:Number>C3</ref:Number>
+      <ref:Paragraph>54</ref:Paragraph>
+      <ref:Subparagraph>b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/54/b</ref:URI>
+      <vsme:RelatedVsmeGuidance>119</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/119</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="CurrentlyStatedMember" xlink:to="reference_CurrentlyStatedMember" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TypeOfPollutantMember" xlink:label="TypeOfPollutantMember" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TypeOfPollutantMember" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B4</ref:Number>
+      <ref:Paragraph>32</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/32</ref:URI>
+      <vsme:RelatedVsmeGuidance>46-48</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/46-48</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TypeOfPollutantMember" xlink:to="reference_TypeOfPollutantMember" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalMassOfMaterialUsed" xlink:label="TotalMassOfMaterialUsed" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalMassOfMaterialUsed" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>108-109</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/108-109</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalMassOfMaterialUsed" xlink:to="reference_TotalMassOfMaterialUsed" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_WasteDirectedToDisposalVolume" xlink:label="WasteDirectedToDisposalVolume" xlink:type="locator"/>
+    <link:reference xlink:label="reference_WasteDirectedToDisposalVolume_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>a-b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/a-b</ref:URI>
+      <vsme:RelatedVsmeGuidance>95-107</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/95-107</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="WasteDirectedToDisposalVolume" xlink:to="reference_WasteDirectedToDisposalVolume_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_WasteDirectedToDisposalMass" xlink:label="WasteDirectedToDisposalMass" xlink:type="locator"/>
+    <link:reference xlink:label="reference_WasteDirectedToDisposalMass_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>a-b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/a-b</ref:URI>
+      <vsme:RelatedVsmeGuidance>95-107</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/95-107</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="WasteDirectedToDisposalMass" xlink:to="reference_WasteDirectedToDisposalMass_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalWasteRecycledReusedAndDirectedToDisposalVolume" xlink:label="TotalWasteRecycledReusedAndDirectedToDisposalVolume" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalWasteRecycledReusedAndDirectedToDisposalVolume_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>a-b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/a-b</ref:URI>
+      <vsme:RelatedVsmeGuidance>95-107</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/95-107</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalWasteRecycledReusedAndDirectedToDisposalVolume" xlink:to="reference_TotalWasteRecycledReusedAndDirectedToDisposalVolume_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalWasteRecycledReusedAndDirectedToDisposalMass" xlink:label="TotalWasteRecycledReusedAndDirectedToDisposalMass" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalWasteRecycledReusedAndDirectedToDisposalMass_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>a-b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/a-b</ref:URI>
+      <vsme:RelatedVsmeGuidance>95-107</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/95-107</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalWasteRecycledReusedAndDirectedToDisposalMass" xlink:to="reference_TotalWasteRecycledReusedAndDirectedToDisposalMass_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalHazardousWasteGeneratedMass" xlink:label="TotalHazardousWasteGeneratedMass" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalHazardousWasteGeneratedMass" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>95-107</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/95-107</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalHazardousWasteGeneratedMass" xlink:to="reference_TotalHazardousWasteGeneratedMass" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalNonHazardousWasteGeneratedMass" xlink:label="TotalNonHazardousWasteGeneratedMass" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalNonHazardousWasteGeneratedMass" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>95-107</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/95-107</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalNonHazardousWasteGeneratedMass" xlink:to="reference_TotalNonHazardousWasteGeneratedMass" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalWasteGeneratedMass" xlink:label="TotalWasteGeneratedMass" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalWasteGeneratedMass" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>95-107</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/95-107</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalWasteGeneratedMass" xlink:to="reference_TotalWasteGeneratedMass" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalHazardousWasteGeneratedVolume" xlink:label="TotalHazardousWasteGeneratedVolume" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalHazardousWasteGeneratedVolume" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>95-107</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/95-107</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalHazardousWasteGeneratedVolume" xlink:to="reference_TotalHazardousWasteGeneratedVolume" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalNonHazardousWasteGeneratedVolume" xlink:label="TotalNonHazardousWasteGeneratedVolume" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalNonHazardousWasteGeneratedVolume" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>95-107</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/95-107</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalNonHazardousWasteGeneratedVolume" xlink:to="reference_TotalNonHazardousWasteGeneratedVolume" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalWasteGeneratedVolume" xlink:label="TotalWasteGeneratedVolume" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalWasteGeneratedVolume" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>95-107</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/95-107</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalWasteGeneratedVolume" xlink:to="reference_TotalWasteGeneratedVolume" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfFemaleEmployees" xlink:label="NumberOfFemaleEmployees" xlink:type="locator"/>
+    <link:reference xlink:label="reference_NumberOfFemaleEmployees" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B8</ref:Number>
+      <ref:Paragraph>39</ref:Paragraph>
+      <ref:Subparagraph>b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/39/b</ref:URI>
+      <vsme:RelatedVsmeGuidance>112-118</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/112-118</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="NumberOfFemaleEmployees" xlink:to="reference_NumberOfFemaleEmployees" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfOtherGenderEmployees" xlink:label="NumberOfOtherGenderEmployees" xlink:type="locator"/>
+    <link:reference xlink:label="reference_NumberOfOtherGenderEmployees" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B8</ref:Number>
+      <ref:Paragraph>39</ref:Paragraph>
+      <ref:Subparagraph>b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/39/b</ref:URI>
+      <vsme:RelatedVsmeGuidance>112-118</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/112-118</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="NumberOfOtherGenderEmployees" xlink:to="reference_NumberOfOtherGenderEmployees" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfNonReportedGenderEmployees" xlink:label="NumberOfNonReportedGenderEmployees" xlink:type="locator"/>
+    <link:reference xlink:label="reference_NumberOfNonReportedGenderEmployees" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B8</ref:Number>
+      <ref:Paragraph>39</ref:Paragraph>
+      <ref:Subparagraph>b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/39/b</ref:URI>
+      <vsme:RelatedVsmeGuidance>112-118</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/112-118</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="NumberOfNonReportedGenderEmployees" xlink:to="reference_NumberOfNonReportedGenderEmployees" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfEmployeesForCountryOfEmploymentContractTable" xlink:label="NumberOfEmployeesForCountryOfEmploymentContractTable" xlink:type="locator"/>
+    <link:reference xlink:label="reference_NumberOfEmployeesForCountryOfEmploymentContractTable_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B8</ref:Number>
+      <ref:Paragraph>39</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/39/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>112-118</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/112-118</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="NumberOfEmployeesForCountryOfEmploymentContractTable" xlink:to="reference_NumberOfEmployeesForCountryOfEmploymentContractTable_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_PracticePolicyAndOrFutureInitiativeIsPubliclyAvailable" xlink:label="PracticePolicyAndOrFutureInitiativeIsPubliclyAvailable" xlink:type="locator"/>
+    <link:reference xlink:label="reference_PracticePolicyAndOrFutureInitiativeIsPubliclyAvailable" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B2</ref:Number>
+      <ref:Paragraph>26-28</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/26-28</ref:URI>
+      <vsme:RelatedVsmeGuidance>14-15</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/14-15</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="PracticePolicyAndOrFutureInitiativeIsPubliclyAvailable" xlink:to="reference_PracticePolicyAndOrFutureInitiativeIsPubliclyAvailable" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_UndertakingHasSetATargetWhichIsRelatedToAPolicy" xlink:label="UndertakingHasSetATargetWhichIsRelatedToAPolicy" xlink:type="locator"/>
+    <link:reference xlink:label="reference_UndertakingHasSetATargetWhichIsRelatedToAPolicy" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B2</ref:Number>
+      <ref:Paragraph>26-28</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/26-28</ref:URI>
+      <vsme:RelatedVsmeGuidance>14-15</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/14-15</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="UndertakingHasSetATargetWhichIsRelatedToAPolicy" xlink:to="reference_UndertakingHasSetATargetWhichIsRelatedToAPolicy" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_BreakdownOfEnergyConsumptionTable" xlink:label="BreakdownOfEnergyConsumptionTable" xlink:type="locator"/>
+    <link:reference xlink:label="reference_BreakdownOfEnergyConsumptionTable" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>29</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/29</ref:URI>
+      <vsme:RelatedVsmeGuidance>18-21</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/18-21</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="BreakdownOfEnergyConsumptionTable" xlink:to="reference_BreakdownOfEnergyConsumptionTable" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_EnergyConsumptionFromSelfGeneratedElectricity" xlink:label="EnergyConsumptionFromSelfGeneratedElectricity" xlink:type="locator"/>
+    <link:reference xlink:label="reference_EnergyConsumptionFromSelfGeneratedElectricity" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>29</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/29</ref:URI>
+      <vsme:RelatedVsmeGuidance>18-21</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/18-21</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="EnergyConsumptionFromSelfGeneratedElectricity" xlink:to="reference_EnergyConsumptionFromSelfGeneratedElectricity" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_GrossLocationBasedScope2GreenhouseGasEmissions" xlink:label="GrossLocationBasedScope2GreenhouseGasEmissions" xlink:type="locator"/>
+    <link:reference xlink:label="reference_GrossLocationBasedScope2GreenhouseGasEmissions" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>30</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/30</ref:URI>
+      <vsme:RelatedVsmeGuidance>26-33</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/26-33</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="GrossLocationBasedScope2GreenhouseGasEmissions" xlink:to="reference_GrossLocationBasedScope2GreenhouseGasEmissions" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_GrossMarketBasedScope2GreenhouseGasEmissions" xlink:label="GrossMarketBasedScope2GreenhouseGasEmissions" xlink:type="locator"/>
+    <link:reference xlink:label="reference_GrossMarketBasedScope2GreenhouseGasEmissions" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>30</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/30</ref:URI>
+      <vsme:RelatedVsmeGuidance>26-33</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/26-33</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="GrossMarketBasedScope2GreenhouseGasEmissions" xlink:to="reference_GrossMarketBasedScope2GreenhouseGasEmissions" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalGrossLocationBasedScope1AndScope2GHGEmissions" xlink:label="TotalGrossLocationBasedScope1AndScope2GHGEmissions" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalGrossLocationBasedScope1AndScope2GHGEmissions" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>30</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/30</ref:URI>
+      <vsme:RelatedVsmeGuidance>26-33</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/26-33</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalGrossLocationBasedScope1AndScope2GHGEmissions" xlink:to="reference_TotalGrossLocationBasedScope1AndScope2GHGEmissions" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalGrossMarketBasedScope1AndScope2GHGEmissions" xlink:label="TotalGrossMarketBasedScope1AndScope2GHGEmissions" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalGrossMarketBasedScope1AndScope2GHGEmissions" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>30</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/30</ref:URI>
+      <vsme:RelatedVsmeGuidance>26-33</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/26-33</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalGrossMarketBasedScope1AndScope2GHGEmissions" xlink:to="reference_TotalGrossMarketBasedScope1AndScope2GHGEmissions" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_GrossScope3GreenhouseGasEmissions" xlink:label="GrossScope3GreenhouseGasEmissions" xlink:type="locator"/>
+    <link:reference xlink:label="reference_GrossScope3GreenhouseGasEmissions" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>50-53</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/50-53</ref:URI>
+      <vsme:RelatedVsmeGuidance>150-151</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/150-151</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="GrossScope3GreenhouseGasEmissions" xlink:to="reference_GrossScope3GreenhouseGasEmissions" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalGrossLocationBasedGHGEmissions" xlink:label="TotalGrossLocationBasedGHGEmissions" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalGrossLocationBasedGHGEmissions_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>50-53</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/50-53</ref:URI>
+      <vsme:RelatedVsmeGuidance>150-151</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/150-151</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalGrossLocationBasedGHGEmissions" xlink:to="reference_TotalGrossLocationBasedGHGEmissions_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalGrossMarketBasedGHGEmissions" xlink:label="TotalGrossMarketBasedGHGEmissions" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalGrossMarketBasedGHGEmissions_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>50-53</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/50-53</ref:URI>
+      <vsme:RelatedVsmeGuidance>150-151</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/150-151</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalGrossMarketBasedGHGEmissions" xlink:to="reference_TotalGrossMarketBasedGHGEmissions_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_Scope1AndScope2GreenhouseGasEmissionsIntensityValueLocationBased" xlink:label="Scope1AndScope2GreenhouseGasEmissionsIntensityValueLocationBased" xlink:type="locator"/>
+    <link:reference xlink:label="reference_Scope1AndScope2GreenhouseGasEmissionsIntensityValueLocationBased" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>31</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/31</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="Scope1AndScope2GreenhouseGasEmissionsIntensityValueLocationBased" xlink:to="reference_Scope1AndScope2GreenhouseGasEmissionsIntensityValueLocationBased" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_Scope1AndScope2GreenhouseGasEmissionsIntensityValueMarketBased" xlink:label="Scope1AndScope2GreenhouseGasEmissionsIntensityValueMarketBased" xlink:type="locator"/>
+    <link:reference xlink:label="reference_Scope1AndScope2GreenhouseGasEmissionsIntensityValueMarketBased" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>31</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/31</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="Scope1AndScope2GreenhouseGasEmissionsIntensityValueMarketBased" xlink:to="reference_Scope1AndScope2GreenhouseGasEmissionsIntensityValueMarketBased" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalLocationBasedGreenhouseGasEmissionsIntensityValue" xlink:label="TotalLocationBasedGreenhouseGasEmissionsIntensityValue" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalLocationBasedGreenhouseGasEmissionsIntensityValue" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>31</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/31</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalLocationBasedGreenhouseGasEmissionsIntensityValue" xlink:to="reference_TotalLocationBasedGreenhouseGasEmissionsIntensityValue" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalMarketBasedGreenhouseGasEmissionsIntensityValue" xlink:label="TotalMarketBasedGreenhouseGasEmissionsIntensityValue" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalMarketBasedGreenhouseGasEmissionsIntensityValue" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>31</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/31</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalMarketBasedGreenhouseGasEmissionsIntensityValue" xlink:to="reference_TotalMarketBasedGreenhouseGasEmissionsIntensityValue" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_URLOrLinkToThePubliclyAvailableDisclosure" xlink:label="URLOrLinkToThePubliclyAvailableDisclosure" xlink:type="locator"/>
+    <link:reference xlink:label="reference_URLOrLinkToThePubliclyAvailableDisclosure" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B4</ref:Number>
+      <ref:Paragraph>32</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/32</ref:URI>
+      <vsme:RelatedVsmeGuidance>49</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/49</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="URLOrLinkToThePubliclyAvailableDisclosure" xlink:to="reference_URLOrLinkToThePubliclyAvailableDisclosure" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_AmountOfWaterWithdrawnAtSitesLocatedInAreasOfHighWaterStress" xlink:label="AmountOfWaterWithdrawnAtSitesLocatedInAreasOfHighWaterStress" xlink:type="locator"/>
+    <link:reference xlink:label="reference_AmountOfWaterWithdrawnAtSitesLocatedInAreasOfHighWaterStress" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B6</ref:Number>
+      <ref:Paragraph>35</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/35</ref:URI>
+      <vsme:RelatedVsmeGuidance>91-93</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/91-93</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="AmountOfWaterWithdrawnAtSitesLocatedInAreasOfHighWaterStress" xlink:to="reference_AmountOfWaterWithdrawnAtSitesLocatedInAreasOfHighWaterStress" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TypeOfWasteAxis" xlink:label="TypeOfWasteAxis" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TypeOfWasteAxis" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>95-107</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/95-107</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TypeOfWasteAxis" xlink:to="reference_TypeOfWasteAxis" xlink:type="arc"/>
+    <link:reference xlink:label="reference_TypeOfWasteAxis_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>Regulation (EU) 2024/1244 of the European Parliament and of the Council of 24 April 2024 on reporting of environmental data from industrial installations, establishing an Industrial Emissions Portal and repealing Regulation</ref:Name>
+      <ref:Number>(EC) No 166/2006</ref:Number>
+      <ref:URI>https://eur-lex.europa.eu/eli/reg/2006/166/oj/eng</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TypeOfWasteAxis" xlink:to="reference_TypeOfWasteAxis_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalVolumeOfMaterialUsed" xlink:label="TotalVolumeOfMaterialUsed_2" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalVolumeOfMaterialUsed" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>108</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/108</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="TotalVolumeOfMaterialUsed_2" xlink:to="reference_TotalVolumeOfMaterialUsed" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_ReportingScopesAxis" xlink:label="ReportingScopesAxis" xlink:type="locator"/>
+    <link:reference xlink:label="reference_ReportingScopesAxis" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>30</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/30</ref:URI>
+      <vsme:RelatedVsmeGuidance>26-39</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/26-39</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="ReportingScopesAxis" xlink:to="reference_ReportingScopesAxis" xlink:type="arc"/>
+    <link:reference xlink:label="reference_ReportingScopesAxis_2" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B3</ref:Number>
+      <ref:Paragraph>50-53</ref:Paragraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/50-53</ref:URI>
+      <vsme:RelatedVsmeGuidance>150-151</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/150-151</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="ReportingScopesAxis" xlink:to="reference_ReportingScopesAxis_2" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_GreenhouseGasEmissionReductionTargetBaseYear" xlink:label="GreenhouseGasEmissionReductionTargetBaseYear" xlink:type="locator"/>
+    <link:reference id="reference_GreenhouseGasEmissionReductionTargetBaseYear" xlink:label="reference_GreenhouseGasEmissionReductionTargetBaseYear" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>C3</ref:Number>
+      <ref:Paragraph>54</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/54/a</ref:URI>
+      <vsme:RelatedVsmeGuidance>156</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/156</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="GreenhouseGasEmissionReductionTargetBaseYear" xlink:to="reference_GreenhouseGasEmissionReductionTargetBaseYear" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_GreenhouseGasEmissionReductionTargetYear" xlink:label="GreenhouseGasEmissionReductionTargetYear" xlink:type="locator"/>
+    <link:reference id="reference_GreenhouseGasEmissionReductionTargetYear" xlink:label="reference_GreenhouseGasEmissionReductionTargetYear" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>C3</ref:Number>
+      <ref:Paragraph>54</ref:Paragraph>
+      <ref:Subclause>b</ref:Subclause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/54</ref:URI>
+      <vsme:RelatedVsmeGuidance>157</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/157</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="GreenhouseGasEmissionReductionTargetYear" xlink:to="reference_GreenhouseGasEmissionReductionTargetYear" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DescriptionOfTheEffectiveParticipationOfWorkersUsersOrOtherInterestedPartiesOrCommunitiesInGovernance" xlink:label="EffectiveParticipationOfWorkersUsersOrOtherinterestedPartiesOrCommunitiesInGovernance" xlink:type="locator"/>
+    <link:reference xlink:label="reference_EffectiveParticipationOfWorkersUsersOrOtherinterestedPartiesOrCommunitiesInGovernance" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B2</ref:Number>
+      <ref:Paragraph>15</ref:Paragraph>
+      <ref:Subparagraph>a</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/79/a</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="EffectiveParticipationOfWorkersUsersOrOtherinterestedPartiesOrCommunitiesInGovernance" xlink:to="reference_EffectiveParticipationOfWorkersUsersOrOtherinterestedPartiesOrCommunitiesInGovernance" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_FinancialInvestmentInTheCapitalOrAssetsOfSocialEconomyEntities" xlink:label="FinancialInvestmentInTheCapitalOrAssetsOfSocialEconomyEntities" xlink:type="locator"/>
+    <link:reference xlink:label="reference_FinancialInvestmentInTheCapitalOrAssetsOfSocialEconomyEntities" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B2</ref:Number>
+      <ref:Paragraph>15</ref:Paragraph>
+      <ref:Subparagraph>b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/79/b</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="FinancialInvestmentInTheCapitalOrAssetsOfSocialEconomyEntities" xlink:to="reference_FinancialInvestmentInTheCapitalOrAssetsOfSocialEconomyEntities" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_DescriptionOfLimitsToTheDistributionOfProfitsConnectedToTheMutualisticNatureOrToTheNatureOfTheActivitiesConsistingInServicesOfGeneralEconomicInterestSGEI" xlink:label="LimitsToTheDistributionOfProfitsConnectedToTheMutualisticNatureOrToTheNatureOfTheActivitiesConsistingInServicesOfGeneralEconomicInterestSGEI" xlink:type="locator"/>
+    <link:reference xlink:label="reference_LimitsToTheDistributionOfProfitsConnectedToTheMutualisticNatureOrToTheNatureOfTheActivitiesConsistingInServicesOfGeneralEconomicInterestSGEI" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B2</ref:Number>
+      <ref:Paragraph>15</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/79/c</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="LimitsToTheDistributionOfProfitsConnectedToTheMutualisticNatureOrToTheNatureOfTheActivitiesConsistingInServicesOfGeneralEconomicInterestSGEI" xlink:to="reference_LimitsToTheDistributionOfProfitsConnectedToTheMutualisticNatureOrToTheNatureOfTheActivitiesConsistingInServicesOfGeneralEconomicInterestSGEI" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_WasteGeneratedLineItems" xlink:label="WasteGeneratedLineItems" xlink:type="locator"/>
+    <link:reference xlink:label="reference_WasteGeneratedLineItems" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>a-b</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/a-b</ref:URI>
+      <vsme:RelatedVsmeGuidance>95-108</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/95-108</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="WasteGeneratedLineItems" xlink:to="reference_WasteGeneratedLineItems" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_AllCountriesMember" xlink:label="AllCountriesMember" xlink:type="locator"/>
+    <link:reference xlink:label="reference_AllCountriesMember" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B1</ref:Number>
+      <ref:Paragraph>24</ref:Paragraph>
+      <ref:Subparagraph>e</ref:Subparagraph>
+      <ref:Clause>vi</ref:Clause>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/24/e/vi</ref:URI>
+      <vsme:RelatedVsmeGuidance>9-12</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/9-12</ref:URI>
+    </link:reference>
+    <link:referenceArc xlink:arcrole="http://www.xbrl.org/2003/arcrole/concept-reference" xlink:from="AllCountriesMember" xlink:to="reference_AllCountriesMember" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalVolumeOfMaterialUsed" xlink:label="TotalVolumeOfMaterialUsed" xlink:type="locator"/>
+    <link:reference xlink:label="reference_TotalVolumeOfMaterialUsed_3" xlink:role="http://www.xbrl.org/2003/role/reference" xlink:type="resource">
+      <ref:Name>VSME</ref:Name>
+      <ref:Section>Basic Module</ref:Section>
+      <ref:Number>B7</ref:Number>
+      <ref:Paragraph>38</ref:Paragraph>
+      <ref:Subparagraph>c</ref:Subparagraph>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-standard-annex-i/08-2025/38/c</ref:URI>
+      <vsme:RelatedVsmeGuidance>108-109</vsme:RelatedVsmeGuidance>
+      <ref:URI>https://xbrl.efrag.org/eng/interactive/vsme/vsme-guidance-annex-ii/08-2025/108-109</ref:URI>
+    </link:reference>
+  </link:referenceLink>
+</link:linkbase>

@@ -1,0 +1,215 @@
+B7 – Resource use, circular economy and waste management
+Guidance on circular economy principles
+159. When disclosing information on its products, material use and waste management, the undertaking
+may provide information in relation to circular economy  principles . Circular economy principles
+are articulated in  the paragraphs below . The key principles outlined by the Ellen Macarthur
+Foundation are underlined  below while the key principles considered by the European Commission
+are italicised.
+Eliminate waste and pollution  – this can be done through process improvements and also through
+design considerations at the level of usability, reusability, repairability , disassembly  and
+remanufacturing .
+Circulate products and materials (at their highest value)  – reusability  and recycling  are key for
+product circulation, but this is enhanced if special consideration is given to circularity at the design
+phase for issues such as usability, reusability, repairability, remanufacturing and disassembly .
+Factors such as the incorporation of biomaterials  and their recirculation via the biological cycle
+can also be considered , for example using biodegradable  crop covers instead of plastics in
+agriculture .
+Regenerate nature  – whenever possible, human activities should seek to regenerate nature and
+improve or restore key ecological functions ( i.e. drainage, habitat provision , thermal regulation,
+etc.) that may have been lost due to previous human activities .
+Guidance on total waste generation and waste diverted to recycling or reuse
+160. The requirements in paragraph 3 8 may be omitted by undertakings that generate only household
+waste.  In such case s, the undertaking will only state that it generates this type of waste.
+161. When reporting on hazardous waste  according to paragraph 38(a), the undertaking fulfils the
+requirements on radioactive waste  of indicator number 9 from Table #1 of Annex 1 of the
+Sustainable Finance Disclosure Regulation (SFDR)10. This SFDR indicator (ratio between tonnes
+of radioactive and hazardous waste ) can be computed by using the numerator and denomi nator
+that the undertaking provides when reporting according to paragraph 38(a).
+162. SMEs must disclose hazardous and radioactive waste  if their operations involve generating such
+waste. Applicability depends on the presence of hazardous or radioactive materials in business
+processes.
+163. Undertakings are recommended to classify their hazardous waste  using the European Waste
+Catalogue (EWC) , which categori ses waste by type. Any waste marked with an asterisk (*) is
+classified as hazardous in the EWC, normally with reference to ‘containing hazardous substances’.
+For example:
+(a) medical sector: contaminated sharps like needles and syringes used in medical settings
+(‘wastes whose collection and disposal is subject to special requirements in order to prevent
+infection ’ EWC Code 18 01 03*), cytotoxic and cytostatic medicines (EWC Code 18 01 08*),
+spent radiopharmaceuticals, and certain diagnostic equipment containing radioactive
+materials ;
+(b) manufacturing sector: used lubricants and oils classified as hazardous (EWC Code 13 02
+05*);
+10 Regulation (EU) 2019/2088 of the European Parliament and of the Council of 27 November 2019 on
+sustainability -related disclosures in the financial services sector (Sustainable Finance Disclosures Regulation) (OJ
+L 317, 9.12.2019, p. 1).
+
+VSME Standard
+(c) construction sector: asbestos -containing materials (EWC Code 17 09 03*), soil and stones
+containing hazardous substances (EWC Code 17 05 03 *), and
+(d) batteries  and accumulators: lead batteries (16 06 01*), Ni -Cd batteries (16 06 02 *), batteries
+containing  mercury (16 06 03*).
+164. Nevertheless, a waste is considered hazardous if it displays one or more of the hazardous
+properties listed in Annex II of the Waste Framework Directive. For easier reference, these are
+presented below together with the respective pictograms to help identify hazardous properties such
+as flammability, toxicity and corrosiveness, which may lead to waste being classified as hazardous.
+165. Radioactive waste  also has or can have hazardous properties that render it hazardous, namely
+carcinogenic, mutagenic or toxic for reproduction. Nevertheless, radioactive substances are
+subject to separate regulations within the EU11. Companies using radioactive materials with the
+ability of generating radioactive waste subject to EU regulation should be aware of it. Radioactive
+waste should be identified based on the presence of radionuclides at levels above regulatory
+clearance thresholds.
+166. Radioactive waste  can be present in a variety of items  such as medical, research and industrial
+equipment, smoke detectors, or sludges.
+167. Hazard Pictograms for each hazard class  are presented below.
+Hazard pictogram  Pictogram
+statement,
+symbol and
+class  What does it mean?
+‘Gas under
+pressure ’
+Symbol: Gas
+cylinder
+Physical Hazard  • Contains gas under pressure; may explode if heated
+• Contains refrigerated gas; may cause cryogenic burns or
+injury
+‘Explosive ’
+Symbol:
+Exploding bomb
+Physical Hazard  • Unstable explosive
+• Explosive; mass explosion hazard
+• Explosive; severe projection hazard
+• Explosive; fire, blast or projection hazard
+• May mass explode in fire
+‘Oxidising ’
+Symbol: Flame
+over circle
+Physical Hazard  • May cause or intensify fire; oxidiser.
+• May cause fire or explosion; strong oxidiser.
+11 EU's Radioactive Waste and Spent Fuel Management Directive (2011/70/Euratom). For more information see
+the  EU’s webpage on Radioactive Waste and spent fuel.
+
+VSME Standard
+‘Flammable ’
+Symbol: Flame
+Physical Hazard  • Extremely flammable gas
+• Flammable gas
+• Extremely flammable aerosol
+• Flammable aerosol
+• Highly flammable liquid and vapour
+• Flammable liquid and vapour
+• Flammable solid
+‘Corrosive ’
+Symbol:
+Corrosion
+Physical Hazard
+/ Health Hazard  • May be corrosive to metals
+• Causes severe skin burns and eye damage
+‘Health
+hazard/Hazard
+ous to the
+ozone layer’
+Symbol:
+Exclamation
+mark
+Health Hazard  • May cause respiratory irritation
+• May cause drowsiness or dizziness
+• May cause an allergic skin reaction
+• Causes serious eye irritation
+• Causes skin irritation
+• Harmful if swallowed
+• Harmful in contact with skin
+• Harmful if inhaled
+• Harms public health and the environment by
+destroying ozone in the upper atmosphere
+‘Acute toxicity’
+Symbol: Skulls
+and Crossbones
+Health Hazard  • Fatal if swallowed
+• Fatal in contact with skin
+• Fatal if inhaled
+• Toxic: if swallowed
+• Toxic in contact with skin
+• Toxic if inhaled
+
+VSME Standard
+‘Serious health
+hazard’
+Symbol: Health
+Hazard
+Health Hazard  • May be fatal if swallowed and enters airways
+• Causes damage to organs
+• May cause damage to organs
+• May damage fertility or the unborn child
+• Suspected of damaging fertility or the unborn child
+• May cause cancer
+• Suspected of causing cancer
+• May cause genetic defects
+• Suspected of causing genetic defects
+• May cause allergy or asthma symptoms or breathing
+difficulties if inhaled
+‘Hazardous to
+the
+environment ’
+Symbol:
+Environment
+Environmental
+Hazard  • Very toxic to aquatic life with long -lasting effects
+• Toxic to aquatic life with long -lasting effects
+Pictograms that indicate hazardous properties, Annex V, from the Classification, Labelling and
+Packaging (CLP) Regulation (EC) No 1272/2008 .
+168. When presenting information on its waste generation or diversion from disposal, the undertaking
+should preferably report such information in units of weight (e.g. kg or tonnes). Nevertheless,
+should the units of weight be considered an inappropriate unit b y the undertaking, they may
+alternatively disclose the aforementioned metrics in volumes (e.g. m3) instead.
+169. When disclosing information on the total annual waste diverted to recycling  or reuse, the
+undertaking should consider the waste that is sorted and sent to recycling  or reuse operators  (e.g.
+the amount of waste put into recycling container or  sorting of waste into certain categories of
+materials and their delivery to waste treatment facilities)  rather than the waste that gets  effectively
+recycled  or reused .
+170. When disclosing  information on waste , the undertaking may adopt the following  table s.
+Waste generated (e.g. tonnes)
+Total waste generated , of which:
+Waste
+diverted to
+recycle or
+reuse  Waste
+directed
+disposal
+
+VSME Standard
+Non-hazardous waste
+Type of waste1
+Type of waste2
+...
+Hazardous waste
+Type of waste1
+...
+171. Examples of hazardous waste s that small businesses may generate include batteries, used oils,
+pesticides , mercury -containing equipment  and fluorescent  lamps .
+172. The undertaking may provide further breakdowns specifying further types of non-hazardous and
+hazard ous wastes . In doing so , it may consider the list of waste descriptions found in the
+European Waste Catalogue ’s social metrics .
+Guidance on the annual mass -flow of relevant materials used
+173. The annual mass -flow is an indicator aligned with the EMAS requirements on efficiency of material
+consumption , and it illustrates an undertaking's dependency on specific materials in its operations
+(e.g. wood and steel for the construction  industry) . The undertaking is here required to provide
+information on the material s it uses , including both the materials acquired from suppliers and those
+sourced internally from production.  To compute the annual mass -flow of the relevant materials it
+has used, the undertaking will need to first identify the specific key materials on which its operations
+are dependent and for which material efficiency needs to be evaluated (e.g. material efficiency of
+wood ). If different types of materials are used, the  undertaking will need to provide  separately the
+annual mass -flow (i.e. total weight for each relevant material use d, e.g. tonnes of wood purchased)
+for each key material in an appropriate manner, for example by breaking it down by the use to
+which they are put ( EMAS, 2023 ). The mass flow of relevant materials used will result from the
+sum of the weight of all used materials, including  raw materials, auxiliary materials, input materials,
+semi -finished products or others (excluding energy sources and water)  and provide the total weight
+for each relevant material used (e.g. tonnes of wood purchased). The m ass flow of relevant
+materials used will result  from the  sum of the weight of all used materials,  includ ing raw materials,
+auxiliary materials, input materials, semi -finished products, or others (excluding energy sources
+and water).This indicator is to be preferably expressed in units of weight (e.g. kilograms or tonnes),
+volume (e.g. m³) or other metric units commonly used in the sector.
+Guidance on how to identify manufacturing, constructions and /or packaging processes
+174. To identify manufacturing, construction and/or packaging processes, the undertaking may refer to
+the activities that fall under Section C – Manufacturing, Section F – Construction as well as Class
+N82.92 ‘Packaging activities ’ of Annex I to Regulation (EC) No 1893/200612.
+Basic Module Guidance – Social Metrics

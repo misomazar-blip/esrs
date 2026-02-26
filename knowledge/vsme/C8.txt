@@ -1,0 +1,19 @@
+C8 – Revenues from certain sectors and exclusion from EU reference benchmarks
+239. Fossil fuels , as defined in Article 2(62), of Regulation (EU) 2018/1999 of the European Parliament
+and the Council, are non -renewable carbon -based energy sources such as solid fuels, natural gas
+and oil.
+240. The production of chemicals refers to  the activities listed under Division 20.2 of Annex I to
+Regulation (EC) No 1893/2006, i.e. the manufacturing of pesticides and other agrochemical
+products.
+241. As defined by Article 12.1 and 12.2 of the Commission Delegated Regulation (EU) 2020/1818, the
+companies excluded from EU Paris -aligned Benchmarks are the following:
+(a) companies that derive 1% or more of their revenues from exploration, mining, extraction,
+distribution or refining of hard coal and lignite;
+
+VSME Standard
+(b) companies that derive 10% or more of their revenues from the exploration, extraction,
+distribution or refining of oil fuels;
+(c) companies that derive 50% or more of their revenues from the exploration, extraction,
+manufacturing or distribution of gaseous fuels; and
+(d) companies that derive 50% or more of their revenues from electricity generation with a GHG
+intensity of more than 100 g CO 2 e/kWh.

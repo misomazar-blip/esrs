@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright EFRAG - https://efrag.org/ -->
+<link:linkbase xmlns:gen="http://xbrl.org/2008/generic" xmlns:label="http://xbrl.org/2008/label" xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd http://xbrl.org/2008/generic http://www.xbrl.org/2008/generic-link.xsd http://xbrl.org/2008/label http://www.xbrl.org/2008/generic-label.xsd">
+  <link:roleRef roleURI="http://www.xbrl.org/2008/role/label" xlink:href="http://www.xbrl.org/2008/generic-label.xsd#standard-label" xlink:type="simple"/>
+  <link:roleRef roleURI="http://www.xbrl.org/2008/role/link" xlink:href="http://www.xbrl.org/2008/generic-link.xsd#standard-link-role" xlink:type="simple"/>
+  <link:arcroleRef arcroleURI="http://xbrl.org/arcrole/2008/element-label" xlink:href="http://www.xbrl.org/2008/generic-label.xsd#element-label" xlink:type="simple"/>
+  <gen:link xlink:role="http://www.xbrl.org/2008/role/link" xlink:type="extended">
+    <link:loc xlink:href="vsme-all.xsd#role-b01000" xlink:label="loc_role-b01000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b01000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B01.000] - Informations générales - Base de préparation</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b01000" xlink:to="label_role-b01000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b01100" xlink:label="loc_role-b01100" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b01100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B01.100] - Informations générales - Liste des filiales</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b01100" xlink:to="label_role-b01100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b01200" xlink:label="loc_role-b01200" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b01200" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B01.200] - Informations générales - Liste des sites</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b01200" xlink:to="label_role-b01200" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b02000" xlink:label="loc_role-b02000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b02000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B02.000] - Informations générales - Pratiques, politiques et/ou initiatives futures en vue de la transition vers une économie plus durable</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b02000" xlink:to="label_role-b02000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b02100" xlink:label="loc_role-b02100" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b02100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B02.100] - Informations générales - Informations spécifiques aux coopératives</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b02100" xlink:to="label_role-b02100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b03000" xlink:label="loc_role-b03000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b03000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B03.000] - Environnement - Consommation d'énergie totale</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b03000" xlink:to="label_role-b03000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b03100" xlink:label="loc_role-b03100" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b03100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B03.100] - Environnement - Ventilation de la consommation d'énergie</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b03100" xlink:to="label_role-b03100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b03200" xlink:label="loc_role-b03200" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b03200" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B03.200] - Environnement - Estimation des émissions de gaz à effet de serre</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b03200" xlink:to="label_role-b03200" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b03300" xlink:label="loc_role-b03300" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b03300" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B03.300] - Environnement - Intensité des émissions de gaz à effet de serre</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b03300" xlink:to="label_role-b03300" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b04000" xlink:label="loc_role-b04000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b04000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B04.000] - Environnement - Pollution de l’air, de l’eau et des sols : disponibilité de la divulgation publique</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b04000" xlink:to="label_role-b04000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b04100" xlink:label="loc_role-b04100" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b04100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B04.100] - Environnement - Pollution de l’air, de l’eau et des sols : quantité des émissions</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b04100" xlink:to="label_role-b04100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b05000" xlink:label="loc_role-b05000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b05000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B05.000] - Environnement - Sites situés dans des zones sensibles sur le plan de la biodiversité</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b05000" xlink:to="label_role-b05000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b05100" xlink:label="loc_role-b05100" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b05100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B05.100] - Environnement - Biodiversité - Utilisation des terres</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b05100" xlink:to="label_role-b05100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b06000" xlink:label="loc_role-b06000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b06000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B06.000] - Environnement - Prélèvements d'eau</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b06000" xlink:to="label_role-b06000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b06100" xlink:label="loc_role-b06100" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b06100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B06.100] - Environnement - Consommation d’eau</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b06100" xlink:to="label_role-b06100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b07000" xlink:label="loc_role-b07000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b07000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B07.000] - Environnement - Description des principes de l'économie circulaire</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b07000" xlink:to="label_role-b07000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b07100" xlink:label="loc_role-b07100" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b07100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B07.100] - Environnement - Ventilation des déchets par type</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b07100" xlink:to="label_role-b07100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b07200" xlink:label="loc_role-b07200" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b07200" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B07.200] - Environnement - Total des déchets dangereux et non dangereux</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b07200" xlink:to="label_role-b07200" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b07300" xlink:label="loc_role-b07300" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b07300" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B07.300] – Environnement – Ventilation annuelle du flux massique des matières pertinentes utilisées par l’entreprise</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b07300" xlink:to="label_role-b07300" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b07400" xlink:label="loc_role-b07400" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b07400" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B07.400] - Environnement - Flux massique annuel total des matières utilisées par l'entreprise</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b07400" xlink:to="label_role-b07400" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b08000" xlink:label="loc_role-b08000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b08000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B08.000] - Social - Personnel - Caractéristiques générales : type de contrat</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b08000" xlink:to="label_role-b08000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b08100" xlink:label="loc_role-b08100" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b08100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B08.100] - Social - Personnel - Caractéristiques générales : genre</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b08100" xlink:to="label_role-b08100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b08200" xlink:label="loc_role-b08200" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b08200" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B08.200] - Social - Personnel - Caractéristiques générales : pays du contrat de travail</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b08200" xlink:to="label_role-b08200" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b08300" xlink:label="loc_role-b08300" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b08300" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B08.300] - Social - Personnel - Caractéristiques générales : taux de rotation</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b08300" xlink:to="label_role-b08300" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b09000" xlink:label="loc_role-b09000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b09000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B09.000] - Social - Personnel - Santé et sécurité</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b09000" xlink:to="label_role-b09000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b10000" xlink:label="loc_role-b10000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b10000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B10.000] - Social - Personnel - Rémunération, négociation collective et formation</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b10000" xlink:to="label_role-b10000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b11000" xlink:label="loc_role-b11000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-b11000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B11.000] – Gouvernance – Condamnations et amendes pour corruption et versement de pots-de-vin</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b11000" xlink:to="label_role-b11000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c01000" xlink:label="loc_role-c01000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-c01000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C01.000] - C1 – Stratégie : modèle économique et durabilité – initiatives associées</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c01000" xlink:to="label_role-c01000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c02000" xlink:label="loc_role-c02000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-c02000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C02.000] - Informations générales - Description des pratiques, politiques et/ou initiatives futures pour la transition vers une économie plus durable</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c02000" xlink:to="label_role-c02000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c03000" xlink:label="loc_role-c03000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-c03000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C03.000] - Environnement - Année de référence et année cible pour la réduction des émissions de gaz à effet de serre</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c03000" xlink:to="label_role-c03000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c03100" xlink:label="loc_role-c03100" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-c03100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C03.100] - Environnement - Cibles de réduction des émissions de gaz à effet de serre</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c03100" xlink:to="label_role-c03100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c03200" xlink:label="loc_role-c03200" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-c03200" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C03.200] - Environnement - Publication de la liste des principales actions que l'entreprise entend mettre en œuvre pour atteindre ses cibles</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c03200" xlink:to="label_role-c03200" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c03300" xlink:label="loc_role-c03300" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-c03300" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C03.300] - Environnement - Plan de transition pour les entreprises opérant dans des secteurs à fort impact climatique</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c03300" xlink:to="label_role-c03300" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c04000" xlink:label="loc_role-c04000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-c04000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C04.000] - Environnement - Risques climatiques</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c04000" xlink:to="label_role-c04000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c05000" xlink:label="loc_role-c05000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-c05000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C05.000] - Social - Caractéristiques supplémentaires (générales) du personnel</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c05000" xlink:to="label_role-c05000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c06000" xlink:label="loc_role-c06000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-c06000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C06.000] - Social - Informations supplémentaires sur le personnel - Politiques et procédures en matière de droits de l’homme</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c06000" xlink:to="label_role-c06000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c07000" xlink:label="loc_role-c07000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-c07000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C07.000] - Social  – Incidents graves en matière de droits de l’homme</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c07000" xlink:to="label_role-c07000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c08000" xlink:label="loc_role-c08000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-c08000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C08.000] - Gouvernance - Chiffre d'affaires réalisé à partir des activités</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c08000" xlink:to="label_role-c08000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c08100" xlink:label="loc_role-c08100" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-c08100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C08.100] - Gouvernance - Exclusion des indices de référence de l’Union européenne</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c08100" xlink:to="label_role-c08100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c09000" xlink:label="loc_role-c09000" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-c09000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C09.000] - Gouvernance - Ratio de mixité au sein de l’organe de gouvernance</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c09000" xlink:to="label_role-c09000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-other" xlink:label="loc_role-other" xlink:type="locator"/>
+    <label:label xml:lang="fr" xlink:label="label_role-other" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[D99.000] - Autres informations et/ou informations spécifiques à l’entité</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-other" xlink:to="label_role-other" xlink:type="arc"/>
+  </gen:link>
+</link:linkbase>

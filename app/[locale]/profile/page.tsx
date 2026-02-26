@@ -6,6 +6,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { colors, buttonStyles, inputStyles, cardStyles, fonts, spacing, shadows } from "@/lib/styles";
 import CompanyMembersManager from "@/app/[locale]/company/CompanyMembersManager";
+import { createCompanyAction } from "@/app/actions/company";
 
 type Company = {
   id: string;
@@ -54,11 +55,15 @@ export default function ProfilePage() {
   const [companyPhone, setCompanyPhone] = useState("");
   const [companyEmail, setCompanyEmail] = useState("");
   const [companyWebsite, setCompanyWebsite] = useState("");
+  const [companyEmployeeCount, setCompanyEmployeeCount] = useState("");
+  const [companyBalanceSheet, setCompanyBalanceSheet] = useState("");
+  const [companyNetTurnover, setCompanyNetTurnover] = useState("");
   const [showAddCompanyForm, setShowAddCompanyForm] = useState(false);
   const [companyMsg, setCompanyMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
   const [expandedCompanyId, setExpandedCompanyId] = useState<string | null>(null);
   const [editingCompanyId, setEditingCompanyId] = useState<string | null>(null);
   const [editingCompany, setEditingCompany] = useState<Company | null>(null);
+  const [quickCreateMode, setQuickCreateMode] = useState(true);
 
   useEffect(() => {
     loadProfile();
@@ -160,26 +165,112 @@ export default function ProfilePage() {
       return;
     }
 
+    if (quickCreateMode && !companyCountry.trim()) {
+      setCompanyMsg({ type: "error", text: "Country is required" });
+      return;
+    }
+
+    // Skip VSME validation in quick create mode
+    if (quickCreateMode) {
+      setSaving(true);
+      setCompanyMsg(null);
+
+      try {
+        // Use server action to create company with guaranteed user_id in company_member
+        const result = await createCompanyAction({
+          name: companyName.trim(),
+          country_code: companyCountry.trim(),
+        });
+
+        setCompanyMsg({ type: "success", text: "Company created successfully! Redirecting to create report..." });
+        setCompanyName("");
+        setCompanyCountry("");
+        setShowAddCompanyForm(false);
+
+        // Reload companies
+        if (userId) await loadCompanies(userId);
+
+        // Redirect to VSME report wizard
+        setTimeout(() => {
+          window.location.href = `/${locale}/reports/new?companyId=${result.companyId}`;
+        }, 1000);
+        return;
+      } catch (err: any) {
+        setCompanyMsg({ type: "error", text: err.message || "Failed to create company" });
+        setSaving(false);
+        return;
+      }
+    }
+
+    // Full form validation
+    const empCount = companyEmployeeCount.trim() ? parseInt(companyEmployeeCount.trim()) : null;
+    const balanceSheet = companyBalanceSheet.trim() ? parseFloat(companyBalanceSheet.trim()) : null;
+    const netTurnover = companyNetTurnover.trim() ? parseFloat(companyNetTurnover.trim()) : null;
+    
+    // Validácia číselných hodnôt
+    if (empCount !== null && (isNaN(empCount) || empCount <= 0)) {
+      setCompanyMsg({ type: "error", text: "Employee count must be a positive number" });
+      return;
+    }
+    if (balanceSheet !== null && (isNaN(balanceSheet) || balanceSheet < 0)) {
+      setCompanyMsg({ type: "error", text: "Balance sheet total must be a non-negative number" });
+      return;
+    }
+    if (netTurnover !== null && (isNaN(netTurnover) || netTurnover < 0)) {
+      setCompanyMsg({ type: "error", text: "Net turnover must be a non-negative number" });
+      return;
+    }
+    
+    // VSME Check - firma musí NEPRESIAHNUŤ 2 z 3 kritérií v danej kategórii
+    // MEDIUM: €25M balance sheet, €50M turnover, 250 employees
+    if (empCount !== null || balanceSheet !== null || netTurnover !== null) {
+      let exceedsCount = 0;
+      const violations = [];
+      
+      if (empCount !== null && empCount > 250) {
+        exceedsCount++;
+        violations.push(`Employees: ${empCount} (Medium max: 250)`);
+      }
+      if (balanceSheet !== null && balanceSheet > 25) {
+        exceedsCount++;
+        violations.push(`Balance Sheet: €${balanceSheet}M (Medium max: €25M)`);
+      }
+      if (netTurnover !== null && netTurnover > 50) {
+        exceedsCount++;
+        violations.push(`Net Turnover: €${netTurnover}M (Medium max: €50M)`);
+      }
+      
+      // Ak presiahne 2 alebo viac kritérií → LARGE (Full ESRS)
+      if (exceedsCount >= 2) {
+        setCompanyMsg({ 
+          type: "error", 
+          text: `⚠️ This platform supports VSME reporting only (Micro/Small/Medium enterprises).\n\nYour company exceeds 2+ Medium thresholds:\n${violations.join('\n')}\n\nFor Full ESRS reporting, please use a different platform.` 
+        });
+        return;
+      }
+    }
+
     setSaving(true);
     setCompanyMsg(null);
 
     try {
-      const { error } = await supabase.from("company").insert({
+      // Use server action for full form creation with VSME validation
+      const result = await createCompanyAction({
         name: companyName.trim(),
+        country_code: companyCountry.trim(),
         address: companyAddress.trim() || null,
         city: companyCity.trim() || null,
         postal_code: companyPostalCode.trim() || null,
-        country_code: companyCountry.trim() || null,
         identification_number: companyIdNumber.trim() || null,
         vat_number: companyVatNumber.trim() || null,
         phone: companyPhone.trim() || null,
         email: companyEmail.trim() || null,
         website: companyWebsite.trim() || null,
         industry_code: companyIndustry.trim() || null,
-        user_id: userId,
+        employee_count: empCount,
+        balance_sheet_total_k: balanceSheet ? balanceSheet * 1000 : null,
+        net_turnover_k: netTurnover ? netTurnover * 1000 : null,
       });
-
-      if (error) throw error;
 
       setCompanyMsg({ type: "success", text: "Company created successfully" });
       setCompanyName("");
@@ -193,6 +284,9 @@ export default function ProfilePage() {
       setCompanyEmail("");
       setCompanyWebsite("");
       setCompanyIndustry("");
+      setCompanyEmployeeCount("");
+      setCompanyBalanceSheet("");
+      setCompanyNetTurnover("");
       setShowAddCompanyForm(false);
 
       // Reload companies
@@ -215,17 +309,31 @@ export default function ProfilePage() {
     setCompanyMsg(null);
 
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("company")
         .delete()
-        .eq("id", companyId);
+        .eq("id", companyId)
+        .select('id');
 
-      if (error) throw error;
+      if (error) {
+        setCompanyMsg({ type: "error", text: error.message || "Failed to delete company" });
+        setSaving(false);
+        return;
+      }
 
-      setCompanyMsg({ type: "success", text: "Company deleted successfully" });
+      // Check if any rows were deleted
+      if (!data || data.length === 0) {
+        setCompanyMsg({ type: "error", text: "Not deleted (no permission or not found)" });
+        setSaving(false);
+        return;
+      }
 
-      // Reload companies
-      if (userId) await loadCompanies(userId);
+      if (data.length === 1) {
+        setCompanyMsg({ type: "success", text: "Company deleted successfully" });
+
+        // Remove from UI
+        setCompanies(companies.filter(c => c.id !== companyId));
+      }
     } catch (err: any) {
       setCompanyMsg({ type: "error", text: err.message || "Failed to delete company" });
     } finally {
@@ -484,6 +592,102 @@ export default function ProfilePage() {
               {/* Add Company Form */}
               {showAddCompanyForm && (
                 <div style={{ marginBottom: spacing.lg, padding: spacing.md, backgroundColor: colors.bgSecondary, borderRadius: "6px" }}>
+                  {/* Quick/Full Toggle */}
+                  <div style={{ marginBottom: spacing.lg, padding: spacing.md, backgroundColor: "#e7f3ff", borderRadius: "6px", border: "2px solid #0066cc" }}>
+                    <div style={{ display: "flex", gap: spacing.md, alignItems: "center" }}>
+                      <button
+                        onClick={() => setQuickCreateMode(true)}
+                        style={{
+                          flex: 1,
+                          padding: spacing.md,
+                          backgroundColor: quickCreateMode ? colors.primary : colors.white,
+                          color: quickCreateMode ? colors.white : colors.textPrimary,
+                          border: `2px solid ${colors.primary}`,
+                          borderRadius: "6px",
+                          fontSize: fonts.size.sm,
+                          fontWeight: fonts.weight.bold,
+                          cursor: "pointer",
+                          transition: "all 0.2s ease",
+                        }}
+                      >
+                        ⚡ Quick create (recommended)<br/>
+                        <span style={{ fontSize: fonts.size.xs, fontWeight: fonts.weight.normal }}>≤60s • Name + Country only</span>
+                      </button>
+                      <button
+                        onClick={() => setQuickCreateMode(false)}
+                        style={{
+                          flex: 1,
+                          padding: spacing.md,
+                          backgroundColor: !quickCreateMode ? colors.primary : colors.white,
+                          color: !quickCreateMode ? colors.white : colors.textPrimary,
+                          border: `2px solid ${colors.primary}`,
+                          borderRadius: "6px",
+                          fontSize: fonts.size.sm,
+                          fontWeight: fonts.weight.bold,
+                          cursor: "pointer",
+                          transition: "all 0.2s ease",
+                        }}
+                      >
+                        📋 Full form<br/>
+                        <span style={{ fontSize: fonts.size.xs, fontWeight: fonts.weight.normal }}>All company details</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {quickCreateMode ? (
+                    /* QUICK CREATE MODE */
+                    <div style={{ display: "grid", gap: spacing.md }}>
+                      <div>
+                        <label style={{ display: "block", marginBottom: spacing.xs, fontSize: fonts.size.sm, fontWeight: fonts.weight.semibold, color: colors.textPrimary }}>
+                          Company Name *
+                        </label>
+                        <input
+                          type="text"
+                          value={companyName}
+                          onChange={(e) => setCompanyName(e.target.value)}
+                          placeholder="Enter company name"
+                          style={inputStyles.base}
+                          autoFocus
+                        />
+                      </div>
+
+                      <div>
+                        <label style={{ display: "block", marginBottom: spacing.xs, fontSize: fonts.size.sm, fontWeight: fonts.weight.semibold, color: colors.textPrimary }}>
+                          Country *
+                        </label>
+                        <input
+                          type="text"
+                          value={companyCountry}
+                          onChange={(e) => setCompanyCountry(e.target.value)}
+                          placeholder="e.g., SK, CZ, DE"
+                          style={inputStyles.base}
+                          maxLength={2}
+                        />
+                        <p style={{ fontSize: fonts.size.xs, color: colors.textSecondary, marginTop: spacing.xs }}>
+                          Two-letter country code (ISO 3166-1 alpha-2)
+                        </p>
+                      </div>
+
+                      <div style={{ padding: spacing.md, backgroundColor: "#e7f3ff", borderRadius: "6px", border: "1px solid #b3d9ff" }}>
+                        <p style={{ margin: 0, fontSize: fonts.size.sm, color: colors.textSecondary }}>
+                          ✨ <strong>Fast onboarding:</strong> Complete your company profile later in Settings.
+                        </p>
+                      </div>
+
+                      <button
+                        onClick={handleCreateCompany}
+                        disabled={saving || !companyName.trim() || !companyCountry.trim()}
+                        style={{
+                          ...buttonStyles.primary,
+                          opacity: saving || !companyName.trim() || !companyCountry.trim() ? 0.5 : 1,
+                          cursor: saving || !companyName.trim() || !companyCountry.trim() ? "not-allowed" : "pointer",
+                        }}
+                      >
+                        {saving ? "Creating..." : "Create Company & Start Report →"}
+                      </button>
+                    </div>
+                  ) : (
+                    /* FULL FORM MODE */
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: spacing.md }}>
                     <div>
                       <label style={{ display: "block", marginBottom: spacing.xs, fontSize: fonts.size.sm, fontWeight: fonts.weight.semibold, color: colors.textPrimary }}>
@@ -628,6 +832,99 @@ export default function ProfilePage() {
                       />
                     </div>
 
+                    <div>
+                      <label style={{ display: "block", marginBottom: spacing.xs, fontSize: fonts.size.sm, fontWeight: fonts.weight.semibold, color: colors.textPrimary }}>
+                        Average Number of Employees (Optional)
+                      </label>
+                      <input
+                        type="number"
+                        value={companyEmployeeCount}
+                        onChange={(e) => setCompanyEmployeeCount(e.target.value)}
+                        placeholder="e.g., 25"
+                        min="1"
+                        style={inputStyles.base}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ display: "block", marginBottom: spacing.xs, fontSize: fonts.size.sm, fontWeight: fonts.weight.semibold, color: colors.textPrimary }}>
+                        Balance Sheet Total in € Million (Optional)
+                      </label>
+                      <input
+                        type="number"
+                        value={companyBalanceSheet}
+                        onChange={(e) => setCompanyBalanceSheet(e.target.value)}
+                        placeholder="e.g., 12.5"
+                        min="0"
+                        step="0.1"
+                        style={inputStyles.base}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ display: "block", marginBottom: spacing.xs, fontSize: fonts.size.sm, fontWeight: fonts.weight.semibold, color: colors.textPrimary }}>
+                        Net Turnover in € Million (Optional)
+                      </label>
+                      <input
+                        type="number"
+                        value={companyNetTurnover}
+                        onChange={(e) => setCompanyNetTurnover(e.target.value)}
+                        placeholder="e.g., 18.7"
+                        min="0"
+                        step="0.1"
+                        style={inputStyles.base}
+                      />
+                    </div>
+
+                    <div style={{ 
+                      padding: spacing.md, 
+                      backgroundColor: '#e7f3ff', 
+                      borderRadius: '6px',
+                      border: '1px solid #b3d9ff'
+                    }}>
+                      <p style={{ margin: `0 0 ${spacing.xs} 0`, fontSize: fonts.size.sm, fontWeight: fonts.weight.semibold, color: colors.textPrimary }}>
+                        ℹ️ VSME Eligibility (EU Directive 2013/34/EU)
+                      </p>
+                      <p style={{ margin: `0 0 ${spacing.sm} 0`, fontSize: fonts.size.xs, color: colors.textSecondary }}>
+                        Your company qualifies as VSME if it does <strong>NOT exceed 2 of 3</strong> thresholds:
+                      </p>
+                      <div style={{ overflowX: 'auto' }}>
+                        <table style={{ width: '100%', fontSize: fonts.size.xs, color: colors.textSecondary, borderCollapse: 'collapse' }}>
+                          <thead>
+                            <tr style={{ borderBottom: '1px solid #b3d9ff' }}>
+                              <th style={{ textAlign: 'left', padding: `${spacing.xs} ${spacing.xs}` }}>Category</th>
+                              <th style={{ textAlign: 'right', padding: `${spacing.xs} ${spacing.xs}` }}>Employees</th>
+                              <th style={{ textAlign: 'right', padding: `${spacing.xs} ${spacing.xs}` }}>Balance Sheet</th>
+                              <th style={{ textAlign: 'right', padding: `${spacing.xs} ${spacing.xs}` }}>Turnover</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td style={{ padding: `${spacing.xs} ${spacing.xs}`, fontWeight: fonts.weight.semibold }}>Micro</td>
+                              <td style={{ textAlign: 'right', padding: `${spacing.xs} ${spacing.xs}` }}>≤10</td>
+                              <td style={{ textAlign: 'right', padding: `${spacing.xs} ${spacing.xs}` }}>≤€0.45M</td>
+                              <td style={{ textAlign: 'right', padding: `${spacing.xs} ${spacing.xs}` }}>≤€0.9M</td>
+                            </tr>
+                            <tr>
+                              <td style={{ padding: `${spacing.xs} ${spacing.xs}`, fontWeight: fonts.weight.semibold }}>Small</td>
+                              <td style={{ textAlign: 'right', padding: `${spacing.xs} ${spacing.xs}` }}>≤50</td>
+                              <td style={{ textAlign: 'right', padding: `${spacing.xs} ${spacing.xs}` }}>≤€5M</td>
+                              <td style={{ textAlign: 'right', padding: `${spacing.xs} ${spacing.xs}` }}>≤€10M</td>
+                            </tr>
+                            <tr>
+                              <td style={{ padding: `${spacing.xs} ${spacing.xs}`, fontWeight: fonts.weight.semibold }}>Medium</td>
+                              <td style={{ textAlign: 'right', padding: `${spacing.xs} ${spacing.xs}` }}>≤250</td>
+                              <td style={{ textAlign: 'right', padding: `${spacing.xs} ${spacing.xs}` }}>≤€25M</td>
+                              <td style={{ textAlign: 'right', padding: `${spacing.xs} ${spacing.xs}` }}>≤€50M</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <p style={{ margin: `${spacing.sm} 0 0 0`, fontSize: fonts.size.xs, color: colors.error, fontWeight: fonts.weight.medium }}>
+                        ⚠️ If your company exceeds 2+ thresholds in the Medium category, it requires Full ESRS reporting (not supported).
+                      </p>
+                    </div>
+
                     <button
                       onClick={handleCreateCompany}
                       disabled={saving || !companyName.trim()}
@@ -640,6 +937,7 @@ export default function ProfilePage() {
                       {saving ? "Creating..." : "Create Company"}
                     </button>
                   </div>
+                  )}
                 </div>
               )}
 

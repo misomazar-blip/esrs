@@ -1,0 +1,33 @@
+B9 – Workforce – Health and safety
+Guidance on the rate of recordable work -related accidents
+184. Based on the assumption that one full -time worker works 2,000 hours per year, the rate indicates
+the number of work -related accidents per 100 full -time workers over a yearly time  frame. If the
+undertaking cannot calculate directly the number of hours worked, it may estimate this on the basis
+of normal or standard hours of work.
+185. In order to calculate the rate of recordable work -related  accidents  of employees , the formula
+below  should  be used .
+
+VSME Standard
+𝑁𝑢𝑚𝑏𝑒𝑟  𝑜𝑓 𝑤𝑜𝑟𝑘  𝑟𝑒𝑙𝑎𝑡𝑒𝑑  𝑎𝑐𝑐𝑖𝑑𝑒𝑛𝑡𝑠  𝑖𝑛 𝑡ℎ𝑒 𝑟𝑒𝑝𝑜𝑟𝑡𝑖𝑛𝑔  𝑦𝑒𝑎𝑟
+𝑇𝑜𝑡𝑎𝑙  𝑛𝑢𝑚𝑏𝑒𝑟  𝑜𝑓 ℎ𝑜𝑢𝑟𝑠  𝑤𝑜𝑟𝑘𝑒𝑑  𝑖𝑛 𝑎 𝑦𝑒𝑎𝑟  𝑏𝑦 𝑎𝑙𝑙 𝑒𝑚𝑝𝑙𝑜𝑦𝑒𝑒𝑠   𝑥 200 ,000
+Example
+186. Company A reported three  work -related accidents in the reporting year. Company A has 40
+employees , and a total number of 80,000 hours ( 40 x 2,000) worked in a year.
+The rate of recordable work -related  accidents is 3/ 80,000 x 200,000 = 7.5.
+Guidance on the number of fatalities resulting from  work -related injuries and work -related  ill health
+187. Work -related injuries and work -related ill health arise from exposure to dangers at work.
+188. In case of teleworking, injuries and ill health are  work -related if the injury or ill health is directly
+related to the performance of work rather than  the general home environment.
+189. In case of injuries and ill health that occur while a person is travelling for work, these are considered
+work -related if the employee  was performing  work activities in the interest of the employer at the
+time of the injury or  ill health.  Accidents  taking place  when travel ling, outside  of the undertaking’s
+responsibility (i.e. regular commuting to and from work) , are subject to the applicable national
+legislation , which  regulates their categorisation as to whether they are considered work -related or
+not.
+190. Mental illness is considered work -related if it has been notified voluntarily by the relevant worker
+and if an evaluation from a licensed healthcare professional stat ing that the illness  in question  is
+indeed work -related  has been issue d and notified, too . Health problems resulting from smoking,
+drug and alcohol abuse, physical inactivity, unhealthy diets and psychosocial factors not connected
+to work are not considered work -related.
+191. The undertaking may present separate ly fatalities resulting from work -related injuries and those
+resulting from work -related  ill health.

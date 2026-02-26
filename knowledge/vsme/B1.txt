@@ -1,0 +1,66 @@
+B1 – Basis for Preparation
+68. When reporting on the legal form of the undertaking according to national legislation  under
+paragraph 24(e)(i) , the undertaking can choose from one of the following undertaking structures:
+(a) private limited liability undertaking
+(b) sole proprietorship
+(c) partnership
+(d) cooperative
+(e) other (please specify  based on country specifications  for legal forms ).
+69. When reporting on the NACE  code(s) of the undertaking under pa ragraph  24(e)(ii), NACE codes
+(Nomenclature statistique des Activités économiques dans la Communauté Européenne) are
+classification s of economic activities used in the European Union. They provide a standardized
+framework for classifying economic activities into sectors, enabling comparability and a common
+understanding among the various EU countries.
+70. The NACE code consists of a number of digits ranging from 2 to 5 depending on the level of
+specificity with which the economic activity is identified. The list of NACE codes can be found in
+the following document: REGULATION (EC) No 1893/2006 .
+Level
+Nr Identifier  Description
+1 Section  Sections are identified by an alphabetic letter, and they define 21 general
+economic areas such as agriculture, manufacturing industry or commerce.
+2 Division  The division is identified by a two -digit numerical code and identifies a
+specific sector within the general economic area. There are a total of 88
+divisions.
+3 Group  The group is identified by a three -digit numerical code (also considering the
+division's two digits) and defines a specific area within the sector. There are
+about 270 groups.
+4 Class  The class is identified by a four -digit numerical code (considering the digits
+of division and group) and defines a specific activity within the group. There
+are about 450 classes.
+71. When repor ting the number of employees  under paragraph 24(e)( v), full-time equivalent (FTE) is
+the number of full -time positions in an undertaking.  It can be calculated by dividing an employee's
+scheduled hours (total effective hours worked in a week) by the employer's hours for a full -time
+workweek (total hours performed by full -time employees). For example, an employee who works
+25 hours every week for a company where the full -time week is 40 hours represents a 0,625 FTE
+(i.e. 25/ 40 hours).
+72. Headcount is the total number of people employed by the undertaking at a given time.
+
+VSME Standard
+73. When reporting on the country of primary operations and the location of significant assets  under
+paragraph s 24(e)( vi) and (vii) , the undertaking shall disclose this information for each of its sites
+using the table below:
+Sites Address  Postal Code  City Country  Coordinates
+(geolocation)
+Registered Office
+(e.g.)
+Warehouse (e.g.)
+Industrial Plant
+(e.g.)
+74. The geolocation of an undertaking is expected to be a valuable datapoint for stakeholders for the
+assessment of risks and opportunities  connected to the SME , particularly in relation to the
+sustainability issues  of climate change  adaptation , water , ecosystems  and biodiversity.
+75. The geolocation shall be provided in spatial points for single units or polygon points defining the
+boundaries of a larger, less unit -like site, such as a farm, mine or facility. The undertaking may
+also provide a cluster of points to allow for the easy identification of the concerned area.  The spatial
+points shall be provided as coordinates, with five decimal places  (e.g. 0° 00′ 0.036″).
+76. When disclosing the geolocation of sites  owned, leased, or managed, the undertaking shall includ e
+the coordinates of the sites in the table  shown in paragraph 73. The undertaking may use web
+mapping tools ( e.g. google maps, apple maps)  to identify the coordinates of sites that it owns,
+leases or manages . The undertaking may also use any appropriate software tools or platforms to
+further  establish the perimeter or area of larger sites .
+77. In relation to paragraph 2 5, sustainabil ity-related certification  can include  registered eco -label s
+from an EU, national or international labelling scheme , corresponding to the main activity of an
+SME. For instance, the EU Ecolabel  covers specific products , such as textiles  and footwear ,
+coverings  (e.g. wood floor coverings ), cleaning and personal care products, electronic equipment ,
+or furniture. The undertaking may consult the EU Ecolabel Product Groups  and Product Catalogue
+for further information .

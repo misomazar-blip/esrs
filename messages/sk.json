@@ -17,6 +17,7 @@
     "preview": "Náhľad"
   },
   "nav": {
+    "dashboard": "Dashboard",
     "home": "Domov",
     "reports": "Reporty",
     "topics": "Kapitoly",
@@ -77,7 +78,10 @@
     "csvFormat": "CSV formát",
     "spreadsheet": "Tabuľka",
     "jsonFormat": "JSON formát",
-    "structuredData": "Štruktúrované dáta"
+    "structuredData": "Štruktúrované dáta",
+    "profileIncomplete": "Profil spoločnosti neúplný",
+    "completeProfile": "Dokončiť profil",
+    "completeProfileDescription": "Dokončite profil spoločnosti pre odomknutie všetkých funkcií"
   },
   "topics": {
     "title": "Otázky kapitoly {code}",

@@ -1,0 +1,80 @@
+B5 – Biodiversity
+Guidance on how to identify sites in or near biodiversity sensitive areas
+134. Paragraph 33 stipulates that the undertaking shall disclose  the sites  it operates in that are located
+in or near  biodiversity -sensitive areas . Biodiversity sensitive areas are defined as such by
+special nature protection regulation at European or international level. These comprise areas
+belonging to the Natura 2000 network of protected areas, UNESCO World Heritage sites and Key
+Biodiversity Area s (‘KBAs’) as well as other protected areas designated as requiring special
+protection by governmental authorities (e.g. forest -protected areas or  areas lying within river basin
+districts).
+135. To identify protected areas and biodiversity sensitive areas , the undertaking may refer to
+databases such as the World Database on Protected Areas (WDPA)  (a global database to help
+identify marine and terrestrial protected areas ), the World Database on Key Biodiversity Areas ,
+and the IUCN Red List of Threatened Species . The undertaking may also use tools  such as the
+Integrated Biodiversity Assessment Tool (IBAT) .
+136. Near , in the context of B5 – Biodiversity, shall refer to an area that is (partially) overlapping or
+adjacent to a biodiversity sensitive area .
+137. The following table shows how  information on sites  in or near biodiversity sensitive areas  can
+be presented .
+Location  Area
+(hectares)  Biodiversity sensitive
+Area  Specification
+
+VSME Standard
+(located i n/near
+biodiversity sensitive
+areas )
+Country –
+Site name 1
+Country –
+Site name 2
+Country –
+Site name 3
+...
+Documentation Sources:
+Data  Documentation Source
+Natura 2000 Network of protected areas  https://natura2000.eea.europa.eu/
+Key Biodiversity Areas – IUCN  https://www.keybiodiversityareas.org/sites/searc
+UNESCO – World Heritage Centre  https://whc.unesco.org/en/list/
+Guidance on how to calculate and report land -use
+138. A ‘sealed area’  is to be understood as  an area where the original soil has been covered (e.g.
+roads, buildings,  parking lots), making it impermeable  and resulting in an impact  on the
+environment.
+139. Green area or ‘ nature -oriented  area’ is an area that primarily preserves or restores nature. Near
+natural/green areas may be located on the organisation’s site and may include roofs, facades,
+water -drainage systems or other features designed, adapted or managed to promote  biodiversity.
+Near -natural areas may also be located off the organisation ’s site if they are owned  or managed
+by the organisation and primarily serve to promote biodiversity.
+140. When disclosing according to paragraph 3 4, the undertaking shall not only consider local impacts
+but also direct and indirect impacts on biodiversity (e.g. through raw material extraction,
+procurement, supply chain, production and products,  transportation and logistics, and marketing
+and communications ).
+141. The following table shows how  information on how land-use may be presented .
+Land -use type Area
+(hectares or m2)
+Previous year  Reporting year  % change
+Total sealed
+area
+
+VSME Standard
+Total nature -
+oriented area
+on-site
+Total nature -
+oriented area
+off-site
+Total use of
+land
+Documentation Sources :
+Data  Documentation Source
+EMAS Guidance  EU Commission Regulation 2018/2026
+https://eur -lex.europa.eu/legal -
+content/EN/TXT/PDF/?uri=CELEX:32018R2026
+&rid=2
+User's guide
+https://green -
+business.ec.europa.eu/document/download/983
+57f3d -f891-416e -81ea -
+a26f3ff3c61f_en?filename=PDF%20version%20
+C_2023_7207EN_annexe_acte_autonome_cp_
+part1_0.pdf

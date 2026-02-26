@@ -1,0 +1,1635 @@
+== Social Disclosures row 29 ==
+None | None | None | None | None | None | None | None | =IF(
+    AND(C29="", E29=""),
+    "",
+    IF(
+        AND(C29<>"", E29=""),
+        template_label_missing_value,
+        IF(
+            AND(C29<>"", E29<>""),
+            IF(
+                SUM($E$29:$E$128)<$E$129,
+                template_label_missing_value,
+                IF(
+                    COUNTIF($C$29:$C$128, C29) > 1,
+                    template_label_value_inconsistency,
+                    template_label_ok
+                )
+            ),
+            template_label_missing_value
+        )
+    )
+)
+
+== Social Disclosures row 30 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C30="", E30=""),
+"",
+IF(
+AND(C30<>"", E30=""),
+template_label_missing_value,
+IF(
+AND(C30<>"", E30<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C30) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 31 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C31="", E31=""),
+"",
+IF(
+AND(C31<>"", E31=""),
+template_label_missing_value,
+IF(
+AND(C31<>"", E31<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C31) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 32 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C32="", E32=""),
+"",
+IF(
+AND(C32<>"", E32=""),
+template_label_missing_value,
+IF(
+AND(C32<>"", E32<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C32) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 33 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C33="", E33=""),
+"",
+IF(
+AND(C33<>"", E33=""),
+template_label_missing_value,
+IF(
+AND(C33<>"", E33<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C33) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 34 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C34="", E34=""),
+"",
+IF(
+AND(C34<>"", E34=""),
+template_label_missing_value,
+IF(
+AND(C34<>"", E34<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C34) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 35 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C35="", E35=""),
+"",
+IF(
+AND(C35<>"", E35=""),
+template_label_missing_value,
+IF(
+AND(C35<>"", E35<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C35) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 36 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C36="", E36=""),
+"",
+IF(
+AND(C36<>"", E36=""),
+template_label_missing_value,
+IF(
+AND(C36<>"", E36<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C36) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 37 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C37="", E37=""),
+"",
+IF(
+AND(C37<>"", E37=""),
+template_label_missing_value,
+IF(
+AND(C37<>"", E37<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C37) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 38 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C38="", E38=""),
+"",
+IF(
+AND(C38<>"", E38=""),
+template_label_missing_value,
+IF(
+AND(C38<>"", E38<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C38) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 39 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C39="", E39=""),
+"",
+IF(
+AND(C39<>"", E39=""),
+template_label_missing_value,
+IF(
+AND(C39<>"", E39<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C39) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 40 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C40="", E40=""),
+"",
+IF(
+AND(C40<>"", E40=""),
+template_label_missing_value,
+IF(
+AND(C40<>"", E40<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C40) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 41 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C41="", E41=""),
+"",
+IF(
+AND(C41<>"", E41=""),
+template_label_missing_value,
+IF(
+AND(C41<>"", E41<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C41) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 42 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C42="", E42=""),
+"",
+IF(
+AND(C42<>"", E42=""),
+template_label_missing_value,
+IF(
+AND(C42<>"", E42<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C42) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 43 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C43="", E43=""),
+"",
+IF(
+AND(C43<>"", E43=""),
+template_label_missing_value,
+IF(
+AND(C43<>"", E43<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C43) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 44 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C44="", E44=""),
+"",
+IF(
+AND(C44<>"", E44=""),
+template_label_missing_value,
+IF(
+AND(C44<>"", E44<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C44) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 45 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C45="", E45=""),
+"",
+IF(
+AND(C45<>"", E45=""),
+template_label_missing_value,
+IF(
+AND(C45<>"", E45<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C45) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 46 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C46="", E46=""),
+"",
+IF(
+AND(C46<>"", E46=""),
+template_label_missing_value,
+IF(
+AND(C46<>"", E46<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C46) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 47 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C47="", E47=""),
+"",
+IF(
+AND(C47<>"", E47=""),
+template_label_missing_value,
+IF(
+AND(C47<>"", E47<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C47) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 48 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C48="", E48=""),
+"",
+IF(
+AND(C48<>"", E48=""),
+template_label_missing_value,
+IF(
+AND(C48<>"", E48<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C48) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 49 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C49="", E49=""),
+"",
+IF(
+AND(C49<>"", E49=""),
+template_label_missing_value,
+IF(
+AND(C49<>"", E49<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C49) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 50 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C50="", E50=""),
+"",
+IF(
+AND(C50<>"", E50=""),
+template_label_missing_value,
+IF(
+AND(C50<>"", E50<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C50) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 51 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C51="", E51=""),
+"",
+IF(
+AND(C51<>"", E51=""),
+template_label_missing_value,
+IF(
+AND(C51<>"", E51<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C51) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 52 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C52="", E52=""),
+"",
+IF(
+AND(C52<>"", E52=""),
+template_label_missing_value,
+IF(
+AND(C52<>"", E52<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C52) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 53 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C53="", E53=""),
+"",
+IF(
+AND(C53<>"", E53=""),
+template_label_missing_value,
+IF(
+AND(C53<>"", E53<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C53) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 54 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C54="", E54=""),
+"",
+IF(
+AND(C54<>"", E54=""),
+template_label_missing_value,
+IF(
+AND(C54<>"", E54<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C54) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 55 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C55="", E55=""),
+"",
+IF(
+AND(C55<>"", E55=""),
+template_label_missing_value,
+IF(
+AND(C55<>"", E55<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C55) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 56 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C56="", E56=""),
+"",
+IF(
+AND(C56<>"", E56=""),
+template_label_missing_value,
+IF(
+AND(C56<>"", E56<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C56) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 57 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C57="", E57=""),
+"",
+IF(
+AND(C57<>"", E57=""),
+template_label_missing_value,
+IF(
+AND(C57<>"", E57<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C57) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 58 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C58="", E58=""),
+"",
+IF(
+AND(C58<>"", E58=""),
+template_label_missing_value,
+IF(
+AND(C58<>"", E58<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C58) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 59 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C59="", E59=""),
+"",
+IF(
+AND(C59<>"", E59=""),
+template_label_missing_value,
+IF(
+AND(C59<>"", E59<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C59) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 60 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C60="", E60=""),
+"",
+IF(
+AND(C60<>"", E60=""),
+template_label_missing_value,
+IF(
+AND(C60<>"", E60<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C60) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 61 ==
+None | None | None | None | None | None | None | None | =IF(
+    AND(C61="", E61=""),
+    "",
+    IF(
+        AND(C61<>"", E61=""),
+        template_label_missing_value,
+        IF(
+            AND(C61<>"", E61<>""),
+            IF(
+                SUM($E$29:$E$128)<$E$129,
+                template_label_missing_value,
+                IF(
+                    COUNTIF($C$29:$C$128, C61) > 1,
+                    template_label_value_inconsistency,
+                    template_label_ok
+                )
+            ),
+            template_label_missing_value
+        )
+    )
+)
+
+== Social Disclosures row 62 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C62="", E62=""),
+"",
+IF(
+AND(C62<>"", E62=""),
+template_label_missing_value,
+IF(
+AND(C62<>"", E62<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C62) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 63 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C63="", E63=""),
+"",
+IF(
+AND(C63<>"", E63=""),
+template_label_missing_value,
+IF(
+AND(C63<>"", E63<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C63) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 64 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C64="", E64=""),
+"",
+IF(
+AND(C64<>"", E64=""),
+template_label_missing_value,
+IF(
+AND(C64<>"", E64<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C64) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 65 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C65="", E65=""),
+"",
+IF(
+AND(C65<>"", E65=""),
+template_label_missing_value,
+IF(
+AND(C65<>"", E65<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C65) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 66 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C66="", E66=""),
+"",
+IF(
+AND(C66<>"", E66=""),
+template_label_missing_value,
+IF(
+AND(C66<>"", E66<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C66) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 67 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C67="", E67=""),
+"",
+IF(
+AND(C67<>"", E67=""),
+template_label_missing_value,
+IF(
+AND(C67<>"", E67<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C67) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 68 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C68="", E68=""),
+"",
+IF(
+AND(C68<>"", E68=""),
+template_label_missing_value,
+IF(
+AND(C68<>"", E68<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C68) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 69 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C69="", E69=""),
+"",
+IF(
+AND(C69<>"", E69=""),
+template_label_missing_value,
+IF(
+AND(C69<>"", E69<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C69) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 70 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C70="", E70=""),
+"",
+IF(
+AND(C70<>"", E70=""),
+template_label_missing_value,
+IF(
+AND(C70<>"", E70<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C70) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 71 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C71="", E71=""),
+"",
+IF(
+AND(C71<>"", E71=""),
+template_label_missing_value,
+IF(
+AND(C71<>"", E71<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C71) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 72 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C72="", E72=""),
+"",
+IF(
+AND(C72<>"", E72=""),
+template_label_missing_value,
+IF(
+AND(C72<>"", E72<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C72) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 73 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C73="", E73=""),
+"",
+IF(
+AND(C73<>"", E73=""),
+template_label_missing_value,
+IF(
+AND(C73<>"", E73<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C73) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 74 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C74="", E74=""),
+"",
+IF(
+AND(C74<>"", E74=""),
+template_label_missing_value,
+IF(
+AND(C74<>"", E74<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C74) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 75 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C75="", E75=""),
+"",
+IF(
+AND(C75<>"", E75=""),
+template_label_missing_value,
+IF(
+AND(C75<>"", E75<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C75) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 76 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C76="", E76=""),
+"",
+IF(
+AND(C76<>"", E76=""),
+template_label_missing_value,
+IF(
+AND(C76<>"", E76<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C76) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 77 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C77="", E77=""),
+"",
+IF(
+AND(C77<>"", E77=""),
+template_label_missing_value,
+IF(
+AND(C77<>"", E77<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C77) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 78 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C78="", E78=""),
+"",
+IF(
+AND(C78<>"", E78=""),
+template_label_missing_value,
+IF(
+AND(C78<>"", E78<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C78) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 79 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C79="", E79=""),
+"",
+IF(
+AND(C79<>"", E79=""),
+template_label_missing_value,
+IF(
+AND(C79<>"", E79<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C79) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 80 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C80="", E80=""),
+"",
+IF(
+AND(C80<>"", E80=""),
+template_label_missing_value,
+IF(
+AND(C80<>"", E80<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C80) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 81 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C81="", E81=""),
+"",
+IF(
+AND(C81<>"", E81=""),
+template_label_missing_value,
+IF(
+AND(C81<>"", E81<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C81) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 82 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C82="", E82=""),
+"",
+IF(
+AND(C82<>"", E82=""),
+template_label_missing_value,
+IF(
+AND(C82<>"", E82<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C82) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 83 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C83="", E83=""),
+"",
+IF(
+AND(C83<>"", E83=""),
+template_label_missing_value,
+IF(
+AND(C83<>"", E83<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C83) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 84 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C84="", E84=""),
+"",
+IF(
+AND(C84<>"", E84=""),
+template_label_missing_value,
+IF(
+AND(C84<>"", E84<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C84) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 85 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C85="", E85=""),
+"",
+IF(
+AND(C85<>"", E85=""),
+template_label_missing_value,
+IF(
+AND(C85<>"", E85<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C85) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 86 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C86="", E86=""),
+"",
+IF(
+AND(C86<>"", E86=""),
+template_label_missing_value,
+IF(
+AND(C86<>"", E86<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C86) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 87 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C87="", E87=""),
+"",
+IF(
+AND(C87<>"", E87=""),
+template_label_missing_value,
+IF(
+AND(C87<>"", E87<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C87) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 88 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C88="", E88=""),
+"",
+IF(
+AND(C88<>"", E88=""),
+template_label_missing_value,
+IF(
+AND(C88<>"", E88<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C88) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 89 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C89="", E89=""),
+"",
+IF(
+AND(C89<>"", E89=""),
+template_label_missing_value,
+IF(
+AND(C89<>"", E89<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C89) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 90 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C90="", E90=""),
+"",
+IF(
+AND(C90<>"", E90=""),
+template_label_missing_value,
+IF(
+AND(C90<>"", E90<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C90) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 91 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C91="", E91=""),
+"",
+IF(
+AND(C91<>"", E91=""),
+template_label_missing_value,
+IF(
+AND(C91<>"", E91<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C91) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 92 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C92="", E92=""),
+"",
+IF(
+AND(C92<>"", E92=""),
+template_label_missing_value,
+IF(
+AND(C92<>"", E92<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C92) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 93 ==
+None | None | None | None | None | None | None | None | =IF(
+    AND(C93="", E93=""),
+    "",
+    IF(
+        AND(C93<>"", E93=""),
+        template_label_missing_value,
+        IF(
+            AND(C93<>"", E93<>""),
+            IF(
+                SUM($E$29:$E$128)<$E$129,
+                template_label_missing_value,
+                IF(
+                    COUNTIF($C$29:$C$128, C93) > 1,
+                    template_label_value_inconsistency,
+                    template_label_ok
+                )
+            ),
+            template_label_missing_value
+        )
+    )
+)
+
+== Social Disclosures row 94 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C94="", E94=""),
+"",
+IF(
+AND(C94<>"", E94=""),
+template_label_missing_value,
+IF(
+AND(C94<>"", E94<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C94) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 95 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C95="", E95=""),
+"",
+IF(
+AND(C95<>"", E95=""),
+template_label_missing_value,
+IF(
+AND(C95<>"", E95<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C95) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 96 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C96="", E96=""),
+"",
+IF(
+AND(C96<>"", E96=""),
+template_label_missing_value,
+IF(
+AND(C96<>"", E96<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C96) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 97 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C97="", E97=""),
+"",
+IF(
+AND(C97<>"", E97=""),
+template_label_missing_value,
+IF(
+AND(C97<>"", E97<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C97) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 98 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C98="", E98=""),
+"",
+IF(
+AND(C98<>"", E98=""),
+template_label_missing_value,
+IF(
+AND(C98<>"", E98<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C98) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Social Disclosures row 99 ==
+None | None | None | None | None | None | None | None | =IF(
+AND(C99="", E99=""),
+"",
+IF(
+AND(C99<>"", E99=""),
+template_label_missing_value,
+IF(
+AND(C99<>"", E99<>""),
+IF(
+SUM($E$29:$E$128)<$E$129,
+template_label_missing_value,
+IF(
+COUNTIF($C$29:$C$128, C99) > 1,
+template_label_value_inconsistency,
+
+template_label_ok)
+),
+
+template_label_missing_value)
+)
+)
+
+== Governance Disclosures row 38 ==
+None | None | None | None | None | None | None | None | =IF(C38<>"",template_label_ok, "")

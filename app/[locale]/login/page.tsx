@@ -18,7 +18,7 @@ export default function LoginPage() {
       setMsg(error.message);
       return;
     }
-    window.location.href = "/";
+    window.location.href = "/dashboard";
   }
 
   return (

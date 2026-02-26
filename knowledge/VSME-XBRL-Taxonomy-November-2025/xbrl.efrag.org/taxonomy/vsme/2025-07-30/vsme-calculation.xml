@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright EFRAG - https://efrag.org/ -->
+<link:linkbase xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:xbrli="http://www.xbrl.org/2003/instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd">
+  <link:roleRef roleURI="https://xbrl.efrag.org/taxonomy/vsme/2025-07-30/role-b03200" xlink:href="vsme-all.xsd#role-b03200" xlink:type="simple"/>
+  <link:roleRef roleURI="https://xbrl.efrag.org/taxonomy/vsme/2025-07-30/role-c03100" xlink:href="vsme-all.xsd#role-c03100" xlink:type="simple"/>
+  <link:roleRef roleURI="https://xbrl.efrag.org/taxonomy/vsme/2025-07-30/role-b03300" xlink:href="vsme-all.xsd#role-b03300" xlink:type="simple"/>
+  <link:roleRef roleURI="https://xbrl.efrag.org/taxonomy/vsme/2025-07-30/role-b07100" xlink:href="vsme-all.xsd#role-b07100" xlink:type="simple"/>
+  <link:roleRef roleURI="https://xbrl.efrag.org/taxonomy/vsme/2025-07-30/role-b07200" xlink:href="vsme-all.xsd#role-b07200" xlink:type="simple"/>
+  <link:roleRef roleURI="https://xbrl.efrag.org/taxonomy/vsme/2025-07-30/role-b08000" xlink:href="vsme-all.xsd#role-b08000" xlink:type="simple"/>
+  <link:roleRef roleURI="https://xbrl.efrag.org/taxonomy/vsme/2025-07-30/role-b08100" xlink:href="vsme-all.xsd#role-b08100" xlink:type="simple"/>
+  <link:roleRef roleURI="https://xbrl.efrag.org/taxonomy/vsme/2025-07-30/role-b08200" xlink:href="vsme-all.xsd#role-b08200" xlink:type="simple"/>
+  <link:roleRef roleURI="https://xbrl.efrag.org/taxonomy/vsme/2025-07-30/role-c08000" xlink:href="vsme-all.xsd#role-c08000" xlink:type="simple"/>
+  <link:arcroleRef arcroleURI="https://xbrl.org/2023/arcrole/summation-item" xlink:href="https://www.xbrl.org/2023/calculation-1.1.xsd#summation-item" xlink:type="simple"/>
+  <link:calculationLink xlink:role="https://xbrl.efrag.org/taxonomy/vsme/2025-07-30/role-b03200" xlink:type="extended">
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalGrossLocationBasedGHGEmissions" xlink:label="TotalGrossLocationBasedGHGEmissions" xlink:type="locator"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalGrossLocationBasedScope1AndScope2GHGEmissions" xlink:label="TotalGrossLocationBasedScope1AndScope2GHGEmissions" xlink:type="locator"/>
+    <link:calculationArc order="1.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalGrossLocationBasedGHGEmissions" xlink:to="TotalGrossLocationBasedScope1AndScope2GHGEmissions" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_GrossLocationBasedScope2GreenhouseGasEmissions" xlink:label="GrossLocationBasedScope2GreenshouseGasEmissions" xlink:type="locator"/>
+    <link:calculationArc order="2.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalGrossLocationBasedScope1AndScope2GHGEmissions" xlink:to="GrossLocationBasedScope2GreenshouseGasEmissions" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_GrossScope1GreenhouseGasEmissions" xlink:label="GrossScope1GreenshouseGasEmissions" xlink:type="locator"/>
+    <link:calculationArc order="1.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalGrossLocationBasedScope1AndScope2GHGEmissions" xlink:to="GrossScope1GreenshouseGasEmissions" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_GrossScope3GreenhouseGasEmissions" xlink:label="GrossScope3GreenshouseGasEmissions" xlink:type="locator"/>
+    <link:calculationArc order="2.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalGrossLocationBasedGHGEmissions" xlink:to="GrossScope3GreenshouseGasEmissions" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalGrossMarketBasedGHGEmissions" xlink:label="TotalGrossMarketBasedGHGEmissions" xlink:type="locator"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalGrossMarketBasedScope1AndScope2GHGEmissions" xlink:label="TotalGrossMarketBasedScope1AndScope2GHGEmissions" xlink:type="locator"/>
+    <link:calculationArc order="1.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalGrossMarketBasedGHGEmissions" xlink:to="TotalGrossMarketBasedScope1AndScope2GHGEmissions" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_GrossMarketBasedScope2GreenhouseGasEmissions" xlink:label="GrossMarketBasedScope2GreenshouseGasEmissions" xlink:type="locator"/>
+    <link:calculationArc order="1.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalGrossMarketBasedScope1AndScope2GHGEmissions" xlink:to="GrossMarketBasedScope2GreenshouseGasEmissions" xlink:type="arc"/>
+    <link:calculationArc order="2.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalGrossMarketBasedScope1AndScope2GHGEmissions" xlink:to="GrossScope1GreenshouseGasEmissions" xlink:type="arc"/>
+    <link:calculationArc order="2.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalGrossMarketBasedGHGEmissions" xlink:to="GrossScope3GreenshouseGasEmissions" xlink:type="arc"/>
+  </link:calculationLink>
+  <link:calculationLink xlink:role="https://xbrl.efrag.org/taxonomy/vsme/2025-07-30/role-c03100" xlink:type="extended">
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalGrossLocationBasedGHGEmissions" xlink:label="TotalGrossLocationBasedGHGEmissions" xlink:type="locator"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_GrossScope3GreenhouseGasEmissions" xlink:label="GrossScope3GreenshouseGasEmissions" xlink:type="locator"/>
+    <link:calculationArc order="3.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalGrossLocationBasedGHGEmissions" xlink:to="GrossScope3GreenshouseGasEmissions" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_GrossLocationBasedScope2GreenhouseGasEmissions" xlink:label="GrossLocationBasedScope2GreenshouseGasEmissions" xlink:type="locator"/>
+    <link:calculationArc order="2.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalGrossLocationBasedGHGEmissions" xlink:to="GrossLocationBasedScope2GreenshouseGasEmissions" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_GrossScope1GreenhouseGasEmissions" xlink:label="GrossScope1GreenshouseGasEmissions" xlink:type="locator"/>
+    <link:calculationArc order="1.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalGrossLocationBasedGHGEmissions" xlink:to="GrossScope1GreenshouseGasEmissions" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalGrossMarketBasedGHGEmissions" xlink:label="TotalGrossMarketBasedGHGEmissions" xlink:type="locator"/>
+    <link:calculationArc order="3.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalGrossMarketBasedGHGEmissions" xlink:to="GrossScope3GreenshouseGasEmissions" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_GrossMarketBasedScope2GreenhouseGasEmissions" xlink:label="GrossMarketBasedScope2GreenshouseGasEmissions" xlink:type="locator"/>
+    <link:calculationArc order="2.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalGrossMarketBasedGHGEmissions" xlink:to="GrossMarketBasedScope2GreenshouseGasEmissions" xlink:type="arc"/>
+    <link:calculationArc order="1.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalGrossMarketBasedGHGEmissions" xlink:to="GrossScope1GreenshouseGasEmissions" xlink:type="arc"/>
+  </link:calculationLink>
+  <link:calculationLink xlink:role="https://xbrl.efrag.org/taxonomy/vsme/2025-07-30/role-b07100" xlink:type="extended">
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalWasteRecycledReusedAndDirectedToDisposalVolume" xlink:label="TotalWasteRecycledReusedAndDirectedToDisposalVolume" xlink:type="locator"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_WasteDirectedToDisposalVolume" xlink:label="WasteDirectedToDisposalVolume" xlink:type="locator"/>
+    <link:calculationArc order="1.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalWasteRecycledReusedAndDirectedToDisposalVolume" xlink:to="WasteDirectedToDisposalVolume" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_WasteDivertedToRecycleOrReuseVolume" xlink:label="WasteDivertedToRecycleOrReuseVolume" xlink:type="locator"/>
+    <link:calculationArc order="2.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalWasteRecycledReusedAndDirectedToDisposalVolume" xlink:to="WasteDivertedToRecycleOrReuseVolume" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalWasteRecycledReusedAndDirectedToDisposalMass" xlink:label="TotalWasteRecycledReusedAndDirectedToDisposalMass" xlink:type="locator"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_WasteDirectedToDisposalMass" xlink:label="WasteDirectedToDisposalMass" xlink:type="locator"/>
+    <link:calculationArc order="1.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalWasteRecycledReusedAndDirectedToDisposalMass" xlink:to="WasteDirectedToDisposalMass" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_WasteDivertedToRecycleOrReuseMass" xlink:label="WasteDivertedToRecycleOrReuseMass" xlink:type="locator"/>
+    <link:calculationArc order="2.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalWasteRecycledReusedAndDirectedToDisposalMass" xlink:to="WasteDivertedToRecycleOrReuseMass" xlink:type="arc"/>
+  </link:calculationLink>
+  <link:calculationLink xlink:role="https://xbrl.efrag.org/taxonomy/vsme/2025-07-30/role-b07200" xlink:type="extended">
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalWasteGeneratedMass" xlink:label="TotalWasteGeneratedMass" xlink:type="locator"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalHazardousWasteGeneratedMass" xlink:label="TotalHazardousWasteGeneratedMass" xlink:type="locator"/>
+    <link:calculationArc order="1.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalWasteGeneratedMass" xlink:to="TotalHazardousWasteGeneratedMass" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalNonHazardousWasteGeneratedMass" xlink:label="TotalNonHazardousWasteGeneratedMass" xlink:type="locator"/>
+    <link:calculationArc order="2.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalWasteGeneratedMass" xlink:to="TotalNonHazardousWasteGeneratedMass" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalWasteGeneratedVolume" xlink:label="TotalWasteGeneratedVolume" xlink:type="locator"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalHazardousWasteGeneratedVolume" xlink:label="TotalHazardousWasteGeneratedVolume" xlink:type="locator"/>
+    <link:calculationArc order="1.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalWasteGeneratedVolume" xlink:to="TotalHazardousWasteGeneratedVolume" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalNonHazardousWasteGeneratedVolume" xlink:label="TotalNonHazardousWasteGeneratedVolume" xlink:type="locator"/>
+    <link:calculationArc order="2.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalWasteGeneratedVolume" xlink:to="TotalNonHazardousWasteGeneratedVolume" xlink:type="arc"/>
+  </link:calculationLink>
+  <link:calculationLink xlink:role="https://xbrl.efrag.org/taxonomy/vsme/2025-07-30/role-b08000" xlink:type="extended">
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfEmployees" xlink:label="NumberOfEmployees" xlink:type="locator"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfPermanentContractEmployees" xlink:label="NumberOfPermanentContractEmployees" xlink:type="locator"/>
+    <link:calculationArc order="1.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="NumberOfEmployees" xlink:to="NumberOfPermanentContractEmployees" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfTemporaryContractEmployees" xlink:label="NumberOfTemporaryContractEmployees" xlink:type="locator"/>
+    <link:calculationArc order="2.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="NumberOfEmployees" xlink:to="NumberOfTemporaryContractEmployees" xlink:type="arc"/>
+  </link:calculationLink>
+  <link:calculationLink xlink:role="https://xbrl.efrag.org/taxonomy/vsme/2025-07-30/role-b08100" xlink:type="extended">
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfEmployees" xlink:label="NumberOfEmployees" xlink:type="locator"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfMaleEmployees" xlink:label="NumberOfMaleEmployees" xlink:type="locator"/>
+    <link:calculationArc order="1.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="NumberOfEmployees" xlink:to="NumberOfMaleEmployees" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfFemaleEmployees" xlink:label="NumberOfFemaleEmployees" xlink:type="locator"/>
+    <link:calculationArc order="2.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="NumberOfEmployees" xlink:to="NumberOfFemaleEmployees" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfOtherGenderEmployees" xlink:label="NumberOfOtherGenderEmployees" xlink:type="locator"/>
+    <link:calculationArc order="3.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="NumberOfEmployees" xlink:to="NumberOfOtherGenderEmployees" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_NumberOfNonReportedGenderEmployees" xlink:label="NumberOfNonReportedGenderEmployees" xlink:type="locator"/>
+    <link:calculationArc order="4.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="NumberOfEmployees" xlink:to="NumberOfNonReportedGenderEmployees" xlink:type="arc"/>
+  </link:calculationLink>
+  <link:calculationLink xlink:role="https://xbrl.efrag.org/taxonomy/vsme/2025-07-30/role-c08000" xlink:type="extended">
+    <link:loc xlink:href="vsme-all.xsd#vsme_TotalRevenuesDerivedFromFossilFuelCoalOilAndGasSector" xlink:label="TotalRevenuesDerivedFromFossilFuelCoalOilAndGasSector" xlink:type="locator"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_RevenueDerivedFromCoal" xlink:label="RevenueDerivedFromCoal" xlink:type="locator"/>
+    <link:calculationArc order="1.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalRevenuesDerivedFromFossilFuelCoalOilAndGasSector" xlink:to="RevenueDerivedFromCoal" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_RevenueDerivedFromOil" xlink:label="RevenueDerivedFromOil" xlink:type="locator"/>
+    <link:calculationArc order="2.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalRevenuesDerivedFromFossilFuelCoalOilAndGasSector" xlink:to="RevenueDerivedFromOil" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#vsme_RevenueDerivedFromGas" xlink:label="RevenueDerivedFromGas" xlink:type="locator"/>
+    <link:calculationArc order="3.0" weight="1.0" xlink:arcrole="https://xbrl.org/2023/arcrole/summation-item" xlink:from="TotalRevenuesDerivedFromFossilFuelCoalOilAndGasSector" xlink:to="RevenueDerivedFromGas" xlink:type="arc"/>
+  </link:calculationLink>
+</link:linkbase>

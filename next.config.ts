@@ -4,9 +4,7 @@ import createNextIntlPlugin from 'next-intl/plugin';
 const withNextIntl = createNextIntlPlugin('./i18n.config.ts');
 
 const nextConfig: NextConfig = {
-  turbopack: {
-    root: __dirname,
-  },
+  // Turbopack disabled for better App Router params compatibility
 };
 
 export default withNextIntl(nextConfig);

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (C) Copyright EFRAG - https://efrag.org/ -->
+<link:linkbase xmlns:gen="http://xbrl.org/2008/generic" xmlns:label="http://xbrl.org/2008/label" xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xbrl.org/2003/linkbase http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd http://xbrl.org/2008/generic http://www.xbrl.org/2008/generic-link.xsd http://xbrl.org/2008/label http://www.xbrl.org/2008/generic-label.xsd">
+  <link:roleRef roleURI="http://www.xbrl.org/2008/role/label" xlink:href="http://www.xbrl.org/2008/generic-label.xsd#standard-label" xlink:type="simple"/>
+  <link:roleRef roleURI="http://www.xbrl.org/2008/role/link" xlink:href="http://www.xbrl.org/2008/generic-link.xsd#standard-link-role" xlink:type="simple"/>
+  <link:arcroleRef arcroleURI="http://xbrl.org/arcrole/2008/element-label" xlink:href="http://www.xbrl.org/2008/generic-label.xsd#element-label" xlink:type="simple"/>
+  <gen:link xlink:role="http://www.xbrl.org/2008/role/link" xlink:type="extended">
+    <link:loc xlink:href="vsme-all.xsd#role-b01000" xlink:label="loc_role-b01000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b01000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">Grundlæggende oplysninger - Grundlag for udarbejdelse</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b01000" xlink:to="label_role-b01000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b01100" xlink:label="loc_role-b01100" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b01100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B01.100] - Generel information - Liste over datterselskaber</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b01100" xlink:to="label_role-b01100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b01200" xlink:label="loc_role-b01200" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b01200" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B01.200] - Generel information - Liste over lokationer</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b01200" xlink:to="label_role-b01200" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b02000" xlink:label="loc_role-b02000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b02000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B02.000] - Generelle oplysninger - Praksisser, politikker og/eller fremtidige initiativer for omstilling til en mere bæredygtig økonomi</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b02000" xlink:to="label_role-b02000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b02100" xlink:label="loc_role-b02100" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b02100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B02.100] - Generelle oplysninger - Specifikke oplysninger for kooperativer</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b02100" xlink:to="label_role-b02100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b03000" xlink:label="loc_role-b03000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b03000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B03.000] - Miljø - Samlet energiforbrug</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b03000" xlink:to="label_role-b03000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b03100" xlink:label="loc_role-b03100" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b03100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B03.100] - Miljø - Opdeling af energiforbrug</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b03100" xlink:to="label_role-b03100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b03200" xlink:label="loc_role-b03200" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b03200" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B03.200] - Miljø - Anslåede drivhusgasudledninger</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b03200" xlink:to="label_role-b03200" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b03300" xlink:label="loc_role-b03300" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b03300" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B03.300] - Miljø -  Drivhusgasintensitet</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b03300" xlink:to="label_role-b03300" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b04000" xlink:label="loc_role-b04000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b04000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B04.000] - Miljø - Forurening af luft, vand og jord: tilgængelighed af offentliggørelse</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b04000" xlink:to="label_role-b04000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b04100" xlink:label="loc_role-b04100" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b04100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B04.100] - Miljø - Forurening af luft, vand og jord: mængde af udledninger</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b04100" xlink:to="label_role-b04100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b05000" xlink:label="loc_role-b05000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b05000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B05.000] - Miljø - Lokationer i biodiversitetsfølsomme områder</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b05000" xlink:to="label_role-b05000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b05100" xlink:label="loc_role-b05100" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b05100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B05.100] - Miljø - Biodiversitet - på Arealforbrug</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b05100" xlink:to="label_role-b05100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b06000" xlink:label="loc_role-b06000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b06000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B06.000] - Miljø - Vandudtag</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b06000" xlink:to="label_role-b06000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b06100" xlink:label="loc_role-b06100" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b06100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B06.100] - Miljø - Vandforbrug</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b06100" xlink:to="label_role-b06100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b07000" xlink:label="loc_role-b07000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b07000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B07.000] - Miljø - Beskrivelse af principper for cirkulær økonomi</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b07000" xlink:to="label_role-b07000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b07100" xlink:label="loc_role-b07100" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b07100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B07.100] - Miljø - Opdeling af affald efter type</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b07100" xlink:to="label_role-b07100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b07200" xlink:label="loc_role-b07200" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b07200" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B07.200] - Miljø - Samlet mængde farligt og ikke-farligt affald</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b07200" xlink:to="label_role-b07200" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b07300" xlink:label="loc_role-b07300" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b07300" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B07.300] - Miljø - Opdeling af den årlige massestrøm af relevante materialer anvendt af virksomheden</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b07300" xlink:to="label_role-b07300" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b07400" xlink:label="loc_role-b07400" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b07400" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B07.400] - Miljø - Samlet årlig massestrøm af materialer brugt af virksomheden</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b07400" xlink:to="label_role-b07400" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b08000" xlink:label="loc_role-b08000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b08000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B08.000] - Social - Arbejdsstyrke - Generelle karakteristika: type af kontrakt</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b08000" xlink:to="label_role-b08000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b08100" xlink:label="loc_role-b08100" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b08100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B08.100] - Social - Arbejdsstyrke - Generelle karakteristika: køn</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b08100" xlink:to="label_role-b08100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b08200" xlink:label="loc_role-b08200" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b08200" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B08.200] - Social - Arbejdsstyrke - Generelle karakteristika: ansættelsesland</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b08200" xlink:to="label_role-b08200" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b08300" xlink:label="loc_role-b08300" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b08300" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B08.300] - Social - Arbejdsstyrke - Generelle karakteristika: Medarbejdsomsætning</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b08300" xlink:to="label_role-b08300" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b09000" xlink:label="loc_role-b09000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b09000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B09.000] - Social - Arbejdsstyrke - Sundhed og sikkerhed</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b09000" xlink:to="label_role-b09000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b10000" xlink:label="loc_role-b10000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b10000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[B10.000] - Social - Arbejdsstyrke - Vederlag, kollektive overenskomster og uddannelse</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b10000" xlink:to="label_role-b10000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-b11000" xlink:label="loc_role-b11000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-b11000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">B11 – Domme og bøder for korruption og bestikkelse</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-b11000" xlink:to="label_role-b11000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c01000" xlink:label="loc_role-c01000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-c01000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C01.000] - Generelle oplysninger - Strategi: Forretningsmodel og bæredygtighedsrelaterede initiativer</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c01000" xlink:to="label_role-c01000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c02000" xlink:label="loc_role-c02000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-c02000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C02.000] - Generelle oplysninger - Beskrivelse af praksisser, politikker og/eller fremtidige initiativer for omstillingen til en mere bæredygtig økonomi</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c02000" xlink:to="label_role-c02000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c03000" xlink:label="loc_role-c03000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-c03000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C03.000] - Miljø - Basisår og målår for reduktion af drivhusgasudledninger</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c03000" xlink:to="label_role-c03000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c03100" xlink:label="loc_role-c03100" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-c03100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C03.100] - Miljø - Mål for reduktion af drivhusgasudledninger</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c03100" xlink:to="label_role-c03100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c03200" xlink:label="loc_role-c03200" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-c03200" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C03.200] - Miljø - Liste over de vigtigste foranstaltninger, som virksomheden søger at gennemføre for at nå sine mål</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c03200" xlink:to="label_role-c03200" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c03300" xlink:label="loc_role-c03300" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-c03300" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C03.300] - Miljø - Omstillingsplan for virksomheder, der opererer i sektorer med stor klimaindvirkning</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c03300" xlink:to="label_role-c03300" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c04000" xlink:label="loc_role-c04000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-c04000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C04.000] - Miljø - Klimarisici</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c04000" xlink:to="label_role-c04000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c05000" xlink:label="loc_role-c05000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-c05000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C05.000] - Social - Supplerende (generelle) oplysninger om arbejdsstyrken</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c05000" xlink:to="label_role-c05000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c06000" xlink:label="loc_role-c06000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-c06000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C06.000] - Social - Supplerende oplysninger om egen arbejdsstyrke - Politikker og processer vedrørende menneskerettigheder</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c06000" xlink:to="label_role-c06000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c07000" xlink:label="loc_role-c07000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-c07000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C07.000] - Social - Alvorlige negative menneskerettighedshændelser</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c07000" xlink:to="label_role-c07000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c08000" xlink:label="loc_role-c08000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-c08000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C08.000] - Virksomhedsadfærd - Indtægter fra bestemte aktiviteter</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c08000" xlink:to="label_role-c08000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c08100" xlink:label="loc_role-c08100" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-c08100" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C08.100] - Virksomhedsadfærd - Udelukkelse fra EU-benchmarks</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c08100" xlink:to="label_role-c08100" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-c09000" xlink:label="loc_role-c09000" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-c09000" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[C09.000] - Virksomhedsadfærd - Kønsfordeling i ledelsesorganet</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-c09000" xlink:to="label_role-c09000" xlink:type="arc"/>
+    <link:loc xlink:href="vsme-all.xsd#role-other" xlink:label="loc_role-other" xlink:type="locator"/>
+    <label:label xml:lang="da" xlink:label="label_role-other" xlink:role="http://www.xbrl.org/2008/role/label" xlink:type="resource">[D99.000] - Anden og/eller virksomhedsspecifik information</label:label>
+    <gen:arc order="1.0" xlink:arcrole="http://xbrl.org/arcrole/2008/element-label" xlink:from="loc_role-other" xlink:to="label_role-other" xlink:type="arc"/>
+  </gen:link>
+</link:linkbase>
