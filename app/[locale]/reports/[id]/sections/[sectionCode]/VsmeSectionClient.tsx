@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState, useCallback } from 'react';
+import { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { createSupabaseBrowserClient } from '@/lib/supabase/client';
@@ -15,6 +15,39 @@ function hasAnyValue(a: any) {
   return t.length > 0 || n.length > 0 || d.length > 0;
 }
 
+function normalizeExample(exampleAnswer: unknown) {
+  let normalized = String(exampleAnswer ?? '').trim();
+  if (!normalized) return '';
+
+  normalized = normalized.replace(/^example:\s*/i, '').trim();
+
+  const startsWithQuote = ['"', "'", '“', '”', '‘', '’'].includes(normalized.charAt(0));
+  const endsWithQuote = ['"', "'", '“', '”', '‘', '’'].includes(normalized.charAt(normalized.length - 1));
+  if (startsWithQuote && endsWithQuote && normalized.length >= 2) {
+    normalized = normalized.slice(1, -1).trim();
+  }
+
+  return normalized;
+}
+
+function isFilled(a: any) {
+  return a?.na === true || hasAnyValue(a);
+}
+
+function buildPlaceholder(exampleAnswer: unknown) {
+  const normalized = normalizeExample(exampleAnswer);
+  return normalized ? `Example: ${normalized}` : '';
+}
+
+function getPlaceholder(q: any, a: any) {
+  const answerType = String(q?.answer_type ?? '').toLowerCase();
+  if (isFilled(a)) return '';
+  if (answerType === 'text' || answerType === 'string' || answerType === 'number' || answerType === 'integer' || answerType === 'numeric') {
+    return buildPlaceholder(q?.example_answer);
+  }
+  return '';
+}
+
 type LocalAnswer = {
   value_text?: string;
   value_numeric?: string; // stored as string in UI
@@ -24,6 +57,7 @@ type LocalAnswer = {
 
 type SectionGroup = 'General Information' | 'Environment' | 'Social' | 'Governance';
 const GROUP_ORDER = ['General Information', 'Environment', 'Social', 'Governance'] as const;
+const CURRENCY_UNITS = ['EUR', 'USD', 'GBP', 'CZK', 'PLN', 'HUF', 'CHF'] as const;
 const SECTION_GROUP_OVERRIDE: Record<string, SectionGroup> = {
   B1: 'General Information',
   B2: 'General Information',
@@ -112,7 +146,15 @@ export default function VsmeSectionClient() {
   const [error, setError] = useState<string | null>(null);
   const [sectionQuestions, setSectionQuestions] = useState<VsmeQuestion[]>([]);
   const [answersById, setAnswersById] = useState<Record<string, LocalAnswer>>({});
-  const [showStickyNav, setShowStickyNav] = useState(false);
+  const [reportCurrency, setReportCurrency] = useState<string | null>(null);
+  const [scrolledPastThreshold, setScrolledPastThreshold] = useState(false);
+  const [footerNavVisible, setFooterNavVisible] = useState(false);
+  const footerNavRef = useRef<HTMLDivElement | null>(null);
+
+  const normalizeCurrency = useCallback((value: unknown) => {
+    const next = String(value ?? '').trim().toUpperCase();
+    return next || null;
+  }, []);
 
   // Sections panel state
   const [openGroup, setOpenGroup] = useState<SectionGroup>(currentGroup);
@@ -150,7 +192,7 @@ export default function VsmeSectionClient() {
           });
         }
 
-        const { data: allQs, error: allQsErr } = await supabase.rpc('get_vsme_questions_for_report', {
+        const { data: allQs, error: allQsErr } = await supabase.rpc('get_vsme_questions_for_report_v2', {
           p_report_id: reportId,
         });
 
@@ -187,7 +229,7 @@ export default function VsmeSectionClient() {
 
       try {
         const supabase = createSupabaseBrowserClient();
-        const { data, error: rpcError } = await supabase.rpc('get_vsme_questions_for_report', {
+        const { data, error: rpcError } = await supabase.rpc('get_vsme_questions_for_report_v2', {
           p_report_id: reportId,
         });
 
@@ -347,20 +389,104 @@ export default function VsmeSectionClient() {
       : undefined;
   const prevChapterTitle = prevChapterCode ? VSME_SECTION_META[prevChapterCode]?.title || prevChapterCode : '';
   const nextChapterTitle = nextChapterCode ? VSME_SECTION_META[nextChapterCode]?.title || nextChapterCode : '';
+  const showStickyNav = scrolledPastThreshold && !footerNavVisible;
 
   useEffect(() => {
     const onScroll = () => {
-      const y = window.scrollY;
-      const viewportBottom = y + window.innerHeight;
-      const documentHeight = document.documentElement.scrollHeight;
-      const nearBottom = documentHeight - viewportBottom <= 250;
-      setShowStickyNav(y > 300 && !nearBottom);
+      setScrolledPastThreshold(window.scrollY > 450);
     };
 
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    const node = footerNavRef.current;
+    if (!node) {
+      setFooterNavVisible(false);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setFooterNavVisible(entry.isIntersecting);
+      },
+      { threshold: 0 },
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [sectionQuestions.length, loading, error, prevChapterCode, nextChapterCode]);
+
+  const templateCurrencyQuestionId = useMemo(() => {
+    const inSection = sectionQuestions.find((q: any) => String(q?.vsme_datapoint_id ?? '') === 'template_currency');
+    if (inSection?.question_id) return String(inSection.question_id);
+
+    const inAll = allQuestions.find((q: any) => String(q?.vsme_datapoint_id ?? '') === 'template_currency');
+    if (inAll?.question_id) return String(inAll.question_id);
+
+    return null;
+  }, [sectionQuestions, allQuestions]);
+
+  const templateCurrencyValue = useMemo(() => {
+    if (!templateCurrencyQuestionId) return null;
+    return answersById[templateCurrencyQuestionId]?.value_text ?? null;
+  }, [templateCurrencyQuestionId, answersById]);
+
+  useEffect(() => {
+    if (!reportId) return;
+
+    let cancelled = false;
+
+    const inMemoryCurrency = normalizeCurrency(templateCurrencyValue);
+
+    if (inMemoryCurrency) {
+      setReportCurrency(inMemoryCurrency);
+      return;
+    }
+
+    const run = async () => {
+      try {
+        const supabase = createSupabaseBrowserClient();
+
+        const { data: qRow, error: qErr } = await supabase
+          .from('disclosure_question')
+          .select('id')
+          .eq('framework', 'VSME')
+          .eq('vsme_datapoint_id', 'template_currency')
+          .maybeSingle();
+
+        if (qErr || !(qRow as any)?.id) {
+          if (!cancelled) setReportCurrency(null);
+          return;
+        }
+
+        const { data: aRow, error: aErr } = await supabase
+          .from('disclosure_answer')
+          .select('value_text')
+          .eq('report_id', reportId)
+          .eq('question_id', (qRow as any).id)
+          .maybeSingle();
+
+        if (!cancelled) {
+          if (aErr) {
+            setReportCurrency(null);
+          } else {
+            setReportCurrency(normalizeCurrency((aRow as any)?.value_text));
+          }
+        }
+      } catch {
+        if (!cancelled) setReportCurrency(null);
+      }
+    };
+
+    void run();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [reportId, templateCurrencyValue, normalizeCurrency]);
 
   const saveAnswer = async (questionId: string, answerType: string, value: string | undefined) => {
     if (!reportId) return;
@@ -444,8 +570,14 @@ export default function VsmeSectionClient() {
       <div className="max-w-3xl mx-auto">
         {/* REPORT BOX (must be on top) */}
         <div className="bg-white rounded-lg border border-gray-200 border-t-4 border-t-blue-500 shadow-sm p-4 mb-6">
-          <div>
+          <div className="flex items-center justify-between gap-3">
             <div className="text-lg font-semibold text-gray-900">Report status</div>
+            <button
+              type="button"
+              className="shrink-0 inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
+            >
+              Report settings
+            </button>
           </div>
 
           <div className="mt-3 flex flex-wrap items-start gap-x-14 gap-y-4 max-w-[520px]">
@@ -590,19 +722,19 @@ export default function VsmeSectionClient() {
           </div>
         </div>
 
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">
+        <div className="sticky top-16 z-30 mb-4 bg-white/95 backdrop-blur border-b border-gray-200">
+          <div className="flex items-center justify-between px-3 py-2">
+            <div className="min-w-0 text-base font-semibold text-gray-900 truncate">
               {sectionCode} — {sectionTitle}
-            </h1>
+            </div>
+            <button
+              type="button"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="ml-4 shrink-0 text-xs font-normal text-gray-500 hover:text-gray-700 hover:underline underline-offset-2"
+            >
+              Back to top
+            </button>
           </div>
-
-          <Link
-            href={`/${locale}/reports/${reportId}/questions`}
-            className="px-3 py-2 bg-gray-700 text-white rounded text-sm"
-          >
-            Back
-          </Link>
         </div>
 
         {/* SECTION QUESTIONS */}
@@ -626,6 +758,35 @@ export default function VsmeSectionClient() {
                 const a = answersById[q.question_id] ?? {};
                 const allowed = (q.config_jsonb?.allowed_values ?? []) as string[];
                 const isNa = a.na === true;
+                const guidanceText = String(q.guidance_text ?? '').trim();
+                const unit = String(q.unit ?? '').trim().toUpperCase();
+                const isNumeric = t === 'number' || t === 'integer' || t === 'numeric';
+                const displayUnit = isNumeric
+                  ? (CURRENCY_UNITS.includes(unit as (typeof CURRENCY_UNITS)[number]) ? reportCurrency ?? unit : unit)
+                  : '';
+                const baseText = q.question_text ?? q.title ?? 'Untitled question';
+
+                let renderedQuestionText = baseText;
+
+                if (
+                  displayUnit &&
+                  (q.answer_type === 'number' ||
+                   q.answer_type === 'numeric' ||
+                   q.answer_type === 'integer')
+                ) {
+                  const trimmed = baseText.trim().toLowerCase();
+
+                  const endsWithIn =
+                    trimmed.endsWith(' in') ||
+                    trimmed.endsWith(' in:');
+
+                  const alreadyHasUnit =
+                    baseText.toUpperCase().endsWith(` ${displayUnit}`);
+
+                  if (endsWithIn && !alreadyHasUnit) {
+                    renderedQuestionText = `${baseText} ${displayUnit}`;
+                  }
+                }
 
                 return (
                   <li
@@ -634,21 +795,14 @@ export default function VsmeSectionClient() {
                       'rounded-lg shadow',
                       'border border-gray-200',
                       'border-l-4',
-                      isNa ? 'border-l-amber-400 bg-amber-50/25' : 'border-l-blue-500 bg-white',
+                      isNa ? 'border-l-gray-300 bg-gray-50/80 opacity-80' : 'border-l-blue-500 bg-white',
                       'p-4 transition-colors',
                     ].join(' ')}
                   >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="min-w-0">
-                        <div className="text-[11px] text-gray-500">
-                          {idx + 1} / {total}
-                        </div>
-                        <div className="mt-1 text-[10px] tracking-wide text-gray-400 uppercase">{q.code ?? ''}</div>
-                        <div className="mt-2 text-base font-semibold text-gray-900">
-                          {q.question_text ?? q.title ?? 'Untitled question'}
-                        </div>
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="text-[11px] text-gray-400">
+                        {idx + 1} / {total}
                       </div>
-
                       <label className="flex items-center gap-3 shrink-0 select-none cursor-pointer">
                         <span className="text-xs text-gray-500">Not applicable</span>
                         <div className="relative">
@@ -663,6 +817,13 @@ export default function VsmeSectionClient() {
                         </div>
                       </label>
                     </div>
+
+                    <div className="mt-2 text-base font-semibold text-gray-900">
+                      {renderedQuestionText}
+                    </div>
+                    {guidanceText ? (
+                      <div className="mt-1 text-sm leading-relaxed text-slate-600">{guidanceText}</div>
+                    ) : null}
 
                     {isNa ? (
                       <div className="mt-3 text-xs text-gray-500">Marked as Not applicable (answer preserved)</div>
@@ -679,17 +840,20 @@ export default function VsmeSectionClient() {
                                   ...prev,
                                   [q.question_id]: { ...(prev[q.question_id] ?? {}), value_text: v },
                                 }));
+                                if (String(q.vsme_datapoint_id ?? '') === 'template_currency') {
+                                  setReportCurrency(normalizeCurrency(v));
+                                }
                               }}
                               onBlur={(e) => saveAnswer(q.question_id, q.answer_type, e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded"
+                              className="w-full px-3 py-2 border border-gray-300 rounded placeholder:text-slate-400 placeholder:italic"
                               autoComplete="off"
-                              placeholder="Type…"
+                              placeholder={getPlaceholder(q, a)}
                             />
                           </div>
                         )}
 
                         {(t === 'number' || t === 'integer' || t === 'numeric') && (
-                          <div className="mt-3">
+                          <div className="mt-3 flex items-center gap-2">
                             <input
                               type="number"
                               value={a.value_numeric ?? ''}
@@ -701,9 +865,10 @@ export default function VsmeSectionClient() {
                                 }));
                               }}
                               onBlur={(e) => saveAnswer(q.question_id, q.answer_type, e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded"
-                              placeholder="0"
+                              className="flex-1 w-full px-3 py-2 border border-gray-300 rounded placeholder:text-slate-400 placeholder:italic"
+                              placeholder={getPlaceholder(q, a)}
                             />
+                            {displayUnit ? <span className="text-xs text-gray-500 shrink-0">{displayUnit}</span> : null}
                           </div>
                         )}
 
@@ -737,6 +902,9 @@ export default function VsmeSectionClient() {
                                     ...prev,
                                     [q.question_id]: { ...(prev[q.question_id] ?? {}), value_text: v },
                                   }));
+                                  if (String(q.vsme_datapoint_id ?? '') === 'template_currency') {
+                                    setReportCurrency(normalizeCurrency(v));
+                                  }
                                 }}
                                 onBlur={(e) => saveAnswer(q.question_id, q.answer_type, e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded"
@@ -752,6 +920,9 @@ export default function VsmeSectionClient() {
                                     ...prev,
                                     [q.question_id]: { ...(prev[q.question_id] ?? {}), value_text: v },
                                   }));
+                                  if (String(q.vsme_datapoint_id ?? '') === 'template_currency') {
+                                    setReportCurrency(normalizeCurrency(v));
+                                  }
                                 }}
                                 onBlur={(e) => saveAnswer(q.question_id, q.answer_type, e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded bg-white"
@@ -774,7 +945,7 @@ export default function VsmeSectionClient() {
             </ul>
 
             {(prevChapterCode || nextChapterCode) ? (
-              <div className="max-w-3xl mx-auto mt-10">
+              <div ref={footerNavRef} className="max-w-3xl mx-auto mt-10">
                 <div className="flex gap-4">
                   {prevChapterCode ? (
                     <Link
@@ -810,14 +981,15 @@ export default function VsmeSectionClient() {
         )}
 
         {showStickyNav && sectionQuestions.length > 0 && !loading && !error && (prevChapterCode || nextChapterCode) ? (
-          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 flex items-stretch gap-2 bg-white/95 backdrop-blur border border-gray-200 rounded-xl shadow-lg p-2">
-            <div className="flex gap-2 items-stretch">
+          <div className="fixed bottom-6 left-0 right-0 z-40 pointer-events-none">
+            <div className="max-w-3xl mx-auto pointer-events-auto">
+              <div className="flex gap-4">
               {prevChapterCode ? (
                 <Link
                   href={`/${locale}/reports/${reportId}/sections/${prevChapterCode}`}
-                  className="h-full flex flex-col justify-center rounded-lg border border-gray-300 bg-white hover:bg-gray-50 text-gray-800 text-xs font-medium px-4 py-2 leading-tight transition min-w-[200px]"
+                  className="h-full flex flex-col justify-center flex-1 px-4 py-3 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 text-gray-800 text-sm font-medium leading-tight transition shadow-sm"
                 >
-                  <span className="text-gray-500">← Previous</span>
+                  <span className="text-gray-500 text-xs">← Previous</span>
                   <span className="truncate">
                     {prevChapterCode} — {prevChapterTitle}
                   </span>
@@ -829,9 +1001,9 @@ export default function VsmeSectionClient() {
               {nextChapterCode ? (
                 <Link
                   href={`/${locale}/reports/${reportId}/sections/${nextChapterCode}`}
-                  className="h-full flex flex-col justify-center rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-4 py-2 leading-tight transition min-w-[200px]"
+                  className="h-full flex flex-col justify-center flex-1 px-4 py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium leading-tight transition shadow-sm"
                 >
-                  <span className="text-blue-100">Next →</span>
+                  <span className="text-blue-100 text-xs">Next →</span>
                   <span className="truncate">
                     {nextChapterCode} — {nextChapterTitle}
                   </span>
@@ -839,6 +1011,7 @@ export default function VsmeSectionClient() {
               ) : (
                 <div className="flex-1" />
               )}
+              </div>
             </div>
           </div>
         ) : null}

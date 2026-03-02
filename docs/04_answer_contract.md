@@ -1,7 +1,7 @@
 # 04 – ANSWER STORAGE CONTRACT (VSME)
 
-This file defines the storage contract for answers in `disclosure_answer`,
-including explicit **N/A** support.
+This file defines the storage contract for answers in disclosure_answer,
+including explicit N/A support and question help text contract.
 
 UI must follow this contract. DB/RPC logic assumes this contract.
 
@@ -10,15 +10,18 @@ UI must follow this contract. DB/RPC logic assumes this contract.
 ## 1. Table: disclosure_answer (key facts)
 
 Identity / upsert key:
-- `(report_id, question_id)`
+
+(report_id, question_id)
 
 Use UPSERT with conflict target:
-- `onConflict: 'report_id,question_id'`
+
+onConflict: 'report_id,question_id'
 
 Note:
-- DB currently contains duplicate UNIQUE constraints for this pair.
-- Do not add another uniqueness rule and do not attempt to “fix” this as part of app work
-  unless explicitly requested (schema is stable).
+
+DB currently contains duplicate UNIQUE constraints for this pair.  
+Do not add another uniqueness rule and do not attempt to “fix” this as part of app work  
+unless explicitly requested (schema is stable).
 
 ---
 
@@ -26,132 +29,240 @@ Note:
 
 Each in-scope question is always in exactly one state:
 
-### 1) Missing
-- No `disclosure_answer` row exists
-OR
-- a row exists but contains **no valid typed value** AND `value_jsonb.na` is not true
+### Missing
 
-### 2) Answered (with value)
-- a valid typed value exists in the relevant value column (by `answer_type`)
-AND
-- `value_jsonb.na` is not true (or absent)
+No disclosure_answer row exists  
+OR  
+row exists but contains no valid typed value AND value_jsonb.na is not true
 
-### 3) Answered as N/A
-- `value_jsonb.na = true`
+### Answered (with value)
+
+Valid typed value exists in correct column  
+AND  
+value_jsonb.na is not true (or absent)
+
+### Answered as N/A
+
+value_jsonb.na = true
 
 N/A counts as answered for progress.
 
 ---
 
-## 3. What counts as “has value” (typed validity)
+## 3. Typed value storage (authoritative)
 
-A question is “answered with value” if:
+Valid typed value must be stored in correct column according to question.answer_type:
 
-- **text / string / select**: `value_text` is a non-empty trimmed string
-- **number / numeric**: `value_numeric` is not null
-- **number (legacy)**: `value_number` is treated as valid only if used by the question type in UI
-- **integer**: `value_integer` is not null
-- **date**: `value_date` is not null
-- **boolean**: `value_boolean` is not null
-- **json**: `value_jsonb` contains at least one business key other than `na`
-  (i.e. `value_jsonb - 'na' <> '{}'::jsonb`)
+text / string / select → value_text  
+numeric → value_numeric  
+number (legacy) → value_number (only if used by question definition)  
+integer → value_integer  
+date → value_date  
+boolean → value_boolean  
+json → value_jsonb (excluding na key)
 
 Empty string does NOT count as answered.
 
-Important:
-- Values must be stored in the correct typed column for the question’s `answer_type`.
-- Storing values in the wrong column is treated as Missing by progress logic.
+Storing value in wrong column is treated as Missing.
 
 ---
 
 ## 4. N/A flag rules (critical)
 
-N/A is stored as:
-- `disclosure_answer.value_jsonb.na = true`
+N/A is stored in:
 
-### NA ON (mark as N/A)
+disclosure_answer.value_jsonb.na = true
 
-When user marks question as N/A:
-- Upsert row with:
-  - report_id
-  - question_id
-  - `value_jsonb = jsonb_set(coalesce(existing_jsonb,'{}'::jsonb), '{na}', 'true'::jsonb, true)`
+### NA ON
 
-Rule:
-- Must not overwrite other keys in `value_jsonb`.
-- Must not destroy existing typed values in other columns.
+When marking as N/A:
 
-### NA OFF (unmark N/A)
+Upsert row with:
 
-When user unmarks N/A:
-- Remove only the `na` key:
-  - `value_jsonb = coalesce(existing_jsonb,'{}'::jsonb) - 'na'`
+report_id  
+question_id  
+value_jsonb = jsonb_set(coalesce(existing_jsonb,'{}'::jsonb), '{na}', 'true'::jsonb, true)
 
-Rule:
-- Must not delete the row automatically.
-- Row may still contain values that become “active” again.
+Rules:
+
+Must merge JSON, not overwrite  
+Must not destroy existing typed values  
 
 ---
 
-## 5. Preservation rule (avoid data loss)
+### NA OFF
+
+When unmarking N/A:
+
+value_jsonb = coalesce(existing_jsonb,'{}'::jsonb) - 'na'
+
+Rules:
+
+Must not delete row automatically  
+Must preserve typed values  
+
+---
+
+## 5. Preservation rule (no data loss)
 
 Toggling N/A must never destroy previously stored values.
 
-This is why:
-- NA ON must merge (not replace)
-- NA OFF must delete only the `na` key
+If user toggles N/A ON and later OFF:
 
-If user toggles NA ON and later OFF:
-- previously entered values must still exist (unless user explicitly cleared them)
+previous values must still exist unless explicitly cleared.
 
 ---
 
 ## 6. Save rules (UI)
 
-### Writing a normal value
+### Writing value
 
-When saving a value for an answer:
-- write to the correct typed column
-- optionally clear N/A flag:
-  - if user enters a value, remove `value_jsonb.na` (recommended)
+When saving answer:
 
-### Clearing a value
+Write value to correct typed column  
+Recommended: remove value_jsonb.na if value entered  
 
-If user explicitly clears the value (and does NOT mark N/A):
-- either delete the row OR keep it with NULL typed values
-- but progress logic must treat it as Missing unless NA is true
+---
 
-Recommended for simplicity:
-- if all typed value columns are NULL/empty AND `value_jsonb` has no business keys (excluding `na`)
-  → delete the row
+### Clearing value
 
-Important:
-- deleting rows is allowed for “clear value”
-- deleting rows is NOT part of NA toggle
+If user clears value AND does not mark N/A:
+
+Allowed:
+
+delete row  
+OR  
+keep row with NULL values  
+
+Progress logic treats as Missing.
+
+Recommended:
+
+Delete row when no typed values AND no JSON business keys.
+
+Deleting rows is allowed for clearing values, but NOT part of N/A toggle.
 
 ---
 
 ## 7. Progress logic alignment (authoritative)
 
-Progress calculations (RPCs) must treat:
+Progress RPC logic treats:
 
-- Answered = (has_value OR na=true)
-- Missing = total_in_scope - answered
-- Completed = answered (includes NA)
+Answered = has_valid_value OR value_jsonb.na = true  
+Missing = total_in_scope - answered  
+Completed = answered  
 
 ---
 
-## 8. Known risks / footguns
+## 8. Question help text contract (disclosure_question)
 
-1) JSONB overwrite risk  
-If UI uses `.upsert({ value_jsonb: { na: true } })` without merge,
-it overwrites the whole JSON and can destroy other keys.
+Help text fields exist in disclosure_question table.
 
-2) Wrong typed column writes  
-If UI writes a number into `value_text` (or similar),
-progress logic will treat the answer as Missing.
+Fields:
+
+guidance_text TEXT NULL  
+example_answer TEXT NULL  
+
+These fields are read-only for answer storage.
+
+They are delivered via RPC get_vsme_questions_for_report_v2.
+
+---
+
+### Semantics
+
+guidance_text:
+
+Shown under question title  
+Explains what data user should provide  
+Purely informational  
+
+example_answer:
+
+Shown under input  
+Prefixed with "Example:"  
+Provides format guidance  
+
+---
+
+### Storage and behavior rules
+
+These fields:
+
+Are NOT stored in disclosure_answer  
+Are NOT modified by UI save operations  
+Are NOT included in UPSERT operations  
+Are NOT required  
+May be NULL  
+
+They do NOT affect:
+
+Answer validity  
+Completion state  
+Progress calculation  
+Export readiness  
+Scope logic  
+
+They are UX-only metadata.
+
+---
+
+## 9. Unit override storage (optional)
+
+Unit is primarily resolved from vsme_datapoint.unit in RPC.
+
+disclosure_answer.unit exists only as an optional per-report override.
+
+Rules:
+
+- UI SHOULD NOT write unit in MVP flows (default NULL)
+- If unit is written, it must be a deliberate override action
+- RPC resolves unit as: coalesce(disclosure_answer.unit, vsme_datapoint.unit, disclosure_question.unit)
+
+Unit values must never be inferred from question_text in UI.
+
+---
+
+## 10. Separation of concerns (critical)
+
+disclosure_question contains:
+
+question_text  
+guidance_text  
+example_answer  
+answer_type  
+scope metadata  
+
+disclosure_answer contains:
+
+actual answer values  
+na flag  
+timestamps  
+(optional) unit override  
+
+disclosure_question defines WHAT is asked  
+disclosure_answer defines WHAT was answered  
+
+These responsibilities must never be mixed.
+
+---
+
+## 11. Known risks / footguns
+
+JSON overwrite risk  
+Never overwrite value_jsonb entirely when toggling NA.
+
+Wrong typed column writes  
+Writing value to wrong column causes progress to treat as Missing.
+
+Help text overwrite risk  
+UI must never attempt to write guidance_text or example_answer.
+
+Unit confusion risk  
+UI must not invent units; always use RPC-returned unit.
 
 Mitigations:
-- implement safe NA toggle via DB RPC (preferred long-term)
-- centralize “typed write” mapping in one UI module
-- keep RPC as the single source of truth for progress/readiness
+
+Use RPC for scope and progress  
+Centralize answer write logic  
+Keep disclosure_question read-only from UI perspective

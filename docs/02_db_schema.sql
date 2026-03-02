@@ -27,6 +27,8 @@
 -- - disclosure_answer guarded by enforce_answer_framework_match trigger
 -- - RLS enabled; topic access enforced via policies + company_member_topic_access
 -- - Packs (add-ons) are driven by report.vsme_pack_codes + report_pack + vsme_datapoint_pack
+-- - Question UX guidance is stored in disclosure_question.guidance_text and disclosure_question.example_answer (read-only metadata)
+-- - Preferred question-loading RPC for UI is get_vsme_questions_for_report_v2 (extended return shape; legacy RPC remains for compatibility)
 
 -- ============================================================
 -- 0) TABLE INVENTORY (public)
@@ -202,6 +204,12 @@
 -- section_code text null
 -- vsme_level text null
 --
+-- Notes (important):
+-- - guidance_text and example_answer are optional UX metadata for guided reporting.
+-- - They are read-only from UI perspective and must never be stored in disclosure_answer.
+-- - They do NOT affect scope, progress, readiness, or answer validity.
+-- - UI should load these via get_vsme_questions_for_report_v2.
+
 -- Constraints (confirmed subset)
 -- PRIMARY KEY (id)
 -- FOREIGN KEY (topic_id) REFERENCES topic(id) ON DELETE RESTRICT
@@ -250,7 +258,7 @@
 -- - disclosure_answer_report_id_question_id_key
 -- - unique_disclosure_answer
 -- Do not add another unique for this pair.
-
+--
 -- Triggers (confirmed)
 -- trg_disclosure_answer_set_updated_at BEFORE UPDATE EXECUTE FUNCTION set_updated_at()
 -- trg_enforce_answer_framework BEFORE INSERT/UPDATE EXECUTE FUNCTION enforce_answer_framework_match()

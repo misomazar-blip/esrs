@@ -8,9 +8,10 @@ Build a guided ESG reporting tool for SMEs (VSME) with:
 - deterministic scope & progress calculation (DB-driven)
 - role/topic-based access enforced by Supabase RLS
 - export always available + “readiness” summary (non-blocking)
+- guided UX via question metadata (guidance_text, example_answer)
 
 Key idea:  
-**DB/RPC are the source of truth. UI is a projection.**
+DB/RPC are the source of truth. UI is a projection.
 
 ---
 
@@ -31,20 +32,21 @@ Key idea:
 
 A report is a snapshot for a company + year:
 
-- `report.company_id`
-- `report.reporting_year`
-- `report.status`
-- `report.framework` (default VSME)
-- `report.vsme_mode` (`core` | `core_plus` | `comprehensive`)
-- `report.vsme_pack_codes` (text[] of selected add-on packs)
+- report.company_id
+- report.reporting_year
+- report.status
+- report.framework (default VSME)
+- report.vsme_mode (core | core_plus | comprehensive)
+- report.vsme_pack_codes (text[] of selected add-on packs)
 
 Uniqueness in DB:
 
-- One report per `(company_id, reporting_year)`
+- One report per (company_id, reporting_year)
 - This uniqueness currently applies across all frameworks
   (DB does not differentiate by framework in unique constraint)
 
 Implication:
+
 - Running multiple frameworks in the same year would require schema adjustment.
 - For VSME-only flow this is correct and stable.
 
@@ -52,25 +54,26 @@ Implication:
 
 ### 3.2 VSME Scope (no materiality)
 
-VSME flow does **not** use formal materiality assessment.
+VSME flow does not use formal materiality assessment.
 
 Scope is computed deterministically from:
 
-- framework filter (`report.framework = 'VSME'`)
-- `report.vsme_mode`
-- pack membership (`report.vsme_pack_codes` + `vsme_datapoint_pack`)
-- question metadata (`disclosure_question.section_code`, `vsme_datapoint_id`)
+- framework filter (report.framework = 'VSME')
+- report.vsme_mode
+- pack membership (report.vsme_pack_codes + vsme_datapoint_pack)
+- question metadata (disclosure_question.section_code, vsme_datapoint_id)
 - user topic permissions (RLS)
 
 Mode semantics:
 
-- `core` → questions where `section_code` LIKE `B%`
-- `core_plus` → `core` + datapoints included by selected packs
-- `comprehensive` → `core` + questions where `section_code` LIKE `C%`
+- core → questions where section_code LIKE B%
+- core_plus → core + datapoints included by selected packs
+- comprehensive → core + questions where section_code LIKE C%
 
 Important UI rule:
+
 - UI must never infer scope from static metadata alone (e.g. VSME_SECTION_META).
-- UI scope is derived from the RPC dataset returned by `get_vsme_questions_for_report(report_id)`.
+- UI scope is derived from the RPC dataset returned by get_vsme_questions_for_report_v2(report_id).
 
 ---
 
@@ -78,13 +81,13 @@ Important UI rule:
 
 Pack catalog:
 
-- `report_pack` defines valid pack codes
-- `vsme_datapoint_pack` maps `(datapoint_id, pack_code)`
-- `disclosure_question.vsme_datapoint_id` links questions to datapoints
+- report_pack defines valid pack codes
+- vsme_datapoint_pack maps (datapoint_id, pack_code)
+- disclosure_question.vsme_datapoint_id links questions to datapoints
 
 Important contract:
 
-- `report.vsme_pack_codes` must only contain values that exist in `report_pack.code`
+- report.vsme_pack_codes must only contain values that exist in report_pack.code
 - Scope expansion must always derive from DB joins
 - UI must not hardcode pack logic
 
@@ -99,7 +102,7 @@ Important contract:
 Enforced by:
 
 - Row Level Security (RLS)
-- `company_member_topic_access` (per-member per-topic permission table)
+- company_member_topic_access (per-member per-topic permission table)
 
 No UI-only enforcement. UI may hide, but DB must block.
 
@@ -108,9 +111,16 @@ No UI-only enforcement. UI may hide, but DB must block.
 ### 3.5 disclosure_question is shared
 
 Single table for ESRS + VSME.  
-Separation through `disclosure_question.framework`.
+Separation through disclosure_question.framework.
 
 No duplicate VSME-only runtime tables.
+
+Question UX metadata lives here:
+
+- guidance_text (optional)
+- example_answer (optional)
+
+These are informational only and never stored in disclosure_answer.
 
 ---
 
@@ -122,12 +132,12 @@ For a given report, UI needs:
 
 - question list in deterministic order
 - existing answers for those questions (if any)
-- question config (answer_type, allowed units/enums, help text)
+- question config (answer_type, allowed units/enums, UX help text)
 - stable identifiers for save/upsert
 
 Source of truth:
 
-- `get_vsme_questions_for_report(report_id)`
+- get_vsme_questions_for_report_v2(report_id)
 
 UI must not recompute scope rules.
 
@@ -139,8 +149,8 @@ Preferred:
 
 - Server Component loads report header + authorization sanity checks
 - Client Component loads questions via RPC:
-  - `get_vsme_questions_for_report(report_id)`
-  - `get_vsme_ctas_for_report(report_id)` (for progress)
+  - get_vsme_questions_for_report_v2(report_id)
+  - get_vsme_ctas_for_report(report_id) (for progress)
 
 Avoid heavy client-side joins.
 
@@ -150,23 +160,23 @@ Avoid heavy client-side joins.
 
 Save must be predictable and idempotent:
 
-- Upsert by `(report_id, question_id)`
-- Normalize value into correct typed column per `answer_type`
-- Support explicit “N/A” state
+- Upsert by (report_id, question_id)
+- Normalize value into correct typed column per answer_type
+- Support explicit N/A state
 
 N/A representation (current DB contract):
 
-- `disclosure_answer.value_jsonb -> { "na": true }`
+- disclosure_answer.value_jsonb -> { "na": true }
 
 Rules:
 
-- if `na=true`, value columns are ignored consistently
-- if `na=false` or absent, values must be stored in correct typed column
+- if na=true, value columns are ignored consistently
+- if na=false or absent, values must be stored in correct typed column
 
 After save:
 
 - optimistic local update
-- refresh progress via `get_vsme_ctas_for_report(report_id)`
+- refresh progress via get_vsme_ctas_for_report(report_id)
 
 ---
 
@@ -174,10 +184,10 @@ After save:
 
 The following DB mechanisms protect consistency:
 
-- `enforce_answer_framework_match()` trigger  
+- enforce_answer_framework_match() trigger  
   → ensures question.framework matches report.framework
 
-- `set_updated_at()` trigger  
+- set_updated_at() trigger  
   → ensures answer timestamps are consistent
 
 RLS policies prevent cross-company or unauthorized topic access.
@@ -190,18 +200,18 @@ These protections must not be bypassed.
 
 Sections UI is derived from the same RPC dataset used for questions:
 
-- `get_vsme_questions_for_report(report_id)` is the only source of truth.
+- get_vsme_questions_for_report_v2(report_id) is the only source of truth.
 
 Derivations computed in frontend (from RPC result):
 
-- `totalBySection[section_code]`
-- `completedBySection[section_code]` (Answered + N/A)
-- `totalByGroup[group]` and `completedByGroup[group]`
+- totalBySection[section_code]
+- completedBySection[section_code] (Answered + N/A)
+- totalByGroup[group] and completedByGroup[group]
 
-Chapters (B1, C2, etc.) display rule:
+Chapters display rule:
 
-- show a chapter only if `totalBySection[code] > 0`
-- chapters with `0/0` are out-of-scope and must not be shown
+- show a chapter only if totalBySection[code] > 0
+- chapters with 0/0 are out-of-scope and must not be shown
 - (edge case safety: if current route sectionCode has 0 questions, keep it visible)
 
 Themes (groups) shown:
@@ -215,29 +225,44 @@ Grouping is deterministic and shared across:
 - building the chapter list (group membership)
 - computing group totals
 
-Grouping resolver:
+---
 
-resolveSectionGroup(sectionCode) with explicit mapping:
+### 4.6 Section navigation (Prev / Next)
 
-General Information:
-- B1, B2, C1, C2
+Section-to-section navigation is derived from the same in-scope chapter list as the Sections panel.
 
-Environment:
-- B3, B4, B5, B6, B7
-- C3, C4
+Source of truth:
 
-Social:
-- B8, B9, B10
-- C5, C6, C7
+- get_vsme_questions_for_report_v2(report_id)
+- chapters included only if totalBySection[code] > 0
 
-Governance:
-- B11
-- C8, C9
+Prev/Next rules:
 
-Accordion behavior:
+- Previous = nearest earlier chapter with totalBySection > 0
+- Next = nearest later chapter with totalBySection > 0
+- Chapters with 0/0 are excluded from navigation
 
-- max 1 open theme at a time
-- open theme auto-syncs with current chapter route
+---
+
+Sticky navigation behavior:
+
+Two navigation UI modes exist:
+
+1) Sticky navigation (floating)
+2) Footer navigation (anchored after last question)
+
+Sticky navigation visibility rules:
+
+- visible only after user scroll passes threshold (~450px)
+- automatically hidden when footer navigation enters viewport
+- implemented using IntersectionObserver on footer navigation element
+
+Footer navigation:
+
+- always rendered after the last question
+- acts as the final navigation anchor
+
+Both navigation modes use the same deterministic chapter list.
 
 ---
 
@@ -258,13 +283,13 @@ Metrics:
 
 Definitions:
 
-- In-scope: same eligibility logic as `get_vsme_questions_for_report`
-- Answered: valid typed value OR `value_jsonb.na = true`
+- In-scope: same eligibility logic as get_vsme_questions_for_report_v2
+- Answered: valid typed value OR value_jsonb.na = true
 - Missing: in-scope AND not answered
 
 Source of truth:
 
-- `get_vsme_ctas_for_report`
+- get_vsme_ctas_for_report
 
 ---
 
@@ -286,7 +311,7 @@ Readiness logic must match progress logic exactly.
 
 ## 7. Where logic lives (anti-drift rule)
 
-### DB / RPC owns:
+DB / RPC owns:
 
 - scope determination
 - question selection and ordering
@@ -294,7 +319,7 @@ Readiness logic must match progress logic exactly.
 - progress calculation
 - missing logic
 
-### UI owns:
+UI owns:
 
 - rendering
 - interactions
@@ -305,7 +330,21 @@ UI must not duplicate missing rules or scope rules.
 
 ---
 
-## 8. Non-negotiables
+## 8. RPC contract versioning (important)
+
+When RPC return shape changes (new columns), do not modify the legacy function return type in place.
+
+Instead:
+
+- introduce a new version (v2, v3, ...)
+- update 03_rpc_contracts.md
+- switch frontend to the new version
+
+Legacy RPC can remain for backward compatibility.
+
+---
+
+## 9. Non-negotiables
 
 - DB schema stable unless explicitly requested
 - disclosure_question remains shared (ESRS + VSME)

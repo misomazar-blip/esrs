@@ -1,15 +1,15 @@
 # 06 – DEBUG PLAYBOOK (VSME SaaS)
 
-This document defines how to debug safely and systematically.
+This document defines how to debug safely and systematically.  
 No random fixes. No emotional coding.
 
 When something breaks, follow this order:
 
-1) Reproduce
-2) Identify layer (UI vs RPC vs RLS vs DB)
-3) Minimal diagnostics
-4) Minimal fix
-5) Verify with role matrix
+1) Reproduce  
+2) Identify layer (UI vs RPC vs RLS vs DB)  
+3) Minimal diagnostics  
+4) Minimal fix  
+5) Verify with role matrix  
 
 ---
 
@@ -20,12 +20,13 @@ Answer these first:
 - Does the bug happen for all users or only certain roles?
 - Is the data missing in UI only or also missing in DB?
 - Is it a frontend crash, an RPC error, or an RLS denial?
+- Is this report on the expected `vsme_taxonomy_version`?
 
 Fast checks:
 
-- Browser console → errors + Network tab
-- Supabase logs → API / policy errors
-- SQL editor → verify rows actually exist
+- Browser console → errors + Network tab  
+- Supabase logs → API / policy errors  
+- SQL editor → verify rows actually exist  
 
 Never guess the layer. Identify it first.
 
@@ -37,25 +38,21 @@ Never guess the layer. Identify it first.
 
 Typical causes:
 
-- Missing import
-- Function declared after usage in closure context
-- Wrong hook import (useCallback vs useCallBack)
-- Stale dev server cache
+- Missing import  
+- Function declared after usage in closure context  
+- Wrong hook import (useCallback vs useCallBack)  
+- Stale dev server cache  
 
 Checklist:
 
-1) Verify import spelling (case-sensitive)
-2) Verify function scope
-3) Confirm correct React hook imports
+1) Verify import spelling  
+2) Verify function scope  
+3) Confirm correct React hook imports  
 4) Restart clean:
 
 stop dev server  
 delete .next  
 run npm run dev  
-
-If it persists:
-
-Check stack trace chunk → verify correct file mapping.
 
 ---
 
@@ -63,26 +60,18 @@ Check stack trace chunk → verify correct file mapping.
 
 Symptoms:
 
-- Infinite re-render
-- Stale state
-- Dependency warnings
-- Effect firing unexpectedly
+- Infinite re-render  
+- Stale state  
+- Dependency warnings  
 
 Rules:
 
-Every function referenced inside useEffect must be:
+Functions used in useEffect must be:
 
-- defined inside the effect OR
-- wrapped in useCallback
-
-Dependency arrays must include referenced variables.
+- defined inside effect OR  
+- wrapped in useCallback  
 
 Never silence eslint warnings blindly.
-
-Debug approach:
-
-- Log dependency values
-- Confirm effect runs only when expected
 
 ---
 
@@ -90,20 +79,33 @@ Debug approach:
 
 Symptoms:
 
-- params undefined on first render
-- sectionCode empty
-- Flicker or empty question list
+- params undefined  
+- sectionCode empty  
 
-Recommended pattern:
+Fix:
 
-Server Component renders layout + auth guard  
-Client Component fetches section data via RPC after mount  
+Normalize params before usage.  
+Always uppercase sectionCode.
 
-Normalize params:
+---
 
-sectionCode must always be uppercased before usage.
+## 1.4 Sticky navigation debugging
 
-Never rely on raw params without normalization.
+Sticky nav visibility depends on:
+
+scroll threshold AND footer visibility.
+
+Debug checklist:
+
+- Verify scroll handler  
+- Verify IntersectionObserver  
+- Verify state logic  
+
+Sticky must depend on:
+
+scrolledPastThreshold && !footerNavVisible  
+
+Never use scroll position guesses.
 
 ---
 
@@ -111,91 +113,130 @@ Never rely on raw params without normalization.
 
 ## 2.1 Questions not rendering
 
-Check in this order:
+Check RPC output first:
 
-1) Does RPC return rows?
-2) Does sectionCode match DB casing?
-3) Is client-side filtering removing everything?
-4) Is RLS blocking query?
-
-Debug query:
-
+```sql
 select section_code, count(*)
-from public.get_vsme_questions_for_report('<report_id>')
-group by section_code
-order by section_code;
+from public.get_vsme_questions_for_report_v2('<report_id>')
+group by section_code;
+```
 
-Never assume frontend is wrong before verifying RPC output.
+If RPC returns rows → frontend issue  
+If RPC empty → DB or scope issue  
+
+Also verify report configuration:
+
+```sql
+select framework, vsme_mode, vsme_pack_codes, vsme_taxonomy_version
+from report
+where id='<report_id>';
+```
+
+Never debug UI before verifying RPC.
 
 ---
 
 ## 2.2 Progress not recalculating
 
-Understand the model:
-
-DB-authoritative progress updates only after refetch.  
-UI-live progress updates from local state.
-
-Rule:
-
-Optimistic update allowed.  
-Must reconcile with RPC-confirmed state.
+Progress source of truth = RPC.
 
 Checklist:
 
-- Confirm save mutation success
-- Confirm local state updated
-- Confirm CTA refresh runs
+- Save mutation success  
+- Refetch progress RPC  
+- Verify value stored correctly  
+
+Test directly:
+
+```sql
+select *
+from get_vsme_ctas_for_report('<report_id>');
+```
 
 ---
 
-## 2.3 Saved answer disappears after refresh
+## 2.3 Saved answer disappears
 
-Likely causes:
+Most common causes:
 
-- Wrong upsert conflict key
-- Value stored in wrong typed column
-- NA toggle overwrote JSON instead of merging
-- Framework mismatch trigger rejected write
+- Wrong upsert key  
+- Wrong value column  
+- NA overwrite  
+- Framework mismatch  
+- Type mismatch rejected by trigger  
 
-Checklist:
+Verify:
 
-Verify upsert key is (report_id, question_id)
+- (report_id, question_id) conflict key  
+- Correct typed column  
+- value_jsonb merge logic  
 
-Verify correct value_* column used
+Also check trigger errors in logs:
 
-Verify JSON merge logic
+- enforce_answer_framework_match  
+- enforce_vsme_question_type_match  
 
-Verify report.framework matches question.framework
+---
+
+## 2.4 Help text not visible (guidance_text / example_answer)
+
+Check in order:
+
+1) Does DB contain values?
+
+```sql
+select guidance_text, example_answer
+from disclosure_question
+where id='<question_id>';
+```
+
+2) Does RPC v2 return values?
+
+```sql
+select guidance_text, example_answer
+from get_vsme_questions_for_report_v2('<report_id>')
+where question_id='<question_id>';
+```
+
+3) Is frontend calling correct RPC?
+
+Must call:
+
+get_vsme_questions_for_report_v2  
+
+Not legacy version.
+
+4) Browser console diagnostic:
+
+console.log(sectionQuestions[0])
+
+If missing → RPC mismatch  
+If present → rendering issue  
+
+Never patch UI before verifying RPC output.
 
 ---
 
 # 3. SUPABASE / RLS ISSUES
 
-## 3.1 Insert/Update fails (401/403)
+## 3.1 Insert/Update fails
 
-Most common cause: RLS denial.
+Most common cause: RLS denial
 
-Checklist:
+Verify membership:
 
+```sql
 select *
 from company_member
-where company_id = '<company_id>'
-and user_id = auth.uid();
+where user_id = auth.uid();
+```
 
-If editor with selected access:
+Verify topic access:
 
+```sql
 select *
-from company_member_topic_access ta
-join company_member cm on cm.id = ta.company_member_id
-where cm.user_id = auth.uid()
-and cm.company_id = '<company_id>'
-and ta.topic_id = '<topic_id>';
-
-Also:
-
-- Confirm correct policy exists
-- Check Supabase logs
+from company_member_topic_access;
+```
 
 ---
 
@@ -203,43 +244,29 @@ Also:
 
 Cause:
 
-Report membership OK  
-Answer policy blocked via topic permission  
+Topic access missing OR topic not assigned for selected editor/viewer.
 
 Fix:
 
-Verify topic access rows exist  
-Verify ta.can_view = true  
+Verify company_member_topic_access rows.
 
 ---
 
-## 3.3 Editor cannot edit some topics
+## 3.3 Unexpected data leakage (CRITICAL)
 
-Expected if:
+Check RLS:
 
-access_type = selected  
-can_edit differs per topic  
-
-If unexpected:
-
-Verify topic access seeding  
-Verify UI does not incorrectly show edit controls  
-
----
-
-## 3.4 Unexpected data leakage (CRITICAL)
-
-If cross-company data visible:
-
-select relrowsecurity, relforcerowsecurity
+```sql
+select relrowsecurity
 from pg_class
-where relname = '<table>';
+where relname='disclosure_answer';
+```
 
-Then verify:
+Verify:
 
-- no USING true policies remain
-- RPC not SECURITY DEFINER leaking data
-- client not using service role
+- relrowsecurity = true  
+- No USING true policies  
+- No service role usage  
 
 Fix immediately.
 
@@ -249,49 +276,104 @@ Fix immediately.
 
 ## 4.1 RPC returns empty list
 
-Check:
+Check report config:
 
-select id, framework, vsme_mode, vsme_pack_codes
+```sql
+select framework, vsme_mode, vsme_pack_codes
 from report
-where id = '<report_id>';
+where id='<report_id>';
+```
 
+Verify questions exist:
+
+```sql
 select count(*)
 from disclosure_question
-where framework='VSME'
-and section_code like 'B%';
+where framework='VSME';
+```
 
-If core_plus:
+Verify datapoint catalog:
 
-verify vsme_pack_codes  
-verify vsme_datapoint_pack mapping  
-
----
-
-## 4.2 RPC contract mismatch
-
-If UI expects fields not returned:
-
-Update TypeScript types OR RPC.
-
-Do not patch UI silently.
-
-03_rpc_contracts.md is authoritative.
+```sql
+select count(*)
+from vsme_datapoint;
+```
 
 ---
 
-## 4.3 Performance debugging
+## 4.2 RPC return shape mismatch (CRITICAL)
 
-If slow:
+Symptoms:
 
+- Frontend receives undefined fields  
+- Help text missing  
+- TypeScript mismatch  
+
+Diagnostic:
+
+```sql
+select *
+from get_vsme_questions_for_report_v2('<report_id>')
+limit 1;
+```
+
+Verify expected fields exist:
+
+- guidance_text  
+- example_answer  
+- unit  
+- vsme_datapoint_id  
+
+If missing:
+
+- RPC version mismatch  
+- Frontend calling legacy RPC  
+
+Fix:
+
+Switch to correct RPC version.
+
+Never patch UI to hide contract mismatch.
+
+---
+
+## 4.3 Multiple RPC versions present
+
+Check available versions:
+
+```sql
+select proname
+from pg_proc
+where proname like 'get_vsme_questions_for_report%';
+```
+
+Ensure frontend calls correct version.
+
+Preferred version:
+
+get_vsme_questions_for_report_v2  
+
+Legacy version kept for compatibility.
+
+---
+
+## 4.4 Performance debugging
+
+Use:
+
+```sql
 explain analyze
-select * from public.get_vsme_questions_for_report('<report_id>');
+select *
+from get_vsme_questions_for_report_v2('<report_id>');
+```
 
-Look for:
+Investigate:
 
-- Seq Scan on large tables
-- Nested Loop over large datasets
+- Seq scans  
+- Large nested loops  
 
-Add indexes only with evidence.
+Add indexes only if proven necessary.  
+Do not prematurely optimize.
 
 ---
 
@@ -299,150 +381,176 @@ Add indexes only with evidence.
 
 ## 5.1 Framework mismatch
 
-Trigger: enforce_answer_framework_match
+Verify:
 
-Symptom:
+report.framework='VSME'  
+question.framework='VSME'
 
-Answer not persisted
-
-Fix:
-
-Ensure report.framework = 'VSME'  
-Ensure question.framework = 'VSME'  
+Mismatch causes silent failures or trigger errors.
 
 ---
 
-## 5.2 NA JSON overwrite
+## 5.2 Datapoint type mismatch (trigger failure)
 
-Bad:
+Error example:
 
-value_jsonb overwritten completely
+VSME answer_type mismatch for datapoint ...
 
-Good:
+Cause:
 
-Merge JSON or remove only "na" key
+disclosure_question.answer_type not aligned with vsme_datapoint.value_type.
+
+Fix:
+
+Align question definition to canonical datapoint.
+
+Never bypass trigger.
+
+---
+
+## 5.3 NA JSON overwrite
+
+Incorrect:
+
+value_jsonb replaced entirely  
+
+Correct:
+
+value_jsonb merged using jsonb_set  
+
+If previous values disappear → inspect JSON merge logic.
+
+---
+
+## 5.4 Help text write attempt (invalid)
+
+guidance_text and example_answer must never be written via UI.
+
+These fields belong to disclosure_question.
+
+If UI attempts write → contract violation.
+
+Fix UI immediately.
+
+---
+
+## 5.5 Unit confusion
+
+If UI shows missing unit:
+
+Check RPC output first.  
+Unit must come from:
+
+coalesce(disclosure_answer.unit, vsme_datapoint.unit, disclosure_question.unit)
+
+Never infer from question_text.
+
+---
+
+## 5.6 Taxonomy drift
+
+If counts mismatch EFRAG taxonomy:
+
+- Check report.vsme_taxonomy_version  
+- Check vsme_datapoint catalog completeness  
+- Verify no stray legacy datapoints  
+
+Never silently add datapoints without updating mapping logic.
 
 ---
 
 # 6. ROLE-BASED TEST MATRIX
 
-Owner:
-Full reporting access
-
-Admin:
-Full reporting access
-
-Editor (all):
-Edit all topics
-
-Editor (selected):
-Edit only assigned topics
-
-Viewer:
-View only allowed topics
-
 Always test:
 
-Owner  
-Admin  
-Editor (all)  
-Editor (selected)  
-Viewer  
+- Owner  
+- Admin  
+- Editor (all)  
+- Editor (selected)  
+- Viewer  
+
+Verify:
+
+- View access  
+- Edit access  
+- Save behavior  
+- Progress calculation  
+- RLS enforcement  
 
 ---
 
 # 7. SAFE RESET PLAYBOOK
 
-Frontend:
+Frontend reset:
 
 Stop dev server  
 Delete .next  
 Restart npm run dev  
 
-Supabase:
+Session reset:
 
-Sign out / sign in again  
-Verify membership rows  
-Re-check policies  
+Sign out  
+Sign in again  
+
+Verify membership.
 
 ---
 
 # 8. WHAT NOT TO DO
 
-- Do not disable RLS to test
-- Do not switch client to service role
-- Do not add random indexes without EXPLAIN evidence
-- Do not patch UI to hide DB contract issues
-- Do not rewrite architecture to fix one bug
+Do NOT disable RLS  
+Do NOT use service role in browser  
+Do NOT patch UI to hide RPC contract mismatch  
+Do NOT modify schema casually  
+Do NOT rewrite RPC without contract update  
+Do NOT bypass triggers to “make it work”  
 
 ---
 
 # 9. SECTIONS PANEL DEBUGGING
 
-Sections panel is derived entirely from get_vsme_questions_for_report(report_id)
+Sections panel derived from:
 
-UI must never infer scope from static metadata.
+get_vsme_questions_for_report_v2
+
+Never compute scope in UI.
 
 ---
 
-## 9.1 Chapters missing or showing incorrectly
+## 9.1 Missing sections
 
 Run:
 
+```sql
 select section_code, count(*)
-from public.get_vsme_questions_for_report('<report_id>')
-group by section_code
-order by section_code;
+from get_vsme_questions_for_report_v2('<report_id>')
+group by section_code;
+```
 
-If count = 0 → chapter must not be shown  
-If count > 0 → chapter must be shown  
-
----
-
-## 9.2 Chapters assigned to wrong theme
-
-Verify resolveSectionGroup(sectionCode) mapping:
-
-General Information:
-B1, B2, C1, C2
-
-Environment:
-B3–B7, C3–C4
-
-Social:
-B8–B10, C5–C7
-
-Governance:
-B11, C8–C9
+Section must exist only if count > 0.
 
 ---
 
-## 9.3 Theme totals incorrect
+## 9.2 Incorrect grouping
 
-Verify totals derived from RPC dataset only.
+Verify resolveSectionGroup mapping.
 
-Never compute totals from static section list.
-
----
-
-## 9.4 Theme opens incorrectly
-
-Expected:
-
-openGroup must equal currentGroup
-
-If mismatch → fix openGroup sync effect.
+Never infer grouping dynamically.
 
 ---
 
-## 9.5 Core vs Comprehensive mismatch
+## 9.3 Core vs Comprehensive mismatch
 
 Check:
 
-select vsme_mode from report where id='<report_id>';
+```sql
+select vsme_mode 
+from report 
+where id='<report_id>';
+```
 
-core → only B sections  
-comprehensive → B + C sections  
+core → B only  
+comprehensive → B + C  
 core_plus → B + pack sections  
 
-Never patch UI to hide incorrect RPC output.
+If mismatch → fix RPC, not UI.

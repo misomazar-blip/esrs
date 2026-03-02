@@ -1,205 +1,370 @@
--- ============================================================
--- 02 – DATABASE SCHEMA SNAPSHOT (VSME Reporting SaaS)
--- ============================================================
+-- 02_db_schema.sql
+
+-- =========================
+-- SECURITY / CATALOG STANCE (DOC NOTE)
+-- =========================
+-- This schema includes both:
+--   (A) tenant-owned business data (company/report/answers)
+--   (B) shared reference catalogs (framework metadata)
 --
--- This file documents the logical structure of the database.
--- It is NOT only a raw dump.
+-- RLS tightening was applied:
+--   - Removed global SELECT true policies on: company, report, topic
+--   - RLS enabled on: report_pack, vsme_datapoint_pack
+--   - disclosure_question remains authenticated-readable by design (catalog)
 --
--- It defines:
---   - domain boundaries
---   - data ownership model
---   - tenant vs catalog separation
---   - security stance
---
--- Authoritative RLS rules are defined in:
---   05_rls_policies.md
---
--- ============================================================
--- 1. DOMAIN OVERVIEW
--- ============================================================
---
--- The database contains two major data categories:
---
--- (A) Tenant-owned business data
---     → scoped per company
---     → protected by RLS
---
--- (B) Shared framework/catalog metadata
---     → global reference data
---     → read-only for authenticated users
---
--- ============================================================
--- 2. CORE TENANT-OWNED DATA (RLS protected)
--- ============================================================
---
--- 2.1 company
---     Represents a tenant organization.
---
--- 2.2 company_member
---     Membership table defining:
---       - user_id
---       - role (owner/admin/editor/viewer)
---       - access_type (all/selected)
---
--- 2.3 company_member_topic_access
---     Topic-level permissions:
---       - can_view
---       - can_edit
---
--- 2.4 report
---     Report snapshot per:
---       - company_id
---       - reporting_year
---       - framework (VSME)
---
--- 2.5 disclosure_answer
---     Stores answers:
---       - unique(report_id, question_id)
---       - value_* typed columns
---       - value_jsonb (contains NA flag)
---
--- ============================================================
--- 3. QUESTION & FRAMEWORK CATALOG (Shared metadata)
--- ============================================================
---
--- 3.1 disclosure_question
---     Shared question catalog for:
---       - ESRS
---       - VSME
---
---     Key fields:
---       - framework
---       - code
---       - topic_id
---       - section_code
---       - vsme_datapoint_id
---
---     This is framework metadata.
---     Not company-owned.
---     Readable to authenticated users.
---
--- 3.2 topic
---     Logical grouping of questions.
---     Catalog-level metadata.
---
--- ============================================================
--- 4. VSME SCOPE CONTROL
--- ============================================================
---
--- 4.1 report_pack
---     Defines available VSME packs.
---     Metadata catalog.
---
--- 4.2 vsme_datapoint_pack
---     Mapping:
---       vsme_datapoint_id ↔ pack_code
---
---     Used to compute:
---       - core
---       - core_plus
---       - comprehensive
---
---     RLS enabled.
---     Treated as read-only reference data.
---
--- 4.3 vsme_datapoint
---     VSME datapoint catalog.
---
--- ============================================================
--- 5. COLLABORATION LAYER
--- ============================================================
---
--- 5.1 question_comment
---     Threaded comments per:
---       - report_id
---       - question_id
---
--- 5.2 question_attachment
---     File attachments per:
---       - report_id
---       - question_id
+-- SECURITY DEFINER functions hardening:
+--   - All SECURITY DEFINER functions have search_path = public
 --
 -- NOTE:
--- Current policies partially gate via company.user_id.
--- Future tightening may align fully to company_member model.
+-- RLS policies are documented in 05_rls_policies.md (authoritative).
+
+-- Source of truth snapshot (maintained from Supabase/Postgres introspection)
+-- Project: VSME Reporting SaaS
 --
+-- Notes:
+-- - DB schema is considered stable (no destructive changes unless explicitly requested)
+-- - disclosure_question is shared for ESRS + VSME (framework column)
+-- - disclosure_answer guarded by enforce_answer_framework_match trigger
+-- - disclosure_question.answer_type is guarded (VSME) by enforce_vsme_question_type_match trigger
+-- - RLS enabled; topic access enforced via policies + company_member_topic_access
+-- - Packs (add-ons) are driven by report.vsme_pack_codes + report_pack + vsme_datapoint_pack
+-- - Question UX guidance is stored in disclosure_question.guidance_text and disclosure_question.example_answer (read-only metadata)
+-- - Preferred question-loading RPC for UI is get_vsme_questions_for_report_v2 (extended return shape; legacy RPC remains for compatibility)
+-- - Each report stores VSME taxonomy version (report.vsme_taxonomy_version) for auditability and future multi-version support
+
 -- ============================================================
--- 6. XBRL / EXPORT LAYER (Future-facing)
+-- 0) TABLE INVENTORY (public)
 -- ============================================================
+-- Active (VSME MVP core):
+-- company, company_member, company_member_topic_access, topic, report,
+-- disclosure_question, disclosure_answer, report_pack, vsme_datapoint, vsme_datapoint_pack
 --
--- 6.1 disclosure_question_xbrl
--- 6.2 esrs_to_xbrl_mapping
--- 6.3 xbrl_context
--- 6.4 xbrl_element
--- 6.5 xbrl_taxonomy
--- 6.6 xbrl_unit
--- 6.7 xbrl_export_log
--- 6.8 xbrl_fact_metadata
--- 6.9 xbrl_validation_rule
+-- Supporting (collaboration):
+-- question_comment, question_attachment
 --
--- These tables support structured export.
--- Mostly reference-driven.
--- RLS enabled.
---
+-- ESRS/XBRL/Future (exists, not required for VSME MVP):
+-- esrs_version, datapoint_version_mapping, report_topic, vsme_question,
+-- disclosure_question_xbrl, esrs_to_xbrl_mapping, xbrl_*
+
 -- ============================================================
--- 7. SECURITY STANCE
--- ============================================================
---
--- Tightening applied:
---
--- - Removed global SELECT true policies on:
---     company
---     report
---     topic
---
--- - RLS enabled on:
---     report_pack
---     vsme_datapoint_pack
---
--- - SECURITY DEFINER functions hardened:
---     search_path = public
---
--- All tenant-owned tables require:
---     membership-based access via company_member
---
--- No cross-company data leakage permitted.
---
--- ============================================================
--- 8. ANSWER STORAGE MODEL
--- ============================================================
---
--- Unique constraint:
---     (report_id, question_id)
---
--- N/A stored as:
---     value_jsonb -> { "na": true }
---
--- Answer states:
---     - missing (no row or no value)
---     - answered
---     - answered as NA
---
--- Authoritative definition in:
---     04_answer_contract.md
---
--- ============================================================
--- 9. PERFORMANCE NOTES
--- ============================================================
---
--- Core indexes:
---     disclosure_answer(report_id, question_id)
---     disclosure_question(framework)
---     disclosure_question(framework, code)
---     company_member(company_id, user_id)
---
--- Optional optimization (if dataset grows):
---     disclosure_question(framework, section_code)
---     disclosure_answer(question_id, report_id)
---
--- ============================================================
--- END OF ARCHITECTURAL SNAPSHOT
+-- 1) CORE TABLES (VSME MVP)
 -- ============================================================
 
+-- --------------------------
+-- company
+-- --------------------------
+-- Columns
+-- id uuid pk default gen_random_uuid()
+-- name text not null
+-- country_code text not null
+-- industry_code text null
+-- size_class text null
+-- created_at timestamptz not null default now()
+-- user_id uuid null
+-- created_by uuid null
+-- address text null
+-- city text null
+-- postal_code text null
+-- identification_number text null
+-- vat_number text null
+-- phone text null
+-- email text null
+-- website text null
+-- employee_count int null
+-- balance_sheet_total_k numeric null
+-- net_turnover_k numeric null
+-- vsme_category text null
+-- is_vsme boolean null
+--
+-- Constraints (confirmed)
+-- PRIMARY KEY (id)
+-- FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE SET NULL
+-- FOREIGN KEY (created_by) REFERENCES auth.users(id)
 
--- Below this line may follow:
--- ACTUAL TABLE DEFINITIONS (schema dump)
+-- --------------------------
+-- company_member
+-- --------------------------
+-- Columns
+-- id uuid pk default uuid_generate_v4()
+-- company_id uuid not null -> company.id
+-- user_id uuid not null -> auth.users.id
+-- role text not null CHECK in ('owner','admin','editor','viewer')
+-- access_type text not null default 'all' CHECK in ('all','selected')
+-- invited_by uuid null -> auth.users.id
+-- invited_at timestamp default now()
+-- created_at timestamp default now()
+--
+-- Constraints (confirmed)
+-- PRIMARY KEY (id)
+-- UNIQUE (company_id, user_id)
+-- FOREIGN KEY (company_id) REFERENCES company(id) ON DELETE CASCADE
+-- FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE
+-- FOREIGN KEY (invited_by) REFERENCES auth.users(id)
+-- CHECK role in ('owner','admin','editor','viewer')
+-- CHECK access_type in ('all','selected')
+
+-- --------------------------
+-- company_member_topic_access
+-- --------------------------
+-- Purpose: topic-level permissions per company member (used by RLS policies)
+--
+-- Columns (confirmed)
+-- id uuid pk default uuid_generate_v4()
+-- company_member_id uuid not null -> company_member.id
+-- topic_id uuid not null -> topic.id
+-- can_view boolean default true
+-- can_edit boolean default false
+-- created_at timestamp default now()
+--
+-- Constraints (confirmed)
+-- PRIMARY KEY (id)
+-- UNIQUE (company_member_id, topic_id)
+-- FOREIGN KEY (company_member_id) REFERENCES company_member(id) ON DELETE CASCADE
+-- FOREIGN KEY (topic_id) REFERENCES topic(id) ON DELETE CASCADE
+
+-- --------------------------
+-- topic
+-- --------------------------
+-- Columns (confirmed)
+-- id uuid pk default gen_random_uuid()
+-- code text not null UNIQUE
+-- name text not null
+-- category text not null
+--
+-- Constraints (confirmed)
+-- PRIMARY KEY (id)
+-- UNIQUE (code)
+
+-- --------------------------
+-- report
+-- --------------------------
+-- Notes:
+-- Report-level configuration is the authority for VSME scope:
+-- - framework ('VSME')
+-- - vsme_mode ('core'|'core_plus'|'comprehensive')
+-- - vsme_pack_codes (text[])
+-- - vsme_taxonomy_version (text, default '1.2.0')  -- taxonomy alignment stamp
+--
+-- Columns (confirmed)
+-- id uuid pk default gen_random_uuid()
+-- company_id uuid not null -> company.id
+-- reporting_year int not null
+-- status text not null default 'draft'
+-- created_at timestamptz not null default now()
+-- esrs_version_id uuid null -> esrs_version.id
+-- framework text not null default 'VSME'
+-- vsme_mode text not null default 'core'
+-- vsme_pack_codes text[] not null default '{}'
+-- vsme_taxonomy_version text not null default '1.2.0'
+-- purpose_code text null CHECK in ('financing','supply_chain','investor','voluntary','other')
+-- purpose_note text null
+--
+-- Constraints (confirmed)
+-- PRIMARY KEY (id)
+-- UNIQUE (company_id, reporting_year)
+-- FOREIGN KEY (company_id) REFERENCES company(id) ON DELETE CASCADE
+-- FOREIGN KEY (esrs_version_id) REFERENCES esrs_version(id)
+-- CHECK vsme_mode in ('core','core_plus','comprehensive')
+-- CHECK purpose_code in ('financing','supply_chain','investor','voluntary','other') OR NULL
+
+-- --------------------------
+-- disclosure_question (shared ESRS + VSME)
+-- --------------------------
+-- Columns (confirmed)
+-- id uuid pk default gen_random_uuid()
+-- topic_id uuid not null -> topic.id
+-- code text not null
+-- question_text text not null
+-- answer_type text not null
+-- order_index int not null default 0
+-- help_text text null
+-- config_jsonb jsonb not null default '{}'
+-- version_id uuid null -> esrs_version.id
+-- datapoint_id text null
+-- esrs_paragraph text null
+-- disclosure_requirement text null
+-- is_mandatory boolean default false
+-- is_phase_in boolean default false
+-- phase_in_year int null
+-- applies_to text[] null
+-- is_conditional boolean default false
+-- condition_description text null
+-- data_type text default 'narrative'
+-- unit text null
+-- value_options text[] null
+-- parent_question_id uuid null -> disclosure_question.id
+-- level int default 1
+-- guidance_text text null
+-- example_answer text null
+-- valid_from date null
+-- valid_to date null
+-- superseded_by uuid null -> disclosure_question.id
+-- supersedes uuid null -> disclosure_question.id
+-- tags text[] null
+-- updated_at timestamptz default now()
+-- translations jsonb default '{}'::jsonb
+-- vsme_datapoint_id text null -> vsme_datapoint.id
+-- framework text not null default 'ESRS'
+-- section_code text null
+-- vsme_level text null
+--
+-- Notes (important):
+-- - guidance_text and example_answer are optional UX metadata for guided reporting.
+-- - They are read-only from UI perspective and must never be stored in disclosure_answer.
+-- - They do NOT affect scope, progress, readiness, or answer validity.
+-- - UI should load these via get_vsme_questions_for_report_v2.
+--
+-- Constraints (confirmed subset)
+-- PRIMARY KEY (id)
+-- FOREIGN KEY (topic_id) REFERENCES topic(id) ON DELETE RESTRICT
+-- FOREIGN KEY (version_id) REFERENCES esrs_version(id)
+-- FOREIGN KEY (vsme_datapoint_id) REFERENCES vsme_datapoint(id)
+-- FOREIGN KEY (parent_question_id) REFERENCES disclosure_question(id)
+-- FOREIGN KEY (superseded_by) REFERENCES disclosure_question(id)
+-- FOREIGN KEY (supersedes) REFERENCES disclosure_question(id)
+--
+-- NOTE:
+-- Unique(framework, code) may exist as an index/constraint outside the pasted constraint list.
+-- Document indexes separately if needed.
+
+-- --------------------------
+-- disclosure_answer
+-- --------------------------
+-- Columns (confirmed)
+-- id uuid pk default gen_random_uuid()
+-- report_id uuid not null -> report.id
+-- question_id uuid not null -> disclosure_question.id
+-- value_boolean bool null
+-- value_text text null
+-- value_number numeric null
+-- value_jsonb jsonb not null default '{}'::jsonb
+-- updated_at timestamptz not null default now()
+-- value_numeric numeric null
+-- value_integer int null
+-- value_date date null
+-- value_json jsonb null
+-- unit text null
+-- data_quality text null
+-- source_document text null
+-- confidence_level text null
+-- notes text null
+-- last_reviewed_at timestamptz null
+-- reviewed_by uuid null -> auth.users.id
+--
+-- Constraints (confirmed)
+-- PRIMARY KEY (id)
+-- FOREIGN KEY (report_id) REFERENCES report(id) ON DELETE CASCADE
+-- FOREIGN KEY (question_id) REFERENCES disclosure_question(id) ON DELETE RESTRICT
+-- FOREIGN KEY (reviewed_by) REFERENCES auth.users(id)
+--
+-- Uniqueness (schema debt)
+-- Two UNIQUE constraints exist on (report_id, question_id):
+-- - disclosure_answer_report_id_question_id_key
+-- - unique_disclosure_answer
+-- Do not add another unique for this pair.
+--
+-- Triggers (confirmed)
+-- trg_disclosure_answer_set_updated_at BEFORE UPDATE EXECUTE FUNCTION set_updated_at()
+-- trg_enforce_answer_framework BEFORE INSERT/UPDATE EXECUTE FUNCTION enforce_answer_framework_match()
+--
+-- Trigger logic:
+-- enforce_answer_framework_match() ensures disclosure_question.framework == report.framework
+
+-- --------------------------
+-- report_pack (pack catalog)
+-- --------------------------
+-- Columns (confirmed)
+-- id uuid pk default gen_random_uuid()
+-- code text not null
+-- name text not null
+-- description text null
+-- created_at timestamp default now()
+--
+-- Constraints (confirmed)
+-- PRIMARY KEY (id)
+-- UNIQUE (code)
+
+-- --------------------------
+-- vsme_datapoint (datapoint catalog)
+-- --------------------------
+-- Columns (confirmed subset)
+-- id text pk
+--
+-- Constraints (confirmed)
+-- PRIMARY KEY (id)
+-- UNIQUE (id)  -- redundant with PK; keep as-is (schema stable)
+
+-- --------------------------
+-- vsme_datapoint_pack (pack membership)
+-- --------------------------
+-- Columns (confirmed)
+-- datapoint_id text not null -> vsme_datapoint.id
+-- pack_code text not null -> report_pack.code
+--
+-- Constraints (confirmed)
+-- PRIMARY KEY (datapoint_id, pack_code)
+-- FOREIGN KEY (datapoint_id) REFERENCES vsme_datapoint(id) ON DELETE CASCADE
+-- FOREIGN KEY (pack_code) REFERENCES report_pack(code) ON DELETE CASCADE
+
+-- ============================================================
+-- 2) SUPPORTING TABLES (collaboration)
+-- ============================================================
+
+-- --------------------------
+-- question_comment
+-- --------------------------
+-- Columns (confirmed)
+-- id uuid pk default gen_random_uuid()
+-- question_id uuid not null -> disclosure_question.id
+-- report_id uuid not null -> report.id
+-- user_id uuid not null
+-- parent_comment_id uuid null -> question_comment.id
+-- comment_text text not null
+-- created_at timestamptz default now()
+-- updated_at timestamptz default now()
+-- is_edited boolean default false
+--
+-- Constraints (from FK list)
+-- FOREIGN KEY (question_id) REFERENCES disclosure_question(id)
+-- FOREIGN KEY (report_id) REFERENCES report(id)
+-- FOREIGN KEY (parent_comment_id) REFERENCES question_comment(id)
+--
+-- Trigger (confirmed)
+-- trigger_update_question_comment_updated_at BEFORE UPDATE EXECUTE FUNCTION update_question_comment_updated_at()
+
+-- --------------------------
+-- question_attachment
+-- --------------------------
+-- Columns (confirmed)
+-- id uuid pk default gen_random_uuid()
+-- question_id uuid not null -> disclosure_question.id
+-- report_id uuid not null -> report.id
+-- user_id uuid not null
+-- file_name text not null
+-- file_size bigint not null
+-- file_type text not null
+-- storage_path text not null
+-- description text null
+-- created_at timestamptz default now()
+-- updated_at timestamptz default now()
+--
+-- Constraints (from FK list)
+-- FOREIGN KEY (question_id) REFERENCES disclosure_question(id)
+-- FOREIGN KEY (report_id) REFERENCES report(id)
+--
+-- Trigger (confirmed)
+-- trigger_update_question_attachment_updated_at BEFORE UPDATE EXECUTE FUNCTION update_question_attachment_updated_at()
+
+-- ============================================================
+-- 3) ESRS / XBRL / FUTURE TABLES (exist, not required for VSME MVP)
+-- ============================================================
+-- esrs_version
+-- datapoint_version_mapping
+-- report_topic
+-- vsme_question
+-- disclosure_question_xbrl
+-- esrs_to_xbrl_mapping
+-- xbrl_taxonomy, xbrl_element, xbrl_context, xbrl_unit
+-- xbrl_fact_metadata, xbrl_export_log, xbrl_validation_rule
+
+-- END SNAPSHOT

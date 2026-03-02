@@ -1,6 +1,6 @@
 # 05 – RLS POLICIES (Authoritative Rules)
 
-This document defines how Row Level Security (RLS) behaves in the system.
+This document defines how Row Level Security (RLS) behaves in the system.  
 UI is not trusted. Database enforces access.
 
 Never weaken RLS without explicit architectural decision.
@@ -9,6 +9,7 @@ Current state reflects:
 - removal of global SELECT true policies on company/report/topic
 - RLS enabled on reference pack tables
 - SECURITY DEFINER functions hardened with fixed search_path
+- VSME-specific triggers enforcing framework/type consistency
 
 ---
 
@@ -36,25 +37,32 @@ No table containing company-owned data is globally readable.
 - Can manage company members (invite/update/remove), including:
   - can create another owner
   - can remove own membership (self-remove)
+- Can delete company
 
 ### admin
 - Same as owner for day-to-day reporting access
 - Not allowed to delete company
 
 ### editor
-- If `company_member.access_type = 'all'`:
-  - Can view/edit all topics
-- If `company_member.access_type = 'selected'`:
-  - Can view/edit only topics assigned in `company_member_topic_access` with:
-    - `can_view = true`
-    - `can_edit = true`
+If `company_member.access_type = 'all'`:
+- Can view/edit all topics
+
+If `company_member.access_type = 'selected'`:
+- Can view/edit only topics assigned in `company_member_topic_access` with:
+  - `can_view = true`
+  - `can_edit = true`
 
 ### viewer
-- If `company_member.access_type = 'all'`:
-  - Can view all topics
-- If `company_member.access_type = 'selected'`:
-  - Can view only assigned topics with `can_view = true`
-- Cannot insert/update/delete answers
+If `company_member.access_type = 'all'`:
+- Can view all topics
+
+If `company_member.access_type = 'selected'`:
+- Can view only assigned topics with `can_view = true`
+
+Viewer cannot:
+- insert answers
+- update answers
+- delete answers
 
 ---
 
@@ -70,6 +78,8 @@ Deleting an owner membership row MUST NOT delete:
 - any other company-owned data
 
 Even if no owner remains, the company and reports remain intact.
+
+There is no cascade from `company_member` to `company`.
 
 ### 3.2 Company deletion is owner-only
 
@@ -88,11 +98,16 @@ Topic permissions are enforced via:
 
 `company_member_topic_access(company_member_id, topic_id, can_view, can_edit)`
 
-No UI-only filtering is trusted.
+No UI-only filtering is trusted.  
 RLS must block unauthorized access even if UI is bypassed.
 
-`topic_select_auth` (USING true) has been removed.
+`topic_select_auth` (USING true) has been removed.  
 Topics are no longer globally readable by default.
+
+Access to topics must derive from:
+
+- company membership
+- topic assignment (if access_type = 'selected')
 
 ---
 
@@ -104,6 +119,9 @@ A user can access a report only if:
 `report_select_auth` (USING true) has been removed.
 
 No cross-company leakage is possible via report table.
+
+Report scope authority (framework, mode, packs, taxonomy_version)
+does NOT override RLS. RLS applies first.
 
 ---
 
@@ -123,89 +141,148 @@ Company table is no longer globally readable.
 Policies enforce:
 
 ### SELECT
+
 Allowed if:
-- user has access to the report’s company
-AND
-- user can view the question’s topic (or is owner/admin)
+- user has access to the report’s company  
+AND  
+- user can view the question’s topic  
+OR  
+- user is owner/admin for the company
 
 ### INSERT / UPDATE
+
 Allowed if:
-- user is owner/admin
-OR
+- user is owner/admin  
+OR  
 - user is editor AND `can_edit = true` for that topic
 
 ### DELETE
+
 Same rule as UPDATE.
 
 Policies:
+
 - `answer_select_topic_access`
 - `answer_insert_topic_access`
 - `answer_update_topic_access`
 - `answer_delete_topic_access`
 
+Additionally enforced by trigger:
+
+- `enforce_answer_framework_match()`
+  - prevents cross-framework writes (e.g. ESRS question in VSME report)
+
 ---
 
-## 8. Reference catalog tables (intentional stance)
+## 8. disclosure_question protection (VSME integrity)
+
+`disclosure_question` is treated as a shared catalog.
+
+### SELECT
+
+Authenticated-readable (global catalog).
+
+### INSERT / UPDATE / DELETE
+
+Must be restricted to:
+- admin-level operations (not end users)
+- typically managed via migrations, not runtime UI
+
+Additional integrity guard:
+
+- `enforce_vsme_question_type_match()` trigger  
+  - ensures:
+    - referenced `vsme_datapoint_id` exists
+    - `answer_type` matches `vsme_datapoint.value_type`
+  - protects VSME catalog from internal inconsistency
+
+---
+
+## 9. Reference catalog tables (intentional stance)
 
 Some tables contain framework metadata only (no company-owned data) and are treated as catalogs.
 
-### 8.1 Authenticated-readable catalogs (intentional)
-- `disclosure_question`  (question catalog / framework metadata)
-  - Current policy allows authenticated SELECT (global catalog)
+### 9.1 Authenticated-readable catalogs (intentional)
+
+- `disclosure_question` (question catalog / framework metadata)
 - `vsme_datapoint` (datapoint catalog)
 - `vsme_question` (metadata catalog)
 
 Rationale:
+
 Catalog metadata is not company-owned data and is safe to reuse across tenants.
 
-### 8.2 Pack catalogs (now RLS enabled)
+These tables must not expose sensitive tenant-specific data.
+
+### 9.2 Pack catalogs (RLS enabled)
+
 - `report_pack`
 - `vsme_datapoint_pack`
 
-RLS is enabled (Supabase warning resolved). These tables are read-only by design:
-- SELECT allowed to authenticated
+RLS is enabled.
+
+Current stance:
+- SELECT allowed to authenticated users
 - no client-side writes expected
 
-If writes are ever needed, introduce explicit write policies (owner/admin only) and document it here.
+If writes are ever needed:
+- introduce explicit owner/admin-only policies
+- update this document
 
 ---
 
-## 9. RLS + RPC interaction rules
+## 10. RLS + RPC interaction rules
 
 - RPC functions must not bypass RLS unintentionally.
-- SECURITY DEFINER functions must enforce access checks if returning business data.
+- RPC functions must not assume visibility beyond RLS constraints.
+- If SECURITY DEFINER is used, explicit membership checks must be performed.
 
 Allowed:
-- SECURITY DEFINER for boolean helpers (e.g. `has_company_role`, `user_can_edit_topic`).
+
+- SECURITY DEFINER for boolean helpers  
+  (e.g. `has_company_role`, `user_can_edit_topic`)
 
 Disallowed:
-- SECURITY DEFINER functions returning unrestricted datasets without access validation.
+
+- SECURITY DEFINER functions returning unrestricted datasets
+  without access validation
+
+RPC must behave as if executed by the authenticated user.
 
 ---
 
-## 10. Function Security Hardening
+## 11. Function Security Hardening
 
 All SECURITY DEFINER functions in `public` schema:
+
 - explicitly set `search_path = public`
 - do not rely on implicit schema resolution
 - avoid dynamic SQL unless necessary
 
 Current state:
+
 All SECURITY DEFINER functions have `search_path=public`.
+
+Any new SECURITY DEFINER function must follow the same pattern.
 
 ---
 
-## 11. Known deviations / TODOs (documented on purpose)
+## 12. Known deviations / TODOs (documented on purpose)
 
-### 11.1 Attachments / comments currently use `company.user_id` gating
+### 12.1 Attachments / comments currently use `company.user_id` gating
+
 `question_attachment` and `question_comment` policies currently gate access via:
+
 - report belongs to company where `company.user_id = auth.uid()`
 
 This does NOT fully align with membership roles in `company_member`.
+
 Impact:
+
 - admins/editors may be blocked even if they should have access by role/topic permission.
 
 TODO (future tightening):
+
 - gate by `company_member` membership
 - optionally align to topic permissions if needed
 
@@ -213,17 +290,18 @@ TODO (future tightening):
 
 ---
 
-## 12. Non-negotiables
+## 13. Non-negotiables
 
 - No disabling RLS in production.
 - No service role usage in browser/client code.
 - All writes use authenticated Supabase client.
 - Policies reference `auth.uid()`.
 - No client-side authorization as primary enforcement.
+- No cross-tenant data leakage under any scenario.
 
 ---
 
-## 13. Practical test checklist
+## 14. Practical test checklist
 
 For each role scenario verify:
 
@@ -236,3 +314,5 @@ For each role scenario verify:
 - Owner can delete company
 - Removing last owner does not delete data
 - No cross-company data leakage
+- RPC question list respects topic permissions
+- Progress RPC reflects only visible in-scope questions
