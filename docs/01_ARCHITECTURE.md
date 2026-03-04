@@ -20,9 +20,10 @@ DB/RPC are the source of truth. UI is a projection.
 1) Sign in (Supabase Auth)  
 2) Company selection / creation  
 3) Report creation (reporting_year)  
-4) Choose VSME mode + optional add-ons (packs)  
-5) Answering sections (questions + answers)  
-6) Export (always allowed, show readiness summary)
+4) Initial scope selection (core / core_plus / comprehensive)  
+5) Report Settings (scope adjustments + optional add-ons)  
+6) Answering sections (questions + answers)  
+7) Export (always allowed, show readiness summary)
 
 ---
 
@@ -75,6 +76,8 @@ Important UI rule:
 - UI must never infer scope from static metadata alone (e.g. VSME_SECTION_META).
 - UI scope is derived from the RPC dataset returned by get_vsme_questions_for_report_v2(report_id).
 
+Scope can be adjusted from the **Report Settings** page.
+
 ---
 
 ### 3.3 Add-on packs (deterministic expansion)
@@ -121,6 +124,102 @@ Question UX metadata lives here:
 - example_answer (optional)
 
 These are informational only and never stored in disclosure_answer.
+
+---
+
+### 3.6 Report Settings (control panel)
+
+Each report exposes a **Report Settings page** used for configuration and support/debug visibility.
+
+Route:
+
+/reports/[id]/settings
+
+The page contains four functional areas.
+
+---
+
+#### 1) Report status
+
+Shows:
+
+- company
+- reporting year
+- reporting scope
+- question count
+- completion percentage
+- N/A count
+
+This information is derived from the same RPC dataset used by the answering pages.
+
+---
+
+#### 2) Scope configuration
+
+Allows editing:
+
+- report.vsme_mode
+- report.vsme_pack_codes
+
+Supported modes:
+
+Core  
+→ base VSME dataset
+
+Core Plus  
+→ Core + optional add-on packs
+
+Comprehensive  
+→ full VSME dataset
+
+UX rules:
+
+- add-on packs are visible only when mode = core_plus
+- comprehensive disables add-on selection
+- packs are preserved when switching modes in UI until saved
+- saving scope updates report.vsme_mode and report.vsme_pack_codes
+
+After saving scope:
+
+- report row is updated
+- question scope is recomputed via RPC
+- question lists refresh deterministically
+
+---
+
+#### 3) Sections overview
+
+Displays per-section completion derived from the RPC dataset.
+
+Rules:
+
+- sections with total = 0 are hidden
+- completion represents (Answered + N/A) / total
+
+This mirrors the same logic used on the answering page.
+
+---
+
+#### 4) All questions (advanced)
+
+A collapsible **support/debug panel** containing the full in-scope question list.
+
+Purpose:
+
+- troubleshooting
+- export validation
+- support diagnostics
+
+Features:
+
+- collapsed by default
+- search by text / code / datapoint / section
+- filter by state (All / Missing / Answered / N/A)
+- per-question debug details
+- answer preview
+- copy debug bundle for support
+
+This panel is **not part of the normal SME answering flow** and exists primarily for diagnostics.
 
 ---
 
@@ -222,7 +321,8 @@ Themes (groups) shown:
 - Governance
 
 Grouping is deterministic and shared across:
-- building the chapter list (group membership)
+
+- building the chapter list
 - computing group totals
 
 ---

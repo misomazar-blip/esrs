@@ -12,11 +12,11 @@ UI must never infer, guess, or override units.
 
 Ensure that:
 
-- every datapoint uses the correct VSME unit
-- units are consistent across reports
-- units are deterministic
-- unit display is fully DB-driven
-- unit logic is not implemented client-side
+* every datapoint uses the correct VSME unit
+* units are consistent across reports
+* units are deterministic
+* unit display is fully DB-driven
+* unit logic is not implemented client-side
 
 Canonical source of truth:
 
@@ -38,12 +38,12 @@ public.vsme_datapoint
 
 Example:
 
-| id | unit |
-|----|------|
-| Assets | EUR |
-| TotalWaterConsumption | m3 |
-| TotalEnergyConsumption | MWh |
-| TotalWasteGeneratedMass | kg |
+| id                      | unit |
+| ----------------------- | ---- |
+| Assets                  | EUR  |
+| TotalWaterConsumption   | m3   |
+| TotalEnergyConsumption  | MWh  |
+| TotalWasteGeneratedMass | kg   |
 
 This defines the correct VSME unit globally.
 
@@ -55,31 +55,33 @@ NOT report-specific.
 
 # 3. Unit Resolution Order (RPC Contract)
 
-RPC:
+RPC used by UI:
 
 get_vsme_questions_for_report_v2
 
-Unit must be resolved using:
+Unit must be resolved inside RPC using:
 
 coalesce(
-  disclosure_answer.unit,
-  vsme_datapoint.unit,
-  disclosure_question.unit
+disclosure_answer.unit,
+vsme_datapoint.unit,
+disclosure_question.unit
 ) as unit
 
 Priority:
 
-1) disclosure_answer.unit  
+1. disclosure_answer.unit
    optional override (rare, not used in MVP)
 
-2) vsme_datapoint.unit  
-   canonical source  
+2. vsme_datapoint.unit
+   canonical source
    required for numeric datapoints
 
-3) disclosure_question.unit  
+3. disclosure_question.unit
    legacy fallback only
 
 UI must rely only on RPC-returned unit.
+
+Unit logic must never be implemented client-side.
 
 ---
 
@@ -95,9 +97,10 @@ vsme_datapoint.unit
 
 This ensures:
 
-- consistency
-- no per-report unit drift
-- deterministic exports
+* consistency
+* no per-report unit drift
+* deterministic exports
+* no client-side logic
 
 Future versions may support overrides.
 
@@ -115,11 +118,11 @@ Stored as:
 
 disclosure_answer.value_text
 
-Example:
+Example values:
 
-EUR  
-USD  
-CZK  
+EUR
+USD
+CZK
 
 template_currency itself has:
 
@@ -135,7 +138,15 @@ UI may display:
 
 value + template_currency
 
-but stored numeric values remain unit-agnostic.
+Example display:
+
+15000000 EUR
+
+Important:
+
+Stored numeric values remain unit-agnostic.
+
+Currency context is purely presentation.
 
 ---
 
@@ -149,16 +160,17 @@ NOT to answers.
 
 NOT to reports.
 
-Mapping:
+Mapping chain:
 
-vsme_datapoint.id  
-→ vsme_datapoint.unit  
-→ disclosure_question.vsme_datapoint_id  
-→ RPC returns resolved unit
+vsme_datapoint.id
+→ vsme_datapoint.unit
+→ disclosure_question.vsme_datapoint_id
+→ RPC resolves unit
+→ UI displays unit
 
 This ensures:
 
-consistent unit for all reports.
+consistent unit usage across all reports.
 
 ---
 
@@ -168,14 +180,14 @@ Units must match VSME recommended units.
 
 Examples:
 
-Currency datapoints → EUR  
-Water consumption → m3  
-Waste mass → kg  
-Energy consumption → MWh  
-Emissions → tCO2e  
-Area → m2  
-Count → count  
-Percentage → %  
+Currency datapoints → EUR
+Water consumption → m3
+Waste mass → kg
+Energy consumption → MWh
+Emissions → tCO2e
+Area → m2
+Count → count
+Percentage → %
 
 Unit selection is defined at datapoint level.
 
@@ -197,9 +209,9 @@ Unit must always come from RPC.
 
 Never inferred from:
 
-question_text  
-example_answer  
-user input  
+question_text
+example_answer
+user input
 
 ---
 
@@ -207,22 +219,23 @@ user input
 
 UI must:
 
-Display unit returned from RPC.
+Display the unit returned from RPC.
 
 Example:
 
-input value: 15000000  
-unit: EUR  
+input value: 15000000
+unit: EUR
 
-display:
+Display:
 
 15000000 EUR
 
 UI must NOT:
 
-infer currency  
-derive unit from template_currency directly  
-guess units  
+* infer currency
+* derive unit from template_currency directly
+* guess units
+* hardcode units
 
 RPC is authoritative.
 
@@ -230,17 +243,18 @@ RPC is authoritative.
 
 # 10. Export Contract (Future XBRL)
 
-Unit will map to:
+Units will map to:
 
 xbrl_unit
 
-Mapping example:
+Example mappings:
 
-EUR → iso4217:EUR  
-kg → xbrli:kg  
-m3 → xbrli:m3  
+EUR → iso4217:EUR
+kg → xbrli:kg
+m3 → xbrli:m3
+MWh → custom energy unit mapping
 
-Unit correctness is required for valid XBRL export.
+Correct unit definition is required for valid XBRL export.
 
 This document ensures export compatibility.
 
@@ -250,14 +264,12 @@ This document ensures export compatibility.
 
 Audit datapoints without unit:
 
-```sql
 select id
 from vsme_datapoint
 where unit is null
-  and id not in ('template_currency');
-```
+and id not in ('template_currency');
 
-Expected:
+Expected result:
 
 0 rows
 
@@ -265,14 +277,12 @@ Expected:
 
 Audit numeric datapoints without unit:
 
-```sql
 select id, value_type, unit
 from vsme_datapoint
 where value_type in ('number','numeric','integer')
-  and unit is null;
-```
+and unit is null;
 
-Expected:
+Expected result:
 
 0 rows
 
@@ -282,16 +292,16 @@ Expected:
 
 Never:
 
-store unit only in disclosure_question  
-derive unit in UI  
-allow inconsistent units per report  
-change unit per answer  
+* store unit only in disclosure_question
+* derive unit in UI
+* allow inconsistent units per report
+* change unit per answer
 
 Always:
 
-define unit in vsme_datapoint  
-resolve unit via RPC  
-treat vsme_datapoint.unit as canonical  
+* define unit in vsme_datapoint
+* resolve unit via RPC
+* treat vsme_datapoint.unit as canonical
 
 ---
 
@@ -301,7 +311,7 @@ Unit authority:
 
 vsme_datapoint.unit
 
-Resolution:
+Resolution layer:
 
 RPC get_vsme_questions_for_report_v2
 
@@ -313,10 +323,10 @@ Never compute.
 
 This guarantees:
 
-deterministic reporting  
-correct exports  
-VSME alignment  
-stable architecture
+* deterministic reporting
+* correct exports
+* VSME alignment
+* stable architecture
 
 ---
 

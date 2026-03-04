@@ -105,10 +105,10 @@ for that version.
 
 Current default taxonomy version:
 
-- '1.2.0'
+'1.2.0'
 
 If multiple taxonomy versions are supported in the future, eligibility MUST be
-computed per report.vsme_taxonomy_version (no implicit mixing).
+computed per report.vsme_taxonomy_version.
 
 ---
 
@@ -123,13 +123,15 @@ section_code text
 vsme_level text  
 vsme_datapoint_id text  
 config_jsonb jsonb  
+
 value_boolean boolean  
 value_text text  
-value_number numeric  
-value_integer integer  
 value_numeric numeric  
+value_integer integer  
 value_date date  
+
 value_jsonb jsonb  
+
 unit text  
 updated_at timestamptz  
 
@@ -147,7 +149,11 @@ Client must not re-filter scope.
 
 Status: Active / preferred RPC
 
-Used by VsmeSectionClient and all new UI.
+Used by:
+
+- VsmeSectionClient
+- Report Settings page
+- Question debug panel
 
 Introduced: 2026-02
 
@@ -157,12 +163,7 @@ Introduced: 2026-02
 
 Return deterministic in-scope VSME question list including help text fields.
 
-This is identical to get_vsme_questions_for_report but extended with:
-
-- guidance_text
-- example_answer
-
-These fields improve UX but do NOT affect scope, progress, or readiness.
+This RPC is the **single source of truth for the question dataset used by UI.**
 
 ---
 
@@ -185,24 +186,33 @@ Only return shape is extended.
 ## Returns (per row)
 
 question_id uuid  
+
 code text  
 question_text text  
+
 guidance_text text nullable  
 example_answer text nullable  
+
 answer_type text  
 order_index integer  
+
 section_code text  
 vsme_level text  
+
 vsme_datapoint_id text  
+
 config_jsonb jsonb  
+
 value_boolean boolean  
 value_text text  
-value_number numeric  
-value_integer integer  
 value_numeric numeric  
+value_integer integer  
 value_date date  
+
 value_jsonb jsonb  
+
 unit text  
+
 updated_at timestamptz  
 
 ---
@@ -223,12 +233,10 @@ Semantics:
 guidance_text  
 - explanatory text shown under question title  
 - describes what the user should provide  
-- informational only  
 
 example_answer  
 - example value shown under input  
 - prefixed with "Example:"  
-- informational only  
 
 These fields:
 
@@ -238,7 +246,7 @@ These fields:
 - do NOT affect export readiness
 - do NOT affect scope
 
-They are purely UX guidance.
+They exist purely for guided reporting UX.
 
 ---
 
@@ -246,51 +254,43 @@ They are purely UX guidance.
 
 The `unit` returned by RPC is resolved deterministically.
 
-**Priority order (highest → lowest):**
+Priority order:
 
 1) disclosure_answer.unit  
-   - optional per-report override  
-   - rarely used in MVP, but supported
 
 2) vsme_datapoint.unit  
-   - canonical source of truth for VSME units  
-   - MUST be correct for numeric datapoints
 
 3) disclosure_question.unit  
-   - legacy fallback only  
-   - MUST NOT be relied upon for correctness
 
-Implementation (inside RPC):
+Implementation:
 
 unit = coalesce(a.unit, dp.unit, q.unit)
 
 Where:
 
-- q = disclosure_question  
-- dp = vsme_datapoint (joined on dp.id = q.vsme_datapoint_id)  
-- a = disclosure_answer  
+a = disclosure_answer  
+dp = vsme_datapoint  
+q = disclosure_question  
 
-This contract exists to avoid “missing units” in UI when disclosure_answer.unit is NULL
-(which is normal in MVP).
+UI must always display the unit returned by RPC.
+
+UI must never derive units independently.
 
 ---
 
 ## TYPE MATCHING CONTRACT (VSME)
 
-VSME questions must match datapoint value types.
+Guardrail trigger:
 
-Guardrail (DB):
-
-- enforce_vsme_question_type_match()
+enforce_vsme_question_type_match()
 
 Rule:
 
-- disclosure_question.answer_type MUST be compatible with vsme_datapoint.value_type
-  for VSME questions (framework='VSME') that reference a vsme_datapoint_id.
+disclosure_question.answer_type MUST match vsme_datapoint.value_type.
 
-The trigger must prevent:
-- referencing missing datapoints
-- mismatched types (e.g. answer_type='number' with value_type='date')
+This prevents invalid combinations such as:
+
+numeric datapoint + date answer type.
 
 ---
 
@@ -298,28 +298,30 @@ The trigger must prevent:
 
 Template currency datapoint:
 
-- vsme_datapoint_id = 'template_currency'
+vsme_datapoint_id = 'template_currency'
 
 Stored as:
 
-- disclosure_answer.value_text (e.g., "EUR")
+disclosure_answer.value_text
 
-UI MAY use this value to display currency suffix for monetary datapoints.
+Example:
 
-Important:
+EUR  
+USD  
 
-- template_currency itself does not have a unit (dp.unit may be NULL)
-- monetary datapoints will have dp.unit like "EUR" (or another currency unit),
-  but UI can override display with template_currency at runtime.
+UI MAY use this value to display a currency suffix
+for monetary datapoints.
 
-This is a UI-only display convention; it does not change stored values.
+This is display logic only.
+
+Stored numeric values remain unit-agnostic.
 
 ---
 
 ## Determinism Requirement
 
 Same report configuration + same DB state  
-→ same question list INCLUDING guidance_text, example_answer, and unit.
+→ same question list INCLUDING guidance_text, example_answer and unit.
 
 ---
 
@@ -336,60 +338,61 @@ as get_vsme_questions_for_report_v2.
 
 ## Answer State Model (Authoritative)
 
-N/A is represented explicitly as:
+N/A representation:
 
 value_jsonb -> { "na": true }
 
-No other implicit interpretation of NULL values is allowed.
-
 Answered:
 
-- Valid value stored in the correct typed column according to answer_type  
+- valid typed value stored in correct column  
 OR  
 - value_jsonb.na = true  
 
 Missing:
 
-- In-scope AND not answered  
+- in-scope AND not answered  
 
 N/A:
 
-- Explicit value_jsonb.na = true  
-- Counted as Answered  
+- explicit value_jsonb.na = true  
+- counted as Answered
 
 ---
 
 ## Completion Formula
 
-(Answered + N/A) / (In-scope questions)
+completion =
+
+(Answered + N/A) / total_in_scope
 
 ---
 
-## Progress Edge Cases (CRITICAL)
-
-To avoid undefined UI behavior:
+## Progress Edge Cases
 
 If total_in_scope_questions = 0:
 
-- overall.missing = 0
-- overall.progress_ratio = 1.0
-- sections[].missing = 0
-- sections[].progress_ratio = 1.0
-- continue_section_code may be NULL
-- suggested_section_code may be NULL
+overall.missing = 0  
+overall.progress_ratio = 1.0  
 
-Rationale:
-A report with 0 eligible questions is considered trivially complete.
+sections[].missing = 0  
+sections[].progress_ratio = 1.0  
+
+continue_section_code may be NULL  
+suggested_section_code may be NULL  
+
+A report with zero eligible questions is considered complete.
 
 ---
 
 ## Aggregation Consistency Requirement
 
-overall.total = sum(sections.total)  
-overall.answered = sum(sections.answered)  
-overall.missing = sum(sections.missing)  
+overall.total = sum(sections.total)
 
-Any deviation indicates a scope or aggregation bug.
+overall.answered = sum(sections.answered)
+
+overall.missing = sum(sections.missing)
+
+Deviation indicates a scope or aggregation bug.
 
 ---
 
@@ -420,58 +423,50 @@ Export readiness must be informative and never blocking.
 
 ---
 
-# 4. Security Model
+# 4. Section Visibility Contract
 
-Access control is enforced by:
+Sections are derived from the RPC dataset.
+
+Rule:
+
+Sections where total = 0 must NOT be displayed in UI.
+
+This prevents:
+
+0 / 0 sections appearing in navigation.
+
+Section lists must be derived only from the RPC dataset.
+
+---
+
+# 5. Security Model
+
+Access control enforced by:
 
 - Row Level Security (RLS)
 - company_member_topic_access
 - report/company membership rules
 
-RPC functions must not bypass RLS.
+RPC must not bypass RLS.
 
-If SECURITY DEFINER is used, explicit role and membership checks must be performed inside the function.
+If SECURITY DEFINER is used, explicit membership checks must exist.
 
 ---
 
-# 5. Single Source of Truth
+# 6. Single Source of Truth
 
-Scope, progress and readiness logic MUST be computed in DB.
+Scope, progress and readiness MUST be computed in DB.
 
 UI:
 
 - may optimistically update local state
-- must reconcile with RPC-confirmed state after writes
-- must not duplicate missing rules
-- must not redefine scope client-side
-- must not redefine unit resolution client-side
+- must reconcile with RPC-confirmed state
+- must not duplicate scope rules
+- must not redefine unit resolution
+- must not reinterpret answer states
 
 If business logic changes:
 
 1. Update RPC
 2. Update this file
 3. Do NOT patch logic in UI only
-
----
-
-# 6. Related / Supporting Functions (Reference)
-
-VSME eligibility:
-
-- fn_check_vsme_eligibility(...)
-- fn_vsme_category(...)
-
-Access helpers:
-
-- user_has_company_access(...)
-- is_company_member(...)
-- has_company_role(...)
-- user_can_view_topic(...)
-- user_can_edit_topic(...)
-
-Future (ESRS / XBRL):
-
-- get_active_esrs_version(...)
-- migrate_report_to_version(...)
-- fn_generate_xbrl_fact_xml(...)
-- fn_validate_xbrl_completeness(...)

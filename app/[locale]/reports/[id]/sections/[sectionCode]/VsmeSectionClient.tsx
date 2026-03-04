@@ -146,6 +146,9 @@ export default function VsmeSectionClient() {
   const [error, setError] = useState<string | null>(null);
   const [sectionQuestions, setSectionQuestions] = useState<VsmeQuestion[]>([]);
   const [answersById, setAnswersById] = useState<Record<string, LocalAnswer>>({});
+  const [savingById, setSavingById] = useState<Record<string, boolean>>({});
+  const [savedAtById, setSavedAtById] = useState<Record<string, number>>({});
+  const [errorById, setErrorById] = useState<Record<string, string | null>>({});
   const [reportCurrency, setReportCurrency] = useState<string | null>(null);
   const [scrolledPastThreshold, setScrolledPastThreshold] = useState(false);
   const [footerNavVisible, setFooterNavVisible] = useState(false);
@@ -434,6 +437,33 @@ export default function VsmeSectionClient() {
     return answersById[templateCurrencyQuestionId]?.value_text ?? null;
   }, [templateCurrencyQuestionId, answersById]);
 
+  const sectionCompleteness = useMemo(() => {
+    const total = sectionQuestions.length;
+    let answered = 0;
+    let na = 0;
+
+    for (const q of sectionQuestions as any[]) {
+      const id = String(q?.question_id ?? '');
+      if (!id) continue;
+
+      const a = answersById[id] ?? {};
+      const isNa = a.na === true;
+      const hasValue = hasAnyValue(a);
+
+      if (isNa) {
+        na += 1;
+      } else if (hasValue) {
+        answered += 1;
+      }
+    }
+
+    const missing = Math.max(0, total - answered - na);
+    const completed = answered + na;
+    const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+    return { total, answered, na, missing, pct };
+  }, [sectionQuestions, answersById]);
+
   useEffect(() => {
     if (!reportId) return;
 
@@ -491,27 +521,98 @@ export default function VsmeSectionClient() {
   const saveAnswer = async (questionId: string, answerType: string, value: string | undefined) => {
     if (!reportId) return;
 
+    setSavingById((prev) => ({ ...prev, [questionId]: true }));
+    setErrorById((prev) => ({ ...prev, [questionId]: null }));
+
     const supabase = createSupabaseBrowserClient();
     const t = String(answerType ?? '').toLowerCase();
 
-    if (!value || value === '') {
-      await supabase.from('disclosure_answer').delete().eq('report_id', reportId).eq('question_id', questionId);
+    try {
+      if (!value || value === '') {
+        const { error: deleteError } = await supabase
+          .from('disclosure_answer')
+          .delete()
+          .eq('report_id', reportId)
+          .eq('question_id', questionId);
+        if (deleteError) throw deleteError;
+
+        await refreshCta();
+        setAnswersById((prev) => ({
+          ...prev,
+          [questionId]: {
+            ...(prev[questionId] ?? {}),
+            value_text: '',
+            value_numeric: '',
+            value_date: '',
+            na: false,
+          },
+        }));
+        setSavingById((prev) => ({ ...prev, [questionId]: false }));
+        setSavedAtById((prev) => ({ ...prev, [questionId]: Date.now() }));
+        setTimeout(() => {
+          setSavedAtById((prev) => {
+            if ((prev[questionId] ?? 0) === 0) return prev;
+            const next = { ...prev };
+            if (Date.now() - (next[questionId] ?? 0) >= 1500) delete next[questionId];
+            return next;
+          });
+        }, 1500);
+        return;
+      }
+
+      const payload: any = { report_id: reportId, question_id: questionId };
+
+      if (t === 'number' || t === 'integer' || t === 'numeric') {
+        payload.value_numeric = Number(value);
+      } else if (t === 'date') {
+        payload.value_date = value;
+      } else {
+        payload.value_text = value;
+      }
+
+      const { error: upsertError } = await supabase
+        .from('disclosure_answer')
+        .upsert(payload, { onConflict: 'report_id,question_id' });
+      if (upsertError) throw upsertError;
+
       await refreshCta();
-      return;
+      setAnswersById((prev) => {
+        const current = prev[questionId] ?? {};
+        const next: LocalAnswer = {
+          ...current,
+          value_text: '',
+          value_numeric: '',
+          value_date: '',
+          na: false,
+        };
+
+        if (t === 'number' || t === 'integer' || t === 'numeric') {
+          next.value_numeric = value;
+        } else if (t === 'date') {
+          next.value_date = value;
+        } else {
+          next.value_text = value;
+        }
+
+        return {
+          ...prev,
+          [questionId]: next,
+        };
+      });
+      setSavingById((prev) => ({ ...prev, [questionId]: false }));
+      setSavedAtById((prev) => ({ ...prev, [questionId]: Date.now() }));
+      setTimeout(() => {
+        setSavedAtById((prev) => {
+          if ((prev[questionId] ?? 0) === 0) return prev;
+          const next = { ...prev };
+          if (Date.now() - (next[questionId] ?? 0) >= 1500) delete next[questionId];
+          return next;
+        });
+      }, 1500);
+    } catch (e: any) {
+      setSavingById((prev) => ({ ...prev, [questionId]: false }));
+      setErrorById((prev) => ({ ...prev, [questionId]: e?.message ?? 'Save failed' }));
     }
-
-    const payload: any = { report_id: reportId, question_id: questionId };
-
-    if (t === 'number' || t === 'integer' || t === 'numeric') {
-      payload.value_numeric = Number(value);
-    } else if (t === 'date') {
-      payload.value_date = value;
-    } else {
-      payload.value_text = value;
-    }
-
-    await supabase.from('disclosure_answer').upsert(payload, { onConflict: 'report_id,question_id' });
-    await refreshCta();
   };
 
   const toggleNA = async (questionId: string, nextNa: boolean) => {
@@ -530,7 +631,13 @@ export default function VsmeSectionClient() {
         .from('disclosure_answer')
         .upsert({ report_id: reportId, question_id: questionId, value_jsonb: { na: true } }, { onConflict: 'report_id,question_id' });
     if (error) console.error('toggle NA on failed', error);
-    else await refreshCta();
+    else {
+      setAnswersById((prev) => ({
+        ...prev,
+        [questionId]: { ...(prev[questionId] ?? {}), na: true },
+      }));
+      await refreshCta();
+    }
       
       return;
     }
@@ -559,7 +666,13 @@ export default function VsmeSectionClient() {
       .eq('question_id', questionId);
 
     if (error) console.error('toggle NA off failed', error);
-    else await refreshCta();
+    else {
+      setAnswersById((prev) => ({
+        ...prev,
+        [questionId]: { ...(prev[questionId] ?? {}), na: false },
+      }));
+      await refreshCta();
+    }
   };
 
   const targetSectionCode = String(cta?.continue_section_code || cta?.suggested_section_code || '').toUpperCase();
@@ -735,6 +848,9 @@ export default function VsmeSectionClient() {
               Back to top
             </button>
           </div>
+          <div className="px-3 pb-2 text-xs text-gray-600">
+            Answered: {sectionCompleteness.answered} · N/A: {sectionCompleteness.na} · Missing: {sectionCompleteness.missing} · {sectionCompleteness.pct}%
+          </div>
         </div>
 
         {/* SECTION QUESTIONS */}
@@ -754,10 +870,14 @@ export default function VsmeSectionClient() {
             <ul className="space-y-2">
               {sectionQuestions.map((q: any, idx: number) => {
                 const total = sectionQuestions.length;
+                const questionId = String(q.question_id ?? '');
                 const t = String(q.answer_type ?? '').toLowerCase();
-                const a = answersById[q.question_id] ?? {};
+                const a = answersById[questionId] ?? {};
                 const allowed = (q.config_jsonb?.allowed_values ?? []) as string[];
                 const isNa = a.na === true;
+                const isSaving = savingById[questionId] === true;
+                const saveError = errorById[questionId];
+                const recentlySaved = Date.now() - (savedAtById[questionId] ?? 0) < 1500;
                 const guidanceText = String(q.guidance_text ?? '').trim();
                 const unit = String(q.unit ?? '').trim().toUpperCase();
                 const isNumeric = t === 'number' || t === 'integer' || t === 'numeric';
@@ -790,7 +910,7 @@ export default function VsmeSectionClient() {
 
                 return (
                   <li
-                    key={q.question_id}
+                    key={questionId}
                     className={[
                       'rounded-lg shadow',
                       'border border-gray-200',
@@ -809,7 +929,7 @@ export default function VsmeSectionClient() {
                           <input
                             type="checkbox"
                             checked={isNa}
-                            onChange={(e) => void toggleNA(q.question_id, e.target.checked)}
+                            onChange={(e) => void toggleNA(questionId, e.target.checked)}
                             className="sr-only peer"
                           />
                           <div className="w-10 h-5 bg-gray-300 peer-checked:bg-gray-400 rounded-full transition-colors" />
@@ -838,13 +958,13 @@ export default function VsmeSectionClient() {
                                 const v = e.target.value;
                                 setAnswersById((prev) => ({
                                   ...prev,
-                                  [q.question_id]: { ...(prev[q.question_id] ?? {}), value_text: v },
+                                  [questionId]: { ...(prev[questionId] ?? {}), value_text: v },
                                 }));
                                 if (String(q.vsme_datapoint_id ?? '') === 'template_currency') {
                                   setReportCurrency(normalizeCurrency(v));
                                 }
                               }}
-                              onBlur={(e) => saveAnswer(q.question_id, q.answer_type, e.target.value)}
+                              onBlur={(e) => saveAnswer(questionId, q.answer_type, e.target.value)}
                               className="w-full px-3 py-2 border border-gray-300 rounded placeholder:text-slate-400 placeholder:italic"
                               autoComplete="off"
                               placeholder={getPlaceholder(q, a)}
@@ -861,10 +981,10 @@ export default function VsmeSectionClient() {
                                 const v = e.target.value;
                                 setAnswersById((prev) => ({
                                   ...prev,
-                                  [q.question_id]: { ...(prev[q.question_id] ?? {}), value_numeric: v },
+                                  [questionId]: { ...(prev[questionId] ?? {}), value_numeric: v },
                                 }));
                               }}
-                              onBlur={(e) => saveAnswer(q.question_id, q.answer_type, e.target.value)}
+                              onBlur={(e) => saveAnswer(questionId, q.answer_type, e.target.value)}
                               className="flex-1 w-full px-3 py-2 border border-gray-300 rounded placeholder:text-slate-400 placeholder:italic"
                               placeholder={getPlaceholder(q, a)}
                             />
@@ -881,10 +1001,10 @@ export default function VsmeSectionClient() {
                                 const v = e.target.value;
                                 setAnswersById((prev) => ({
                                   ...prev,
-                                  [q.question_id]: { ...(prev[q.question_id] ?? {}), value_date: v },
+                                  [questionId]: { ...(prev[questionId] ?? {}), value_date: v },
                                 }));
                               }}
-                              onBlur={(e) => saveAnswer(q.question_id, q.answer_type, e.target.value)}
+                              onBlur={(e) => saveAnswer(questionId, q.answer_type, e.target.value)}
                               className="w-full px-3 py-2 border border-gray-300 rounded"
                             />
                           </div>
@@ -900,13 +1020,13 @@ export default function VsmeSectionClient() {
                                   const v = e.target.value;
                                   setAnswersById((prev) => ({
                                     ...prev,
-                                    [q.question_id]: { ...(prev[q.question_id] ?? {}), value_text: v },
+                                    [questionId]: { ...(prev[questionId] ?? {}), value_text: v },
                                   }));
                                   if (String(q.vsme_datapoint_id ?? '') === 'template_currency') {
                                     setReportCurrency(normalizeCurrency(v));
                                   }
                                 }}
-                                onBlur={(e) => saveAnswer(q.question_id, q.answer_type, e.target.value)}
+                                onBlur={(e) => saveAnswer(questionId, q.answer_type, e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded"
                                 autoComplete="off"
                                 placeholder="Type…"
@@ -918,13 +1038,13 @@ export default function VsmeSectionClient() {
                                   const v = e.target.value;
                                   setAnswersById((prev) => ({
                                     ...prev,
-                                    [q.question_id]: { ...(prev[q.question_id] ?? {}), value_text: v },
+                                    [questionId]: { ...(prev[questionId] ?? {}), value_text: v },
                                   }));
                                   if (String(q.vsme_datapoint_id ?? '') === 'template_currency') {
                                     setReportCurrency(normalizeCurrency(v));
                                   }
                                 }}
-                                onBlur={(e) => saveAnswer(q.question_id, q.answer_type, e.target.value)}
+                                onBlur={(e) => saveAnswer(questionId, q.answer_type, e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded bg-white"
                               >
                                 <option value="">— Select —</option>
@@ -937,6 +1057,12 @@ export default function VsmeSectionClient() {
                             )}
                           </div>
                         )}
+
+                        <div className="mt-1 text-xs">
+                          {isSaving ? <span className="text-gray-500">Saving…</span> : null}
+                          {!isSaving && saveError ? <span className="text-red-600">Not saved</span> : null}
+                          {!isSaving && !saveError && recentlySaved ? <span className="text-emerald-600">Saved</span> : null}
+                        </div>
                       </>
                     )}
                   </li>

@@ -67,10 +67,6 @@ export default function ReportSettingsClient() {
   const locale = typeof params.locale === 'string' ? params.locale : 'en';
   const reportId = typeof params.id === 'string' ? params.id : '';
 
-  useEffect(() => {
-    console.log('@@@ ReportSettingsClient rendered @@@');
-  }, []);
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -86,6 +82,10 @@ export default function ReportSettingsClient() {
   const [selectedPacks, setSelectedPacks] = useState<string[]>([]);
   const [savingScope, setSavingScope] = useState(false);
   const [scopeMessage, setScopeMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [showAllQuestions, setShowAllQuestions] = useState(false);
+  const [openDetailsById, setOpenDetailsById] = useState<Record<string, boolean>>({});
+  const [showPreviewById, setShowPreviewById] = useState<Record<string, boolean>>({});
+  const [lastCopiedId, setLastCopiedId] = useState<string | null>(null);
 
   const [qSearch, setQSearch] = useState('');
   const [onlyState, setOnlyState] = useState<'all' | 'missing' | 'answered' | 'na'>('all');
@@ -191,6 +191,7 @@ export default function ReportSettingsClient() {
       setLoading(false);
       return;
     }
+    setScopeMessage(null);
     void loadAll();
   }, [reportId, loadAll]);
 
@@ -281,35 +282,21 @@ export default function ReportSettingsClient() {
   return (
     <div className="min-h-screen bg-gray-50 p-8 pb-24">
       <div className="max-w-4xl mx-auto">
-        <div className="mb-4 rounded-lg border border-yellow-300 bg-yellow-100 px-4 py-3 text-sm font-semibold text-yellow-900">
-          DEBUG: VsmeQuestionsClient.tsx is rendering (Questions page)
-        </div>
-
         <div className="bg-white rounded-lg border border-gray-200 border-t-4 border-t-blue-500 shadow-sm p-4 mb-6">
           <div className="flex items-center justify-between gap-3">
             <div className="text-lg font-semibold text-gray-900">Report status</div>
 
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                disabled
-                title="TODO: scope UI"
-                className="shrink-0 inline-flex items-center rounded-md bg-blue-600 px-3 py-1.5 text-xs font-medium text-white opacity-60 cursor-not-allowed"
-              >
-                Change scope
-              </button>
-
-              <button
-                type="button"
-                onClick={() => void loadAll()}
-                className="shrink-0 inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
-              >
-                Reload questions
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setScopeMessage(null);
+                void loadAll();
+              }}
+              className="shrink-0 inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
+            >
+              Reload questions
+            </button>
           </div>
-
-          <div className="mt-1 text-xs text-gray-500">TODO: scope UI</div>
 
           <div className="mt-3 flex flex-wrap items-start gap-x-14 gap-y-4 max-w-[620px]">
             <div className="min-w-0">
@@ -323,8 +310,14 @@ export default function ReportSettingsClient() {
             </div>
 
             <div className="min-w-0">
-              <div className="text-xs text-gray-500">Question set</div>
-              <div className="text-base font-semibold text-gray-900">{reportInfo.vsmeMode || 'Core'}</div>
+              <div className="text-xs text-gray-500">Reporting scope</div>
+              <div className="text-base font-semibold text-gray-900">
+                {reportInfo.vsmeMode === 'core_plus'
+                  ? 'Core + add-ons'
+                  : reportInfo.vsmeMode === 'comprehensive'
+                    ? 'Comprehensive'
+                    : 'Core'}
+              </div>
             </div>
           </div>
 
@@ -353,88 +346,108 @@ export default function ReportSettingsClient() {
           </div>
 
           <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-3">
-            <div className="text-sm font-semibold text-slate-900">Scope</div>
+            <div className="text-sm font-semibold text-slate-900">Reporting scope</div>
+            <div className="mt-1 text-xs text-slate-600">Choose how detailed your report should be. You can change this anytime.</div>
 
             <div className="mt-2 space-y-2">
-              <label className="flex items-center gap-2 text-sm text-slate-800">
-                <input
-                  type="radio"
-                  name="vsme-mode"
-                  checked={selectedMode === 'core'}
-                  onChange={() => {
-                    setSelectedMode('core');
-                    setSelectedPacks([]);
-                  }}
-                />
-                <span>Core</span>
-              </label>
+              <div>
+                <label className="flex items-center gap-2 text-sm text-slate-800">
+                  <input
+                    type="radio"
+                    name="vsme-mode"
+                    checked={selectedMode === 'core'}
+                    onChange={() => {
+                      setScopeMessage(null);
+                      setSelectedMode('core');
+                    }}
+                  />
+                  <span>Core</span>
+                </label>
+                {selectedMode === 'core' ? (
+                  <div className="text-sm text-gray-600 bg-gray-50 rounded p-2 mt-1">
+                    Essential sustainability information for small and medium-sized companies.
+                  </div>
+                ) : null}
+              </div>
 
-              <label className="flex items-center gap-2 text-sm text-slate-800">
-                <input
-                  type="radio"
-                  name="vsme-mode"
-                  checked={selectedMode === 'core_plus'}
-                  onChange={() => setSelectedMode('core_plus')}
-                />
-                <span>Core Plus</span>
-              </label>
+              <div>
+                <label className="flex items-center gap-2 text-sm text-slate-800">
+                  <input
+                    type="radio"
+                    name="vsme-mode"
+                    checked={selectedMode === 'core_plus'}
+                    onChange={() => {
+                      setScopeMessage(null);
+                      setSelectedMode('core_plus');
+                    }}
+                  />
+                  <span>Core Plus (Core + add-ons)</span>
+                </label>
+                {selectedMode === 'core_plus' ? (
+                  <>
+                    <div className="text-sm text-gray-600 bg-gray-50 rounded p-2 mt-1">
+                      Use this if your bank, investor or large customer asks for additional sustainability information.
+                    </div>
+                    <div className="mt-2 rounded-md border border-slate-200 bg-white p-3">
+                      <div className="text-xs font-medium text-slate-700">Optional add-ons</div>
+                      <div className="mt-1 text-xs text-slate-600">These additional topics are often requested by banks, investors or supply-chain partners.</div>
+                      {packs.length === 0 ? (
+                        <div className="mt-2 text-xs text-slate-500">No packs found.</div>
+                      ) : (
+                        <div className="mt-2 space-y-2">
+                          {packs.map((pack) => {
+                            const checked = selectedPacks.includes(pack.code);
+                            return (
+                              <label key={pack.code} className="flex items-start gap-2 text-sm text-slate-800">
+                                <input
+                                  type="checkbox"
+                                  checked={checked}
+                                  onChange={() => {
+                                    setScopeMessage(null);
+                                    setSelectedPacks((prev) =>
+                                      prev.includes(pack.code)
+                                        ? prev.filter((code) => code !== pack.code)
+                                        : [...prev, pack.code],
+                                    );
+                                  }}
+                                  className="mt-0.5"
+                                />
+                                <span>
+                                  <span className="font-medium">{pack.name || pack.code}</span>
+                                  {pack.description ? <span className="block text-xs text-slate-500">{pack.description}</span> : null}
+                                </span>
+                              </label>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  </>
+                ) : null}
+              </div>
 
-              <label className="flex items-center gap-2 text-sm text-slate-800">
-                <input
-                  type="radio"
-                  name="vsme-mode"
-                  checked={selectedMode === 'comprehensive'}
-                  onChange={() => {
-                    setSelectedMode('comprehensive');
-                    setSelectedPacks([]);
-                  }}
-                />
-                <span>Comprehensive</span>
-              </label>
+              <div>
+                <label className="flex items-center gap-2 text-sm text-slate-800">
+                  <input
+                    type="radio"
+                    name="vsme-mode"
+                    checked={selectedMode === 'comprehensive'}
+                    onChange={() => {
+                      setScopeMessage(null);
+                      setSelectedMode('comprehensive');
+                    }}
+                  />
+                  <span>Comprehensive (full VSME report)</span>
+                </label>
+                {selectedMode === 'comprehensive' ? (
+                  <div className="text-sm text-gray-600 bg-gray-50 rounded p-2 mt-1">
+                    Complete VSME report covering all sustainability topics.
+                  </div>
+                ) : null}
+              </div>
             </div>
 
-            {selectedMode === 'core_plus' ? (
-              <div className="mt-3 rounded-md border border-slate-200 bg-white p-3">
-                <div className="text-xs font-medium text-slate-700">Add-on packs</div>
-                {packs.length === 0 ? (
-                  <div className="mt-2 text-xs text-slate-500">No packs found.</div>
-                ) : (
-                  <div className="mt-2 space-y-2">
-                    {packs.map((pack) => {
-                      const checked = selectedPacks.includes(pack.code);
-                      return (
-                        <label key={pack.code} className="flex items-start gap-2 text-sm text-slate-800">
-                          <input
-                            type="checkbox"
-                            checked={checked}
-                            onChange={() => {
-                              setSelectedPacks((prev) =>
-                                prev.includes(pack.code)
-                                  ? prev.filter((code) => code !== pack.code)
-                                  : [...prev, pack.code],
-                              );
-                            }}
-                            className="mt-0.5"
-                          />
-                          <span>
-                            <span className="font-medium">{pack.name || pack.code}</span>
-                            {pack.description ? <span className="block text-xs text-slate-500">{pack.description}</span> : null}
-                          </span>
-                        </label>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            ) : null}
-
-            {selectedMode === 'comprehensive' ? (
-              <div className="mt-3 text-xs text-slate-600">
-                Full VSME report (includes all datapoints). Add-ons are not applicable.
-              </div>
-            ) : null}
-
-            <div className="mt-3 flex items-center gap-3">
+            <div className="mt-3">
               <button
                 type="button"
                 onClick={() => void saveScope()}
@@ -445,10 +458,17 @@ export default function ReportSettingsClient() {
               </button>
 
               {scopeMessage ? (
-                <div className={scopeMessage.type === 'success' ? 'text-xs text-emerald-700' : 'text-xs text-red-700'}>
+                <div className={[
+                  'mt-2 text-xs',
+                  scopeMessage.type === 'success' ? 'text-emerald-700' : 'text-red-700',
+                ].join(' ')}>
                   {scopeMessage.text}
                 </div>
               ) : null}
+
+              <div className="mt-2 text-xs text-slate-600">
+                Changing the reporting scope will update the number of questions in your report.
+              </div>
             </div>
           </div>
 
@@ -473,7 +493,7 @@ export default function ReportSettingsClient() {
                   </div>
 
                   <ul className="divide-y divide-gray-100">
-                    {sections.map((s) => (
+                    {sections.filter((s) => s.total > 0).map((s) => (
                       <li key={s.code} className="flex items-center justify-between px-3 py-2">
                         <Link
                           href={`/${locale}/reports/${reportId}/sections/${s.code}`}
@@ -494,32 +514,6 @@ export default function ReportSettingsClient() {
           </div>
         </div>
 
-        <div className="mb-4 bg-white rounded-xl border border-gray-200 shadow-sm p-3">
-          <div className="flex flex-wrap items-center gap-2">
-            <input
-              value={qSearch}
-              onChange={(e) => setQSearch(e.target.value)}
-              placeholder="Search (text / code / datapoint / section)…"
-              className="flex-1 min-w-[260px] px-3 py-2 border border-gray-300 rounded text-sm"
-            />
-
-            <select
-              value={onlyState}
-              onChange={(e) => setOnlyState(e.target.value as any)}
-              className="px-3 py-2 border border-gray-300 rounded text-sm bg-white"
-            >
-              <option value="all">All</option>
-              <option value="missing">Missing only</option>
-              <option value="answered">Answered only</option>
-              <option value="na">N/A only</option>
-            </select>
-
-            <div className="text-xs text-gray-500">
-              Showing <span className="font-semibold text-gray-800">{visibleQuestions.length}</span> / {allQuestions.length}
-            </div>
-          </div>
-        </div>
-
         {loading ? (
           <div className="text-gray-600">Loading questions…</div>
         ) : !reportId ? (
@@ -536,56 +530,186 @@ export default function ReportSettingsClient() {
             0 questions returned by RPC. Check report_id / scope / RLS.
           </div>
         ) : (
-          <ul className="space-y-2">
-            {visibleQuestions.map((q: any, idx: number) => {
-              const state = questionState(q);
-              const sc = String(q.section_code ?? '').toUpperCase();
-              const code = String(q.code ?? '');
-              const dp = String(q.vsme_datapoint_id ?? '');
-              const unit = String(q.unit ?? '').trim();
-              const guidance = String(q.guidance_text ?? '').trim();
+          <div className="mb-4 bg-white rounded-xl border border-gray-200 shadow-sm p-3">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <div className="text-base font-semibold text-gray-900">All questions (advanced)</div>
+                <div className="text-xs text-gray-500">For troubleshooting, export checks, and support.</div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowAllQuestions((prev) => !prev)}
+                className="shrink-0 inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
+              >
+                {showAllQuestions ? 'Hide questions' : 'Show questions'}
+              </button>
+            </div>
 
-              const badge =
-                state === 'Answered'
-                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                  : state === 'N/A'
-                    ? 'bg-slate-50 text-slate-600 border-slate-200'
-                    : 'bg-amber-50 text-amber-800 border-amber-200';
+            {!showAllQuestions ? (
+              <div className="mt-2 text-sm text-gray-600">
+                Showing <span className="font-semibold text-gray-900">{visibleQuestions.length}</span> questions in current scope.
+              </div>
+            ) : (
+              <>
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  <input
+                    value={qSearch}
+                    onChange={(e) => setQSearch(e.target.value)}
+                    placeholder="Search (text / code / datapoint / section)…"
+                    className="flex-1 min-w-[260px] px-3 py-2 border border-gray-300 rounded text-sm"
+                  />
 
-              return (
-                <li key={q.question_id ?? `${sc}-${code}-${idx}`} className="bg-white rounded-lg border border-gray-200 shadow-sm p-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0">
-                      <div className="text-[11px] text-gray-400">
-                        #{idx + 1} • {sc || '—'} • {code || '—'}
-                      </div>
-                      <div className="mt-1 text-base font-semibold text-gray-900">
-                        {q.question_text ?? q.title ?? 'Untitled question'}
-                      </div>
-                      {guidance ? <div className="mt-1 text-sm text-slate-600">{guidance}</div> : null}
+                  <select
+                    value={onlyState}
+                    onChange={(e) => setOnlyState(e.target.value as any)}
+                    className="px-3 py-2 border border-gray-300 rounded text-sm bg-white"
+                  >
+                    <option value="all">All</option>
+                    <option value="missing">Missing</option>
+                    <option value="answered">Answered</option>
+                    <option value="na">N/A</option>
+                  </select>
 
-                      <div className="mt-2 text-xs text-gray-500">
-                        <span className="font-medium text-gray-700">section:</span> {sc || '—'}
-                        {' '}
-                        <span className="text-gray-300">•</span>{' '}
-                        <span className="font-medium text-gray-700">code:</span> {code || '—'}
-                        {' '}
-                        <span className="text-gray-300">•</span>{' '}
-                        <span className="font-medium text-gray-700">datapoint:</span> {dp || '—'}
-                        {' '}
-                        <span className="text-gray-300">•</span>{' '}
-                        <span className="font-medium text-gray-700">unit:</span> {unit || '—'}
-                      </div>
-                    </div>
-
-                    <div className={`shrink-0 inline-flex items-center rounded-full border px-2 py-1 text-xs font-medium ${badge}`}>
-                      {state}
-                    </div>
+                  <div className="text-xs text-gray-500">
+                    Showing <span className="font-semibold text-gray-800">{visibleQuestions.length}</span> / {allQuestions.length}
                   </div>
-                </li>
-              );
-            })}
-          </ul>
+                </div>
+
+                <ul className="mt-3 space-y-2">
+                  {visibleQuestions.map((q: any, idx: number) => {
+                    const state = questionState(q);
+                    const sc = String(q.section_code ?? '').toUpperCase();
+                    const code = String(q.code ?? '');
+                    const dp = String(q.vsme_datapoint_id ?? '');
+                    const unit = String(q.unit ?? '').trim();
+                    const guidance = String(q.guidance_text ?? '').trim();
+                    const answerType = String(q.answer_type ?? '').trim();
+                    const questionId = String(q.question_id ?? `${sc}-${code}-${idx}`);
+                    const detailsOpen = openDetailsById[questionId] === true;
+                    const previewOpen = showPreviewById[questionId] === true;
+
+                    const valuePreview = (() => {
+                      const text = String(q.value_text ?? '').trim();
+                      if (text) return text.length > 60 ? `${text.slice(0, 60)}…` : text;
+                      if (q.value_numeric != null && String(q.value_numeric).trim() !== '') return String(q.value_numeric);
+                      const date = String(q.value_date ?? '').trim();
+                      if (date) return date;
+                      return '—';
+                    })();
+
+                    const badge =
+                      state === 'Answered'
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                        : state === 'N/A'
+                          ? 'bg-slate-50 text-slate-600 border-slate-200'
+                          : 'bg-amber-50 text-amber-800 border-amber-200';
+
+                    return (
+                      <li key={questionId} className="bg-white rounded-lg border border-gray-200 shadow-sm p-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="min-w-0">
+                            <div className="text-[11px] text-gray-400">
+                              #{idx + 1} • {sc || '—'} • {code || '—'}
+                            </div>
+                            <div className="mt-1 text-sm font-semibold text-gray-900">
+                              {q.question_text ?? q.title ?? 'Untitled question'}
+                            </div>
+                            {guidance ? <div className="mt-1 text-xs text-slate-600">{guidance}</div> : null}
+                          </div>
+
+                          <div className={`shrink-0 inline-flex items-center rounded-full border px-2 py-1 text-xs font-medium ${badge}`}>
+                            {state}
+                          </div>
+                        </div>
+
+                        <div className="mt-2 flex flex-wrap items-center gap-2">
+                          {sc ? (
+                            <Link
+                              href={`/${locale}/reports/${reportId}/sections/${sc}`}
+                              className="inline-flex items-center rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-600 hover:bg-gray-50"
+                            >
+                              Go to question
+                            </Link>
+                          ) : null}
+
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setOpenDetailsById((prev) => ({
+                                ...prev,
+                                [questionId]: !detailsOpen,
+                              }))
+                            }
+                            className="inline-flex items-center rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-600 hover:bg-gray-50"
+                          >
+                            {detailsOpen ? 'Hide details' : 'Details'}
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              const payload = {
+                                report_id: reportId,
+                                report_year: reportInfo.reportingYear ?? null,
+                                report_scope: (selectedMode || reportInfo.vsmeMode || null),
+                                question_id: q.question_id ?? null,
+                                section_code: sc || null,
+                                code: code || null,
+                                vsme_datapoint_id: dp || null,
+                                answer_type: answerType || null,
+                                unit: unit || null,
+                                state,
+                                value_preview: valuePreview,
+                              };
+                              await navigator.clipboard.writeText(JSON.stringify(payload, null, 2));
+                              setLastCopiedId(questionId);
+                              window.setTimeout(() => {
+                                setLastCopiedId((prev) => (prev === questionId ? null : prev));
+                              }, 1500);
+                            }}
+                            className="inline-flex items-center rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-600 hover:bg-gray-50"
+                          >
+                            Copy debug
+                          </button>
+
+                          {lastCopiedId === questionId ? <span className="text-xs text-emerald-700">Copied</span> : null}
+                        </div>
+
+                        {detailsOpen ? (
+                          <div className="mt-2 rounded-md border border-gray-200 bg-gray-50 p-2 text-xs text-gray-700 space-y-1">
+                            <div><span className="font-medium">Section:</span> {sc || '—'}</div>
+                            <div><span className="font-medium">Code:</span> {code || '—'}</div>
+                            <div><span className="font-medium">Datapoint:</span> {dp || '—'}</div>
+                            <div><span className="font-medium">Unit:</span> {unit || '—'}</div>
+                            <div><span className="font-medium">Answer type:</span> {answerType || '—'}</div>
+                            <div><span className="font-medium">Question ID:</span> {q.question_id ?? '—'}</div>
+                            <div><span className="font-medium">State:</span> {state}</div>
+
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setShowPreviewById((prev) => ({
+                                  ...prev,
+                                  [questionId]: !previewOpen,
+                                }))
+                              }
+                              className="inline-flex items-center rounded-md border border-gray-300 bg-white px-2 py-1 text-xs font-medium text-gray-600 hover:bg-gray-50"
+                            >
+                              {previewOpen ? 'Hide preview' : 'Preview stored answer'}
+                            </button>
+
+                            {previewOpen ? (
+                              <div><span className="font-medium">Answer preview:</span> {valuePreview}</div>
+                            ) : null}
+                          </div>
+                        ) : null}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </>
+            )}
+          </div>
         )}
       </div>
     </div>

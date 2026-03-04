@@ -29,6 +29,7 @@
 -- - Packs (add-ons) are driven by report.vsme_pack_codes + report_pack + vsme_datapoint_pack
 -- - Question UX guidance is stored in disclosure_question.guidance_text and disclosure_question.example_answer (read-only metadata)
 -- - Preferred question-loading RPC for UI is get_vsme_questions_for_report_v2 (extended return shape; legacy RPC remains for compatibility)
+-- - Reporting scope is controlled via report.vsme_mode and report.vsme_pack_codes (editable via Report Settings page)
 
 -- ============================================================
 -- 0) TABLE INVENTORY (public)
@@ -137,11 +138,16 @@
 -- report
 -- --------------------------
 -- Notes:
--- Report-level configuration is the authority for VSME scope:
+-- Report-level configuration is the authority for VSME scope.
+--
+-- Scope control columns:
 -- - framework ('VSME')
 -- - vsme_mode ('core'|'core_plus'|'comprehensive')
 -- - vsme_pack_codes (text[])
 --
+-- These columns are editable from the Report Settings page and drive
+-- deterministic scope computation in RPC functions.
+
 -- Columns (confirmed)
 -- id uuid pk default gen_random_uuid()
 -- company_id uuid not null -> company.id
@@ -203,7 +209,7 @@
 -- framework text not null default 'ESRS'
 -- section_code text null
 -- vsme_level text null
---
+
 -- Notes (important):
 -- - guidance_text and example_answer are optional UX metadata for guided reporting.
 -- - They are read-only from UI perspective and must never be stored in disclosure_answer.
@@ -218,10 +224,6 @@
 -- FOREIGN KEY (parent_question_id) REFERENCES disclosure_question(id)
 -- FOREIGN KEY (superseded_by) REFERENCES disclosure_question(id)
 -- FOREIGN KEY (supersedes) REFERENCES disclosure_question(id)
---
--- NOTE:
--- Unique(framework, code) may exist as an index/constraint outside the pasted constraint list.
--- Document indexes separately if needed.
 
 -- --------------------------
 -- disclosure_answer
@@ -246,23 +248,23 @@
 -- notes text null
 -- last_reviewed_at timestamptz null
 -- reviewed_by uuid null -> auth.users.id
---
+
 -- Constraints (confirmed)
 -- PRIMARY KEY (id)
 -- FOREIGN KEY (report_id) REFERENCES report(id) ON DELETE CASCADE
 -- FOREIGN KEY (question_id) REFERENCES disclosure_question(id) ON DELETE RESTRICT
 -- FOREIGN KEY (reviewed_by) REFERENCES auth.users(id)
---
+
 -- Uniqueness (schema debt)
 -- Two UNIQUE constraints exist on (report_id, question_id):
 -- - disclosure_answer_report_id_question_id_key
 -- - unique_disclosure_answer
 -- Do not add another unique for this pair.
---
+
 -- Triggers (confirmed)
 -- trg_disclosure_answer_set_updated_at BEFORE UPDATE EXECUTE FUNCTION set_updated_at()
 -- trg_enforce_answer_framework BEFORE INSERT/UPDATE EXECUTE FUNCTION enforce_answer_framework_match()
---
+
 -- Trigger logic:
 -- enforce_answer_framework_match() ensures disclosure_question.framework == report.framework
 
@@ -275,7 +277,7 @@
 -- name text not null
 -- description text null
 -- created_at timestamp default now()
---
+
 -- Constraints (confirmed)
 -- PRIMARY KEY (id)
 -- UNIQUE (code)
@@ -285,10 +287,10 @@
 -- --------------------------
 -- Columns (confirmed subset)
 -- id text pk
---
+
 -- Constraints (confirmed)
 -- PRIMARY KEY (id)
--- UNIQUE (id)  -- redundant with PK; keep as-is (schema stable)
+-- UNIQUE (id)
 
 -- --------------------------
 -- vsme_datapoint_pack (pack membership)
@@ -296,7 +298,7 @@
 -- Columns (confirmed)
 -- datapoint_id text not null -> vsme_datapoint.id
 -- pack_code text not null -> report_pack.code
---
+
 -- Constraints (confirmed)
 -- PRIMARY KEY (datapoint_id, pack_code)
 -- FOREIGN KEY (datapoint_id) REFERENCES vsme_datapoint(id) ON DELETE CASCADE
@@ -306,50 +308,8 @@
 -- 2) SUPPORTING TABLES (collaboration)
 -- ============================================================
 
--- --------------------------
 -- question_comment
--- --------------------------
--- Columns (confirmed)
--- id uuid pk default gen_random_uuid()
--- question_id uuid not null -> disclosure_question.id
--- report_id uuid not null -> report.id
--- user_id uuid not null
--- parent_comment_id uuid null -> question_comment.id
--- comment_text text not null
--- created_at timestamptz default now()
--- updated_at timestamptz default now()
--- is_edited boolean default false
---
--- Constraints (from FK list)
--- FOREIGN KEY (question_id) REFERENCES disclosure_question(id)
--- FOREIGN KEY (report_id) REFERENCES report(id)
--- FOREIGN KEY (parent_comment_id) REFERENCES question_comment(id)
---
--- Trigger (confirmed)
--- trigger_update_question_comment_updated_at BEFORE UPDATE EXECUTE FUNCTION update_question_comment_updated_at()
-
--- --------------------------
 -- question_attachment
--- --------------------------
--- Columns (confirmed)
--- id uuid pk default gen_random_uuid()
--- question_id uuid not null -> disclosure_question.id
--- report_id uuid not null -> report.id
--- user_id uuid not null
--- file_name text not null
--- file_size bigint not null
--- file_type text not null
--- storage_path text not null
--- description text null
--- created_at timestamptz default now()
--- updated_at timestamptz default now()
---
--- Constraints (from FK list)
--- FOREIGN KEY (question_id) REFERENCES disclosure_question(id)
--- FOREIGN KEY (report_id) REFERENCES report(id)
---
--- Trigger (confirmed)
--- trigger_update_question_attachment_updated_at BEFORE UPDATE EXECUTE FUNCTION update_question_attachment_updated_at()
 
 -- ============================================================
 -- 3) ESRS / XBRL / FUTURE TABLES (exist, not required for VSME MVP)

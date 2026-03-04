@@ -20,7 +20,7 @@ Answer these first:
 - Does the bug happen for all users or only certain roles?
 - Is the data missing in UI only or also missing in DB?
 - Is it a frontend crash, an RPC error, or an RLS denial?
-- Is this report on the expected `vsme_taxonomy_version`?
+- Is this report on the expected vsme_taxonomy_version?
 
 Fast checks:
 
@@ -52,7 +52,7 @@ Checklist:
 
 stop dev server  
 delete .next  
-run npm run dev  
+run npm run dev
 
 ---
 
@@ -84,8 +84,19 @@ Symptoms:
 
 Fix:
 
-Normalize params before usage.  
-Always uppercase sectionCode.
+Normalize params before usage.
+
+Example pattern:
+
+const params = useParams<{ locale: string; id: string; sectionCode: string }>();
+
+const reportId = typeof params.id === 'string' ? params.id : '';
+const sectionCode =
+  typeof params.sectionCode === 'string'
+    ? params.sectionCode.toUpperCase()
+    : '';
+
+Never assume params are immediately hydrated.
 
 ---
 
@@ -103,9 +114,9 @@ Debug checklist:
 
 Sticky must depend on:
 
-scrolledPastThreshold && !footerNavVisible  
+scrolledPastThreshold && !footerNavVisible
 
-Never use scroll position guesses.
+Never rely on raw scrollY guesses.
 
 ---
 
@@ -115,22 +126,18 @@ Never use scroll position guesses.
 
 Check RPC output first:
 
-```sql
 select section_code, count(*)
 from public.get_vsme_questions_for_report_v2('<report_id>')
 group by section_code;
-```
 
 If RPC returns rows → frontend issue  
 If RPC empty → DB or scope issue  
 
 Also verify report configuration:
 
-```sql
 select framework, vsme_mode, vsme_pack_codes, vsme_taxonomy_version
 from report
 where id='<report_id>';
-```
 
 Never debug UI before verifying RPC.
 
@@ -148,10 +155,8 @@ Checklist:
 
 Test directly:
 
-```sql
 select *
 from get_vsme_ctas_for_report('<report_id>');
-```
 
 ---
 
@@ -184,25 +189,21 @@ Check in order:
 
 1) Does DB contain values?
 
-```sql
 select guidance_text, example_answer
 from disclosure_question
 where id='<question_id>';
-```
 
 2) Does RPC v2 return values?
 
-```sql
 select guidance_text, example_answer
 from get_vsme_questions_for_report_v2('<report_id>')
 where question_id='<question_id>';
-```
 
 3) Is frontend calling correct RPC?
 
 Must call:
 
-get_vsme_questions_for_report_v2  
+get_vsme_questions_for_report_v2
 
 Not legacy version.
 
@@ -217,30 +218,51 @@ Never patch UI before verifying RPC output.
 
 ---
 
-# 3. SUPABASE / RLS ISSUES
+# 3. REPORT SETTINGS DEBUGGING
 
-## 3.1 Insert/Update fails
+Report settings control VSME scope.
+
+UI: Report Settings page.
+
+Fields:
+
+- vsme_mode
+- vsme_pack_codes
+- vsme_taxonomy_version
+
+Verify settings:
+
+select
+vsme_mode,
+vsme_pack_codes,
+vsme_taxonomy_version
+from report
+where id='<report_id>';
+
+If question scope seems incorrect, this is the first place to check.
+
+---
+
+# 4. SUPABASE / RLS ISSUES
+
+## 4.1 Insert/Update fails
 
 Most common cause: RLS denial
 
 Verify membership:
 
-```sql
 select *
 from company_member
 where user_id = auth.uid();
-```
 
 Verify topic access:
 
-```sql
 select *
 from company_member_topic_access;
-```
 
 ---
 
-## 3.2 User sees report but not answers
+## 4.2 User sees report but not answers
 
 Cause:
 
@@ -252,15 +274,13 @@ Verify company_member_topic_access rows.
 
 ---
 
-## 3.3 Unexpected data leakage (CRITICAL)
+## 4.3 Unexpected data leakage (CRITICAL)
 
 Check RLS:
 
-```sql
 select relrowsecurity
 from pg_class
 where relname='disclosure_answer';
-```
 
 Verify:
 
@@ -272,36 +292,30 @@ Fix immediately.
 
 ---
 
-# 4. RPC / SQL ISSUES
+# 5. RPC / SQL ISSUES
 
-## 4.1 RPC returns empty list
+## 5.1 RPC returns empty list
 
 Check report config:
 
-```sql
 select framework, vsme_mode, vsme_pack_codes
 from report
 where id='<report_id>';
-```
 
 Verify questions exist:
 
-```sql
 select count(*)
 from disclosure_question
 where framework='VSME';
-```
 
 Verify datapoint catalog:
 
-```sql
 select count(*)
 from vsme_datapoint;
-```
 
 ---
 
-## 4.2 RPC return shape mismatch (CRITICAL)
+## 5.2 RPC return shape mismatch (CRITICAL)
 
 Symptoms:
 
@@ -311,11 +325,9 @@ Symptoms:
 
 Diagnostic:
 
-```sql
 select *
 from get_vsme_questions_for_report_v2('<report_id>')
 limit 1;
-```
 
 Verify expected fields exist:
 
@@ -337,35 +349,31 @@ Never patch UI to hide contract mismatch.
 
 ---
 
-## 4.3 Multiple RPC versions present
+## 5.3 Multiple RPC versions present
 
 Check available versions:
 
-```sql
 select proname
 from pg_proc
 where proname like 'get_vsme_questions_for_report%';
-```
 
 Ensure frontend calls correct version.
 
 Preferred version:
 
-get_vsme_questions_for_report_v2  
+get_vsme_questions_for_report_v2
 
 Legacy version kept for compatibility.
 
 ---
 
-## 4.4 Performance debugging
+## 5.4 Performance debugging
 
 Use:
 
-```sql
 explain analyze
 select *
 from get_vsme_questions_for_report_v2('<report_id>');
-```
 
 Investigate:
 
@@ -377,20 +385,20 @@ Do not prematurely optimize.
 
 ---
 
-# 5. PROJECT-SPECIFIC ROOT CAUSES
+# 6. PROJECT-SPECIFIC ROOT CAUSES
 
-## 5.1 Framework mismatch
+## 6.1 Framework mismatch
 
 Verify:
 
 report.framework='VSME'  
 question.framework='VSME'
 
-Mismatch causes silent failures or trigger errors.
+Mismatch causes trigger failures.
 
 ---
 
-## 5.2 Datapoint type mismatch (trigger failure)
+## 6.2 Datapoint type mismatch (trigger failure)
 
 Error example:
 
@@ -408,7 +416,7 @@ Never bypass trigger.
 
 ---
 
-## 5.3 NA JSON overwrite
+## 6.3 NA JSON overwrite
 
 Incorrect:
 
@@ -416,13 +424,13 @@ value_jsonb replaced entirely
 
 Correct:
 
-value_jsonb merged using jsonb_set  
+jsonb_set(coalesce(value_jsonb,'{}'::jsonb), '{na}', 'true')
 
 If previous values disappear → inspect JSON merge logic.
 
 ---
 
-## 5.4 Help text write attempt (invalid)
+## 6.4 Help text write attempt (invalid)
 
 guidance_text and example_answer must never be written via UI.
 
@@ -434,39 +442,48 @@ Fix UI immediately.
 
 ---
 
-## 5.5 Unit confusion
+## 6.5 Unit confusion
 
 If UI shows missing unit:
 
-Check RPC output first.  
+Check RPC output first.
+
 Unit must come from:
 
-coalesce(disclosure_answer.unit, vsme_datapoint.unit, disclosure_question.unit)
+coalesce(disclosure_answer.unit,
+vsme_datapoint.unit,
+disclosure_question.unit)
 
-Never infer from question_text.
+Never infer units from question text.
 
 ---
 
-## 5.6 Taxonomy drift
+## 6.6 Taxonomy drift
 
 If counts mismatch EFRAG taxonomy:
 
-- Check report.vsme_taxonomy_version  
-- Check vsme_datapoint catalog completeness  
-- Verify no stray legacy datapoints  
+Check:
+
+report.vsme_taxonomy_version
+
+Then verify:
+
+- vsme_datapoint catalog completeness
+- datapoint ↔ pack mappings
+- no stray legacy datapoints
 
 Never silently add datapoints without updating mapping logic.
 
 ---
 
-# 6. ROLE-BASED TEST MATRIX
+# 7. ROLE-BASED TEST MATRIX
 
 Always test:
 
 - Owner  
 - Admin  
-- Editor (all)  
-- Editor (selected)  
+- Editor (all topics)  
+- Editor (selected topics)  
 - Viewer  
 
 Verify:
@@ -479,13 +496,13 @@ Verify:
 
 ---
 
-# 7. SAFE RESET PLAYBOOK
+# 8. SAFE RESET PLAYBOOK
 
 Frontend reset:
 
 Stop dev server  
 Delete .next  
-Restart npm run dev  
+Restart npm run dev
 
 Session reset:
 
@@ -496,18 +513,18 @@ Verify membership.
 
 ---
 
-# 8. WHAT NOT TO DO
+# 9. WHAT NOT TO DO
 
 Do NOT disable RLS  
 Do NOT use service role in browser  
 Do NOT patch UI to hide RPC contract mismatch  
 Do NOT modify schema casually  
 Do NOT rewrite RPC without contract update  
-Do NOT bypass triggers to “make it work”  
+Do NOT bypass triggers to “make it work”
 
 ---
 
-# 9. SECTIONS PANEL DEBUGGING
+# 10. SECTIONS PANEL DEBUGGING
 
 Sections panel derived from:
 
@@ -517,40 +534,41 @@ Never compute scope in UI.
 
 ---
 
-## 9.1 Missing sections
+## 10.1 Missing sections
 
 Run:
 
-```sql
 select section_code, count(*)
 from get_vsme_questions_for_report_v2('<report_id>')
 group by section_code;
-```
 
 Section must exist only if count > 0.
 
 ---
 
-## 9.2 Incorrect grouping
+## 10.2 Incorrect grouping
 
-Verify resolveSectionGroup mapping.
+Verify:
+
+VSME_SECTION_META  
+resolveSectionGroup()
 
 Never infer grouping dynamically.
 
 ---
 
-## 9.3 Core vs Comprehensive mismatch
+## 10.3 Core vs Comprehensive mismatch
 
 Check:
 
-```sql
-select vsme_mode 
-from report 
+select vsme_mode
+from report
 where id='<report_id>';
-```
 
-core → B only  
-comprehensive → B + C  
-core_plus → B + pack sections  
+Mode semantics:
+
+core → B sections only  
+core_plus → B + selected pack sections  
+comprehensive → B + C sections  
 
 If mismatch → fix RPC, not UI.

@@ -1,3 +1,4 @@
+00:
 # PROJECT CONTEXT – VSME Reporting SaaS (SME-focused)
 
 ## 1. Product Scope
@@ -440,18 +441,30 @@ None critical.
 
 Kodovanie robim cez VSC AI
 Prosim promty pre VSC rob v nasledovnom tvare:
-We are modifying: PRIKLAD: app\[locale]\reports\[id]\sections\[sectionCode]\VsmeSectionClient.tsx (pripadne ina, podla toho coaktualne robime)
+STEP 1 (context):
 
-Constraints: 
-- DB schema stable 
-- No RLS changes 
-- Must use existing RPC 
-- Must respect answer contract (value_jsonb.na) 
--No new columns 
-- No refactor outside this file 
+Read docs/AI_CONTEXT.md and respect it.
 
-Goal: <precise UX change> 
+STEP 2 (task):
 
-Return: 
-- minimal patch only 
-- explain side effects
+We are modifying:
+<exact file path>
+
+Constraints:
+- DB schema stable (no new columns, no destructive schema changes)
+- RLS enforced (no bypass, no service role)
+- Use existing RPC contracts (03_rpc_contracts.md)
+- No client-side scope logic
+- No client-side unit logic
+- Minimal changes limited to this file
+
+Goal:
+<single precise goal>
+
+Return:
+- minimal diff-like patch only
+- list side effects (if any)
+- verification steps (how I can test in UI)
+
+Never implement scope logic client-side.
+Scope must always come from RPC.
