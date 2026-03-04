@@ -433,3 +433,25 @@ help text visible when present
 Known issues:
 
 None critical.
+
+---
+
+## 18. VSC AI
+
+Kodovanie robim cez VSC AI
+Prosim promty pre VSC rob v nasledovnom tvare:
+We are modifying: PRIKLAD: app\[locale]\reports\[id]\sections\[sectionCode]\VsmeSectionClient.tsx (pripadne ina, podla toho coaktualne robime)
+
+Constraints: 
+- DB schema stable 
+- No RLS changes 
+- Must use existing RPC 
+- Must respect answer contract (value_jsonb.na) 
+-No new columns 
+- No refactor outside this file 
+
+Goal: <precise UX change> 
+
+Return: 
+- minimal patch only 
+- explain side effects

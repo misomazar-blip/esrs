@@ -566,18 +566,18 @@ export default function VsmeSectionClient() {
   const targetSectionTitle = VSME_SECTION_META[targetSectionCode]?.title || targetSectionCode;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-gray-50 p-8 pb-24">
       <div className="max-w-3xl mx-auto">
         {/* REPORT BOX (must be on top) */}
         <div className="bg-white rounded-lg border border-gray-200 border-t-4 border-t-blue-500 shadow-sm p-4 mb-6">
           <div className="flex items-center justify-between gap-3">
             <div className="text-lg font-semibold text-gray-900">Report status</div>
-            <button
-              type="button"
+            <Link
+              href={`/${locale}/reports/${reportId}/questions`}
               className="shrink-0 inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
             >
               Report settings
-            </button>
+            </Link>
           </div>
 
           <div className="mt-3 flex flex-wrap items-start gap-x-14 gap-y-4 max-w-[520px]">
@@ -795,16 +795,16 @@ export default function VsmeSectionClient() {
                       'rounded-lg shadow',
                       'border border-gray-200',
                       'border-l-4',
-                      isNa ? 'border-l-gray-300 bg-gray-50/80 opacity-80' : 'border-l-blue-500 bg-white',
+                      isNa ? 'border-l-slate-300 bg-slate-50 text-slate-500' : 'border-l-blue-500 bg-white text-gray-900',
                       'p-4 transition-colors',
                     ].join(' ')}
                   >
-                    <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center justify-between gap-4 pb-2 border-b border-slate-100">
                       <div className="text-[11px] text-gray-400">
                         {idx + 1} / {total}
                       </div>
-                      <label className="flex items-center gap-3 shrink-0 select-none cursor-pointer">
-                        <span className="text-xs text-gray-500">Not applicable</span>
+                      <label className="flex items-center gap-3 shrink-0 select-none cursor-pointer bg-slate-50 rounded-full px-3 py-1">
+                        <span className="text-xs text-slate-600">Not applicable</span>
                         <div className="relative">
                           <input
                             type="checkbox"
@@ -818,19 +818,19 @@ export default function VsmeSectionClient() {
                       </label>
                     </div>
 
-                    <div className="mt-2 text-base font-semibold text-gray-900">
+                    <div className={["mt-2 text-base font-semibold", isNa ? 'text-slate-600' : 'text-gray-900'].join(' ')}>
                       {renderedQuestionText}
                     </div>
                     {guidanceText ? (
-                      <div className="mt-1 text-sm leading-relaxed text-slate-600">{guidanceText}</div>
+                      <div className={["mt-1 text-sm leading-relaxed", isNa ? 'text-slate-500' : 'text-slate-600'].join(' ')}>{guidanceText}</div>
                     ) : null}
 
                     {isNa ? (
-                      <div className="mt-3 text-xs text-gray-500">Marked as Not applicable (answer preserved)</div>
+                      <div className="mt-2 text-xs text-slate-500">Marked as Not applicable (answer preserved)</div>
                     ) : (
                       <>
                         {(t === 'text' || t === 'string') && (
-                          <div className="mt-3">
+                          <div className="mt-2">
                             <input
                               type="text"
                               value={a.value_text ?? ''}
@@ -853,7 +853,7 @@ export default function VsmeSectionClient() {
                         )}
 
                         {(t === 'number' || t === 'integer' || t === 'numeric') && (
-                          <div className="mt-3 flex items-center gap-2">
+                          <div className="mt-2 flex items-center gap-2">
                             <input
                               type="number"
                               value={a.value_numeric ?? ''}
@@ -873,7 +873,7 @@ export default function VsmeSectionClient() {
                         )}
 
                         {t === 'date' && (
-                          <div className="mt-3">
+                          <div className="mt-2">
                             <input
                               type="date"
                               value={a.value_date ?? ''}
@@ -891,7 +891,7 @@ export default function VsmeSectionClient() {
                         )}
 
                         {t === 'select' && (
-                          <div className="mt-3">
+                          <div className="mt-2">
                             {!Array.isArray(allowed) || allowed.length === 0 ? (
                               <input
                                 type="text"
