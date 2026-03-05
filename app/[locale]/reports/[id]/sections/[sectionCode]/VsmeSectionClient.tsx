@@ -438,17 +438,18 @@ export default function VsmeSectionClient() {
   }, [templateCurrencyQuestionId, answersById]);
 
   const sectionCompleteness = useMemo(() => {
-    const total = sectionQuestions.length;
+    const inSection = (allQuestions as any[]).filter((q: any) => {
+      const sc = String(q.section_code ?? q.sectionCode ?? q.section ?? '').toUpperCase();
+      return sc === normalizedSectionCode;
+    });
+
+    const total = inSection.length;
     let answered = 0;
     let na = 0;
 
-    for (const q of sectionQuestions as any[]) {
-      const id = String(q?.question_id ?? '');
-      if (!id) continue;
-
-      const a = answersById[id] ?? {};
-      const isNa = a.na === true;
-      const hasValue = hasAnyValue(a);
+    for (const q of inSection) {
+      const isNa = q?.value_jsonb?.na === true;
+      const hasValue = hasAnyValue(q);
 
       if (isNa) {
         na += 1;
@@ -462,7 +463,7 @@ export default function VsmeSectionClient() {
     const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
 
     return { total, answered, na, missing, pct };
-  }, [sectionQuestions, answersById]);
+  }, [allQuestions, normalizedSectionCode]);
 
   useEffect(() => {
     if (!reportId) return;
@@ -536,7 +537,6 @@ export default function VsmeSectionClient() {
           .eq('question_id', questionId);
         if (deleteError) throw deleteError;
 
-        await refreshCta();
         setAnswersById((prev) => ({
           ...prev,
           [questionId]: {
@@ -547,6 +547,22 @@ export default function VsmeSectionClient() {
             na: false,
           },
         }));
+        setAllQuestions((prev) =>
+          prev.map((q: any) => {
+            if (String(q?.question_id ?? '') !== questionId) return q;
+            const currentJson = (q?.value_jsonb ?? {}) as any;
+            const nextJson = { ...currentJson };
+            delete nextJson.na;
+            return {
+              ...q,
+              value_text: '',
+              value_numeric: '',
+              value_date: '',
+              value_jsonb: Object.keys(nextJson).length > 0 ? nextJson : null,
+            };
+          }),
+        );
+        await refreshCta();
         setSavingById((prev) => ({ ...prev, [questionId]: false }));
         setSavedAtById((prev) => ({ ...prev, [questionId]: Date.now() }));
         setTimeout(() => {
@@ -575,7 +591,6 @@ export default function VsmeSectionClient() {
         .upsert(payload, { onConflict: 'report_id,question_id' });
       if (upsertError) throw upsertError;
 
-      await refreshCta();
       setAnswersById((prev) => {
         const current = prev[questionId] ?? {};
         const next: LocalAnswer = {
@@ -599,6 +614,33 @@ export default function VsmeSectionClient() {
           [questionId]: next,
         };
       });
+      setAllQuestions((prev) =>
+        prev.map((q: any) => {
+          if (String(q?.question_id ?? '') !== questionId) return q;
+          const currentJson = (q?.value_jsonb ?? {}) as any;
+          const nextJson = { ...currentJson };
+          delete nextJson.na;
+
+          const nextRow: any = {
+            ...q,
+            value_text: '',
+            value_numeric: '',
+            value_date: '',
+            value_jsonb: Object.keys(nextJson).length > 0 ? nextJson : null,
+          };
+
+          if (t === 'number' || t === 'integer' || t === 'numeric') {
+            nextRow.value_numeric = Number(value);
+          } else if (t === 'date') {
+            nextRow.value_date = value;
+          } else {
+            nextRow.value_text = value;
+          }
+
+          return nextRow;
+        }),
+      );
+      await refreshCta();
       setSavingById((prev) => ({ ...prev, [questionId]: false }));
       setSavedAtById((prev) => ({ ...prev, [questionId]: Date.now() }));
       setTimeout(() => {
@@ -618,12 +660,6 @@ export default function VsmeSectionClient() {
   const toggleNA = async (questionId: string, nextNa: boolean) => {
     if (!reportId) return;
 
-    // optimistic UI
-    setAnswersById((prev) => ({
-      ...prev,
-      [questionId]: { ...(prev[questionId] ?? {}), na: nextNa },
-    }));
-
     const supabase = createSupabaseBrowserClient();
 
     if (nextNa) {
@@ -636,6 +672,19 @@ export default function VsmeSectionClient() {
         ...prev,
         [questionId]: { ...(prev[questionId] ?? {}), na: true },
       }));
+      setAllQuestions((prev) =>
+        prev.map((q: any) => {
+          if (String(q?.question_id ?? '') !== questionId) return q;
+          const currentJson = (q?.value_jsonb ?? {}) as any;
+          return {
+            ...q,
+            value_jsonb: {
+              ...currentJson,
+              na: true,
+            },
+          };
+        }),
+      );
       await refreshCta();
     }
       
@@ -671,6 +720,18 @@ export default function VsmeSectionClient() {
         ...prev,
         [questionId]: { ...(prev[questionId] ?? {}), na: false },
       }));
+      setAllQuestions((prev) =>
+        prev.map((q: any) => {
+          if (String(q?.question_id ?? '') !== questionId) return q;
+          const currentJson = (q?.value_jsonb ?? {}) as any;
+          const nextJson = { ...currentJson };
+          delete nextJson.na;
+          return {
+            ...q,
+            value_jsonb: Object.keys(nextJson).length > 0 ? nextJson : null,
+          };
+        }),
+      );
       await refreshCta();
     }
   };
@@ -755,7 +816,12 @@ export default function VsmeSectionClient() {
 
         {/* SECTIONS PANEL */}
         <div className="mb-6 bg-white rounded-xl border border-gray-200 shadow-sm p-3">
-          <div className="text-lg font-bold text-gray-900 mb-2">Sections</div>
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <div className="text-lg font-semibold text-gray-900">Sections</div>
+            <div className="grid grid-cols-[64px_40px] gap-x-2 shrink-0 text-right">
+              <div className="col-span-2 text-xs text-gray-500 text-center">Completion</div>
+            </div>
+          </div>
 
           <div className="space-y-2">
           {GROUP_ORDER.map((group) => {
@@ -787,7 +853,7 @@ export default function VsmeSectionClient() {
                   <div className="text-sm font-medium text-gray-600">
                     {groupCompleted}/{groupTotal}
                   </div>
-                  <div className="text-sm font-normal text-gray-500">
+                  <div className="text-sm font-medium text-gray-500">
                     {groupPct}%
                   </div>
                 </div>
@@ -835,7 +901,7 @@ export default function VsmeSectionClient() {
           </div>
         </div>
 
-        <div className="sticky top-16 z-30 mb-4 bg-white/95 backdrop-blur border-b border-gray-200">
+        <div className="sticky top-16 z-50 mb-4 bg-white/95 backdrop-blur border-b border-gray-200">
           <div className="flex items-center justify-between px-3 py-2">
             <div className="min-w-0 text-base font-semibold text-gray-900 truncate">
               {sectionCode} — {sectionTitle}
