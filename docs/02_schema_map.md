@@ -16,7 +16,7 @@ For RPC contracts see:
 
 # 1. DOMAIN OVERVIEW
 
-The system contains two primary data domains:
+The system contains two primary data domains.
 
 ### A) Tenant-owned operational data
 
@@ -33,6 +33,8 @@ Tables:
 * disclosure_answer
 
 These contain **company reporting data**.
+
+Tenant data represents **customer-specific reporting state** and must never be exposed across companies.
 
 ---
 
@@ -54,19 +56,42 @@ These define the **reporting framework itself**.
 
 They are **not company-owned data**.
 
+They represent the **static reporting catalog** aligned with the VSME taxonomy.
+
 ---
 
 # 2. TENANT DOMAIN (Company Data)
 
 These tables store company-owned reporting data.
 
-### company
+---
+
+## company
 
 Represents a tenant organization.
 
+Stores reusable **company master data**, such as:
+
+* legal name
+* address
+* city
+* postal_code
+* country_code
+* identification_number
+* vat_number
+* contact details
+
+Important architectural principle:
+
+Company data represents **current master data**, not report snapshots.
+
+Reports store **independent answer snapshots** in `disclosure_answer`.
+
+To reduce duplicate typing, company profile data may be used for **prefilling missing report answers**, but the report answer always becomes the authoritative snapshot.
+
 ---
 
-### company_member
+## company_member
 
 Defines membership and roles.
 
@@ -79,9 +104,11 @@ Roles:
 
 Membership determines report access.
 
+Membership is scoped to a **specific company**.
+
 ---
 
-### company_member_topic_access
+## company_member_topic_access
 
 Defines **topic-level permissions**.
 
@@ -92,29 +119,39 @@ Controls which users may:
 
 specific reporting topics.
 
+This table is primarily used by **Row Level Security policies**.
+
+If `access_type = all`, the user can access all topics.
+
+If `access_type = selected`, access is determined by this table.
+
 ---
 
-### report
+## report
 
 Represents a reporting instance for:
 
 * company_id
 * reporting_year
 
-Report configuration also defines the **VSME scope model**.
+A report represents a **snapshot of ESG reporting answers** for a specific company and year.
 
-Important fields:
+Important configuration fields:
 
 * framework
 * vsme_mode
 * vsme_pack_codes
 * vsme_taxonomy_version
 
+These fields define the **scope model of the report**.
+
+Each report has its **own independent scope configuration**.
+
 ---
 
-### disclosure_answer
+## disclosure_answer
 
-Stores answers to questions.
+Stores answers to reporting questions.
 
 Identity constraint:
 
@@ -124,15 +161,23 @@ Identity constraint:
 
 Each question has **at most one answer per report**.
 
+Answers represent the **report snapshot**.
+
+Even if the company profile later changes, existing report answers remain unchanged.
+
+This ensures **historical report stability**.
+
 ---
 
 # 3. FRAMEWORK CATALOG DOMAIN
 
 Framework catalog tables define **what is asked**, not **what is answered**.
 
+They represent the **reporting taxonomy and metadata**.
+
 ---
 
-### disclosure_question
+## disclosure_question
 
 Master catalog of questions.
 
@@ -165,7 +210,7 @@ They exist purely for **guided reporting UX**.
 
 ---
 
-### topic
+## topic
 
 Logical grouping of questions.
 
@@ -175,16 +220,18 @@ Topics are used for:
 * access control
 * reporting organization
 
+Topics also serve as the **authorization boundary** used by RLS.
+
 ---
 
-### vsme_datapoint
+## vsme_datapoint
 
 Defines canonical datapoints aligned with the **VSME taxonomy**.
 
 Each datapoint defines:
 
 * semantic meaning
-* value_type
+* value type
 * canonical unit
 
 Units are defined in:
@@ -194,6 +241,36 @@ vsme_datapoint.unit
 ```
 
 This is the **canonical source of truth for units**.
+
+The UI must never infer units independently.
+
+---
+
+## report_pack
+
+Catalog of **VSME add-on packs**.
+
+Packs represent bundles of datapoints that extend the reporting scope.
+
+Example purposes:
+
+* financing
+* supply-chain requests
+* investor ESG questionnaires
+
+---
+
+## vsme_datapoint_pack
+
+Mapping table connecting datapoints to packs.
+
+Structure:
+
+```
+datapoint_id ↔ pack_code
+```
+
+This table allows deterministic **scope expansion**.
 
 ---
 
@@ -210,7 +287,7 @@ The scope of questions in a report is determined deterministically from:
 
 Scope logic is implemented **only in RPC functions**.
 
-UI must never compute scope itself.
+The UI must never compute scope itself.
 
 ---
 
@@ -224,6 +301,8 @@ Includes sections:
 B*
 ```
 
+These sections contain the **baseline VSME dataset**.
+
 ---
 
 ### core_plus
@@ -232,6 +311,12 @@ Includes:
 
 * core sections (B*)
 * datapoints from selected add-on packs
+
+Packs are selected via:
+
+```
+report.vsme_pack_codes
+```
 
 ---
 
@@ -248,25 +333,25 @@ Add-on packs are ignored in comprehensive mode.
 
 ## 4.2 Add-on Packs
 
-Add-on packs extend the reporting scope.
+Add-on packs extend reporting scope.
 
-Tables:
+Tables involved:
 
 ### report_pack
 
-Catalog of available packs.
+Catalog of packs.
 
 ---
 
 ### vsme_datapoint_pack
 
-Mapping table:
+Mapping between:
 
 ```
 datapoint_id ↔ pack_code
 ```
 
-Questions connect to datapoints via:
+Questions link to datapoints via:
 
 ```
 disclosure_question.vsme_datapoint_id
@@ -323,6 +408,41 @@ Used by:
 
 ---
 
+## prefill_company_profile_into_open_reports(company_id)
+
+Helper RPC used for onboarding convenience.
+
+Purpose:
+
+* copy overlapping **company profile fields** into open VSME reports
+* fill **missing answers only**
+
+Typical overlapping fields include:
+
+* company name
+* address
+* city
+* postal code
+* country code
+* registration number
+* VAT number
+
+Rules:
+
+* only open / non-submitted reports are targeted
+* existing typed answers are never overwritten
+* provenance is recorded in:
+
+```
+value_jsonb.source = "company_profile"
+```
+
+This RPC is a **helper action only**.
+
+It does **not influence scope, progress, or question selection**.
+
+---
+
 ### Determinism Requirement
 
 Same report configuration + same database state
@@ -356,7 +476,42 @@ Optional metadata:
 
 ---
 
-### N/A representation
+## Metadata storage
+
+Additional metadata is stored in:
+
+```
+value_jsonb
+```
+
+`value_jsonb` is **NOT NULL**.
+
+Empty metadata state:
+
+```
+{}
+```
+
+Common metadata keys include:
+
+```
+na
+source
+```
+
+Example:
+
+```
+{ "na": true }
+
+{ "source": "company_profile" }
+```
+
+Metadata must always be **merged**, not blindly replaced.
+
+---
+
+## N/A representation
 
 N/A is stored as:
 
@@ -364,13 +519,13 @@ N/A is stored as:
 value_jsonb -> { "na": true }
 ```
 
-When NA = true:
+When `na = true`:
 
 typed value columns are ignored.
 
 ---
 
-### Unit Resolution
+## Unit Resolution
 
 Units are resolved in RPC.
 
@@ -396,7 +551,9 @@ UI must always use the **RPC-returned unit**.
 
 # 7. ANSWER STATE MODEL
 
-Question state definitions:
+Question state definitions.
+
+---
 
 ### Answered
 
@@ -415,6 +572,12 @@ value_jsonb.na = true
 ### Missing
 
 No value stored and not marked N/A.
+
+Operationally, Missing means:
+
+* no disclosure_answer row exists
+* OR typed value columns are empty
+* AND `value_jsonb.na` is not true
 
 ---
 
@@ -485,11 +648,29 @@ get_vsme_questions_for_report_v2
 
 ---
 
+## Profile / Company page
+
+Route:
+
+```
+/[locale]/profile
+```
+
+Used for editing company master data.
+
+After successful company update, the app may call:
+
+```
+prefill_company_profile_into_open_reports
+```
+
+This may create or update missing overlapping answers in open VSME reports.
+
+---
+
 ## Questions debug panel
 
-Report Settings page contains a collapsible
-
-**"Questions overview" panel.**
+Report Settings page contains a collapsible **Questions overview panel**.
 
 Purpose:
 
@@ -525,19 +706,19 @@ Hide sections with:
 0 / 0 questions
 ```
 
-Section ordering follows deterministic
+Section ordering follows deterministic:
 
 ```
 section_code ordering
 ```
 
+Prev / Next navigation uses the same in-scope section list.
+
 ---
 
 # 10. SECURITY MODEL
 
-Tenant isolation enforced via:
-
-**Row Level Security (RLS)**.
+Tenant isolation enforced via **Row Level Security (RLS)**.
 
 Access determined by:
 

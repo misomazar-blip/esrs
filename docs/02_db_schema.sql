@@ -30,6 +30,9 @@
 -- - Question UX guidance is stored in disclosure_question.guidance_text and disclosure_question.example_answer (read-only metadata)
 -- - Preferred question-loading RPC for UI is get_vsme_questions_for_report_v2 (extended return shape; legacy RPC remains for compatibility)
 -- - Reporting scope is controlled via report.vsme_mode and report.vsme_pack_codes (editable via Report Settings page)
+-- - Report taxonomy snapshot is stored on report.vsme_taxonomy_version
+-- - Company-profile prefill into open reports is performed via helper RPC prefill_company_profile_into_open_reports(company_id)
+-- - disclosure_answer.value_jsonb is NOT NULL and uses '{}' as the empty metadata state
 
 -- ============================================================
 -- 0) TABLE INVENTORY (public)
@@ -144,6 +147,7 @@
 -- - framework ('VSME')
 -- - vsme_mode ('core'|'core_plus'|'comprehensive')
 -- - vsme_pack_codes (text[])
+-- - vsme_taxonomy_version ('1.2.0' default)
 --
 -- These columns are editable from the Report Settings page and drive
 -- deterministic scope computation in RPC functions.
@@ -158,6 +162,7 @@
 -- framework text not null default 'VSME'
 -- vsme_mode text not null default 'core'
 -- vsme_pack_codes text[] not null default '{}'
+-- vsme_taxonomy_version text not null default '1.2.0'
 -- purpose_code text null CHECK in ('financing','supply_chain','investor','voluntary','other')
 -- purpose_note text null
 --
@@ -255,6 +260,23 @@
 -- FOREIGN KEY (question_id) REFERENCES disclosure_question(id) ON DELETE RESTRICT
 -- FOREIGN KEY (reviewed_by) REFERENCES auth.users(id)
 
+-- Metadata conventions (important)
+-- value_jsonb is NOT NULL.
+-- Empty metadata state is:
+--   {}::jsonb
+--
+-- Current MVP keys include:
+-- - na
+--   explicit N/A marker
+-- - source
+--   provenance marker for prefilled answers
+--   example: 'company_profile'
+--
+-- Important behavior:
+-- - value_jsonb metadata must be merged, not blindly replaced
+-- - NA toggle must not erase source or other unrelated keys
+-- - save flows must never write value_jsonb = null
+
 -- Uniqueness (schema debt)
 -- Two UNIQUE constraints exist on (report_id, question_id):
 -- - disclosure_answer_report_id_question_id_key
@@ -267,6 +289,17 @@
 
 -- Trigger logic:
 -- enforce_answer_framework_match() ensures disclosure_question.framework == report.framework
+
+-- Prefill helper RPC (current)
+-- prefill_company_profile_into_open_reports(p_company_id uuid)
+--
+-- Purpose:
+-- - copy overlapping company-profile fields into open/non-submitted VSME report answers
+-- - only when target disclosure_answer is missing (no typed value present)
+-- - mark provenance with value_jsonb.source = 'company_profile'
+--
+-- This RPC is a helper action only.
+-- It is not the authority for scope, progress, or question selection.
 
 -- --------------------------
 -- report_pack (pack catalog)

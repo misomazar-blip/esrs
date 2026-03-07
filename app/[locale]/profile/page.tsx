@@ -372,6 +372,15 @@ export default function ProfilePage() {
 
       if (error) throw error;
 
+      const { error: prefillError } = await supabase.rpc(
+        "prefill_company_profile_into_open_reports",
+        { p_company_id: editingCompany.id }
+      );
+
+      if (prefillError) {
+        console.error("Prefill RPC failed", prefillError);
+      }
+
       setCompanyMsg({ type: "success", text: "Company updated successfully" });
       setEditingCompanyId(null);
       setEditingCompany(null);

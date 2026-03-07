@@ -9,6 +9,7 @@ Build a guided ESG reporting tool for SMEs (VSME) with:
 - role/topic-based access enforced by Supabase RLS
 - export always available + “readiness” summary (non-blocking)
 - guided UX via question metadata (guidance_text, example_answer)
+- pragmatic reuse of company profile data for report onboarding
 
 Key idea:  
 DB/RPC are the source of truth. UI is a projection.
@@ -25,6 +26,8 @@ DB/RPC are the source of truth. UI is a projection.
 6) Answering sections (questions + answers)  
 7) Export (always allowed, show readiness summary)
 
+Company profile editing exists on a separate profile/company page and may prefill overlapping missing report answers for open VSME reports.
+
 ---
 
 ## 3. Core concepts
@@ -39,6 +42,7 @@ A report is a snapshot for a company + year:
 - report.framework (default VSME)
 - report.vsme_mode (core | core_plus | comprehensive)
 - report.vsme_pack_codes (text[] of selected add-on packs)
+- report.vsme_taxonomy_version
 
 Uniqueness in DB:
 
@@ -50,6 +54,9 @@ Implication:
 
 - Running multiple frameworks in the same year would require schema adjustment.
 - For VSME-only flow this is correct and stable.
+
+A report is a historical snapshot.  
+It must not behave like a live view directly bound to company master data.
 
 ---
 
@@ -77,6 +84,9 @@ Important UI rule:
 - UI scope is derived from the RPC dataset returned by get_vsme_questions_for_report_v2(report_id).
 
 Scope can be adjusted from the **Report Settings** page.
+
+N/A is not a scope control.  
+It is only an answer-state marker.
 
 ---
 
@@ -127,7 +137,30 @@ These are informational only and never stored in disclosure_answer.
 
 ---
 
-### 3.6 Report Settings (control panel)
+### 3.6 Company profile vs report answers
+
+company stores reusable master data such as:
+
+- legal name
+- address
+- city
+- postal_code
+- country_code
+- identification_number
+- vat_number
+
+disclosure_answer stores report-specific answers / snapshot values.
+
+Important rule:
+
+- company profile data is not rendered as report data directly
+- report-facing values must live in disclosure_answer
+
+To reduce duplicate entry, overlapping company profile fields may be prefilling candidates for open VSME reports, but only through explicit DB/RPC action.
+
+---
+
+### 3.7 Report Settings (control panel)
 
 Each report exposes a **Report Settings page** used for configuration and support/debug visibility.
 
@@ -198,6 +231,14 @@ Rules:
 
 This mirrors the same logic used on the answering page.
 
+Current section panel header convention:
+
+- left: Sections
+- right: Completion
+
+No global numeric total is shown in the header.  
+Completion values are shown at section-row level only.
+
 ---
 
 #### 4) All questions (advanced)
@@ -267,15 +308,24 @@ N/A representation (current DB contract):
 
 - disclosure_answer.value_jsonb -> { "na": true }
 
+Metadata representation (current DB contract):
+
+- disclosure_answer.value_jsonb is NOT NULL
+- empty metadata state is {}
+
 Rules:
 
 - if na=true, value columns are ignored consistently
 - if na=false or absent, values must be stored in correct typed column
+- JSON metadata must be merged, not blindly replaced
+- save operations must preserve unrelated value_jsonb keys
 
 After save:
 
 - optimistic local update
 - refresh progress via get_vsme_ctas_for_report(report_id)
+
+If a prefilled answer is later edited by the user, source metadata may be switched from company_profile to user.
 
 ---
 
@@ -366,6 +416,35 @@ Both navigation modes use the same deterministic chapter list.
 
 ---
 
+### 4.7 Company profile prefill flow
+
+Company profile editing happens outside the report answering page, currently on:
+
+/[locale]/profile
+
+After successful company update, the app may call:
+
+- prefill_company_profile_into_open_reports(company_id)
+
+Purpose:
+
+- copy overlapping company-profile values into open/non-submitted VSME report answers
+- reduce duplicate typing in B1 onboarding fields
+
+Rules:
+
+- prefill targets disclosure_answer, never UI-only state
+- prefill only applies when the target answer is missing
+- prefill never overwrites an existing typed answer
+- prefill marks provenance in value_jsonb.source = 'company_profile'
+- questionnaire UI may render:
+  "Prefilled from company profile"
+
+This is a helper action only.  
+It is not a scope/progress authority.
+
+---
+
 ## 5. Progress calculation (rules)
 
 Progress must be deterministic and consistent across:
@@ -386,6 +465,12 @@ Definitions:
 - In-scope: same eligibility logic as get_vsme_questions_for_report_v2
 - Answered: valid typed value OR value_jsonb.na = true
 - Missing: in-scope AND not answered
+
+Operationally, Missing means:
+
+- no disclosure_answer row exists
+- OR a row exists but all typed value columns are empty/null
+- AND value_jsonb.na is not true
 
 Source of truth:
 
@@ -418,6 +503,7 @@ DB / RPC owns:
 - answer retrieval
 - progress calculation
 - missing logic
+- company-profile prefill action for report answers
 
 UI owns:
 
@@ -425,8 +511,10 @@ UI owns:
 - interactions
 - optimistic updates
 - navigation
+- showing informational prefill provenance hints
 
-UI must not duplicate missing rules or scope rules.
+UI must not duplicate missing rules or scope rules.  
+UI must not use company table values as a live substitute for disclosure_answer.
 
 ---
 
@@ -442,6 +530,16 @@ Instead:
 
 Legacy RPC can remain for backward compatibility.
 
+Current preferred question-loading RPC:
+
+- get_vsme_questions_for_report_v2
+
+Current helper prefill RPC:
+
+- prefill_company_profile_into_open_reports
+
+A narrower legacy prefill RPC may remain temporarily for backward compatibility, but should not be the preferred call from current UI.
+
 ---
 
 ## 9. Non-negotiables
@@ -450,4 +548,6 @@ Legacy RPC can remain for backward compatibility.
 - disclosure_question remains shared (ESRS + VSME)
 - RLS is enforced (never bypass in app code)
 - Prefer small deterministic changes
+- disclosure_answer is the report snapshot
+- company profile changes must not retroactively rewrite submitted reports
 - If uncertain about DB policy/trigger change → ask first

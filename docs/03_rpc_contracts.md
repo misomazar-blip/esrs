@@ -7,7 +7,7 @@ This file defines the exact data contracts between:
 - Progress / readiness logic
 
 DB/RPC are the source of truth.  
-UI must not reinterpret scope, answer state, unit resolution, or progress logic.
+UI must not reinterpret scope, answer state, unit resolution, progress logic, or company-profile prefill rules.
 
 ---
 
@@ -27,6 +27,7 @@ UI must not reinterpret scope, answer state, unit resolution, or progress logic.
 - RPC functions must not bypass RLS.
 - RPC contracts are versioned when return shape changes.
 - Deterministic edge cases must be handled explicitly (see Progress Edge Cases).
+- Helper RPCs that write data must remain deterministic and must never overwrite user-entered typed values unless explicitly intended.
 
 ---
 
@@ -44,8 +45,7 @@ get_vsme_questions_for_report_v2
 
 ## Purpose
 
-Return the deterministic in-scope VSME question list for a report,
-including existing answers.
+Return the deterministic in-scope VSME question list for a report, including existing answers.
 
 This function defines the authoritative VSME question scope.
 
@@ -100,15 +100,13 @@ Each report is aligned to a specific VSME taxonomy version:
 
 report.vsme_taxonomy_version
 
-The question catalog MUST support 1:1 alignment to the EFRAG VSME taxonomy
-for that version.
+The question catalog MUST support 1:1 alignment to the EFRAG VSME taxonomy for that version.
 
 Current default taxonomy version:
 
 '1.2.0'
 
-If multiple taxonomy versions are supported in the future, eligibility MUST be
-computed per report.vsme_taxonomy_version.
+If multiple taxonomy versions are supported in the future, eligibility MUST be computed per report.vsme_taxonomy_version.
 
 ---
 
@@ -309,19 +307,66 @@ Example:
 EUR  
 USD  
 
-UI MAY use this value to display a currency suffix
-for monetary datapoints.
+UI MAY use this value to display a currency suffix for monetary datapoints.
 
 This is display logic only.
 
 Stored numeric values remain unit-agnostic.
+
+Template currency does not override vsme_datapoint.unit.
+
+---
+
+## Answer Metadata Contract
+
+value_jsonb is part of the answer payload and is NOT NULL in storage.
+
+Known metadata keys used by UI / save flow:
+
+- na
+- source
+
+Example values:
+
+- { "na": true }
+- { "source": "company_profile" }
+- { "na": true, "source": "company_profile" }
+
+UI save logic must preserve unrelated keys in value_jsonb.
+
+NA toggle must not erase source metadata.
+
+---
+
+## Company Prefill Provenance Contract
+
+When an answer was prefilled from company profile, value_jsonb may contain:
+
+source = 'company_profile'
+
+UI may render an informational hint such as:
+
+Prefilled from company profile
+
+This metadata is informational only.
+
+It does NOT affect:
+
+- scope
+- validation
+- progress
+- readiness
+
+If the user later edits a prefilled answer, UI/app save flow may switch source to:
+
+source = 'user'
 
 ---
 
 ## Determinism Requirement
 
 Same report configuration + same DB state  
-→ same question list INCLUDING guidance_text, example_answer and unit.
+→ same question list INCLUDING guidance_text, example_answer, unit, and existing answer metadata.
 
 ---
 
@@ -331,8 +376,7 @@ Same report configuration + same DB state
 
 Return deterministic progress and readiness summary for the report.
 
-This function MUST derive totals from the same eligible question set
-as get_vsme_questions_for_report_v2.
+This function MUST derive totals from the same eligible question set as get_vsme_questions_for_report_v2.
 
 ---
 
@@ -351,6 +395,14 @@ OR
 Missing:
 
 - in-scope AND not answered  
+
+Operationally, Missing means:
+
+- no disclosure_answer row exists  
+OR
+- a disclosure_answer row exists but all typed value columns are empty/null  
+AND
+- value_jsonb.na is not true
 
 N/A:
 
@@ -423,7 +475,112 @@ Export readiness must be informative and never blocking.
 
 ---
 
-# 4. Section Visibility Contract
+# 4. prefill_company_profile_into_open_reports(p_company_id uuid)
+
+Status: Active / helper RPC
+
+Used by:
+
+- Profile / company edit flow after successful company update
+
+Purpose:
+
+- copy overlapping company-profile fields into open VSME report answers
+- reduce duplicate typing in B1-style company identity fields
+- fill missing answers only
+
+This RPC is a **helper write action**, not a question-loading or progress authority RPC.
+
+---
+
+## Scope of Action
+
+Targets only reports where:
+
+- report.company_id = p_company_id
+- report.framework = 'VSME'
+- report.status is open / non-submitted
+
+Current intended overlap includes applicable company-profile fields such as:
+
+- legal company name
+- address
+- city
+- postal code
+- country code
+- identification / registration number
+- VAT number
+
+The exact mapping must remain deterministic and DB-defined.
+
+---
+
+## Missing-only Update Rule
+
+This RPC must only prefill when the target answer is missing.
+
+Safe-to-prefill condition:
+
+- no disclosure_answer row exists  
+OR
+- disclosure_answer row exists but has no typed value:
+  - value_text empty/null
+  - value_numeric null
+  - value_integer null if relevant
+  - value_date null
+  - value_boolean null
+
+It must NOT overwrite an existing typed answer.
+
+If value_jsonb.na = true but there is no typed value, prefill may still occur if the implementation defines that state as missing-enough for prefill.  
+If any typed value exists, it must not be overwritten.
+
+---
+
+## Metadata Contract
+
+When prefilling, the RPC must mark provenance with:
+
+value_jsonb.source = 'company_profile'
+
+Metadata must be merged with existing value_jsonb rather than blindly replaced.
+
+value_jsonb must remain non-null in storage.
+
+---
+
+## Return Value
+
+Returns INTEGER:
+
+- number of answers inserted or updated by the prefill action
+
+Example:
+
+0  
+→ nothing eligible to prefill
+
+3  
+→ three answers were newly inserted / updated from company profile
+
+---
+
+## Determinism Requirement
+
+Given the same:
+
+- company row
+- report rows
+- question catalog
+- existing answers
+
+the function must always produce the same result.
+
+No client-side heuristics are allowed.
+
+---
+
+# 5. Section Visibility Contract
 
 Sections are derived from the RPC dataset.
 
@@ -437,9 +594,16 @@ This prevents:
 
 Section lists must be derived only from the RPC dataset.
 
+Sections panel header convention in current UI:
+
+- left: Sections
+- right: Completion
+
+No global numeric total should be shown in the header.
+
 ---
 
-# 5. Security Model
+# 6. Security Model
 
 Access control enforced by:
 
@@ -451,9 +615,11 @@ RPC must not bypass RLS.
 
 If SECURITY DEFINER is used, explicit membership checks must exist.
 
+Helper prefill RPCs must also respect tenant boundaries and must never write across unauthorized companies.
+
 ---
 
-# 6. Single Source of Truth
+# 7. Single Source of Truth
 
 Scope, progress and readiness MUST be computed in DB.
 
@@ -464,6 +630,9 @@ UI:
 - must not duplicate scope rules
 - must not redefine unit resolution
 - must not reinterpret answer states
+- must not use company table values as a live substitute for disclosure_answer
+
+Company profile edits may trigger deterministic helper prefills, but disclosure_answer remains the report-facing snapshot.
 
 If business logic changes:
 

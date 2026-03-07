@@ -21,6 +21,7 @@ Answer these first:
 - Is the data missing in UI only or also missing in DB?
 - Is it a frontend crash, an RPC error, or an RLS denial?
 - Is this report on the expected vsme_taxonomy_version?
+- Is the issue related to report snapshot data or company master data?
 
 Fast checks:
 
@@ -117,6 +118,28 @@ Sticky must depend on:
 scrolledPastThreshold && !footerNavVisible
 
 Never rely on raw scrollY guesses.
+
+---
+
+## 1.5 Sections header / layout debugging
+
+If the Sections panel header looks wrong:
+
+Check:
+
+- header layout container  
+- row layout container  
+- whether header and rows use the same grid/flex column structure  
+
+Current intended header convention:
+
+left: Sections  
+right: Completion  
+
+No global numeric total should be shown in the header.
+
+If Completion is visually misaligned, fix layout only.  
+Do not touch progress logic.
 
 ---
 
@@ -218,6 +241,38 @@ Never patch UI before verifying RPC output.
 
 ---
 
+## 2.5 Prefilled value not visible
+
+If a value should be prefilled from company profile but is not visible:
+
+Step 1 — verify company data
+
+select name
+from company
+where id='<company_id>';
+
+Step 2 — check answer snapshot
+
+select
+value_text,
+value_jsonb,
+value_jsonb->>'source'
+from disclosure_answer
+where report_id='<report_id>'
+and question_id='<question_id>';
+
+Expected result:
+
+value_jsonb.source = 'company_profile'
+
+If missing → run prefill RPC manually:
+
+select prefill_company_profile_into_open_reports('<company_id>'::uuid);
+
+If still missing → mapping between datapoint and question likely incorrect.
+
+---
+
 # 3. REPORT SETTINGS DEBUGGING
 
 Report settings control VSME scope.
@@ -226,9 +281,9 @@ UI: Report Settings page.
 
 Fields:
 
-- vsme_mode
-- vsme_pack_codes
-- vsme_taxonomy_version
+- vsme_mode  
+- vsme_pack_codes  
+- vsme_taxonomy_version  
 
 Verify settings:
 
@@ -572,3 +627,7 @@ core_plus → B + selected pack sections
 comprehensive → B + C sections  
 
 If mismatch → fix RPC, not UI.
+
+---
+
+END OF DEBUG PLAYBOOK

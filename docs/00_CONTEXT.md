@@ -1,4 +1,3 @@
-00:
 # PROJECT CONTEXT – VSME Reporting SaaS (SME-focused)
 
 ## 1. Product Scope
@@ -16,6 +15,7 @@ Primary goals:
 - modular VSME structure (Core / Comprehensive / Add-ons)
 - guided reporting via contextual help text
 - deterministic unit handling based on VSME datapoint catalog
+- pragmatic reuse of company profile data for report onboarding
 
 Export is always allowed.  
 Missing answers are shown calmly.  
@@ -84,6 +84,9 @@ Materiality flags (if any legacy structures exist) are ignored in VSME flow.
 Progress is computed only from in-scope questions.  
 N/A counts as complete.
 
+N/A is an answer-state flag only.  
+It does not change scope.
+
 ---
 
 ## 4. Answer State Model
@@ -97,7 +100,13 @@ N/A
 → explicitly marked via value_jsonb -> { "na": true }
 
 Missing  
-→ no valid value and not marked N/A
+→ no valid typed value and not marked N/A
+
+Operationally, Missing means:
+
+- no disclosure_answer row exists
+- OR a row exists but all typed value columns are empty/null
+- AND value_jsonb.na is not true
 
 Progress formula:
 
@@ -168,6 +177,9 @@ This ensures:
 - alignment with VSME standard
 - deterministic unit rendering
 
+Unit may be null for datapoints where no display unit is needed.  
+UI must never invent a unit.
+
 ---
 
 ## 7. UNIT RESOLUTION CONTRACT (RPC)
@@ -182,8 +194,7 @@ Priority order:
    optional override (rare in MVP)
 
 2. vsme_datapoint.unit  
-   canonical source of truth  
-   MUST be present for numeric datapoints
+   canonical source of truth
 
 3. disclosure_question.unit  
    legacy fallback only
@@ -226,6 +237,9 @@ Assets input → value + EUR
 This is display logic only.
 
 Stored numeric values remain unit-agnostic.
+
+Template currency is a report-level value.  
+It does not override vsme_datapoint.unit.
 
 ---
 
@@ -279,6 +293,17 @@ unit (resolved deterministically)
 Legacy RPC remains only for compatibility.
 
 UI must use v2.
+
+Additional utility RPC now used for onboarding/prefill:
+
+prefill_company_profile_into_open_reports
+
+This RPC is not a scope/progress authority RPC.  
+It is a deterministic helper action that copies overlapping company profile data into open report answers only when the target answer is missing.
+
+Legacy narrow prefill RPC may remain temporarily for backward compatibility, but preferred prefill RPC is:
+
+prefill_company_profile_into_open_reports
 
 ---
 
@@ -340,6 +365,9 @@ vsme_datapoint_pack
 
 Key ownership:
 
+company  
+defines reusable company profile data
+
 disclosure_question  
 defines question metadata
 
@@ -347,9 +375,12 @@ vsme_datapoint
 defines canonical datapoint semantics including unit
 
 disclosure_answer  
-defines answer state
+defines report-specific answer state / snapshot
 
 Strict separation must be maintained.
+
+Company profile is not rendered directly as report data.  
+Report-facing values live in disclosure_answer.
 
 ---
 
@@ -378,12 +409,14 @@ implement unit logic in UI
 derive unit from question_text  
 bypass RPC  
 duplicate unit logic client-side  
+treat company profile as a live substitute for report answers  
 
 Always:
 
 use RPC-returned unit  
 treat vsme_datapoint.unit as canonical  
 use additive schema changes only  
+treat disclosure_answer as the report snapshot  
 
 ---
 
@@ -400,11 +433,19 @@ Never show empty sections
 
 Grouping derived from section_code.
 
+Current header layout:
+
+- left: Sections
+- right: Completion
+
+No global numeric total is shown in the sections header.  
+Completion values are shown only at section-row level.
+
 ---
 
 ## 17. Current Focus
 
-Guided reporting UX with deterministic unit handling.
+Guided reporting UX with deterministic unit handling and pragmatic company-profile prefill for overlapping B1 data.
 
 Implemented:
 
@@ -413,23 +454,64 @@ example_answer rendering
 RPC v2 contract  
 unit resolution via vsme_datapoint  
 template_currency support  
-taxonomy version stored on report (vsme_taxonomy_version)
+taxonomy version stored on report (vsme_taxonomy_version)  
+sections header cleanup  
+company-profile prefill into open reports for overlapping B1 fields  
+prefill source hint rendering in questionnaire UI  
+
+Answering UX (MVP):
+
+- answers saved on blur (no explicit Save button)
+- N/A toggle supported via value_jsonb.na
+- section completion shown live (Answered / N/A / Missing / %)
+- sticky section header for long sections
+- sections panel completion derived from the same RPC dataset (consistent numbers)
 
 Routes:
 
-/reports/[id]/sections/[sectionCode]
+/reports/[id]/sections/[sectionCode]  
+/[locale]/profile
 
 RPC:
 
 get_vsme_questions_for_report_v2  
 get_vsme_ctas_for_report  
+prefill_company_profile_into_open_reports  
+
+Company profile prefill behavior:
+
+- company profile is edited on a separate profile/company page
+- after successful company update, open non-submitted VSME reports may be prefilled via RPC
+- prefill applies only to overlapping Company Info ↔ B1 fields
+- prefill writes into disclosure_answer, not directly from company to UI
+- prefill never overwrites an existing typed answer
+- prefill marks answer metadata with:
+  value_jsonb.source = "company_profile"
+- UI may show:
+  "Prefilled from company profile"
+  when source is company_profile
+- if user later edits that answer in the questionnaire, source may be switched to user
+- submitted reports are not targeted by prefill RPC
+
+Current overlapping fields covered by company-profile prefill are intended to include applicable B1 company identity fields such as:
+
+- legal name
+- address
+- city
+- postal code
+- country
+- identification / registration number
+- VAT number
 
 Definition of done:
 
-units always present for numeric datapoints  
+units always present where applicable  
 unit resolved deterministically  
 no unit logic in UI  
 help text visible when present  
+answering loop stable (load → edit → save → progress)  
+company-profile prefill fills only missing overlapping report answers  
+prefilled answers clearly indicated in UI  
 
 Known issues:
 
@@ -437,10 +519,63 @@ None critical.
 
 ---
 
-## 18. VSC AI
+## 18. disclosure_answer JSONB metadata conventions
 
-Kodovanie robim cez VSC AI
+value_jsonb is NOT NULL.  
+Empty metadata state should use:
+
+{}
+
+Current metadata keys used in MVP include:
+
+na  
+→ explicit N/A marker
+
+source  
+→ provenance marker for prefilled answers, e.g.:
+  company_profile  
+  user
+
+JSON metadata must be merged, not blindly replaced.
+
+In particular:
+
+- NA toggle must not erase source
+- saveAnswer must preserve unrelated keys in value_jsonb
+- empty metadata should be stored as {} rather than null
+
+---
+
+## 19. Company Profile vs Report Snapshot Model
+
+Company profile data and report answers are related but not identical concepts.
+
+Company profile:
+
+- represents the current master data of the company
+- may change over time
+
+Report answers:
+
+- represent the snapshot used for that specific report
+- must remain stable for historical/audit reasons
+
+Therefore:
+
+- changing company profile must not retroactively rewrite historical submitted reports
+- open reports may receive deterministic prefills for missing overlapping answers
+- report answers can diverge from company profile if the user explicitly changes them
+- divergence is acceptable in MVP; user is not blocked
+
+This avoids double entry while preserving report history.
+
+---
+
+## 20. VSC AI
+
+Kodovanie robim cez VSC AI  
 Prosim promty pre VSC rob v nasledovnom tvare:
+
 STEP 1 (context):
 
 Read docs/AI_CONTEXT.md and respect it.
@@ -466,5 +601,20 @@ Return:
 - list side effects (if any)
 - verification steps (how I can test in UI)
 
-Never implement scope logic client-side.
+Never implement scope logic client-side.  
 Scope must always come from RPC.
+
+---
+
+## 21. Docs Update Workflow (recommended)
+
+To keep docs consistent without heavy manual copying:
+
+1) Upload the relevant docs file(s) into GPT (copy/paste text in chat).  
+2) GPT applies light updates only:
+   - remove statements that are no longer true
+   - incorporate newly implemented behaviour where it logically belongs
+   - keep structure and wording stable (no rewrites)  
+3) GPT returns the full updated file.  
+4) Replace the file in `/docs` via Explorer.  
+5) VSC AI reads docs from `/docs` as the source of truth.

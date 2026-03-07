@@ -558,7 +558,7 @@ export default function VsmeSectionClient() {
               value_text: '',
               value_numeric: '',
               value_date: '',
-              value_jsonb: Object.keys(nextJson).length > 0 ? nextJson : null,
+              value_jsonb: Object.keys(nextJson).length > 0 ? nextJson : {},
             };
           }),
         );
@@ -576,7 +576,21 @@ export default function VsmeSectionClient() {
         return;
       }
 
-      const payload: any = { report_id: reportId, question_id: questionId };
+      const currentQuestion = (allQuestions as any[]).find(
+        (q: any) => String(q?.question_id ?? '') === questionId,
+      );
+      const currentJson = (((currentQuestion as any)?.value_jsonb ?? {}) as any) || {};
+      const nextValueJsonb = { ...currentJson };
+      delete nextValueJsonb.na;
+      if (nextValueJsonb.source === 'company_profile') {
+        nextValueJsonb.source = 'user';
+      }
+
+      const payload: any = {
+        report_id: reportId,
+        question_id: questionId,
+        value_jsonb: Object.keys(nextValueJsonb).length > 0 ? nextValueJsonb : {},
+      };
 
       if (t === 'number' || t === 'integer' || t === 'numeric') {
         payload.value_numeric = Number(value);
@@ -620,13 +634,16 @@ export default function VsmeSectionClient() {
           const currentJson = (q?.value_jsonb ?? {}) as any;
           const nextJson = { ...currentJson };
           delete nextJson.na;
+          if (nextJson.source === 'company_profile') {
+            nextJson.source = 'user';
+          }
 
           const nextRow: any = {
             ...q,
             value_text: '',
             value_numeric: '',
             value_date: '',
-            value_jsonb: Object.keys(nextJson).length > 0 ? nextJson : null,
+            value_jsonb: Object.keys(nextJson).length > 0 ? nextJson : {},
           };
 
           if (t === 'number' || t === 'integer' || t === 'numeric') {
@@ -663,9 +680,23 @@ export default function VsmeSectionClient() {
     const supabase = createSupabaseBrowserClient();
 
     if (nextNa) {
+      const currentQuestion = (allQuestions as any[]).find(
+        (q: any) => String(q?.question_id ?? '') === questionId,
+      );
+      const currentJson = (((currentQuestion as any)?.value_jsonb ?? {}) as any) || {};
       const { error } = await supabase
         .from('disclosure_answer')
-        .upsert({ report_id: reportId, question_id: questionId, value_jsonb: { na: true } }, { onConflict: 'report_id,question_id' });
+        .upsert(
+          {
+            report_id: reportId,
+            question_id: questionId,
+            value_jsonb: {
+              ...currentJson,
+              na: true,
+            },
+          },
+          { onConflict: 'report_id,question_id' },
+        );
     if (error) console.error('toggle NA on failed', error);
     else {
       setAnswersById((prev) => ({
@@ -707,10 +738,11 @@ export default function VsmeSectionClient() {
     const current = (existing?.value_jsonb ?? {}) as any;
     const next = { ...current };
     delete next.na;
+    const nextValueJsonb = Object.keys(next).length > 0 ? next : {};
 
     const { error } = await supabase
       .from('disclosure_answer')
-      .update({ value_jsonb: next })
+      .update({ value_jsonb: nextValueJsonb })
       .eq('report_id', reportId)
       .eq('question_id', questionId);
 
@@ -728,7 +760,7 @@ export default function VsmeSectionClient() {
           delete nextJson.na;
           return {
             ...q,
-            value_jsonb: Object.keys(nextJson).length > 0 ? nextJson : null,
+            value_jsonb: Object.keys(nextJson).length > 0 ? nextJson : {},
           };
         }),
       );
@@ -945,6 +977,7 @@ export default function VsmeSectionClient() {
                 const saveError = errorById[questionId];
                 const recentlySaved = Date.now() - (savedAtById[questionId] ?? 0) < 1500;
                 const guidanceText = String(q.guidance_text ?? '').trim();
+                const isPrefilledFromCompanyProfile = String(q?.value_jsonb?.source ?? '') === 'company_profile';
                 const unit = String(q.unit ?? '').trim().toUpperCase();
                 const isNumeric = t === 'number' || t === 'integer' || t === 'numeric';
                 const displayUnit = isNumeric
@@ -1123,6 +1156,10 @@ export default function VsmeSectionClient() {
                             )}
                           </div>
                         )}
+
+                        {isPrefilledFromCompanyProfile ? (
+                          <div className="mt-1 text-xs text-gray-400">Prefilled from company profile</div>
+                        ) : null}
 
                         <div className="mt-1 text-xs">
                           {isSaving ? <span className="text-gray-500">Saving…</span> : null}
