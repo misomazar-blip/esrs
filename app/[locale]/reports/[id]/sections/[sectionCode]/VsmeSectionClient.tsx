@@ -12,7 +12,8 @@ function hasAnyValue(a: any) {
   const t = (a.value_text ?? '').toString().trim();
   const n = (a.value_numeric ?? '').toString().trim();
   const d = (a.value_date ?? '').toString().trim();
-  return t.length > 0 || n.length > 0 || d.length > 0;
+  const b = a.value_boolean === true || a.value_boolean === false;
+  return t.length > 0 || n.length > 0 || d.length > 0 || b;
 }
 
 function normalizeExample(exampleAnswer: unknown) {
@@ -52,7 +53,54 @@ type LocalAnswer = {
   value_text?: string;
   value_numeric?: string; // stored as string in UI
   value_date?: string;
+  value_boolean?: boolean | null;
   na?: boolean;
+};
+
+type B1QuestionGroup = {
+  id?: string;
+  code?: string;
+  title?: string;
+  label?: string;
+  name?: string;
+  sort_order?: number;
+  order_index?: number;
+};
+
+type B1QuestionGroupItem = {
+  id?: string;
+  group_id?: string;
+  question_group_id?: string;
+  group_code?: string;
+  question_group_code?: string;
+  question_id?: string;
+  disclosure_question_id?: string;
+  question_code?: string;
+  vsme_datapoint_id?: string;
+  role?: string;
+  sort_order?: number;
+  order_index?: number;
+};
+
+type B1InteractionRule = {
+  id?: string;
+  rule_type?: string;
+  interaction_type?: string;
+  type?: string;
+  group_id?: string;
+  question_group_id?: string;
+  group_code?: string;
+  question_group_code?: string;
+  parent_question_id?: string;
+  parent_disclosure_question_id?: string;
+  parent_question_code?: string;
+  parent_code?: string;
+  child_question_id?: string;
+  child_disclosure_question_id?: string;
+  child_question_code?: string;
+  child_code?: string;
+  config_jsonb?: Record<string, any>;
+  config?: Record<string, any>;
 };
 
 type SectionGroup = 'General Information' | 'Environment' | 'Social' | 'Governance';
@@ -105,6 +153,7 @@ export default function VsmeSectionClient() {
   const reportId = typeof params.id === 'string' ? params.id : '';
   const sectionCode = typeof params.sectionCode === 'string' ? params.sectionCode : '';
   const normalizedSectionCode = sectionCode.toUpperCase();
+  const isB1Section = normalizedSectionCode === 'B1';
 
   const currentGroup: SectionGroup = useMemo(() => {
     return resolveSectionGroup(normalizedSectionCode);
@@ -145,6 +194,9 @@ export default function VsmeSectionClient() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [sectionQuestions, setSectionQuestions] = useState<VsmeQuestion[]>([]);
+  const [b1QuestionGroups, setB1QuestionGroups] = useState<B1QuestionGroup[]>([]);
+  const [b1QuestionGroupItems, setB1QuestionGroupItems] = useState<B1QuestionGroupItem[]>([]);
+  const [b1InteractionRules, setB1InteractionRules] = useState<B1InteractionRule[]>([]);
   const [answersById, setAnswersById] = useState<Record<string, LocalAnswer>>({});
   const [savingById, setSavingById] = useState<Record<string, boolean>>({});
   const [savedAtById, setSavedAtById] = useState<Record<string, number>>({});
@@ -259,6 +311,7 @@ export default function VsmeSectionClient() {
                 value_text: typeof q.value_text === 'string' ? q.value_text : '',
                 value_numeric: q.value_numeric != null ? String(q.value_numeric) : '',
                 value_date: typeof q.value_date === 'string' ? q.value_date : '',
+                value_boolean: typeof (q as any).value_boolean === 'boolean' ? (q as any).value_boolean : null,
                 na: q.value_jsonb?.na === true,
               };
             }
@@ -280,6 +333,94 @@ export default function VsmeSectionClient() {
       cancelled = true;
     };
   }, [reportId, sectionCode]);
+
+  useEffect(() => {
+    if (!isB1Section) {
+      setB1QuestionGroups([]);
+      setB1QuestionGroupItems([]);
+      setB1InteractionRules([]);
+      return;
+    }
+
+    let cancelled = false;
+
+    const run = async () => {
+      try {
+        const supabase = createSupabaseBrowserClient();
+
+        const { data: groupsData, error: groupsError } = await supabase
+          .from('question_group')
+          .select('*')
+          .eq('framework', 'VSME')
+          .eq('taxonomy_version', '1.2.0')
+          .eq('section_code', 'B1')
+          .order('sort_order', { ascending: true });
+
+        if (groupsError) {
+          if (!cancelled) {
+            setB1QuestionGroups([]);
+            setB1QuestionGroupItems([]);
+            setB1InteractionRules([]);
+          }
+          return;
+        }
+
+        const groupIds = ((groupsData as any[]) ?? [])
+          .map((g: any) => String(g?.id ?? '').trim())
+          .filter(Boolean);
+
+        let itemsData: any[] = [];
+        let itemsError: any = null;
+        let rulesData: any[] = [];
+        let rulesError: any = null;
+
+        if (groupIds.length > 0) {
+          const [itemsRes, rulesRes] = await Promise.all([
+            supabase
+              .from('question_group_item')
+              .select('*')
+              .in('group_id', groupIds)
+              .order('sort_order', { ascending: true }),
+            supabase
+              .from('question_interaction_rule')
+              .select('*'),
+          ]);
+
+          itemsData = (itemsRes.data as any[]) ?? [];
+          itemsError = itemsRes.error;
+          rulesData = (rulesRes.data as any[]) ?? [];
+          rulesError = rulesRes.error;
+        }
+
+        if (itemsError || rulesError) {
+          if (!cancelled) {
+            setB1QuestionGroups([]);
+            setB1QuestionGroupItems([]);
+            setB1InteractionRules([]);
+          }
+          return;
+        }
+
+        if (!cancelled) {
+          setB1QuestionGroups(((groupsData as any[]) ?? []) as B1QuestionGroup[]);
+          setB1QuestionGroupItems(((itemsData as any[]) ?? []) as B1QuestionGroupItem[]);
+          setB1InteractionRules(((rulesData as any[]) ?? []) as B1InteractionRule[]);
+        }
+      } catch {
+        if (!cancelled) {
+          setB1QuestionGroups([]);
+          setB1QuestionGroupItems([]);
+          setB1InteractionRules([]);
+        }
+      }
+    };
+
+    void run();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isB1Section]);
 
   // Report-wide stats (NA included in Completed)  ✅
   const reportStats = useMemo(() => {
@@ -465,6 +606,256 @@ export default function VsmeSectionClient() {
     return { total, answered, na, missing, pct };
   }, [allQuestions, normalizedSectionCode]);
 
+  const b1GroupedRenderModel = useMemo(() => {
+    if (!isB1Section) return null;
+
+    const hasMetadata = b1QuestionGroups.length > 0 || b1QuestionGroupItems.length > 0;
+    if (!hasMetadata) {
+      return {
+        hasMetadata: false,
+        grouped: [] as Array<{
+          key: string;
+          code: string;
+          title: string;
+          questions: VsmeQuestion[];
+        }>,
+        isQuestionVisible: () => true,
+        totalQuestions: 0,
+      };
+    }
+
+    const byQuestionId = new Map<string, VsmeQuestion>();
+
+    for (const q of sectionQuestions) {
+      const questionId = String((q as any)?.question_id ?? '').trim();
+      if (questionId) byQuestionId.set(questionId, q);
+    }
+
+    const resolveQuestionFromItem = (item: B1QuestionGroupItem): VsmeQuestion | null => {
+      const questionId = String(item.question_id ?? '').trim();
+      if (questionId && byQuestionId.has(questionId)) return byQuestionId.get(questionId) ?? null;
+      return null;
+    };
+
+    const normalizeOrder = (value: unknown) => {
+      const n = Number(value);
+      return Number.isFinite(n) ? n : Number.MAX_SAFE_INTEGER;
+    };
+
+    const sortedGroups = [...b1QuestionGroups].sort((a, b) => {
+      const ao = normalizeOrder(a.sort_order ?? a.order_index);
+      const bo = normalizeOrder(b.sort_order ?? b.order_index);
+      if (ao !== bo) return ao - bo;
+      return String(a.code ?? a.id ?? '').localeCompare(String(b.code ?? b.id ?? ''));
+    });
+
+    const sortedItems = [...b1QuestionGroupItems].sort((a, b) => {
+      const ao = normalizeOrder(a.sort_order ?? a.order_index);
+      const bo = normalizeOrder(b.sort_order ?? b.order_index);
+      if (ao !== bo) return ao - bo;
+      return String(a.id ?? '').localeCompare(String(b.id ?? ''));
+    });
+
+    const itemsByGroupKey = new Map<string, B1QuestionGroupItem[]>();
+
+    const normalizeKey = (value: unknown) => String(value ?? '').trim().toUpperCase();
+
+    for (const item of sortedItems) {
+      const candidateKeys = [
+        item.question_group_id,
+        item.group_id,
+        item.question_group_code,
+        item.group_code,
+      ]
+        .map((v) => normalizeKey(v))
+        .filter(Boolean);
+
+      for (const groupKey of candidateKeys) {
+        const existing = itemsByGroupKey.get(groupKey) ?? [];
+        existing.push(item);
+        itemsByGroupKey.set(groupKey, existing);
+      }
+    }
+
+    const normalizeBool = (value: unknown) => {
+      if (typeof value === 'boolean') return value;
+      const normalized = String(value ?? '').trim().toLowerCase();
+      if (normalized === 'true') return true;
+      if (normalized === 'false') return false;
+      return null;
+    };
+
+    const getConditionalChildRuleForQuestion = (q: VsmeQuestion) => {
+      const questionId = String((q as any)?.question_id ?? '').trim();
+      if (!questionId) return null;
+
+      return (b1InteractionRules as any[]).find((rule: any) =>
+        String(rule?.rule_type ?? '').toLowerCase() === 'conditional_child' &&
+        String(rule?.child_question_id ?? '').trim() === questionId,
+      ) ?? null;
+    };
+
+    const getParentQuestionForRule = (rule: any): VsmeQuestion | null => {
+      const parentQuestionId = String(rule?.parent_question_id ?? '').trim();
+      if (!parentQuestionId) return null;
+      return byQuestionId.get(parentQuestionId) ?? null;
+    };
+
+    const getRuleExpectedValue = (rule: any) => {
+      const expected = rule?.config_jsonb?.show_when_parent_value;
+      if (expected === undefined || expected === null) return '';
+      return String(expected).trim();
+    };
+
+    const parentMatchesExpected = (parentQuestion: VsmeQuestion | null, expected: unknown) => {
+      if (!parentQuestion) return false;
+
+      const parentId = String((parentQuestion as any)?.question_id ?? '').trim();
+      if (!parentId) return false;
+
+      const expectedText = String(expected ?? '').trim();
+      if (expectedText === '') return false;
+
+      const parentAnswer = answersById[parentId] ?? {};
+      const expectedBool = normalizeBool(expected);
+      if (expectedBool !== null) {
+        const actualBool = normalizeBool(
+          parentAnswer.value_boolean === true || parentAnswer.value_boolean === false
+            ? parentAnswer.value_boolean
+            : parentAnswer.value_text,
+        );
+        return actualBool === expectedBool;
+      }
+
+      const actualText = String(parentAnswer.value_text ?? '').trim();
+      return actualText.toLowerCase() === expectedText.toLowerCase();
+    };
+
+    const groupVisibilityByKey = new Map<string, boolean>();
+
+    for (const rule of b1InteractionRules) {
+      const ruleType = String((rule as any)?.rule_type ?? (rule as any)?.interaction_type ?? (rule as any)?.type ?? '')
+        .trim()
+        .toLowerCase();
+      if (ruleType !== 'conditional_child' && ruleType !== 'conditional_group') continue;
+
+      const expectedValue = getRuleExpectedValue(rule);
+      const parentQuestion = getParentQuestionForRule(rule);
+      const isVisible = parentMatchesExpected(parentQuestion, expectedValue);
+
+      if (ruleType === 'conditional_group') {
+        const groupKeys = [
+          String((rule as any)?.group_id ?? (rule as any)?.question_group_id ?? ''),
+          String((rule as any)?.group_code ?? (rule as any)?.question_group_code ?? ''),
+        ]
+          .map((k) => normalizeKey(k))
+          .filter(Boolean);
+
+        for (const key of groupKeys) {
+          const previous = groupVisibilityByKey.get(key);
+          groupVisibilityByKey.set(key, previous === undefined ? isVisible : previous && isVisible);
+        }
+      }
+    }
+
+    const evaluateConditionalChildRule = (rule: B1InteractionRule) => {
+      const expectedValue = getRuleExpectedValue(rule);
+      if (expectedValue === '') return false;
+
+      const parentQuestion = getParentQuestionForRule(rule);
+      return parentMatchesExpected(parentQuestion, expectedValue);
+    };
+
+    const isQuestionVisible = (q: VsmeQuestion) => {
+      const questionId = String((q as any)?.question_id ?? '').trim();
+      if (!questionId) return false;
+
+      const directRule = getConditionalChildRuleForQuestion(q);
+      if (!directRule) {
+        return true;
+      }
+
+      return evaluateConditionalChildRule(directRule as B1InteractionRule);
+    };
+
+    const shownQuestionIds = new Set<string>();
+    const grouped: Array<{
+      key: string;
+      code: string;
+      title: string;
+      questions: VsmeQuestion[];
+    }> = [];
+
+    for (const group of sortedGroups) {
+      const candidateKeys = [
+        normalizeKey(group.id),
+        normalizeKey(group.code),
+      ].filter(Boolean);
+
+      const dedupedItems = new Map<string, B1QuestionGroupItem>();
+      for (const key of candidateKeys) {
+        const matchedItems = itemsByGroupKey.get(key) ?? [];
+        for (const item of matchedItems) {
+          const itemKey = String(item.id ?? `${item.question_id ?? ''}-${item.vsme_datapoint_id ?? ''}`);
+          if (!dedupedItems.has(itemKey)) {
+            dedupedItems.set(itemKey, item);
+          }
+        }
+      }
+
+      const groupItems = Array.from(dedupedItems.values());
+
+      const groupVisibilityKeys = candidateKeys;
+      const isGroupVisible =
+        groupVisibilityKeys.length === 0 ||
+        groupVisibilityKeys.every((key) => groupVisibilityByKey.get(key) !== false);
+      if (!isGroupVisible) {
+        continue;
+      }
+
+      const questions: VsmeQuestion[] = [];
+
+      for (const item of groupItems) {
+        const resolvedQuestion = resolveQuestionFromItem(item);
+        if (!resolvedQuestion) continue;
+
+        const questionId = String((resolvedQuestion as any)?.question_id ?? '').trim();
+        if (!questionId) continue;
+
+        if (!isQuestionVisible(resolvedQuestion)) {
+          continue;
+        }
+
+        const role = String(item.role ?? '').trim().toLowerCase();
+        if (role === 'technical') {
+          continue;
+        }
+
+        if (shownQuestionIds.has(questionId)) continue;
+
+        shownQuestionIds.add(questionId);
+        questions.push(resolvedQuestion);
+      }
+
+      grouped.push({
+        key: String(group.id ?? group.code ?? `group-${grouped.length + 1}`),
+        code: String(group.code ?? ''),
+        title: String(group.title ?? group.label ?? group.name ?? group.code ?? 'Group').trim(),
+        questions,
+      });
+    }
+
+    const totalQuestions = grouped.reduce((acc, group) => acc + group.questions.length, 0);
+
+    return { hasMetadata: true, grouped, isQuestionVisible, totalQuestions };
+  }, [isB1Section, sectionQuestions, b1QuestionGroups, b1QuestionGroupItems, b1InteractionRules, answersById]);
+
+  const displayedQuestionCount = useMemo(() => {
+    if (!isB1Section) return sectionQuestions.length;
+    if (!b1GroupedRenderModel?.hasMetadata) return sectionQuestions.length;
+    return b1GroupedRenderModel.totalQuestions;
+  }, [isB1Section, sectionQuestions.length, b1GroupedRenderModel]);
+
   useEffect(() => {
     if (!reportId) return;
 
@@ -519,7 +910,7 @@ export default function VsmeSectionClient() {
     };
   }, [reportId, templateCurrencyValue, normalizeCurrency]);
 
-  const saveAnswer = async (questionId: string, answerType: string, value: string | undefined) => {
+  const saveAnswer = async (questionId: string, answerType: string, value: string | boolean | undefined) => {
     if (!reportId) return;
 
     setSavingById((prev) => ({ ...prev, [questionId]: true }));
@@ -529,7 +920,7 @@ export default function VsmeSectionClient() {
     const t = String(answerType ?? '').toLowerCase();
 
     try {
-      if (!value || value === '') {
+      if (value === undefined || value === '') {
         const { error: deleteError } = await supabase
           .from('disclosure_answer')
           .delete()
@@ -544,6 +935,7 @@ export default function VsmeSectionClient() {
             value_text: '',
             value_numeric: '',
             value_date: '',
+            value_boolean: null,
             na: false,
           },
         }));
@@ -558,6 +950,7 @@ export default function VsmeSectionClient() {
               value_text: '',
               value_numeric: '',
               value_date: '',
+              value_boolean: null,
               value_jsonb: Object.keys(nextJson).length > 0 ? nextJson : {},
             };
           }),
@@ -594,6 +987,8 @@ export default function VsmeSectionClient() {
 
       if (t === 'number' || t === 'integer' || t === 'numeric') {
         payload.value_numeric = Number(value);
+      } else if (t === 'boolean') {
+        payload.value_boolean = typeof value === 'boolean' ? value : String(value).trim().toLowerCase() === 'true';
       } else if (t === 'date') {
         payload.value_date = value;
       } else {
@@ -612,15 +1007,18 @@ export default function VsmeSectionClient() {
           value_text: '',
           value_numeric: '',
           value_date: '',
+          value_boolean: null,
           na: false,
         };
 
         if (t === 'number' || t === 'integer' || t === 'numeric') {
-          next.value_numeric = value;
+          next.value_numeric = String(value);
+        } else if (t === 'boolean') {
+          next.value_boolean = typeof value === 'boolean' ? value : String(value).trim().toLowerCase() === 'true';
         } else if (t === 'date') {
-          next.value_date = value;
+          next.value_date = String(value);
         } else {
-          next.value_text = value;
+          next.value_text = String(value);
         }
 
         return {
@@ -643,11 +1041,14 @@ export default function VsmeSectionClient() {
             value_text: '',
             value_numeric: '',
             value_date: '',
+            value_boolean: null,
             value_jsonb: Object.keys(nextJson).length > 0 ? nextJson : {},
           };
 
           if (t === 'number' || t === 'integer' || t === 'numeric') {
             nextRow.value_numeric = Number(value);
+          } else if (t === 'boolean') {
+            nextRow.value_boolean = typeof value === 'boolean' ? value : String(value).trim().toLowerCase() === 'true';
           } else if (t === 'date') {
             nextRow.value_date = value;
           } else {
@@ -768,8 +1169,417 @@ export default function VsmeSectionClient() {
     }
   };
 
+  useEffect(() => {
+    if (!isB1Section || !reportId) return;
+
+    const byCode = new Map<string, any>();
+    for (const q of sectionQuestions as any[]) {
+      const code = String(q?.code ?? '').trim().toUpperCase();
+      if (code) byCode.set(code, q);
+    }
+
+    const legalParentQuestion = byCode.get('UNDERTAKINGSLEGALFORM');
+    const legalParentQuestionId = String(legalParentQuestion?.question_id ?? '').trim();
+    const legalChildQuestion = byCode.get('OTHERUNDERTAKINGSLEGALFORM');
+    const legalChildQuestionId = String(legalChildQuestion?.question_id ?? '').trim();
+
+    const prevParentQuestion = byCode.get('REPORTCONTAINSDISCLOSURESFROMTHEPREVIOUSREPORTINGPERIODTHATREMAINUNCHANGED');
+    const prevParentQuestionId = String(prevParentQuestion?.question_id ?? '').trim();
+    const prevListChildQuestion = byCode.get('LISTOFDISCLOSURESFORWHICHNOCHANGESAREREPORTEDCOMPAREDTOTHEPREVIOUSPERIODREPORTING');
+    const prevListChildQuestionId = String(prevListChildQuestion?.question_id ?? '').trim();
+    const prevLinkChildQuestion = byCode.get('LINKTOPREVIOUSREPORTCONTAININGDISCLOSURESTHATREMAINUNCHANGED');
+    const prevLinkChildQuestionId = String(prevLinkChildQuestion?.question_id ?? '').trim();
+
+    const expectedLegalParentValue = 'other (please specify the legal form in the row below)';
+    const legalParentValue = String(answersById[legalParentQuestionId]?.value_text ?? '').trim().toLowerCase();
+    const shouldShowLegalChild = legalParentQuestionId ? legalParentValue === expectedLegalParentValue : false;
+
+    const prevParentRawValue = answersById[prevParentQuestionId]?.value_boolean;
+    const prevParentValue =
+      prevParentRawValue === true || prevParentRawValue === false
+        ? prevParentRawValue
+        : String(answersById[prevParentQuestionId]?.value_text ?? '').trim().toLowerCase() === 'true';
+    const shouldShowPrevChildren = prevParentQuestionId ? prevParentValue === true : false;
+
+    const targets: Array<{ childQuestionId: string; shouldShow: boolean }> = [];
+    if (legalChildQuestionId) {
+      targets.push({ childQuestionId: legalChildQuestionId, shouldShow: shouldShowLegalChild });
+    }
+    if (prevListChildQuestionId) {
+      targets.push({ childQuestionId: prevListChildQuestionId, shouldShow: shouldShowPrevChildren });
+    }
+    if (prevLinkChildQuestionId) {
+      targets.push({ childQuestionId: prevLinkChildQuestionId, shouldShow: shouldShowPrevChildren });
+    }
+
+    if (targets.length === 0) return;
+
+    let cancelled = false;
+
+    const run = async () => {
+      const supabase = createSupabaseBrowserClient();
+
+      for (const target of targets) {
+        const { childQuestionId, shouldShow } = target;
+        const childAnswer = answersById[childQuestionId] ?? {};
+        const childHasTypedValue = hasAnyValue(childAnswer);
+        const childIsNa = childAnswer.na === true;
+
+        if (!shouldShow) {
+          if (childIsNa && !childHasTypedValue) continue;
+
+          const { data: existing, error: readErr } = await supabase
+            .from('disclosure_answer')
+            .select('value_jsonb')
+            .eq('report_id', reportId)
+            .eq('question_id', childQuestionId)
+            .maybeSingle();
+
+          if (readErr || cancelled) continue;
+
+          const currentJson = (existing?.value_jsonb ?? {}) as any;
+          const nextValueJsonb = {
+            ...currentJson,
+            na: true,
+          };
+
+          const { error: upsertErr } = await supabase
+            .from('disclosure_answer')
+            .upsert(
+              {
+                report_id: reportId,
+                question_id: childQuestionId,
+                value_text: null,
+                value_numeric: null,
+                value_date: null,
+                value_jsonb: nextValueJsonb,
+              },
+              { onConflict: 'report_id,question_id' },
+            );
+
+          if (upsertErr || cancelled) continue;
+
+          setAnswersById((prev) => ({
+            ...prev,
+            [childQuestionId]: {
+              ...(prev[childQuestionId] ?? {}),
+              value_text: '',
+              value_numeric: '',
+              value_date: '',
+              value_boolean: null,
+              na: true,
+            },
+          }));
+
+          setAllQuestions((prev) =>
+            prev.map((q: any) => {
+              if (String(q?.question_id ?? '') !== childQuestionId) return q;
+              const currentRowJson = (q?.value_jsonb ?? {}) as any;
+              return {
+                ...q,
+                value_text: '',
+                value_numeric: '',
+                value_date: '',
+                value_boolean: null,
+                value_jsonb: {
+                  ...currentRowJson,
+                  na: true,
+                },
+              };
+            }),
+          );
+
+          await refreshCta();
+          continue;
+        }
+
+        if (!childIsNa) continue;
+
+        const { data: existing, error: readErr } = await supabase
+          .from('disclosure_answer')
+          .select('value_jsonb')
+          .eq('report_id', reportId)
+          .eq('question_id', childQuestionId)
+          .maybeSingle();
+
+        if (readErr || cancelled) continue;
+
+        const currentJson = (existing?.value_jsonb ?? {}) as any;
+        const nextValueJsonb = { ...currentJson };
+        delete nextValueJsonb.na;
+
+        const { error: updateErr } = await supabase
+          .from('disclosure_answer')
+          .update({ value_jsonb: Object.keys(nextValueJsonb).length > 0 ? nextValueJsonb : {} })
+          .eq('report_id', reportId)
+          .eq('question_id', childQuestionId);
+
+        if (updateErr || cancelled) continue;
+
+        setAnswersById((prev) => ({
+          ...prev,
+          [childQuestionId]: {
+            ...(prev[childQuestionId] ?? {}),
+            na: false,
+          },
+        }));
+
+        setAllQuestions((prev) =>
+          prev.map((q: any) => {
+            if (String(q?.question_id ?? '') !== childQuestionId) return q;
+            const currentRowJson = (q?.value_jsonb ?? {}) as any;
+            const nextRowJson = { ...currentRowJson };
+            delete nextRowJson.na;
+            return {
+              ...q,
+              value_jsonb: Object.keys(nextRowJson).length > 0 ? nextRowJson : {},
+            };
+          }),
+        );
+
+        await refreshCta();
+      }
+    };
+
+    void run();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isB1Section, reportId, sectionQuestions, answersById, refreshCta]);
+
   const targetSectionCode = String(cta?.continue_section_code || cta?.suggested_section_code || '').toUpperCase();
   const targetSectionTitle = VSME_SECTION_META[targetSectionCode]?.title || targetSectionCode;
+
+  const renderQuestionCard = (q: any, idx: number, total: number) => {
+    const questionId = String(q.question_id ?? '');
+    const t = String(q.answer_type ?? '').toLowerCase();
+    const a = answersById[questionId] ?? {};
+    const allowed = (q.config_jsonb?.allowed_values ?? []) as string[];
+    const isEnumText = (t === 'text' || t === 'string') && Array.isArray(allowed) && allowed.length > 0;
+    const isNa = a.na === true;
+    const isSaving = savingById[questionId] === true;
+    const saveError = errorById[questionId];
+    const recentlySaved = Date.now() - (savedAtById[questionId] ?? 0) < 1500;
+    const guidanceText = String(q.guidance_text ?? '').trim();
+    const isPrefilledFromCompanyProfile = String(q?.value_jsonb?.source ?? '') === 'company_profile';
+    const unit = String(q.unit ?? '').trim().toUpperCase();
+    const isNumeric = t === 'number' || t === 'integer' || t === 'numeric';
+    const displayUnit = isNumeric
+      ? (CURRENCY_UNITS.includes(unit as (typeof CURRENCY_UNITS)[number]) ? reportCurrency ?? unit : unit)
+      : '';
+    const baseText = q.question_text ?? q.title ?? 'Untitled question';
+
+    let renderedQuestionText = baseText;
+
+    if (
+      displayUnit &&
+      (q.answer_type === 'number' ||
+       q.answer_type === 'numeric' ||
+       q.answer_type === 'integer')
+    ) {
+      const trimmed = baseText.trim().toLowerCase();
+
+      const endsWithIn =
+        trimmed.endsWith(' in') ||
+        trimmed.endsWith(' in:');
+
+      const alreadyHasUnit =
+        baseText.toUpperCase().endsWith(` ${displayUnit}`);
+
+      if (endsWithIn && !alreadyHasUnit) {
+        renderedQuestionText = `${baseText} ${displayUnit}`;
+      }
+    }
+
+    return (
+      <li
+        key={questionId}
+        className={[
+          'rounded-lg shadow',
+          'border border-gray-200',
+          'border-l-4',
+          isNa ? 'border-l-slate-300 bg-slate-50 text-slate-500' : 'border-l-blue-500 bg-white text-gray-900',
+          'p-4 transition-colors',
+        ].join(' ')}
+      >
+        <div className="flex items-center justify-between gap-4 pb-2 border-b border-slate-100">
+          <div className="text-[11px] text-gray-400">
+            {idx + 1} / {total}
+          </div>
+          <label className="flex items-center gap-3 shrink-0 select-none cursor-pointer bg-slate-50 rounded-full px-3 py-1">
+            <span className="text-xs text-slate-600">Not applicable</span>
+            <div className="relative">
+              <input
+                type="checkbox"
+                checked={isNa}
+                onChange={(e) => void toggleNA(questionId, e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-10 h-5 bg-gray-300 peer-checked:bg-gray-400 rounded-full transition-colors" />
+              <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5" />
+            </div>
+          </label>
+        </div>
+
+        <div className={["mt-2 text-base font-semibold", isNa ? 'text-slate-600' : 'text-gray-900'].join(' ')}>
+          {renderedQuestionText}
+        </div>
+        {guidanceText ? (
+          <div className={["mt-1 text-sm leading-relaxed", isNa ? 'text-slate-500' : 'text-slate-600'].join(' ')}>{guidanceText}</div>
+        ) : null}
+
+        {isNa ? (
+          <div className="mt-2 text-xs text-slate-500">Marked as Not applicable (answer preserved)</div>
+        ) : (
+          <>
+            {(t === 'text' || t === 'string') && !isEnumText && (
+              <div className="mt-2">
+                <input
+                  type="text"
+                  value={a.value_text ?? ''}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setAnswersById((prev) => ({
+                      ...prev,
+                      [questionId]: { ...(prev[questionId] ?? {}), value_text: v },
+                    }));
+                    if (String(q.vsme_datapoint_id ?? '') === 'template_currency') {
+                      setReportCurrency(normalizeCurrency(v));
+                    }
+                  }}
+                  onBlur={(e) => saveAnswer(questionId, q.answer_type, e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded placeholder:text-slate-400 placeholder:italic"
+                  autoComplete="off"
+                  placeholder={getPlaceholder(q, a)}
+                />
+              </div>
+            )}
+
+            {t === 'boolean' && (
+              <div className="mt-2">
+                <select
+                  value={a.value_boolean === true ? 'true' : a.value_boolean === false ? 'false' : ''}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setAnswersById((prev) => ({
+                      ...prev,
+                      [questionId]: {
+                        ...(prev[questionId] ?? {}),
+                        value_boolean: v === 'true' ? true : v === 'false' ? false : null,
+                      },
+                    }));
+                  }}
+                  onBlur={(e) => saveAnswer(questionId, q.answer_type, e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded bg-white"
+                >
+                  <option value="">— Select —</option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </div>
+            )}
+
+            {(t === 'number' || t === 'integer' || t === 'numeric') && (
+              <div className="mt-2 flex items-center gap-2">
+                <input
+                  type="number"
+                  value={a.value_numeric ?? ''}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setAnswersById((prev) => ({
+                      ...prev,
+                      [questionId]: { ...(prev[questionId] ?? {}), value_numeric: v },
+                    }));
+                  }}
+                  onBlur={(e) => saveAnswer(questionId, q.answer_type, e.target.value)}
+                  className="flex-1 w-full px-3 py-2 border border-gray-300 rounded placeholder:text-slate-400 placeholder:italic"
+                  placeholder={getPlaceholder(q, a)}
+                />
+                {displayUnit ? <span className="text-xs text-gray-500 shrink-0">{displayUnit}</span> : null}
+              </div>
+            )}
+
+            {t === 'date' && (
+              <div className="mt-2">
+                <input
+                  type="date"
+                  value={a.value_date ?? ''}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setAnswersById((prev) => ({
+                      ...prev,
+                      [questionId]: { ...(prev[questionId] ?? {}), value_date: v },
+                    }));
+                  }}
+                  onBlur={(e) => saveAnswer(questionId, q.answer_type, e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded"
+                />
+              </div>
+            )}
+
+            {(t === 'select' || isEnumText) && (
+              <div className="mt-2">
+                {!Array.isArray(allowed) || allowed.length === 0 ? (
+                  <input
+                    type="text"
+                    value={a.value_text ?? ''}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setAnswersById((prev) => ({
+                        ...prev,
+                        [questionId]: { ...(prev[questionId] ?? {}), value_text: v },
+                      }));
+                      if (String(q.vsme_datapoint_id ?? '') === 'template_currency') {
+                        setReportCurrency(normalizeCurrency(v));
+                      }
+                    }}
+                    onBlur={(e) => saveAnswer(questionId, q.answer_type, e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded"
+                    autoComplete="off"
+                    placeholder="Type…"
+                  />
+                ) : (
+                  <select
+                    value={a.value_text ?? ''}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setAnswersById((prev) => ({
+                        ...prev,
+                        [questionId]: { ...(prev[questionId] ?? {}), value_text: v },
+                      }));
+                      if (String(q.vsme_datapoint_id ?? '') === 'template_currency') {
+                        setReportCurrency(normalizeCurrency(v));
+                      }
+                    }}
+                    onBlur={(e) => saveAnswer(questionId, q.answer_type, e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded bg-white"
+                  >
+                    <option value="">— Select —</option>
+                    {allowed.map((v) => (
+                      <option key={v} value={v}>
+                        {v}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            )}
+
+            {isPrefilledFromCompanyProfile ? (
+              <div className="mt-1 text-xs text-gray-400">Prefilled from company profile</div>
+            ) : null}
+
+            <div className="mt-1 text-xs">
+              {isSaving ? <span className="text-gray-500">Saving…</span> : null}
+              {!isSaving && saveError ? <span className="text-red-600">Not saved</span> : null}
+              {!isSaving && !saveError && recentlySaved ? <span className="text-emerald-600">Saved</span> : null}
+            </div>
+          </>
+        )}
+      </li>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-8 pb-24">
@@ -959,219 +1769,51 @@ export default function VsmeSectionClient() {
             <div className="font-semibold text-red-800">Error</div>
             <div className="text-red-700 text-sm mt-1">{error}</div>
           </div>
-        ) : sectionQuestions.length === 0 ? (
+        ) : displayedQuestionCount === 0 ? (
           <div className="bg-yellow-50 border border-yellow-200 rounded p-4 text-yellow-900">
             No questions matched this section.
           </div>
         ) : (
           <>
-            <ul className="space-y-2">
-              {sectionQuestions.map((q: any, idx: number) => {
-                const total = sectionQuestions.length;
-                const questionId = String(q.question_id ?? '');
-                const t = String(q.answer_type ?? '').toLowerCase();
-                const a = answersById[questionId] ?? {};
-                const allowed = (q.config_jsonb?.allowed_values ?? []) as string[];
-                const isNa = a.na === true;
-                const isSaving = savingById[questionId] === true;
-                const saveError = errorById[questionId];
-                const recentlySaved = Date.now() - (savedAtById[questionId] ?? 0) < 1500;
-                const guidanceText = String(q.guidance_text ?? '').trim();
-                const isPrefilledFromCompanyProfile = String(q?.value_jsonb?.source ?? '') === 'company_profile';
-                const unit = String(q.unit ?? '').trim().toUpperCase();
-                const isNumeric = t === 'number' || t === 'integer' || t === 'numeric';
-                const displayUnit = isNumeric
-                  ? (CURRENCY_UNITS.includes(unit as (typeof CURRENCY_UNITS)[number]) ? reportCurrency ?? unit : unit)
-                  : '';
-                const baseText = q.question_text ?? q.title ?? 'Untitled question';
+            {isB1Section && b1GroupedRenderModel?.hasMetadata ? (
+              <div className="space-y-8">
+                {(() => {
+                  const visibleGroups = b1GroupedRenderModel.grouped.map((group) => {
+                    const visibleQuestions = group.questions.filter((q: any) => b1GroupedRenderModel.isQuestionVisible(q));
+                    return { ...group, visibleQuestions };
+                  });
 
-                let renderedQuestionText = baseText;
+                  let runningIndex = 0;
+                  const total = visibleGroups.reduce((acc, group) => acc + group.visibleQuestions.length, 0);
 
-                if (
-                  displayUnit &&
-                  (q.answer_type === 'number' ||
-                   q.answer_type === 'numeric' ||
-                   q.answer_type === 'integer')
-                ) {
-                  const trimmed = baseText.trim().toLowerCase();
+                  return visibleGroups.map((group) => {
+                    const startIndex = runningIndex;
+                    runningIndex += group.visibleQuestions.length;
 
-                  const endsWithIn =
-                    trimmed.endsWith(' in') ||
-                    trimmed.endsWith(' in:');
+                    return (
+                      <div key={group.key} className="space-y-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                        <div className="px-1 pb-2 text-base font-semibold text-gray-900 border-b border-gray-100">{group.title}</div>
+                        <ul className="space-y-2">
+                          {group.visibleQuestions.map((q: any, idx: number) => {
+                            const questionId = String((q as any)?.question_id ?? '').trim();
 
-                  const alreadyHasUnit =
-                    baseText.toUpperCase().endsWith(` ${displayUnit}`);
-
-                  if (endsWithIn && !alreadyHasUnit) {
-                    renderedQuestionText = `${baseText} ${displayUnit}`;
-                  }
-                }
-
-                return (
-                  <li
-                    key={questionId}
-                    className={[
-                      'rounded-lg shadow',
-                      'border border-gray-200',
-                      'border-l-4',
-                      isNa ? 'border-l-slate-300 bg-slate-50 text-slate-500' : 'border-l-blue-500 bg-white text-gray-900',
-                      'p-4 transition-colors',
-                    ].join(' ')}
-                  >
-                    <div className="flex items-center justify-between gap-4 pb-2 border-b border-slate-100">
-                      <div className="text-[11px] text-gray-400">
-                        {idx + 1} / {total}
+                            return (
+                              <div key={`${questionId || idx}-wrap`}>
+                                {renderQuestionCard(q, startIndex + idx, total)}
+                              </div>
+                            );
+                          })}
+                        </ul>
                       </div>
-                      <label className="flex items-center gap-3 shrink-0 select-none cursor-pointer bg-slate-50 rounded-full px-3 py-1">
-                        <span className="text-xs text-slate-600">Not applicable</span>
-                        <div className="relative">
-                          <input
-                            type="checkbox"
-                            checked={isNa}
-                            onChange={(e) => void toggleNA(questionId, e.target.checked)}
-                            className="sr-only peer"
-                          />
-                          <div className="w-10 h-5 bg-gray-300 peer-checked:bg-gray-400 rounded-full transition-colors" />
-                          <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5" />
-                        </div>
-                      </label>
-                    </div>
-
-                    <div className={["mt-2 text-base font-semibold", isNa ? 'text-slate-600' : 'text-gray-900'].join(' ')}>
-                      {renderedQuestionText}
-                    </div>
-                    {guidanceText ? (
-                      <div className={["mt-1 text-sm leading-relaxed", isNa ? 'text-slate-500' : 'text-slate-600'].join(' ')}>{guidanceText}</div>
-                    ) : null}
-
-                    {isNa ? (
-                      <div className="mt-2 text-xs text-slate-500">Marked as Not applicable (answer preserved)</div>
-                    ) : (
-                      <>
-                        {(t === 'text' || t === 'string') && (
-                          <div className="mt-2">
-                            <input
-                              type="text"
-                              value={a.value_text ?? ''}
-                              onChange={(e) => {
-                                const v = e.target.value;
-                                setAnswersById((prev) => ({
-                                  ...prev,
-                                  [questionId]: { ...(prev[questionId] ?? {}), value_text: v },
-                                }));
-                                if (String(q.vsme_datapoint_id ?? '') === 'template_currency') {
-                                  setReportCurrency(normalizeCurrency(v));
-                                }
-                              }}
-                              onBlur={(e) => saveAnswer(questionId, q.answer_type, e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded placeholder:text-slate-400 placeholder:italic"
-                              autoComplete="off"
-                              placeholder={getPlaceholder(q, a)}
-                            />
-                          </div>
-                        )}
-
-                        {(t === 'number' || t === 'integer' || t === 'numeric') && (
-                          <div className="mt-2 flex items-center gap-2">
-                            <input
-                              type="number"
-                              value={a.value_numeric ?? ''}
-                              onChange={(e) => {
-                                const v = e.target.value;
-                                setAnswersById((prev) => ({
-                                  ...prev,
-                                  [questionId]: { ...(prev[questionId] ?? {}), value_numeric: v },
-                                }));
-                              }}
-                              onBlur={(e) => saveAnswer(questionId, q.answer_type, e.target.value)}
-                              className="flex-1 w-full px-3 py-2 border border-gray-300 rounded placeholder:text-slate-400 placeholder:italic"
-                              placeholder={getPlaceholder(q, a)}
-                            />
-                            {displayUnit ? <span className="text-xs text-gray-500 shrink-0">{displayUnit}</span> : null}
-                          </div>
-                        )}
-
-                        {t === 'date' && (
-                          <div className="mt-2">
-                            <input
-                              type="date"
-                              value={a.value_date ?? ''}
-                              onChange={(e) => {
-                                const v = e.target.value;
-                                setAnswersById((prev) => ({
-                                  ...prev,
-                                  [questionId]: { ...(prev[questionId] ?? {}), value_date: v },
-                                }));
-                              }}
-                              onBlur={(e) => saveAnswer(questionId, q.answer_type, e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded"
-                            />
-                          </div>
-                        )}
-
-                        {t === 'select' && (
-                          <div className="mt-2">
-                            {!Array.isArray(allowed) || allowed.length === 0 ? (
-                              <input
-                                type="text"
-                                value={a.value_text ?? ''}
-                                onChange={(e) => {
-                                  const v = e.target.value;
-                                  setAnswersById((prev) => ({
-                                    ...prev,
-                                    [questionId]: { ...(prev[questionId] ?? {}), value_text: v },
-                                  }));
-                                  if (String(q.vsme_datapoint_id ?? '') === 'template_currency') {
-                                    setReportCurrency(normalizeCurrency(v));
-                                  }
-                                }}
-                                onBlur={(e) => saveAnswer(questionId, q.answer_type, e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded"
-                                autoComplete="off"
-                                placeholder="Type…"
-                              />
-                            ) : (
-                              <select
-                                value={a.value_text ?? ''}
-                                onChange={(e) => {
-                                  const v = e.target.value;
-                                  setAnswersById((prev) => ({
-                                    ...prev,
-                                    [questionId]: { ...(prev[questionId] ?? {}), value_text: v },
-                                  }));
-                                  if (String(q.vsme_datapoint_id ?? '') === 'template_currency') {
-                                    setReportCurrency(normalizeCurrency(v));
-                                  }
-                                }}
-                                onBlur={(e) => saveAnswer(questionId, q.answer_type, e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded bg-white"
-                              >
-                                <option value="">— Select —</option>
-                                {allowed.map((v) => (
-                                  <option key={v} value={v}>
-                                    {v}
-                                  </option>
-                                ))}
-                              </select>
-                            )}
-                          </div>
-                        )}
-
-                        {isPrefilledFromCompanyProfile ? (
-                          <div className="mt-1 text-xs text-gray-400">Prefilled from company profile</div>
-                        ) : null}
-
-                        <div className="mt-1 text-xs">
-                          {isSaving ? <span className="text-gray-500">Saving…</span> : null}
-                          {!isSaving && saveError ? <span className="text-red-600">Not saved</span> : null}
-                          {!isSaving && !saveError && recentlySaved ? <span className="text-emerald-600">Saved</span> : null}
-                        </div>
-                      </>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
+                    );
+                  });
+                })()}
+              </div>
+            ) : (
+              <ul className="space-y-2">
+                {sectionQuestions.map((q: any, idx: number) => renderQuestionCard(q, idx, sectionQuestions.length))}
+              </ul>
+            )}
 
             {(prevChapterCode || nextChapterCode) ? (
               <div ref={footerNavRef} className="max-w-3xl mx-auto mt-10">
@@ -1209,7 +1851,7 @@ export default function VsmeSectionClient() {
           </>
         )}
 
-        {showStickyNav && sectionQuestions.length > 0 && !loading && !error && (prevChapterCode || nextChapterCode) ? (
+        {showStickyNav && displayedQuestionCount > 0 && !loading && !error && (prevChapterCode || nextChapterCode) ? (
           <div className="fixed bottom-6 left-0 right-0 z-40 pointer-events-none">
             <div className="max-w-3xl mx-auto pointer-events-auto">
               <div className="flex gap-4">
