@@ -12,11 +12,11 @@ UI must never infer, guess, or override units.
 
 Ensure that:
 
-* every datapoint uses the correct VSME unit
-* units are consistent across reports
-* units are deterministic
-* unit display is fully DB-driven
-* unit logic is not implemented client-side
+- every datapoint uses the correct VSME unit
+- units are consistent across reports
+- units are deterministic
+- unit display is fully DB-driven
+- unit logic is not implemented client-side
 
 Canonical source of truth:
 
@@ -39,7 +39,7 @@ public.vsme_datapoint
 Example:
 
 | id                      | unit |
-| ----------------------- | ---- |
+|-------------------------|------|
 | Assets                  | EUR  |
 | TotalWaterConsumption   | m3   |
 | TotalEnergyConsumption  | MWh  |
@@ -62,32 +62,31 @@ get_vsme_questions_for_report_v2
 Unit must be resolved inside RPC using:
 
 coalesce(
-disclosure_answer.unit,
-vsme_datapoint.unit,
-disclosure_question.unit
+  disclosure_answer.unit,
+  vsme_datapoint.unit,
+  disclosure_question.unit
 ) as unit
 
 Priority:
 
-1. disclosure_answer.unit
-   optional override (rare, not used in MVP)
+1. disclosure_answer.unit  
+   optional per-report override (rare, not used in MVP)
 
-2. vsme_datapoint.unit
-   canonical source
-   required for numeric datapoints
+2. vsme_datapoint.unit  
+   canonical source of truth
 
-3. disclosure_question.unit
+3. disclosure_question.unit  
    legacy fallback only
 
-UI must rely only on RPC-returned unit.
+UI must rely only on the RPC-returned unit.
 
 Unit logic must never be implemented client-side.
 
 ---
 
-# 4. MVP RULE: disclosure_answer.unit is NOT used
+# 4. MVP Rule: disclosure_answer.unit is NOT used
 
-For MVP:
+For MVP implementations:
 
 disclosure_answer.unit remains NULL.
 
@@ -97,14 +96,14 @@ vsme_datapoint.unit
 
 This ensures:
 
-* consistency
-* no per-report unit drift
-* deterministic exports
-* no client-side logic
+- deterministic unit behavior
+- no per-report unit drift
+- export consistency
+- simplified client logic
 
-Future versions may support overrides.
+Future versions may support report-specific unit overrides.
 
-Not in MVP.
+This is intentionally disabled in MVP.
 
 ---
 
@@ -120,19 +119,30 @@ disclosure_answer.value_text
 
 Example values:
 
-EUR
-USD
-CZK
+EUR  
+USD  
+CZK  
 
 template_currency itself has:
 
 vsme_datapoint.unit = NULL
 
-It defines reporting currency context.
+It defines **reporting currency context only**.
 
-Other monetary datapoints still have canonical unit:
+Other monetary datapoints still use their canonical unit:
 
 vsme_datapoint.unit = EUR
+
+Example:
+
+Assets → unit EUR  
+Revenue → unit EUR  
+
+Important architectural rule:
+
+vsme_datapoint.unit remains the canonical unit contract.
+
+template_currency defines the **display currency context for the report**, not the canonical datapoint unit.
 
 UI may display:
 
@@ -146,7 +156,9 @@ Important:
 
 Stored numeric values remain unit-agnostic.
 
-Currency context is purely presentation.
+Currency context is purely presentation logic.
+
+Currency does NOT override vsme_datapoint.unit.
 
 ---
 
@@ -154,23 +166,19 @@ Currency context is purely presentation.
 
 Units belong to datapoints.
 
-NOT to questions.
-
-NOT to answers.
-
+NOT to questions.  
+NOT to answers.  
 NOT to reports.
 
 Mapping chain:
 
-vsme_datapoint.id
-→ vsme_datapoint.unit
-→ disclosure_question.vsme_datapoint_id
-→ RPC resolves unit
+vsme_datapoint.id  
+→ vsme_datapoint.unit  
+→ disclosure_question.vsme_datapoint_id  
+→ RPC resolves unit  
 → UI displays unit
 
-This ensures:
-
-consistent unit usage across all reports.
+This guarantees consistent unit usage across reports.
 
 ---
 
@@ -180,13 +188,13 @@ Units must match VSME recommended units.
 
 Examples:
 
-Currency datapoints → EUR
-Water consumption → m3
-Waste mass → kg
-Energy consumption → MWh
-Emissions → tCO2e
-Area → m2
-Count → count
+Currency datapoints → EUR  
+Water consumption → m3  
+Waste mass → kg  
+Energy consumption → MWh  
+Emissions → tCO2e  
+Area → m2  
+Count → count  
 Percentage → %
 
 Unit selection is defined at datapoint level.
@@ -209,9 +217,9 @@ Unit must always come from RPC.
 
 Never inferred from:
 
-question_text
-example_answer
-user input
+- question_text
+- example_answer
+- user input
 
 ---
 
@@ -223,7 +231,7 @@ Display the unit returned from RPC.
 
 Example:
 
-input value: 15000000
+value: 15000000  
 unit: EUR
 
 Display:
@@ -232,10 +240,10 @@ Display:
 
 UI must NOT:
 
-* infer currency
-* derive unit from template_currency directly
-* guess units
-* hardcode units
+- infer currency
+- derive units from template_currency
+- guess units
+- hardcode units
 
 RPC is authoritative.
 
@@ -243,20 +251,18 @@ RPC is authoritative.
 
 # 10. Export Contract (Future XBRL)
 
-Units will map to:
-
-xbrl_unit
+Units will map to XBRL units.
 
 Example mappings:
 
-EUR → iso4217:EUR
-kg → xbrli:kg
-m3 → xbrli:m3
-MWh → custom energy unit mapping
+EUR → iso4217:EUR  
+kg → xbrli:kg  
+m3 → xbrli:m3  
+MWh → custom energy unit mapping  
 
 Correct unit definition is required for valid XBRL export.
 
-This document ensures export compatibility.
+This contract ensures export compatibility.
 
 ---
 
@@ -279,7 +285,7 @@ Audit numeric datapoints without unit:
 
 select id, value_type, unit
 from vsme_datapoint
-where value_type in ('number','numeric','integer')
+where value_type in ('numeric','integer')
 and unit is null;
 
 Expected result:
@@ -292,16 +298,16 @@ Expected result:
 
 Never:
 
-* store unit only in disclosure_question
-* derive unit in UI
-* allow inconsistent units per report
-* change unit per answer
+- store unit only in disclosure_question
+- derive unit in UI
+- allow inconsistent units per report
+- change unit per answer
 
 Always:
 
-* define unit in vsme_datapoint
-* resolve unit via RPC
-* treat vsme_datapoint.unit as canonical
+- define unit in vsme_datapoint
+- resolve unit via RPC
+- treat vsme_datapoint.unit as canonical
 
 ---
 
@@ -323,10 +329,10 @@ Never compute.
 
 This guarantees:
 
-* deterministic reporting
-* correct exports
-* VSME alignment
-* stable architecture
+- deterministic reporting
+- correct exports
+- VSME alignment
+- stable architecture
 
 ---
 

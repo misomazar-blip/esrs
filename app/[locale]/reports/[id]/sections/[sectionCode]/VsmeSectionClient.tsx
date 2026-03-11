@@ -60,6 +60,7 @@ type LocalAnswer = {
 type B1QuestionGroup = {
   id?: string;
   code?: string;
+  group_kind?: string;
   title?: string;
   label?: string;
   name?: string;
@@ -154,6 +155,7 @@ export default function VsmeSectionClient() {
   const sectionCode = typeof params.sectionCode === 'string' ? params.sectionCode : '';
   const normalizedSectionCode = sectionCode.toUpperCase();
   const isB1Section = normalizedSectionCode === 'B1';
+  const isBSection = normalizedSectionCode.startsWith('B');
 
   const currentGroup: SectionGroup = useMemo(() => {
     return resolveSectionGroup(normalizedSectionCode);
@@ -201,6 +203,23 @@ export default function VsmeSectionClient() {
   const [savingById, setSavingById] = useState<Record<string, boolean>>({});
   const [savedAtById, setSavedAtById] = useState<Record<string, number>>({});
   const [errorById, setErrorById] = useState<Record<string, string | null>>({});
+  const [b3EnergyBreakdownNa, setB3EnergyBreakdownNa] = useState(false);
+  const [b3TotalEnergyUserInteracted, setB3TotalEnergyUserInteracted] = useState(false);
+  const [b3EnergyBreakdownValues, setB3EnergyBreakdownValues] = useState<
+    Record<'electricity_purchased' | 'self_generated_electricity' | 'fuels', { renewable: string; nonRenewable: string; total: string }>
+  >({
+    electricity_purchased: { renewable: '', nonRenewable: '', total: '' },
+    self_generated_electricity: { renewable: '', nonRenewable: '', total: '' },
+    fuels: { renewable: '', nonRenewable: '', total: '' },
+  });
+  const b3EnergyBreakdownValuesRef = useRef(b3EnergyBreakdownValues);
+  const b3DetailPersistTimeoutsRef = useRef<
+    Record<'electricity_purchased' | 'self_generated_electricity' | 'fuels', number | null>
+  >({
+    electricity_purchased: null,
+    self_generated_electricity: null,
+    fuels: null,
+  });
   const [reportCurrency, setReportCurrency] = useState<string | null>(null);
   const [scrolledPastThreshold, setScrolledPastThreshold] = useState(false);
   const [footerNavVisible, setFooterNavVisible] = useState(false);
@@ -217,6 +236,42 @@ export default function VsmeSectionClient() {
   useEffect(() => {
     setOpenGroup(currentGroup);
   }, [currentGroup]);
+
+  useEffect(() => {
+    if (normalizedSectionCode !== 'B3') {
+      setB3TotalEnergyUserInteracted(false);
+    }
+  }, [normalizedSectionCode]);
+
+  useEffect(() => {
+    b3EnergyBreakdownValuesRef.current = b3EnergyBreakdownValues;
+  }, [b3EnergyBreakdownValues]);
+
+  useEffect(() => {
+    if (normalizedSectionCode === 'B3') return;
+
+    for (const timeoutId of Object.values(b3DetailPersistTimeoutsRef.current)) {
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId);
+      }
+    }
+
+    b3DetailPersistTimeoutsRef.current = {
+      electricity_purchased: null,
+      self_generated_electricity: null,
+      fuels: null,
+    };
+  }, [normalizedSectionCode]);
+
+  useEffect(() => {
+    return () => {
+      for (const timeoutId of Object.values(b3DetailPersistTimeoutsRef.current)) {
+        if (timeoutId !== null) {
+          window.clearTimeout(timeoutId);
+        }
+      }
+    };
+  }, []);
 
   // Load report header info + all questions (for report-wide stats + sections aggregates)
   useEffect(() => {
@@ -335,7 +390,7 @@ export default function VsmeSectionClient() {
   }, [reportId, sectionCode]);
 
   useEffect(() => {
-    if (!isB1Section) {
+    if (!isBSection) {
       setB1QuestionGroups([]);
       setB1QuestionGroupItems([]);
       setB1InteractionRules([]);
@@ -353,7 +408,7 @@ export default function VsmeSectionClient() {
           .select('*')
           .eq('framework', 'VSME')
           .eq('taxonomy_version', '1.2.0')
-          .eq('section_code', 'B1')
+          .eq('section_code', normalizedSectionCode)
           .order('sort_order', { ascending: true });
 
         if (groupsError) {
@@ -420,7 +475,7 @@ export default function VsmeSectionClient() {
     return () => {
       cancelled = true;
     };
-  }, [isB1Section]);
+  }, [isBSection, normalizedSectionCode]);
 
   // Report-wide stats (NA included in Completed)  ✅
   const reportStats = useMemo(() => {
@@ -578,6 +633,42 @@ export default function VsmeSectionClient() {
     return answersById[templateCurrencyQuestionId]?.value_text ?? null;
   }, [templateCurrencyQuestionId, answersById]);
 
+  useEffect(() => {
+    if (normalizedSectionCode !== 'B3') return;
+
+    const needles = ['energy', 'electricity', 'fuels', 'renewable', 'total'];
+
+    const match = (q: any) => {
+      const code = String(q?.code ?? '').toLowerCase();
+      const dp = String(q?.vsme_datapoint_id ?? '').toLowerCase();
+      return needles.some((n) => code.includes(n) || dp.includes(n));
+    };
+
+    const toDebugRow = (q: any, source: 'sectionQuestions' | 'allQuestions') => ({
+      source,
+      question_id: String(q?.question_id ?? ''),
+      code: String(q?.code ?? ''),
+      vsme_datapoint_id: String(q?.vsme_datapoint_id ?? ''),
+      section_code: String(q?.section_code ?? q?.sectionCode ?? q?.section ?? ''),
+      answer_type: String(q?.answer_type ?? ''),
+    });
+
+    const sectionRows = (sectionQuestions as any[])
+      .filter(match)
+      .map((q) => toDebugRow(q, 'sectionQuestions'));
+
+    const allRows = (allQuestions as any[])
+      .filter((q) =>
+        String(q?.section_code ?? q?.sectionCode ?? q?.section ?? '').toUpperCase() === 'B3'
+      )
+      .filter(match)
+      .map((q) => toDebugRow(q, 'allQuestions'));
+
+    console.group('[B3 energy mapping debug]');
+    console.table([...sectionRows, ...allRows]);
+    console.groupEnd();
+  }, [normalizedSectionCode, sectionQuestions, allQuestions]);
+
   const sectionCompleteness = useMemo(() => {
     const inSection = (allQuestions as any[]).filter((q: any) => {
       const sc = String(q.section_code ?? q.sectionCode ?? q.section ?? '').toUpperCase();
@@ -607,7 +698,7 @@ export default function VsmeSectionClient() {
   }, [allQuestions, normalizedSectionCode]);
 
   const b1GroupedRenderModel = useMemo(() => {
-    if (!isB1Section) return null;
+    if (!isBSection) return null;
 
     const hasMetadata = b1QuestionGroups.length > 0 || b1QuestionGroupItems.length > 0;
     if (!hasMetadata) {
@@ -616,9 +707,11 @@ export default function VsmeSectionClient() {
         grouped: [] as Array<{
           key: string;
           code: string;
+          kind: string;
           title: string;
           questions: VsmeQuestion[];
         }>,
+        consumedQuestionIds: new Set<string>(),
         isQuestionVisible: () => true,
         totalQuestions: 0,
       };
@@ -782,6 +875,7 @@ export default function VsmeSectionClient() {
     const grouped: Array<{
       key: string;
       code: string;
+      kind: string;
       title: string;
       questions: VsmeQuestion[];
     }> = [];
@@ -840,6 +934,7 @@ export default function VsmeSectionClient() {
       grouped.push({
         key: String(group.id ?? group.code ?? `group-${grouped.length + 1}`),
         code: String(group.code ?? ''),
+        kind: String(group.group_kind ?? '').trim().toLowerCase(),
         title: String(group.title ?? group.label ?? group.name ?? group.code ?? 'Group').trim(),
         questions,
       });
@@ -847,14 +942,309 @@ export default function VsmeSectionClient() {
 
     const totalQuestions = grouped.reduce((acc, group) => acc + group.questions.length, 0);
 
-    return { hasMetadata: true, grouped, isQuestionVisible, totalQuestions };
-  }, [isB1Section, sectionQuestions, b1QuestionGroups, b1QuestionGroupItems, b1InteractionRules, answersById]);
+    return { hasMetadata: true, grouped, consumedQuestionIds: shownQuestionIds, isQuestionVisible, totalQuestions };
+  }, [isBSection, sectionQuestions, b1QuestionGroups, b1QuestionGroupItems, b1InteractionRules, answersById]);
+
+  const sectionRenderModel = useMemo(() => {
+    if (!isBSection || !b1GroupedRenderModel?.hasMetadata) {
+      return null;
+    }
+
+    const visibleNonTechnical = sectionQuestions.filter((q: any) => {
+      const questionId = String((q as any)?.question_id ?? '').trim();
+      if (!questionId) return false;
+      const isTechnicalQuestion = b1QuestionGroupItems.some((item: any) => {
+        const itemQuestionId = String(item?.question_id ?? '').trim();
+        const role = String(item?.role ?? '').trim().toLowerCase();
+        return itemQuestionId === questionId && role === 'technical';
+      });
+      if (isTechnicalQuestion) return false;
+      return b1GroupedRenderModel.isQuestionVisible(q);
+    });
+
+    const groupedWithVisibleQuestions = b1GroupedRenderModel.grouped
+      .map((group) => {
+        const visibleQuestions = group.questions.filter((q: any) => b1GroupedRenderModel.isQuestionVisible(q));
+        return { ...group, visibleQuestions };
+      })
+      .filter((group) => group.visibleQuestions.length > 0);
+
+    const consumedIds = new Set<string>();
+    for (const group of groupedWithVisibleQuestions) {
+      for (const q of group.visibleQuestions as any[]) {
+        const questionId = String(q?.question_id ?? '').trim();
+        if (questionId) consumedIds.add(questionId);
+      }
+    }
+
+    const standaloneQuestions = visibleNonTechnical.filter((q: any) => {
+      const questionId = String((q as any)?.question_id ?? '').trim();
+      return questionId && !consumedIds.has(questionId);
+    });
+
+    const totalVisible = groupedWithVisibleQuestions.reduce((acc, group) => acc + group.visibleQuestions.length, 0) + standaloneQuestions.length;
+
+    return {
+      grouped: groupedWithVisibleQuestions,
+      consumedIds,
+      standaloneQuestions,
+      totalVisible,
+    };
+  }, [isBSection, b1GroupedRenderModel, sectionQuestions, b1QuestionGroupItems]);
+
+  const b3ComputedTotalsModel = useMemo(() => {
+    if (normalizedSectionCode !== 'B3') {
+      return {
+        hiddenQuestionIds: new Set<string>(),
+        location: null as null | { questionId: string; title: string; value: number | null; unit: string },
+        market: null as null | { questionId: string; title: string; value: number | null; unit: string },
+      };
+    }
+
+    const byCode = new Map<string, any>();
+    for (const q of sectionQuestions as any[]) {
+      const code = String(q?.code ?? '').trim().toUpperCase();
+      if (code) byCode.set(code, q);
+    }
+
+    const sourceCodes = {
+      scope1: 'GROSSSCOPE1GREENHOUSEGASEMISSIONS',
+      scope2Location: 'GROSSLOCATIONBASEDSCOPE2GREENHOUSEGASEMISSIONS',
+      scope2Market: 'GROSSMARKETBASEDSCOPE2GREENHOUSEGASEMISSIONS',
+    } as const;
+
+    const totalCodes = {
+      location: 'TOTALGROSSLOCATIONBASEDSCOPE1ANDSCOPE2GHGEMISSIONS',
+      market: 'TOTALGROSSMARKETBASEDSCOPE1ANDSCOPE2GHGEMISSIONS',
+    } as const;
+
+    const getNumericValue = (q: any): number | null => {
+      if (!q) return null;
+      const questionId = String(q?.question_id ?? '').trim();
+      if (!questionId) return null;
+
+      const local = answersById[questionId] ?? {};
+      const isNa = local.na === true || q?.value_jsonb?.na === true;
+      if (isNa) return null;
+
+      const raw = local.value_numeric !== undefined && local.value_numeric !== ''
+        ? local.value_numeric
+        : q?.value_numeric;
+      if (raw === undefined || raw === null || String(raw).trim() === '') return null;
+
+      const parsed = Number(raw);
+      return Number.isFinite(parsed) ? parsed : null;
+    };
+
+    const resolveDisplayUnit = (q: any): string => {
+      const unit = String(q?.unit ?? '').trim().toUpperCase();
+      if (!unit) return '';
+      return CURRENCY_UNITS.includes(unit as (typeof CURRENCY_UNITS)[number]) ? reportCurrency ?? unit : unit;
+    };
+
+    const scope1 = getNumericValue(byCode.get(sourceCodes.scope1));
+    const scope2Location = getNumericValue(byCode.get(sourceCodes.scope2Location));
+    const scope2Market = getNumericValue(byCode.get(sourceCodes.scope2Market));
+
+    const locationTotalQuestion = byCode.get(totalCodes.location);
+    const marketTotalQuestion = byCode.get(totalCodes.market);
+
+    const hiddenQuestionIds = new Set<string>();
+
+    const location = locationTotalQuestion
+      ? {
+          questionId: String(locationTotalQuestion?.question_id ?? '').trim(),
+          title: String(locationTotalQuestion?.question_text ?? locationTotalQuestion?.title ?? 'Total Scope 1 + Scope 2 (location-based)'),
+          value: scope1 !== null && scope2Location !== null ? scope1 + scope2Location : null,
+          unit: resolveDisplayUnit(locationTotalQuestion),
+        }
+      : null;
+
+    const market = marketTotalQuestion
+      ? {
+          questionId: String(marketTotalQuestion?.question_id ?? '').trim(),
+          title: String(marketTotalQuestion?.question_text ?? marketTotalQuestion?.title ?? 'Total Scope 1 + Scope 2 (market-based)'),
+          value: scope1 !== null && scope2Market !== null ? scope1 + scope2Market : null,
+          unit: resolveDisplayUnit(marketTotalQuestion),
+        }
+      : null;
+
+    return { hiddenQuestionIds, location, market };
+  }, [normalizedSectionCode, sectionQuestions, answersById, reportCurrency]);
 
   const displayedQuestionCount = useMemo(() => {
-    if (!isB1Section) return sectionQuestions.length;
+    if (!isBSection) return sectionQuestions.length;
     if (!b1GroupedRenderModel?.hasMetadata) return sectionQuestions.length;
-    return b1GroupedRenderModel.totalQuestions;
-  }, [isB1Section, sectionQuestions.length, b1GroupedRenderModel]);
+    const hiddenCount = b3ComputedTotalsModel.hiddenQuestionIds.size;
+    const computedCount = 0;
+    const baseVisible = sectionRenderModel?.totalVisible ?? b1GroupedRenderModel.totalQuestions;
+    return Math.max(0, baseVisible - hiddenCount + computedCount);
+  }, [isBSection, sectionQuestions.length, b1GroupedRenderModel, sectionRenderModel, b3ComputedTotalsModel]);
+
+  const b3RenderPlan = useMemo(() => {
+    if (normalizedSectionCode !== 'B3' || !sectionRenderModel) return null;
+
+    const normalizeCode = (value: unknown) => String(value ?? '').trim().toUpperCase();
+    const hiddenQuestionIds = b3ComputedTotalsModel.hiddenQuestionIds;
+
+    type B3VisibleGroup = {
+      key: string;
+      code: string;
+      kind: string;
+      title: string;
+      visibleQuestions: any[];
+    };
+
+    const visibleGroups: B3VisibleGroup[] = sectionRenderModel.grouped
+      .map((group) => {
+        const visibleQuestions = group.visibleQuestions.filter((q: any) => {
+          const questionId = String((q as any)?.question_id ?? '').trim();
+          return !hiddenQuestionIds.has(questionId);
+        });
+        return { ...group, visibleQuestions };
+      })
+      .filter((group) => group.visibleQuestions.length > 0);
+
+    const visibleStandalone = sectionRenderModel.standaloneQuestions.filter((q: any) => {
+      const questionId = String((q as any)?.question_id ?? '').trim();
+      return !hiddenQuestionIds.has(questionId);
+    });
+
+    const groupsByCode = new Map<string, B3VisibleGroup>();
+    for (const group of visibleGroups) {
+      const code = normalizeCode((group as any)?.code);
+      if (code) groupsByCode.set(code, group);
+    }
+
+    const standaloneByCode = new Map<string, any>();
+    for (const q of visibleStandalone as any[]) {
+      const code = normalizeCode(q?.code);
+      if (code) standaloneByCode.set(code, q);
+    }
+
+    const consumedGroupCodes = new Set<string>();
+    const consumedQuestionIds = new Set<string>();
+
+    const consumeQuestion = (q: any) => {
+      const questionId = String(q?.question_id ?? '').trim();
+      if (questionId) consumedQuestionIds.add(questionId);
+      return q;
+    };
+
+    const consumeGroupByCode = (groupCode: string) => {
+      const normalizedGroupCode = normalizeCode(groupCode);
+      const group = groupsByCode.get(normalizedGroupCode);
+      if (!group) return null;
+      consumedGroupCodes.add(normalizedGroupCode);
+      for (const q of group.visibleQuestions as any[]) {
+        const questionId = String(q?.question_id ?? '').trim();
+        if (questionId) consumedQuestionIds.add(questionId);
+      }
+      return group;
+    };
+
+    const plan: Array<
+      | { kind: 'energy'; key: string; totalEnergyQuestion: any | null }
+      | { kind: 'question'; key: string; question: any }
+      | { kind: 'group'; key: string; group: B3VisibleGroup }
+      | {
+          kind: 'emissions-group';
+          key: string;
+          scope1Question: any | null;
+          scope2Group: B3VisibleGroup | null;
+          totalGroup: B3VisibleGroup | null;
+        }
+      | { kind: 'computed-total-pair'; key: string; title: string; group: B3VisibleGroup }
+    > = [];
+
+    const totalEnergyQuestion = standaloneByCode.get('TOTALENERGYCONSUMPTION');
+    if (totalEnergyQuestion) {
+      consumeQuestion(totalEnergyQuestion);
+    }
+
+    plan.push({
+      kind: 'energy',
+      key: 'b3-energy-block',
+      totalEnergyQuestion: totalEnergyQuestion ?? null,
+    });
+
+    const scope1Question = standaloneByCode.get('GROSSSCOPE1GREENHOUSEGASEMISSIONS');
+    const scope2Group = consumeGroupByCode('SCOPE2_EMISSIONS');
+    const totalScope12Group = groupsByCode.get('TOTAL_SCOPE12_EMISSIONS');
+
+    if (scope1Question || scope2Group || totalScope12Group) {
+      if (scope1Question) {
+        consumeQuestion(scope1Question);
+      }
+
+      if (totalScope12Group) {
+        consumedGroupCodes.add('TOTAL_SCOPE12_EMISSIONS');
+        for (const q of totalScope12Group.visibleQuestions as any[]) {
+          const questionId = String(q?.question_id ?? '').trim();
+          if (questionId) consumedQuestionIds.add(questionId);
+        }
+      }
+
+      plan.push({
+        kind: 'emissions-group',
+        key: 'b3-emissions-group',
+        scope1Question: scope1Question ?? null,
+        scope2Group: scope2Group ?? null,
+        totalGroup: totalScope12Group ?? null,
+      });
+    }
+
+    const ghgTargetYearsGroup = consumeGroupByCode('GHG_TARGET_YEARS');
+    if (ghgTargetYearsGroup) {
+      plan.push({ kind: 'group', key: 'b3-ghg-target-years-group', group: ghgTargetYearsGroup });
+    }
+
+    const totalGhgIntensityGroup = consumeGroupByCode('TOTAL_GHG_INTENSITY');
+    if (totalGhgIntensityGroup) {
+      plan.push({ kind: 'group', key: 'b3-total-ghg-intensity-group', group: totalGhgIntensityGroup });
+    }
+
+    for (const group of visibleGroups) {
+      const groupCode = normalizeCode((group as any)?.code);
+      if (!groupCode || consumedGroupCodes.has(groupCode)) continue;
+      plan.push({ kind: 'group', key: `b3-group-${groupCode}`, group });
+      consumedGroupCodes.add(groupCode);
+      for (const q of group.visibleQuestions as any[]) {
+        const questionId = String(q?.question_id ?? '').trim();
+        if (questionId) consumedQuestionIds.add(questionId);
+      }
+    }
+
+    for (const q of visibleStandalone as any[]) {
+      const questionId = String(q?.question_id ?? '').trim();
+      if (!questionId || consumedQuestionIds.has(questionId)) continue;
+      plan.push({ kind: 'question', key: `b3-question-${questionId}`, question: q });
+      consumedQuestionIds.add(questionId);
+    }
+
+    return { plan };
+  }, [normalizedSectionCode, sectionRenderModel, b3ComputedTotalsModel]);
+
+  const b3QuestionsByDatapoint = useMemo(() => {
+    const map = new Map<string, any>();
+    if (normalizedSectionCode !== 'B3') return map;
+
+    const normalizeDp = (value: unknown) => String(value ?? '').trim().toUpperCase();
+
+    for (const q of sectionQuestions as any[]) {
+      const dp = normalizeDp(q?.vsme_datapoint_id);
+      if (dp && !map.has(dp)) map.set(dp, q);
+    }
+
+    for (const q of allQuestions as any[]) {
+      const sc = String(q?.section_code ?? q?.sectionCode ?? q?.section ?? '').trim().toUpperCase();
+      if (sc !== 'B3') continue;
+      const dp = normalizeDp(q?.vsme_datapoint_id);
+      if (dp && !map.has(dp)) map.set(dp, q);
+    }
+
+    return map;
+  }, [normalizedSectionCode, sectionQuestions, allQuestions]);
 
   useEffect(() => {
     if (!reportId) return;
@@ -910,6 +1300,65 @@ export default function VsmeSectionClient() {
     };
   }, [reportId, templateCurrencyValue, normalizeCurrency]);
 
+  const clearAnswer = async (questionId: string) => {
+    if (!reportId) return;
+
+    setSavingById((prev) => ({ ...prev, [questionId]: true }));
+    setErrorById((prev) => ({ ...prev, [questionId]: null }));
+
+    try {
+      const supabase = createSupabaseBrowserClient();
+      const { error: deleteError } = await supabase
+        .from('disclosure_answer')
+        .delete()
+        .eq('report_id', reportId)
+        .eq('question_id', questionId);
+      if (deleteError) throw deleteError;
+
+      setAnswersById((prev) => ({
+        ...prev,
+        [questionId]: {
+          ...(prev[questionId] ?? {}),
+          value_text: '',
+          value_numeric: '',
+          value_date: '',
+          value_boolean: null,
+          na: false,
+        },
+      }));
+      setAllQuestions((prev) =>
+        prev.map((q: any) => {
+          if (String(q?.question_id ?? '') !== questionId) return q;
+          const currentJson = (q?.value_jsonb ?? {}) as any;
+          const nextJson = { ...currentJson };
+          delete nextJson.na;
+          return {
+            ...q,
+            value_text: '',
+            value_numeric: '',
+            value_date: '',
+            value_boolean: null,
+            value_jsonb: Object.keys(nextJson).length > 0 ? nextJson : {},
+          };
+        }),
+      );
+      await refreshCta();
+      setSavingById((prev) => ({ ...prev, [questionId]: false }));
+      setSavedAtById((prev) => ({ ...prev, [questionId]: Date.now() }));
+      setTimeout(() => {
+        setSavedAtById((prev) => {
+          if ((prev[questionId] ?? 0) === 0) return prev;
+          const next = { ...prev };
+          if (Date.now() - (next[questionId] ?? 0) >= 1500) delete next[questionId];
+          return next;
+        });
+      }, 1500);
+    } catch (e: any) {
+      setSavingById((prev) => ({ ...prev, [questionId]: false }));
+      setErrorById((prev) => ({ ...prev, [questionId]: e?.message ?? 'Clear failed' }));
+    }
+  };
+
   const saveAnswer = async (questionId: string, answerType: string, value: string | boolean | undefined) => {
     if (!reportId) return;
 
@@ -918,9 +1367,14 @@ export default function VsmeSectionClient() {
 
     const supabase = createSupabaseBrowserClient();
     const t = String(answerType ?? '').toLowerCase();
+    const isNumericType = t === 'number' || t === 'integer' || t === 'numeric';
+    const isEmptyNumericValue =
+      value === undefined ||
+      value === null ||
+      (typeof value === 'string' && value.trim() === '');
 
     try {
-      if (value === undefined || value === '') {
+      if (!isNumericType && (value === undefined || value === '')) {
         const { error: deleteError } = await supabase
           .from('disclosure_answer')
           .delete()
@@ -985,8 +1439,10 @@ export default function VsmeSectionClient() {
         value_jsonb: Object.keys(nextValueJsonb).length > 0 ? nextValueJsonb : {},
       };
 
-      if (t === 'number' || t === 'integer' || t === 'numeric') {
-        payload.value_numeric = Number(value);
+      if (isNumericType) {
+        if (!isEmptyNumericValue) {
+          payload.value_numeric = Number(value);
+        }
       } else if (t === 'boolean') {
         payload.value_boolean = typeof value === 'boolean' ? value : String(value).trim().toLowerCase() === 'true';
       } else if (t === 'date') {
@@ -1011,8 +1467,10 @@ export default function VsmeSectionClient() {
           na: false,
         };
 
-        if (t === 'number' || t === 'integer' || t === 'numeric') {
-          next.value_numeric = String(value);
+        if (isNumericType) {
+          if (!isEmptyNumericValue) {
+            next.value_numeric = String(value);
+          }
         } else if (t === 'boolean') {
           next.value_boolean = typeof value === 'boolean' ? value : String(value).trim().toLowerCase() === 'true';
         } else if (t === 'date') {
@@ -1045,8 +1503,10 @@ export default function VsmeSectionClient() {
             value_jsonb: Object.keys(nextJson).length > 0 ? nextJson : {},
           };
 
-          if (t === 'number' || t === 'integer' || t === 'numeric') {
-            nextRow.value_numeric = Number(value);
+          if (isNumericType) {
+            if (!isEmptyNumericValue) {
+              nextRow.value_numeric = Number(value);
+            }
           } else if (t === 'boolean') {
             nextRow.value_boolean = typeof value === 'boolean' ? value : String(value).trim().toLowerCase() === 'true';
           } else if (t === 'date') {
@@ -1351,7 +1811,16 @@ export default function VsmeSectionClient() {
   const targetSectionCode = String(cta?.continue_section_code || cta?.suggested_section_code || '').toUpperCase();
   const targetSectionTitle = VSME_SECTION_META[targetSectionCode]?.title || targetSectionCode;
 
-  const renderQuestionCard = (q: any, idx: number, total: number) => {
+  const renderQuestionCard = (
+    q: any,
+    idx: number,
+    total: number,
+    mode: 'full' | 'compact' = 'full',
+    options?: { hideTopRow?: boolean; hideQuestionTitle?: boolean },
+  ) => {
+    const isCompact = mode === 'compact';
+    const hideTopRow = options?.hideTopRow === true;
+    const hideQuestionTitle = options?.hideQuestionTitle === true;
     const questionId = String(q.question_id ?? '');
     const t = String(q.answer_type ?? '').toLowerCase();
     const a = answersById[questionId] ?? {};
@@ -1365,9 +1834,10 @@ export default function VsmeSectionClient() {
     const isPrefilledFromCompanyProfile = String(q?.value_jsonb?.source ?? '') === 'company_profile';
     const unit = String(q.unit ?? '').trim().toUpperCase();
     const isNumeric = t === 'number' || t === 'integer' || t === 'numeric';
-    const displayUnit = isNumeric
+    const rawDisplayUnit = isNumeric
       ? (CURRENCY_UNITS.includes(unit as (typeof CURRENCY_UNITS)[number]) ? reportCurrency ?? unit : unit)
       : '';
+    const displayUnit = rawDisplayUnit.toUpperCase() === 'MWH' ? 'MWh' : rawDisplayUnit;
     const baseText = q.question_text ?? q.title ?? 'Untitled question';
 
     let renderedQuestionText = baseText;
@@ -1396,35 +1866,40 @@ export default function VsmeSectionClient() {
       <li
         key={questionId}
         className={[
-          'rounded-lg shadow',
-          'border border-gray-200',
-          'border-l-4',
-          isNa ? 'border-l-slate-300 bg-slate-50 text-slate-500' : 'border-l-blue-500 bg-white text-gray-900',
-          'p-4 transition-colors',
+          isCompact ? 'h-full flex flex-col p-2 transition-colors' : 'rounded-lg shadow border border-gray-200 border-l-4 p-4 transition-colors',
+          isCompact
+            ? (isNa ? 'text-slate-500' : 'text-gray-900')
+            : (isNa ? 'border-l-slate-300 bg-slate-50 text-slate-500' : 'border-l-blue-500 bg-white text-gray-900'),
         ].join(' ')}
       >
-        <div className="flex items-center justify-between gap-4 pb-2 border-b border-slate-100">
-          <div className="text-[11px] text-gray-400">
-            {idx + 1} / {total}
+        {!hideTopRow ? (
+          <div className={isCompact ? 'flex items-center justify-between gap-4' : 'flex items-center justify-between gap-4 pb-2 border-b border-slate-100'}>
+            {isCompact ? <div /> : (
+              <div className="text-[11px] text-gray-400">
+                {idx + 1} / {total}
+              </div>
+            )}
+            <label className="flex items-center gap-3 shrink-0 select-none cursor-pointer bg-slate-50 rounded-full px-3 py-1">
+              <span className="text-xs text-slate-600">Not applicable</span>
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  checked={isNa}
+                  onChange={(e) => void toggleNA(questionId, e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-10 h-5 bg-gray-300 peer-checked:bg-gray-400 rounded-full transition-colors" />
+                <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5" />
+              </div>
+            </label>
           </div>
-          <label className="flex items-center gap-3 shrink-0 select-none cursor-pointer bg-slate-50 rounded-full px-3 py-1">
-            <span className="text-xs text-slate-600">Not applicable</span>
-            <div className="relative">
-              <input
-                type="checkbox"
-                checked={isNa}
-                onChange={(e) => void toggleNA(questionId, e.target.checked)}
-                className="sr-only peer"
-              />
-              <div className="w-10 h-5 bg-gray-300 peer-checked:bg-gray-400 rounded-full transition-colors" />
-              <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5" />
-            </div>
-          </label>
-        </div>
+        ) : null}
 
-        <div className={["mt-2 text-base font-semibold", isNa ? 'text-slate-600' : 'text-gray-900'].join(' ')}>
-          {renderedQuestionText}
-        </div>
+        {!hideQuestionTitle ? (
+          <div className={[isCompact ? 'mt-2 text-sm font-semibold' : 'mt-2 text-base font-semibold', isNa ? 'text-slate-600' : 'text-gray-900'].join(' ')}>
+            {renderedQuestionText}
+          </div>
+        ) : null}
         {guidanceText ? (
           <div className={["mt-1 text-sm leading-relaxed", isNa ? 'text-slate-500' : 'text-slate-600'].join(' ')}>{guidanceText}</div>
         ) : null}
@@ -1432,7 +1907,7 @@ export default function VsmeSectionClient() {
         {isNa ? (
           <div className="mt-2 text-xs text-slate-500">Marked as Not applicable (answer preserved)</div>
         ) : (
-          <>
+          <div className={isCompact ? 'mt-auto' : ''}>
             {(t === 'text' || t === 'string') && !isEnumText && (
               <div className="mt-2">
                 <input
@@ -1487,6 +1962,12 @@ export default function VsmeSectionClient() {
                   value={a.value_numeric ?? ''}
                   onChange={(e) => {
                     const v = e.target.value;
+                    if (
+                      normalizedSectionCode === 'B3' &&
+                      String(q?.code ?? '').trim().toUpperCase() === 'TOTALENERGYCONSUMPTION'
+                    ) {
+                      setB3TotalEnergyUserInteracted(true);
+                    }
                     setAnswersById((prev) => ({
                       ...prev,
                       [questionId]: { ...(prev[questionId] ?? {}), value_numeric: v },
@@ -1566,7 +2047,7 @@ export default function VsmeSectionClient() {
               </div>
             )}
 
-            {isPrefilledFromCompanyProfile ? (
+            {isPrefilledFromCompanyProfile && !isCompact ? (
               <div className="mt-1 text-xs text-gray-400">Prefilled from company profile</div>
             ) : null}
 
@@ -1575,7 +2056,7 @@ export default function VsmeSectionClient() {
               {!isSaving && saveError ? <span className="text-red-600">Not saved</span> : null}
               {!isSaving && !saveError && recentlySaved ? <span className="text-emerald-600">Saved</span> : null}
             </div>
-          </>
+          </div>
         )}
       </li>
     );
@@ -1775,44 +2256,832 @@ export default function VsmeSectionClient() {
           </div>
         ) : (
           <>
-            {isB1Section && b1GroupedRenderModel?.hasMetadata ? (
+            {isBSection && b1GroupedRenderModel?.hasMetadata && sectionRenderModel ? (
               <div className="space-y-8">
                 {(() => {
-                  const visibleGroups = b1GroupedRenderModel.grouped.map((group) => {
-                    const visibleQuestions = group.questions.filter((q: any) => b1GroupedRenderModel.isQuestionVisible(q));
-                    return { ...group, visibleQuestions };
-                  });
-
-                  let runningIndex = 0;
-                  const total = visibleGroups.reduce((acc, group) => acc + group.visibleQuestions.length, 0);
-
-                  return visibleGroups.map((group) => {
-                    const startIndex = runningIndex;
-                    runningIndex += group.visibleQuestions.length;
+                  const renderGroup = (group: any, startIndex: number, total: number) => {
+                    const isPairGroup = group.kind === 'pair';
+                    const shouldRenderPairLayout = isPairGroup && group.visibleQuestions.length >= 2;
 
                     return (
                       <div key={group.key} className="space-y-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
                         <div className="px-1 pb-2 text-base font-semibold text-gray-900 border-b border-gray-100">{group.title}</div>
-                        <ul className="space-y-2">
-                          {group.visibleQuestions.map((q: any, idx: number) => {
-                            const questionId = String((q as any)?.question_id ?? '').trim();
-
-                            return (
-                              <div key={`${questionId || idx}-wrap`}>
-                                {renderQuestionCard(q, startIndex + idx, total)}
-                              </div>
-                            );
-                          })}
-                        </ul>
+                        {shouldRenderPairLayout ? (
+                          <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 items-stretch">
+                            {group.visibleQuestions.map((q: any, idx: number) => {
+                              const questionId = String((q as any)?.question_id ?? '').trim();
+                              return (
+                                <div key={`${questionId || idx}-pair`} className="h-full">
+                                  {renderQuestionCard(q, startIndex + idx, total, 'compact')}
+                                </div>
+                              );
+                            })}
+                          </ul>
+                        ) : (
+                          <ul className="space-y-2">
+                            {group.visibleQuestions.map((q: any, idx: number) => {
+                              const questionId = String((q as any)?.question_id ?? '').trim();
+                              return (
+                                <div key={`${questionId || idx}-wrap`}>
+                                  {renderQuestionCard(q, startIndex + idx, total)}
+                                </div>
+                              );
+                            })}
+                          </ul>
+                        )}
                       </div>
                     );
+                  };
+
+                  if (normalizedSectionCode === 'B3' && b3RenderPlan) {
+                    const formatB3ComputedLabel = (raw: string) => {
+                      const text = String(raw ?? '').trim();
+                      if (!text) return text;
+
+                      const mostlyUppercase = text === text.toUpperCase();
+                      if (!mostlyUppercase) return text;
+
+                      const lower = text.toLowerCase();
+                      const sentence = lower.charAt(0).toUpperCase() + lower.slice(1);
+                      return sentence
+                        .replace(/\bscope\b/g, 'Scope')
+                        .replace(/\bghg\b/g, 'GHG')
+                        .replace(/\bco2e\b/g, 'CO2e');
+                    };
+
+                    const total = b3RenderPlan.plan.reduce((acc: number, block: any) => {
+                      if (block.kind === 'group') return acc + (block.group?.visibleQuestions?.length ?? 0);
+                      if (block.kind === 'question') return acc + 1;
+                      if (block.kind === 'energy' && block.totalEnergyQuestion) return acc + 1;
+                      if (block.kind === 'computed-total-pair') return acc + 2;
+                      return acc;
+                    }, 0);
+
+                    let runningIndex = 0;
+
+                    return b3RenderPlan.plan.map((block: any) => {
+                      if (block.kind === 'energy') {
+                        const totalEnergyQuestion = block.totalEnergyQuestion;
+                        const sectionStart = runningIndex;
+                        const breakdownRows = [
+                          { key: 'electricity_purchased', label: 'Electricity purchased' },
+                          { key: 'self_generated_electricity', label: 'Self-generated electricity' },
+                          { key: 'fuels', label: 'Fuels' },
+                        ] as const;
+                        console.debug('[B3 energy debug] breakdownRows', breakdownRows.map((r) => r.key));
+
+                        const parseBreakdownNumber = (raw: string): number | null => {
+                          const trimmed = String(raw ?? '').trim();
+                          if (!trimmed) return null;
+                          const parsed = Number(trimmed);
+                          return Number.isFinite(parsed) ? parsed : null;
+                        };
+
+                        const persistByDatapoint = async (
+                          datapointId: string,
+                          value: string,
+                          options?: {
+                            forceText?: boolean;
+                            debugContext?: {
+                              source: 'persistDetailRow' | 'persistRowTotalBlur';
+                              rowKey: 'electricity_purchased' | 'self_generated_electricity' | 'fuels';
+                              field?: 'renewable' | 'nonRenewable' | 'total';
+                            };
+                          },
+                        ) => {
+                          const key = String(datapointId ?? '').trim().toUpperCase();
+                          if (!key) return;
+                          const q = b3QuestionsByDatapoint.get(key);
+                          if (!q) return;
+                          const questionId = String(q?.question_id ?? '').trim();
+                          if (!questionId) return;
+                          if (String(value ?? '').trim() === '') {
+                            console.debug('[B3 energy clearByDatapoint]', {
+                              context: options?.debugContext ?? null,
+                              datapointId,
+                              question_id: questionId,
+                            });
+                            await clearAnswer(questionId);
+                            return;
+                          }
+                          const answerType = options?.forceText ? 'text' : String(q?.answer_type ?? 'number');
+                          console.debug('[B3 energy persistByDatapoint]', {
+                            context: options?.debugContext ?? null,
+                            datapointId,
+                            question_id: questionId,
+                            answer_type: answerType,
+                            value,
+                          });
+                          await saveAnswer(questionId, answerType, value);
+                        };
+
+                        const datapointMapping = {
+                          electricity_purchased: {
+                            renewable: 'EnergyConsumptionFromElectricity_RenewableEnergyMember',
+                            nonRenewable: 'EnergyConsumptionFromElectricity_NonRenewableEnergyMember',
+                            total: 'EnergyConsumptionFromElectricity',
+                          },
+                          self_generated_electricity: {
+                            renewable: 'EnergyConsumptionFromSelfGeneratedElectricity_RenewableEnergyMember',
+                            nonRenewable: 'EnergyConsumptionFromSelfGeneratedElectricity_NonRenewableEnergyMember',
+                            total: 'EnergyConsumptionFromSelfGeneratedElectricity',
+                          },
+                          fuels: {
+                            renewable: 'EnergyConsumptionFromFuels_RenewableEnergyMember',
+                            nonRenewable: 'EnergyConsumptionFromFuels_NonRenewableEnergyMember',
+                            total: 'EnergyConsumptionFromFuels',
+                          },
+                        } as const;
+
+                        const getRowComputedTotal = (
+                          snapshot: Record<'electricity_purchased' | 'self_generated_electricity' | 'fuels', { renewable: string; nonRenewable: string; total: string }>,
+                          rowKey: 'electricity_purchased' | 'self_generated_electricity' | 'fuels',
+                        ): number | null => {
+                          const current = snapshot[rowKey];
+                          const renewable = parseBreakdownNumber(current.renewable);
+                          const nonRenewable = parseBreakdownNumber(current.nonRenewable);
+                          const enteredTotal = parseBreakdownNumber(current.total);
+                          const isRowDetailMode = renewable !== null || nonRenewable !== null;
+                          const isRowTotalMode = !isRowDetailMode && enteredTotal !== null;
+                          if (isRowDetailMode) return (renewable ?? 0) + (nonRenewable ?? 0);
+                          if (isRowTotalMode) return enteredTotal;
+                          return null;
+                        };
+
+                        const getGrandTotal = (
+                          snapshot: Record<'electricity_purchased' | 'self_generated_electricity' | 'fuels', { renewable: string; nonRenewable: string; total: string }>,
+                        ): number | null => {
+                          const keys: Array<'electricity_purchased' | 'self_generated_electricity' | 'fuels'> = [
+                            'electricity_purchased',
+                            'self_generated_electricity',
+                            'fuels',
+                          ];
+                          let acc = 0;
+                          let hasAny = false;
+                          for (const key of keys) {
+                            const rowTotal = getRowComputedTotal(snapshot, key);
+                            if (rowTotal !== null) {
+                              hasAny = true;
+                              acc += rowTotal;
+                            }
+                          }
+                          return hasAny ? acc : null;
+                        };
+
+                        const clearScheduledPersistDetailRow = (
+                          rowKey: 'electricity_purchased' | 'self_generated_electricity' | 'fuels',
+                        ) => {
+                          const timeoutId = b3DetailPersistTimeoutsRef.current[rowKey];
+                          if (timeoutId !== null) {
+                            window.clearTimeout(timeoutId);
+                            b3DetailPersistTimeoutsRef.current[rowKey] = null;
+                          }
+                        };
+
+                        const persistDetailRow = async (
+                          rowKey: 'electricity_purchased' | 'self_generated_electricity' | 'fuels',
+                        ) => {
+                          const snapshot = b3EnergyBreakdownValuesRef.current;
+                          const current = snapshot[rowKey];
+                          const mapping = datapointMapping[rowKey];
+                          const isDetailRowCleared =
+                            String(current.renewable ?? '').trim() === '' &&
+                            String(current.nonRenewable ?? '').trim() === '';
+                          const rowTotal = getRowComputedTotal(snapshot, rowKey);
+                          const grandTotal = getGrandTotal(snapshot);
+
+                          console.debug('[B3 energy persistDetailRow]', {
+                            rowKey,
+                            current,
+                            mapping,
+                            rowTotal,
+                            grandTotal,
+                          });
+
+                          if (isDetailRowCleared) {
+                            await persistByDatapoint(mapping.renewable, '', {
+                              forceText: true,
+                              debugContext: { source: 'persistDetailRow', rowKey, field: 'renewable' },
+                            });
+                            await persistByDatapoint(mapping.nonRenewable, '', {
+                              forceText: true,
+                              debugContext: { source: 'persistDetailRow', rowKey, field: 'nonRenewable' },
+                            });
+                            await persistByDatapoint(mapping.total, '', {
+                              debugContext: { source: 'persistDetailRow', rowKey, field: 'total' },
+                            });
+                            await persistByDatapoint('TotalEnergyConsumption', grandTotal !== null ? String(grandTotal) : '', {
+                              debugContext: { source: 'persistDetailRow', rowKey, field: 'total' },
+                            });
+                            return;
+                          }
+
+                          await persistByDatapoint(mapping.renewable, String(current.renewable ?? ''), {
+                            forceText: true,
+                            debugContext: { source: 'persistDetailRow', rowKey, field: 'renewable' },
+                          });
+                          await persistByDatapoint(mapping.nonRenewable, String(current.nonRenewable ?? ''), {
+                            forceText: true,
+                            debugContext: { source: 'persistDetailRow', rowKey, field: 'nonRenewable' },
+                          });
+                          await persistByDatapoint(mapping.total, rowTotal !== null ? String(rowTotal) : '', {
+                            debugContext: { source: 'persistDetailRow', rowKey, field: 'total' },
+                          });
+                          await persistByDatapoint('TotalEnergyConsumption', grandTotal !== null ? String(grandTotal) : '', {
+                            debugContext: { source: 'persistDetailRow', rowKey, field: 'total' },
+                          });
+                        };
+
+                        const schedulePersistDetailRow = (
+                          rowKey: 'electricity_purchased' | 'self_generated_electricity' | 'fuels',
+                        ) => {
+                          clearScheduledPersistDetailRow(rowKey);
+                          b3DetailPersistTimeoutsRef.current[rowKey] = window.setTimeout(() => {
+                            b3DetailPersistTimeoutsRef.current[rowKey] = null;
+                            void persistDetailRow(rowKey);
+                          }, 350);
+                        };
+
+                        const persistRowTotalBlur = async (
+                          rowKey: 'electricity_purchased' | 'self_generated_electricity' | 'fuels',
+                          editedValue: string,
+                        ) => {
+                          const currentValues = b3EnergyBreakdownValuesRef.current;
+                          const current = currentValues[rowKey];
+                          const nextRow = {
+                            ...current,
+                            total: editedValue,
+                            renewable: editedValue !== '' ? '' : current.renewable,
+                            nonRenewable: editedValue !== '' ? '' : current.nonRenewable,
+                          };
+                          const snapshot = {
+                            ...currentValues,
+                            [rowKey]: nextRow,
+                          };
+
+                          const mapping = datapointMapping[rowKey];
+                          const rowTotal = getRowComputedTotal(snapshot, rowKey);
+                          const grandTotal = getGrandTotal(snapshot);
+
+                          console.debug('[B3 energy persistRowTotalBlur]', {
+                            rowKey,
+                            editedValue,
+                            nextRow,
+                            mapping,
+                            rowTotal,
+                            grandTotal,
+                          });
+
+                          await persistByDatapoint(mapping.total, rowTotal !== null ? String(rowTotal) : '', {
+                            debugContext: { source: 'persistRowTotalBlur', rowKey, field: 'total' },
+                          });
+                          await persistByDatapoint(mapping.renewable, String(nextRow.renewable ?? ''), {
+                            forceText: true,
+                            debugContext: { source: 'persistRowTotalBlur', rowKey, field: 'renewable' },
+                          });
+                          await persistByDatapoint(mapping.nonRenewable, String(nextRow.nonRenewable ?? ''), {
+                            forceText: true,
+                            debugContext: { source: 'persistRowTotalBlur', rowKey, field: 'nonRenewable' },
+                          });
+                          await persistByDatapoint('TotalEnergyConsumption', grandTotal !== null ? String(grandTotal) : '', {
+                            debugContext: { source: 'persistRowTotalBlur', rowKey, field: 'total' },
+                          });
+                        };
+
+                        const rowValues = breakdownRows.map((row) => {
+                          const current = b3EnergyBreakdownValues[row.key];
+                          const renewable = parseBreakdownNumber(current.renewable);
+                          const nonRenewable = parseBreakdownNumber(current.nonRenewable);
+                          const enteredTotal = parseBreakdownNumber(current.total);
+                          const isRowDetailMode = renewable !== null || nonRenewable !== null;
+                          const isRowTotalMode = !isRowDetailMode && enteredTotal !== null;
+                          const rowTotal = isRowDetailMode
+                            ? (renewable ?? 0) + (nonRenewable ?? 0)
+                            : isRowTotalMode
+                              ? enteredTotal
+                              : null;
+                          return {
+                            ...row,
+                            renewable,
+                            nonRenewable,
+                            enteredTotal,
+                            isRowDetailMode,
+                            isRowTotalMode,
+                            rowTotal,
+                          };
+                        });
+
+                        const hasBreakdownValues = rowValues.some((row) => (
+                          row.rowTotal !== null
+                        ));
+                        const hasAnyRenewableValue = rowValues.some((row) => row.renewable !== null);
+                        const hasAnyNonRenewableValue = rowValues.some((row) => row.nonRenewable !== null);
+                        const hasRowTotalModeActive = rowValues.some((row) => row.isRowTotalMode);
+
+                        const totalEnergyQuestionId = String(totalEnergyQuestion?.question_id ?? '').trim();
+                        const totalEnergyAnswer = totalEnergyQuestionId ? (answersById[totalEnergyQuestionId] ?? {}) : {};
+                        const hasEnteredTotalEnergy = totalEnergyQuestionId
+                          ? b3TotalEnergyUserInteracted && hasAnyValue(totalEnergyAnswer) && totalEnergyAnswer.na !== true
+                          : false;
+
+                        const isDetailDrivenMode = hasBreakdownValues;
+                        const isTotalOnlyMode = !isDetailDrivenMode && hasEnteredTotalEnergy;
+                        const isBreakdownDisabled = b3EnergyBreakdownNa || isTotalOnlyMode;
+
+                        const renewableTotal = hasAnyRenewableValue
+                          ? rowValues.reduce((acc, row) => acc + (row.renewable ?? 0), 0)
+                          : null;
+                        const nonRenewableTotal = hasAnyNonRenewableValue
+                          ? rowValues.reduce((acc, row) => acc + (row.nonRenewable ?? 0), 0)
+                          : null;
+                        const overallTotal = hasBreakdownValues
+                          ? rowValues.reduce((acc, row) => acc + (row.rowTotal ?? 0), 0)
+                          : null;
+
+                        const renderTotalValueWithUnit = (
+                          content: any,
+                          options?: { shellClassName?: string; unitLabel?: string },
+                        ) => {
+                          const shellClassName = options?.shellClassName ?? 'bg-white text-gray-900';
+                          const unitLabel = options?.unitLabel ?? 'MWh';
+                          return (
+                            <div className="w-full flex items-center gap-2">
+                              <div className={`flex-1 min-w-0 px-2 py-1 rounded border border-gray-300 ${shellClassName}`}>
+                                {content}
+                              </div>
+                              <span className="text-[11px] font-medium text-slate-400 whitespace-nowrap shrink-0">{unitLabel}</span>
+                            </div>
+                          );
+                        };
+
+                        if (totalEnergyQuestion) {
+                          runningIndex += 1;
+                        }
+
+                        return (
+                          <div key={block.key} className="space-y-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div className="px-1 pb-2 text-base font-semibold text-gray-900 border-b border-gray-100">Energy consumption</div>
+                            <div className="text-sm text-gray-500">If you know the detailed energy breakdown, enter it here. Otherwise, you may provide only total energy consumption below.</div>
+
+                            <div className="pt-1">
+                              <div className="flex items-center justify-between gap-3">
+                                <div className="text-sm font-medium text-gray-700">1. Energy consumption breakdown (MWh)</div>
+                                <label className="flex items-center gap-3 shrink-0 select-none cursor-pointer bg-slate-50 rounded-full px-3 py-1">
+                                  <span className="text-xs text-slate-600">Not applicable</span>
+                                  <div className="relative">
+                                    <input
+                                      type="checkbox"
+                                      checked={b3EnergyBreakdownNa}
+                                      onChange={(e) => {
+                                        const nextChecked = e.target.checked;
+                                        setB3EnergyBreakdownNa(nextChecked);
+                                        if (nextChecked) {
+                                          clearScheduledPersistDetailRow('electricity_purchased');
+                                          clearScheduledPersistDetailRow('self_generated_electricity');
+                                          clearScheduledPersistDetailRow('fuels');
+                                          const cleared = {
+                                            electricity_purchased: { renewable: '', nonRenewable: '', total: '' },
+                                            self_generated_electricity: { renewable: '', nonRenewable: '', total: '' },
+                                            fuels: { renewable: '', nonRenewable: '', total: '' },
+                                          };
+                                          b3EnergyBreakdownValuesRef.current = cleared;
+                                          setB3EnergyBreakdownValues(cleared);
+                                        }
+                                      }}
+                                      className="sr-only peer"
+                                    />
+                                    <div className="w-10 h-5 bg-gray-300 peer-checked:bg-gray-400 rounded-full transition-colors" />
+                                    <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5" />
+                                  </div>
+                                </label>
+                              </div>
+                              {isTotalOnlyMode ? (
+                                <div className="mt-2 text-xs text-slate-500">
+                                  To edit detailed breakdown values, clear the total value first.
+                                </div>
+                              ) : null}
+                              <div className="mt-2 overflow-x-auto">
+                                <table className={[
+                                  'w-full text-sm border-collapse',
+                                  isTotalOnlyMode ? 'opacity-70' : '',
+                                ].join(' ')}>
+                                  <thead>
+                                    <tr>
+                                      <th className="text-left w-[32%] px-3 py-2 border-b border-gray-200 text-gray-600">Source</th>
+                                      <th className="text-left w-[21%] px-3 py-2 border-b border-gray-200 text-gray-600">Renewable</th>
+                                      <th className="text-left w-[21%] px-3 py-2 border-b border-gray-200 text-gray-600">Non-renewable</th>
+                                      <th className="text-left w-[26%] px-3 py-2 border-b border-gray-200 text-gray-600">Total</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {rowValues.map((row) => (
+                                      <tr key={row.key}>
+                                        <td className="px-3 py-2 border-b border-gray-100 text-gray-800">{row.label}</td>
+                                        <td className="px-3 py-2 border-b border-gray-100">
+                                          <input
+                                            type="number"
+                                            value={b3EnergyBreakdownValues[row.key].renewable}
+                                            onChange={(e) => {
+                                              const nextValue = e.target.value;
+                                              setB3EnergyBreakdownValues((prev) => {
+                                                const next = {
+                                                  ...prev,
+                                                  [row.key]: {
+                                                    ...prev[row.key],
+                                                    renewable: nextValue,
+                                                    total: nextValue !== '' || String(prev[row.key].nonRenewable ?? '') !== '' ? '' : prev[row.key].total,
+                                                  },
+                                                };
+                                                b3EnergyBreakdownValuesRef.current = next;
+                                                return next;
+                                              });
+                                              schedulePersistDetailRow(row.key);
+                                            }}
+                                            disabled={isBreakdownDisabled || row.isRowTotalMode}
+                                            className="w-full px-2 py-1 rounded border border-gray-300 bg-white text-gray-900 disabled:bg-slate-50 disabled:text-slate-500"
+                                            placeholder=""
+                                          />
+                                        </td>
+                                        <td className="px-3 py-2 border-b border-gray-100">
+                                          <input
+                                            type="number"
+                                            value={b3EnergyBreakdownValues[row.key].nonRenewable}
+                                            onChange={(e) => {
+                                              const nextValue = e.target.value;
+                                              setB3EnergyBreakdownValues((prev) => {
+                                                const next = {
+                                                  ...prev,
+                                                  [row.key]: {
+                                                    ...prev[row.key],
+                                                    nonRenewable: nextValue,
+                                                    total: nextValue !== '' || String(prev[row.key].renewable ?? '') !== '' ? '' : prev[row.key].total,
+                                                  },
+                                                };
+                                                b3EnergyBreakdownValuesRef.current = next;
+                                                return next;
+                                              });
+                                              schedulePersistDetailRow(row.key);
+                                            }}
+                                            disabled={isBreakdownDisabled || row.isRowTotalMode}
+                                            className="w-full px-2 py-1 rounded border border-gray-300 bg-white text-gray-900 disabled:bg-slate-50 disabled:text-slate-500"
+                                            placeholder=""
+                                          />
+                                        </td>
+                                        <td className="px-3 py-2 border-b border-gray-100">
+                                          {row.isRowDetailMode ? (
+                                            renderTotalValueWithUnit(
+                                              <span className="block w-full text-slate-700 font-medium">{row.rowTotal !== null ? row.rowTotal : '—'}</span>,
+                                              { shellClassName: 'bg-slate-50 text-slate-700' },
+                                            )
+                                          ) : (
+                                            <div className="space-y-1">
+                                              {renderTotalValueWithUnit(
+                                                <input
+                                                  type="number"
+                                                  value={b3EnergyBreakdownValues[row.key].total}
+                                                  onChange={(e) => {
+                                                    const nextValue = e.target.value;
+                                                    clearScheduledPersistDetailRow(row.key);
+                                                    setB3EnergyBreakdownValues((prev) => {
+                                                      const next = {
+                                                        ...prev,
+                                                        [row.key]: {
+                                                          ...prev[row.key],
+                                                          total: nextValue,
+                                                          renewable: nextValue !== '' ? '' : prev[row.key].renewable,
+                                                          nonRenewable: nextValue !== '' ? '' : prev[row.key].nonRenewable,
+                                                        },
+                                                      };
+                                                      b3EnergyBreakdownValuesRef.current = next;
+                                                      return next;
+                                                    });
+                                                  }}
+                                                  onBlur={(e) => {
+                                                    void persistRowTotalBlur(row.key, e.target.value);
+                                                  }}
+                                                  disabled={isBreakdownDisabled}
+                                                  className="w-full min-w-0 bg-transparent text-gray-900 placeholder:text-slate-400 outline-none disabled:text-slate-500"
+                                                  placeholder=""
+                                                />,
+                                                { shellClassName: isBreakdownDisabled ? 'bg-slate-50 text-slate-500' : 'bg-white text-gray-900' },
+                                              )}
+                                            </div>
+                                          )}
+                                        </td>
+                                      </tr>
+                                    ))}
+                                    <tr>
+                                      <td className="px-3 py-2 border-t border-gray-200 font-semibold text-gray-900">Total</td>
+                                      <td className="px-3 py-2 border-t border-gray-200">
+                                        <div className="w-full px-2 py-1 rounded border border-gray-300 bg-slate-50 text-slate-700 font-semibold">{renewableTotal !== null ? renewableTotal : '—'}</div>
+                                      </td>
+                                      <td className="px-3 py-2 border-t border-gray-200">
+                                        <div className="w-full px-2 py-1 rounded border border-gray-300 bg-slate-50 text-slate-700 font-semibold">{nonRenewableTotal !== null ? nonRenewableTotal : '—'}</div>
+                                      </td>
+                                      <td className="px-3 py-2 border-t border-gray-200">
+                                        {renderTotalValueWithUnit(
+                                          <span className="block w-full text-slate-800 font-semibold">{overallTotal !== null ? overallTotal : '—'}</span>,
+                                          { shellClassName: 'bg-slate-50 text-slate-800' },
+                                        )}
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                              {hasRowTotalModeActive ? (
+                                <div className="mt-2 text-xs text-slate-500">
+                                  If you enter a row total, renewable and non-renewable values for that row are disabled. Clear the row total to enter the detailed breakdown.
+                                </div>
+                              ) : null}
+                            </div>
+
+                            {totalEnergyQuestion ? (
+                              <div className="mt-6 pt-4 border-t border-gray-100">
+                                <div className="text-sm font-medium text-gray-700">2. Total energy consumption (MWh)</div>
+                                <div className="mt-2">
+                                  {isDetailDrivenMode ? (
+                                    <div className="rounded-md border border-slate-200 bg-slate-50 p-3 text-gray-900">
+                                      <div className="text-sm font-medium text-slate-700">Computed from energy breakdown</div>
+                                      <div className="mt-2 flex items-center gap-2">
+                                        {(() => {
+                                          const rawUnit = String(totalEnergyQuestion?.unit ?? '').trim();
+                                          if (!rawUnit) return null;
+                                          const unitLabel = rawUnit.toUpperCase() === 'MWH' ? 'MWh' : rawUnit;
+                                          return renderTotalValueWithUnit(
+                                            <span className="block w-full text-base font-semibold text-slate-800">{overallTotal !== null ? overallTotal : '—'}</span>,
+                                            { shellClassName: 'bg-white text-slate-800', unitLabel },
+                                          );
+                                        })()}
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    renderQuestionCard(totalEnergyQuestion, sectionStart, total, 'compact')
+                                  )}
+                                </div>
+                              </div>
+                            ) : null}
+                          </div>
+                        );
+                      }
+
+                      if (block.kind === 'question') {
+                        const node = renderQuestionCard(block.question, runningIndex, total);
+                        runningIndex += 1;
+                        return <div key={block.key}>{node}</div>;
+                      }
+
+                      if (block.kind === 'emissions-group') {
+                        const scope1Question = block.scope1Question;
+                        const scope2Questions = block.scope2Group?.visibleQuestions ?? [];
+                        const totalQuestions = block.totalGroup?.visibleQuestions ?? [];
+                        const sectionCount = (scope1Question ? 1 : 0) + scope2Questions.length + totalQuestions.length;
+                        const sectionStart = runningIndex;
+                        runningIndex += sectionCount;
+
+                        const totalItems = (totalQuestions as any[]).map((q: any) => {
+                          const code = String(q?.code ?? '').trim().toUpperCase();
+                          if (code === 'TOTALGROSSLOCATIONBASEDSCOPE1ANDSCOPE2GHGEMISSIONS') {
+                            return b3ComputedTotalsModel.location ?? {
+                              questionId: String(q?.question_id ?? '').trim(),
+                              title: String(q?.question_text ?? q?.title ?? 'Total Scope 1 + Scope 2 (location-based)'),
+                              value: null,
+                              unit: String(q?.unit ?? '').trim().toUpperCase(),
+                            };
+                          }
+                          if (code === 'TOTALGROSSMARKETBASEDSCOPE1ANDSCOPE2GHGEMISSIONS') {
+                            return b3ComputedTotalsModel.market ?? {
+                              questionId: String(q?.question_id ?? '').trim(),
+                              title: String(q?.question_text ?? q?.title ?? 'Total Scope 1 + Scope 2 (market-based)'),
+                              value: null,
+                              unit: String(q?.unit ?? '').trim().toUpperCase(),
+                            };
+                          }
+                          return {
+                            questionId: String(q?.question_id ?? '').trim(),
+                            title: String(q?.question_text ?? q?.title ?? 'Derived total'),
+                            value: null,
+                            unit: String(q?.unit ?? '').trim().toUpperCase(),
+                          };
+                        });
+
+                        return (
+                          <div key={block.key} className="space-y-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div className="px-1 pb-2 text-base font-semibold text-gray-900 border-b border-gray-100">Scope 1 and Scope 2 GHG emissions</div>
+
+                            {scope1Question ? (
+                              <div className="pt-1">
+                                <div className="flex items-center justify-between gap-3">
+                                  <div className="text-sm font-medium text-gray-700">1. Scope 1 GHG emissions</div>
+                                  {(() => {
+                                    const questionId = String(scope1Question?.question_id ?? '').trim();
+                                    const isNa = questionId ? answersById[questionId]?.na === true : false;
+                                    return questionId ? (
+                                      <label className="flex items-center gap-3 shrink-0 select-none cursor-pointer bg-slate-50 rounded-full px-3 py-1">
+                                        <span className="text-xs text-slate-600">Not applicable</span>
+                                        <div className="relative">
+                                          <input
+                                            type="checkbox"
+                                            checked={isNa}
+                                            onChange={(e) => void toggleNA(questionId, e.target.checked)}
+                                            className="sr-only peer"
+                                          />
+                                          <div className="w-10 h-5 bg-gray-300 peer-checked:bg-gray-400 rounded-full transition-colors" />
+                                          <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5" />
+                                        </div>
+                                      </label>
+                                    ) : null;
+                                  })()}
+                                </div>
+                                <div className="mt-2">
+                                  {renderQuestionCard(scope1Question, sectionStart, total, 'compact', { hideTopRow: true, hideQuestionTitle: true })}
+                                </div>
+                              </div>
+                            ) : null}
+
+                            {scope2Questions.length > 0 ? (
+                              <div className="mt-6 pt-4 border-t border-gray-100">
+                                <div className="text-sm font-medium text-gray-700">2. Scope 2 GHG emissions</div>
+                                <ul className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2 items-stretch">
+                                  {scope2Questions.map((q: any, idx: number) => {
+                                    const questionId = String((q as any)?.question_id ?? '').trim();
+                                    return (
+                                      <div key={`${questionId || idx}-scope2`} className="h-full">
+                                        {renderQuestionCard(q, sectionStart + (scope1Question ? 1 : 0) + idx, total, 'compact')}
+                                      </div>
+                                    );
+                                  })}
+                                </ul>
+                              </div>
+                            ) : null}
+
+                            {totalItems.length > 0 ? (
+                              <div className="mt-6 pt-4 border-t border-gray-100">
+                                <div className="text-sm font-medium text-gray-700">3. Total Scope 1 + Scope 2 GHG emissions</div>
+                                <ul className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2 items-stretch">
+                                  {totalItems.map((item, idx) => (
+                                    <li key={`${block.key}-${idx}`} className="h-full rounded-md border border-gray-200 bg-gray-50 p-3 text-gray-900">
+                                      <div className="text-sm font-medium text-gray-700">{formatB3ComputedLabel(item.title)}</div>
+                                      <div className="mt-2 flex items-center gap-2">
+                                        <div className="flex-1 text-base font-semibold text-gray-900">
+                                          {item.value !== null ? item.value : '—'}
+                                        </div>
+                                        {item.unit ? (
+                                          <span className="text-xs text-gray-500 shrink-0">
+                                            {item.unit}
+                                          </span>
+                                        ) : null}
+                                      </div>
+                                      <div className="mt-2 text-xs text-gray-500">
+                                        {item.value !== null
+                                          ? 'Computed from Scope 1 and Scope 2 values.'
+                                          : 'Computed automatically once required source values are available.'}
+                                      </div>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            ) : null}
+                          </div>
+                        );
+                      }
+
+                      if (block.kind === 'computed-total-pair') {
+                        const totalItems = (block.group.visibleQuestions as any[]).map((q: any) => {
+                          const code = String(q?.code ?? '').trim().toUpperCase();
+                          if (code === 'TOTALGROSSLOCATIONBASEDSCOPE1ANDSCOPE2GHGEMISSIONS') {
+                            return b3ComputedTotalsModel.location ?? {
+                              questionId: String(q?.question_id ?? '').trim(),
+                              title: String(q?.question_text ?? q?.title ?? 'Total Scope 1 + Scope 2 (location-based)'),
+                              value: null,
+                              unit: String(q?.unit ?? '').trim().toUpperCase(),
+                            };
+                          }
+                          if (code === 'TOTALGROSSMARKETBASEDSCOPE1ANDSCOPE2GHGEMISSIONS') {
+                            return b3ComputedTotalsModel.market ?? {
+                              questionId: String(q?.question_id ?? '').trim(),
+                              title: String(q?.question_text ?? q?.title ?? 'Total Scope 1 + Scope 2 (market-based)'),
+                              value: null,
+                              unit: String(q?.unit ?? '').trim().toUpperCase(),
+                            };
+                          }
+                          return {
+                            questionId: String(q?.question_id ?? '').trim(),
+                            title: String(q?.question_text ?? q?.title ?? 'Derived total'),
+                            value: null,
+                            unit: String(q?.unit ?? '').trim().toUpperCase(),
+                          };
+                        });
+
+                        runningIndex += 2;
+                        return (
+                          <div key={block.key} className="space-y-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                            <div className="px-1 pb-2 text-base font-semibold text-gray-900 border-b border-gray-100">{block.title}</div>
+                            <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 items-stretch">
+                              {totalItems.map((item, idx) => (
+                                <li key={`${block.key}-${idx}`} className="h-full rounded-md border border-emerald-200 bg-emerald-50/40 p-3 text-gray-900">
+                                  <div className="text-xs font-semibold uppercase tracking-wide text-emerald-900/80">{item.title}</div>
+                                  <div className="mt-2 flex items-end gap-2">
+                                    <div className={item.value !== null ? 'text-2xl font-bold leading-none text-emerald-700' : 'text-2xl font-bold leading-none text-slate-400'}>
+                                      {item.value !== null ? item.value : '—'}
+                                    </div>
+                                    {item.unit ? (
+                                      <span className={item.value !== null ? 'text-xs font-medium text-emerald-700/90 mb-0.5' : 'text-xs font-medium text-slate-500 mb-0.5'}>
+                                        {item.unit}
+                                      </span>
+                                    ) : null}
+                                  </div>
+                                  <div className={item.value !== null ? 'mt-2 text-xs text-emerald-800/80' : 'mt-2 text-xs text-slate-500'}>
+                                    {item.value !== null
+                                      ? 'Derived summary from Scope 1 and Scope 2 source inputs.'
+                                      : 'Computed automatically once required source values are available.'}
+                                  </div>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        );
+                      }
+
+                      const startIndex = runningIndex;
+                      runningIndex += block.group.visibleQuestions.length;
+                      return renderGroup(block.group, startIndex, total);
+                    });
+                  }
+
+                  const hiddenQuestionIds = b3ComputedTotalsModel.hiddenQuestionIds;
+                  let runningIndex = 0;
+                  const visibleGroups = sectionRenderModel.grouped.map((group) => {
+                    const visibleQuestions = group.visibleQuestions.filter((q: any) => {
+                      const questionId = String((q as any)?.question_id ?? '').trim();
+                      return !hiddenQuestionIds.has(questionId);
+                    });
+                    return { ...group, visibleQuestions };
+                  }).filter((group) => group.visibleQuestions.length > 0);
+
+                  const standaloneQuestions = sectionRenderModel.standaloneQuestions.filter((q: any) => {
+                    const questionId = String((q as any)?.question_id ?? '').trim();
+                    return !hiddenQuestionIds.has(questionId);
                   });
+
+                  const total = visibleGroups.reduce((acc, group) => acc + group.visibleQuestions.length, 0) + standaloneQuestions.length;
+
+                  const renderedGroups = visibleGroups.map((group) => {
+                    const startIndex = runningIndex;
+                    runningIndex += group.visibleQuestions.length;
+                    return renderGroup(group, startIndex, total);
+                  });
+
+                  const standaloneStartIndex = runningIndex;
+                  const renderedStandalone = standaloneQuestions.length > 0 ? (
+                    <ul className="space-y-2">
+                      {standaloneQuestions.map((q: any, idx: number) =>
+                        renderQuestionCard(q, standaloneStartIndex + idx, total),
+                      )}
+                    </ul>
+                  ) : null;
+
+                  return (
+                    <>
+                      {renderedGroups}
+                      {renderedStandalone}
+                    </>
+                  );
                 })()}
               </div>
             ) : (
-              <ul className="space-y-2">
-                {sectionQuestions.map((q: any, idx: number) => renderQuestionCard(q, idx, sectionQuestions.length))}
-              </ul>
+              <div className="space-y-2">
+                {b3ComputedTotalsModel.location || b3ComputedTotalsModel.market ? (
+                  <div className="space-y-2">
+                    <div className="rounded-lg border border-emerald-200 bg-emerald-50/40 p-4">
+                      <div className="text-sm font-semibold text-gray-900">Total Scope 1 + Scope 2 emissions</div>
+                      <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2">
+                        {[b3ComputedTotalsModel.location, b3ComputedTotalsModel.market].filter(Boolean).map((item: any, idx) => (
+                          <div key={`b3-fallback-computed-${idx}`} className="p-2">
+                            <div className="text-sm font-semibold text-gray-900">{item.title}</div>
+                            <div className="mt-1 flex items-center gap-2">
+                              <div className="flex-1 px-3 py-2 border border-gray-300 rounded bg-gray-50 text-lg font-semibold text-emerald-700">
+                                {item.value !== null ? item.value : '—'}
+                              </div>
+                              {item.unit ? <span className="text-xs text-gray-500 shrink-0">{item.unit}</span> : null}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+
+                <ul className="space-y-2">
+                  {(() => {
+                    const hiddenQuestionIds = b3ComputedTotalsModel.hiddenQuestionIds;
+                    const visibleQuestions = sectionQuestions.filter((q: any) => {
+                      const questionId = String((q as any)?.question_id ?? '').trim();
+                      return !hiddenQuestionIds.has(questionId);
+                    });
+                    return visibleQuestions.map((q: any, idx: number) => renderQuestionCard(q, idx, visibleQuestions.length));
+                  })()}
+                </ul>
+              </div>
             )}
 
             {(prevChapterCode || nextChapterCode) ? (

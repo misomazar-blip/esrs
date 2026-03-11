@@ -10,18 +10,20 @@ Technical architecture and DB schema are documented elsewhere.
 
 # 1. Core Reporting Principle
 
-The platform is a **guided reporting tool for SMEs**, not a compliance enforcement engine.
+The platform is a **guided ESG reporting tool for SMEs**, not a compliance enforcement engine.
 
 Key design goals:
 
 - simple answering UX
 - deterministic progress
 - non-blocking export
-- proportional reporting logic (aligned with VSME)
+- proportional reporting logic aligned with VSME
 
 Users can always export their report.
 
-Missing answers are shown but **do not block export**.
+Missing answers are visible but **do not block export**.
+
+The system guides completion but does not enforce compliance gates.
 
 ---
 
@@ -41,6 +43,8 @@ Detected when any typed value exists:
 - value_date
 - value_boolean
 
+OR when the answer is explicitly marked as N/A.
+
 ---
 
 ### Not Applicable (N/A)
@@ -51,14 +55,18 @@ Stored as:
 
 value_jsonb → { "na": true }
 
+N/A counts as completed.
+
 ---
 
 ### Missing
 
 Question has:
 
-- no value
+- no typed value
 - not marked as N/A
+
+Missing means the question still requires user attention.
 
 ---
 
@@ -72,9 +80,11 @@ Missing = Total − Completed
 
 Progress % = Completed / Total
 
-Important:
+Important rule:
 
 N/A **counts as completed**.
+
+Completion logic is derived from **DB state only**.
 
 ---
 
@@ -88,13 +98,13 @@ Example:
 
 B1 – Basis for preparation
 
-Completion uses questions in that section only.
+Completion uses only questions belonging to that section.
 
 ---
 
 ### Group level
 
-Example:
+Example group:
 
 General Information
 
@@ -104,6 +114,8 @@ Completion aggregates:
 - B2
 - C1
 - C2
+
+Group progress is derived from section progress.
 
 ---
 
@@ -115,7 +127,21 @@ Displayed in the **Report status card**.
 
 ---
 
-# 5. Live Progress Updates
+# 5. Progress Authority
+
+Progress logic is computed in RPC:
+
+get_vsme_ctas_for_report
+
+UI must not recompute progress independently.
+
+UI may optimistically update local state but must reconcile with RPC results.
+
+RPC remains the authoritative source of truth.
+
+---
+
+# 6. Live Progress Updates
 
 Progress updates immediately when:
 
@@ -125,11 +151,11 @@ Progress updates immediately when:
 
 UI updates local state immediately.
 
-Server remains the **source of truth** after refresh.
+After refresh or navigation, progress is reloaded from RPC.
 
 ---
 
-# 6. Save Strategy
+# 7. Save Strategy
 
 Answers are saved using:
 
@@ -146,7 +172,7 @@ This keeps the UI fast and reduces explicit save actions.
 
 ---
 
-# 7. Section Navigation
+# 8. Section Navigation
 
 Sections panel provides structured navigation.
 
@@ -164,23 +190,35 @@ General Information
 
 Sections can be expanded or collapsed.
 
+Section visibility rules:
+
+Sections with **0 in-scope questions are hidden**.
+
+Section lists must be derived from the RPC dataset returned by:
+
+get_vsme_questions_for_report_v2
+
 ---
 
-# 8. Sticky Section Header
+# 9. Sticky Section Header
 
 Each section page includes a sticky header with:
 
-Section title  
-Answered count  
-N/A count  
-Missing count  
-Completion %
+- Section title
+- Answered count
+- N/A count
+- Missing count
+- Completion %
 
-This header stays visible while scrolling.
+The header stays visible while scrolling.
+
+Sticky header is informational only.
+
+Progress values are derived from RPC-derived state.
 
 ---
 
-# 9. Units
+# 10. Units
 
 Numeric questions may display a unit.
 
@@ -197,30 +235,37 @@ count
 
 Units are informational and displayed next to inputs.
 
+UI must always display the **unit returned by RPC**.
+
+UI must never infer units from question text.
+
 ---
 
-# 10. Export Philosophy
+# 11. Export Philosophy
 
 Export is always available.
 
 Before export the system may show:
 
-Completion %  
-Missing items
+- Completion %
+- Missing items
+- Major reporting gaps
 
-But the user can still export.
+But export remains possible.
 
-The goal is:
+Goal:
 
-**guidance, not blocking compliance.**
+**guidance rather than enforcement.**
+
+Exports always reflect the **current report snapshot**.
 
 ---
 
-# 11. Company Profile Prefill
+# 12. Company Profile Prefill
 
 Some questions overlap with **company profile information**.
 
-Examples include:
+Examples:
 
 - company legal name  
 - address  
@@ -230,62 +275,128 @@ Examples include:
 - registration number  
 - VAT number  
 
-If these fields are already filled in the company profile, the system may **prefill missing answers** in the report.
+If these fields exist in the company profile, the system may **prefill missing report answers**.
 
 Prefill behavior:
 
-- Only applies to **missing answers**
-- Never overwrites existing typed answers
-- Applies only to **open / non-submitted reports**
+- only applies to **missing answers**
+- never overwrites typed answers
+- applies only to **open / non-submitted reports**
 
-Prefill is performed via server RPC.
+Prefill is executed via RPC:
+
+prefill_company_profile_into_open_reports
 
 ---
 
-# 12. Prefill Indicator
+# 13. Prefill Indicator
 
-If an answer originates from company profile data, the UI may display an informational hint:
+If an answer originates from company profile data, the UI may show:
 
 Prefilled from company profile.
 
-This hint is based on metadata stored in:
+Indicator is based on metadata:
 
 value_jsonb.source = "company_profile"
 
-The hint is informational only and does not affect completion logic.
+This is informational only.
+
+It does not affect progress.
 
 ---
 
-# 13. Editing Prefilled Answers
+# 14. Editing Prefilled Answers
 
-Users may freely edit values that were prefilled.
+Users may freely edit prefilled values.
 
 When edited:
 
 - the value becomes a normal user answer
-- the user value takes precedence over company profile data
+- user-entered value takes precedence
 
-Prefill never locks fields.
+Prefill never locks inputs.
 
 ---
 
-# 14. Report Snapshot Principle
+# 15. Report Snapshot Principle
 
 Reports represent a **snapshot of answers at the time of reporting**.
 
 Changing company profile data later **does not modify existing report answers**.
 
-This ensures:
+This guarantees:
 
 - historical consistency
 - reproducible reports
 - stable exports
 
-Company profile data only assists with **initial data entry**.
+Company profile data assists only with **initial report population**.
 
 ---
 
-# 15. Design Principle
+# 16. Section Visibility Rules
+
+Sections must be derived from the RPC dataset.
+
+Rule:
+
+A section is displayed only if:
+
+total_questions > 0
+
+Sections with:
+
+0 / 0 questions
+
+must not appear in navigation.
+
+Prev / Next navigation must follow the same in-scope section list.
+
+---
+
+# 17. Deterministic Scope
+
+Question scope is determined exclusively by report configuration:
+
+- report.framework
+- report.vsme_mode
+- report.vsme_pack_codes
+- report.vsme_taxonomy_version
+
+Scope computation happens in RPC:
+
+get_vsme_questions_for_report_v2
+
+UI must not infer scope.
+
+UI must not filter questions independently.
+
+---
+
+# 18. Questionnaire Interaction Metadata
+
+Questionnaire UX behavior may be influenced by metadata tables:
+
+- question_group
+- question_group_item
+- question_interaction_rule
+
+These define:
+
+- grouped question layouts
+- conditional child questions
+- paired question rendering
+- UX interaction rules
+
+Important:
+
+These tables **do not define scope or progress**.
+
+They only shape how in-scope questions are rendered.
+
+---
+
+# 19. UX Design Principle
 
 The reporting experience should feel:
 
@@ -298,3 +409,9 @@ The user should always understand:
 - what is missing
 - what is completed
 - what is optional
+
+The system guides the user toward completion without introducing compliance barriers.
+
+---
+
+END OF DOCUMENT

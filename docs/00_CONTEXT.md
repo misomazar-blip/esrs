@@ -1,5 +1,10 @@
 # PROJECT CONTEXT – VSME Reporting SaaS (SME-focused)
 
+Architecture version: v0.4  
+Last structural update: Question grouping model + multi-member datapoint pattern
+
+---
+
 ## 1. Product Scope
 
 Guided ESG reporting platform based on EFRAG VSME.  
@@ -42,23 +47,23 @@ DB representation:
 
 Pack catalog stored in:
 
-report_pack  
+report_pack
 
 Pack-to-datapoint mapping stored in:
 
-vsme_datapoint_pack  
+vsme_datapoint_pack
 
 Datapoint catalog stored in:
 
-vsme_datapoint  
+vsme_datapoint
 
 Questions reference datapoints via:
 
-disclosure_question.vsme_datapoint_id  
+disclosure_question.vsme_datapoint_id
 
 Selected pack codes stored on:
 
-report.vsme_pack_codes  
+report.vsme_pack_codes
 
 Scope expansion is computed deterministically from report configuration.
 
@@ -169,13 +174,7 @@ Examples:
 
 Assets → EUR  
 TotalWaterConsumption → m3  
-EnergyConsumption → MWh  
-
-This ensures:
-
-- consistent units across reports
-- alignment with VSME standard
-- deterministic unit rendering
+EnergyConsumption → MWh
 
 Unit may be null for datapoints where no display unit is needed.  
 UI must never invent a unit.
@@ -191,13 +190,8 @@ coalesce(disclosure_answer.unit, vsme_datapoint.unit, disclosure_question.unit)
 Priority order:
 
 1. disclosure_answer.unit  
-   optional override (rare in MVP)
-
 2. vsme_datapoint.unit  
-   canonical source of truth
-
-3. disclosure_question.unit  
-   legacy fallback only
+3. disclosure_question.unit
 
 UI MUST rely on RPC-returned unit.  
 UI must never infer units independently.
@@ -212,29 +206,21 @@ vsme_datapoint_id = template_currency
 
 Stored as:
 
-disclosure_answer.value_text  
+disclosure_answer.value_text
 
 Example:
 
 EUR  
 USD  
-CZK  
+CZK
 
 This defines the reporting currency for the report.
 
-Important:
-
-template_currency itself has no unit.
+Template currency itself has no unit.
 
 Other monetary datapoints have unit defined in:
 
 vsme_datapoint.unit
-
-UI may display:
-
-Assets input → value + EUR
-
-This is display logic only.
 
 Stored numeric values remain unit-agnostic.
 
@@ -263,14 +249,9 @@ Scope authority:
 
 RPC functions are the single source of truth for:
 
-in-scope question list  
-get_vsme_questions_for_report_v2  
-
-progress calculation  
-get_vsme_ctas_for_report  
-
-unit resolution  
-get_vsme_questions_for_report_v2  
+- in-scope question list  
+- progress calculation  
+- unit resolution
 
 UI may update optimistically but must reconcile with RPC state.
 
@@ -278,48 +259,37 @@ UI may update optimistically but must reconcile with RPC state.
 
 ## 10. RPC Contract Versioning
 
-RPC return shape is versioned when extended.
-
-Current preferred RPC:
+Preferred RPC:
 
 get_vsme_questions_for_report_v2
 
 Includes:
 
-guidance_text  
-example_answer  
-unit (resolved deterministically)
+- guidance_text
+- example_answer
+- resolved unit
 
-Legacy RPC remains only for compatibility.
-
-UI must use v2.
-
-Additional utility RPC now used for onboarding/prefill:
+Utility RPC:
 
 prefill_company_profile_into_open_reports
 
-This RPC is not a scope/progress authority RPC.  
-It is a deterministic helper action that copies overlapping company profile data into open report answers only when the target answer is missing.
-
-Legacy narrow prefill RPC may remain temporarily for backward compatibility, but preferred prefill RPC is:
-
-prefill_company_profile_into_open_reports
+Used for deterministic prefill of missing B1 answers from company profile.
 
 ---
 
 ## 11. Taxonomy Versioning (VSME)
 
-The platform is aligned 1:1 with EFRAG VSME XBRL taxonomy version 1.2.0 (facts/questions).
+Platform aligned with VSME XBRL taxonomy **1.2.0**.
 
-Each report stores the taxonomy version used when the report was created:
+Stored on:
 
-report.vsme_taxonomy_version (default: '1.2.0')
+report.vsme_taxonomy_version
 
-This ensures:
+Ensures:
 
-- auditability of historical reports
-- forward compatibility with future taxonomy releases
-- deterministic export expectations per report
+- auditability
+- deterministic exports
+- forward compatibility.
 
 ---
 
@@ -330,7 +300,7 @@ Frontend:
 Next.js (App Router)  
 React 19  
 TypeScript  
-Tailwind CSS  
+Tailwind CSS
 
 Backend:
 
@@ -344,13 +314,13 @@ Architecture principles:
 
 RPC-driven  
 Deterministic  
-No client-side scope logic  
+No client-side scope logic
 
 ---
 
 ## 13. Core Database Model (STABLE)
 
-Core Tables:
+Core tables:
 
 company  
 company_member  
@@ -361,39 +331,21 @@ disclosure_question
 disclosure_answer  
 report_pack  
 vsme_datapoint  
-vsme_datapoint_pack  
+vsme_datapoint_pack
 
-Key ownership:
+Strict separation:
 
-company  
-defines reusable company profile data
+Company profile ≠ report answers.
 
-disclosure_question  
-defines question metadata
-
-vsme_datapoint  
-defines canonical datapoint semantics including unit
-
-disclosure_answer  
-defines report-specific answer state / snapshot
-
-Strict separation must be maintained.
-
-Company profile is not rendered directly as report data.  
-Report-facing values live in disclosure_answer.
+Report-facing values always live in **disclosure_answer**.
 
 ---
 
 ## 14. Role Model
 
-Owner / Admin  
-Full access
-
-Editor  
-Edit allowed topics
-
-Viewer  
-View allowed topics
+Owner / Admin → full access  
+Editor → edit allowed topics  
+Viewer → read-only
 
 Permissions enforced via RLS.
 
@@ -405,176 +357,273 @@ DB schema is stable.
 
 Never:
 
-implement unit logic in UI  
-derive unit from question_text  
-bypass RPC  
-duplicate unit logic client-side  
-treat company profile as a live substitute for report answers  
+- implement unit logic in UI
+- derive unit from question_text
+- bypass RPC
+- duplicate unit logic client-side
+- treat company profile as live report data
 
 Always:
 
-use RPC-returned unit  
-treat vsme_datapoint.unit as canonical  
-use additive schema changes only  
-treat disclosure_answer as the report snapshot  
+- use RPC-returned unit
+- treat vsme_datapoint.unit as canonical
+- treat disclosure_answer as the report snapshot
 
 ---
 
 ## 16. Sections Panel – Scope-Derived Structure
 
-Sections panel is derived entirely from:
+Sections panel derived from:
 
 get_vsme_questions_for_report_v2
 
 Rules:
 
 Show section only if total > 0  
-Never show empty sections  
+Never show empty sections
 
 Grouping derived from section_code.
 
-Current header layout:
-
-- left: Sections
-- right: Completion
-
-No global numeric total is shown in the sections header.  
-Completion values are shown only at section-row level.
+Completion displayed per section.
 
 ---
 
-## 17. Current Focus
+## 17. Questionnaire Interaction Layer (B1 Pilot)
 
-Guided reporting UX with deterministic unit handling and pragmatic company-profile prefill for overlapping B1 data.
+Additional metadata layer for questionnaire UX.
 
-Implemented:
+Tables:
 
-guidance_text rendering  
-example_answer rendering  
-RPC v2 contract  
-unit resolution via vsme_datapoint  
-template_currency support  
-taxonomy version stored on report (vsme_taxonomy_version)  
-sections header cleanup  
-company-profile prefill into open reports for overlapping B1 fields  
-prefill source hint rendering in questionnaire UI  
+question_group  
+question_group_item  
+question_interaction_rule
 
-Answering UX (MVP):
+Purpose:
 
-- answers saved on blur (no explicit Save button)
-- N/A toggle supported via value_jsonb.na
-- section completion shown live (Answered / N/A / Missing / %)
-- sticky section header for long sections
-- sections panel completion derived from the same RPC dataset (consistent numbers)
+- grouped questionnaire rendering
+- conditional question behaviour
+- separation of UX metadata from core data model
 
-Routes:
+This layer does NOT affect:
 
-/reports/[id]/sections/[sectionCode]  
-/[locale]/profile
-
-RPC:
-
-get_vsme_questions_for_report_v2  
-get_vsme_ctas_for_report  
-prefill_company_profile_into_open_reports  
-
-Company profile prefill behavior:
-
-- company profile is edited on a separate profile/company page
-- after successful company update, open non-submitted VSME reports may be prefilled via RPC
-- prefill applies only to overlapping Company Info ↔ B1 fields
-- prefill writes into disclosure_answer, not directly from company to UI
-- prefill never overwrites an existing typed answer
-- prefill marks answer metadata with:
-  value_jsonb.source = "company_profile"
-- UI may show:
-  "Prefilled from company profile"
-  when source is company_profile
-- if user later edits that answer in the questionnaire, source may be switched to user
-- submitted reports are not targeted by prefill RPC
-
-Current overlapping fields covered by company-profile prefill are intended to include applicable B1 company identity fields such as:
-
-- legal name
-- address
-- city
-- postal code
-- country
-- identification / registration number
-- VAT number
-
-Definition of done:
-
-units always present where applicable  
-unit resolved deterministically  
-no unit logic in UI  
-help text visible when present  
-answering loop stable (load → edit → save → progress)  
-company-profile prefill fills only missing overlapping report answers  
-prefilled answers clearly indicated in UI  
-
-Known issues:
-
-None critical.
+- scope
+- progress
+- unit logic
+- export logic
 
 ---
 
-## 18. disclosure_answer JSONB metadata conventions
+## 18. Question Grouping Model
 
-value_jsonb is NOT NULL.  
-Empty metadata state should use:
+Questions remain **atomic datapoint prompts** stored in:
+
+disclosure_question
+
+UI layout and interaction structure are defined through grouping metadata.
+
+Tables:
+
+question_group  
+question_group_item
+
+Purpose:
+
+- visual grouping of questions
+- paired question layouts
+- parent → child dependencies
+- structural rows used for XBRL tables
+
+---
+
+### question_group
+
+Defines logical UI blocks.
+
+Fields:
+
+id  
+framework  
+taxonomy_version  
+section_code  
+code  
+title  
+description  
+group_kind  
+sort_order  
+is_active  
+config_jsonb
+
+Supported group kinds:
+
+block  
+pair
+
+Meaning:
+
+block → vertical group  
+pair → two-column layout
+
+Example:
+
+Base year | Target year
+
+---
+
+### question_group_item
+
+Defines group membership.
+
+Fields:
+
+group_id  
+question_id  
+sort_order  
+role  
+config_jsonb
+
+Supported roles:
+
+primary  
+secondary  
+parent  
+child  
+entry  
+technical
+
+Meaning:
+
+primary → main question  
+secondary → paired question  
+parent → controlling question  
+child → dependent question  
+entry → normal group item  
+technical → hidden structural row
+
+---
+
+### Technical questions
+
+Some XBRL datapoints represent:
+
+- tables
+- axes
+- structural rows
+
+Examples:
+
+BreakdownOfEnergyConsumptionAxis  
+BreakdownOfEnergyConsumptionTable
+
+These use:
+
+role = technical
+
+Technical rows:
+
+- exist in DB
+- may be returned by RPC
+- are **never rendered as question cards**
+
+---
+
+### Parent → child behaviour
+
+Parent questions may control child visibility.
+
+Example:
+
+Has the undertaking set a GHG reduction target?
+
+Children:
+
+Base year  
+Target year
+
+If parent = false:
+
+children are hidden.
+
+Hidden children:
+
+- remain in DB
+- are excluded from UI
+- do not count toward visible question counts
+
+---
+
+## 19. Conditional Question Behaviour (B1 Pilot)
+
+Implemented rule patterns:
+
+conditional_child  
+conditional_group  
+pair
+
+Example:
+
+UndertakingsLegalForm  
+→ shows  
+OtherUndertakingsLegalForm
+
+Previous report reuse question  
+→ shows follow-up explanation fields.
+
+Inactive child behaviour:
+
+- typed values cleared
+- value_jsonb.na = true
+
+When reactivated:
+
+- na removed
+- user may answer again
+
+---
+
+## 20. disclosure_answer JSONB metadata conventions
+
+value_jsonb is NOT NULL.
+
+Empty metadata:
 
 {}
 
-Current metadata keys used in MVP include:
+Keys used:
 
 na  
-→ explicit N/A marker
+source
 
-source  
-→ provenance marker for prefilled answers, e.g.:
-  company_profile  
-  user
+Example:
 
-JSON metadata must be merged, not blindly replaced.
+source = "company_profile"
 
-In particular:
-
-- NA toggle must not erase source
-- saveAnswer must preserve unrelated keys in value_jsonb
-- empty metadata should be stored as {} rather than null
+Metadata must always be **merged**, not overwritten.
 
 ---
 
-## 19. Company Profile vs Report Snapshot Model
-
-Company profile data and report answers are related but not identical concepts.
+## 21. Company Profile vs Report Snapshot Model
 
 Company profile:
 
-- represents the current master data of the company
-- may change over time
+- editable master data
 
 Report answers:
 
-- represent the snapshot used for that specific report
-- must remain stable for historical/audit reasons
+- immutable snapshot for that report
 
-Therefore:
+Rules:
 
-- changing company profile must not retroactively rewrite historical submitted reports
-- open reports may receive deterministic prefills for missing overlapping answers
-- report answers can diverge from company profile if the user explicitly changes them
-- divergence is acceptable in MVP; user is not blocked
-
-This avoids double entry while preserving report history.
+- company profile never rewrites submitted reports
+- open reports may receive deterministic prefills
+- users may override prefills
 
 ---
 
-## 20. VSC AI
+## 22. VSC AI
 
-Kodovanie robim cez VSC AI  
-Prosim promty pre VSC rob v nasledovnom tvare:
+Coding is done via VSC AI.
+
+Prompt structure:
 
 STEP 1 (context):
 
@@ -582,39 +631,36 @@ Read docs/AI_CONTEXT.md and respect it.
 
 STEP 2 (task):
 
-We are modifying:
+We are modifying:  
 <exact file path>
 
 Constraints:
-- DB schema stable (no new columns, no destructive schema changes)
-- RLS enforced (no bypass, no service role)
-- Use existing RPC contracts (03_rpc_contracts.md)
+
+- DB schema stable
+- RLS enforced
+- Use existing RPC contracts
 - No client-side scope logic
 - No client-side unit logic
-- Minimal changes limited to this file
 
-Goal:
+Goal:  
 <single precise goal>
 
 Return:
-- minimal diff-like patch only
-- list side effects (if any)
-- verification steps (how I can test in UI)
 
-Never implement scope logic client-side.  
-Scope must always come from RPC.
+- minimal diff-like patch
+- side effects
+- verification steps
+
+Scope must never be implemented client-side.
 
 ---
 
-## 21. Docs Update Workflow (recommended)
+## 23. Docs Update Workflow
 
-To keep docs consistent without heavy manual copying:
+Docs maintenance process:
 
-1) Upload the relevant docs file(s) into GPT (copy/paste text in chat).  
-2) GPT applies light updates only:
-   - remove statements that are no longer true
-   - incorporate newly implemented behaviour where it logically belongs
-   - keep structure and wording stable (no rewrites)  
+1) Paste relevant docs into GPT.  
+2) GPT performs light updates only.  
 3) GPT returns the full updated file.  
-4) Replace the file in `/docs` via Explorer.  
-5) VSC AI reads docs from `/docs` as the source of truth.
+4) Replace file in `/docs`.  
+5) VSC AI reads `/docs` as source of truth.

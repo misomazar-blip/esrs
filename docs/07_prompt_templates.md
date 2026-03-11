@@ -4,112 +4,188 @@ This file defines how GPT should be used in this project.
 
 Always reference:
 
-* 00_project_context.md
-* 01_architecture.md
-* 02_db_schema.sql
-* 03_rpc_contracts.md
-* 04_answer_contract.md
-* 05_rls_policies.md
-* 06_debug_playbook.md
+- 00_CONTEXT.md
+- 01_ARCHITECTURE.md
+- 02_db_schema.sql
+- 02_schema_map.md
+- 03_rpc_contracts.md
+- 04_answer_contract.md
+- 05_rls_policies.md
+- 06_debug_playbook.md
+- 08_units_contract.md
+- 09_known_limits.md
+- 10_Product_logic.md
+- 11_prefill_contract.md
+- 12_multi_member_datapoint_pattern.md
+- AI_context_md
 
 Non-negotiables:
 
-* DB schema stable (no destructive changes)
-* RLS enforced (never bypass in client)
-* Prefer RPC-driven deterministic logic
-* RPC contracts are versioned and authoritative
+- DB schema is considered stable
+- No destructive schema changes unless explicitly requested
+- RLS must never be bypassed
+- Prefer deterministic RPC-driven logic
+- RPC contracts are authoritative
+- UI must never compute reporting scope independently
+- UI must never infer units
+- UI must never bypass answer contract
 
-Preferred RPC version for questions:
+Preferred RPC for question loading:
 
 get_vsme_questions_for_report_v2
 
-Legacy RPC get_vsme_questions_for_report must not be used for new features.
+Legacy RPC get_vsme_questions_for_report must not be used for new functionality.
 
-All solutions must preserve:
+The following conceptual separations are critical:
 
-* deterministic scope
-* deterministic unit resolution
-* taxonomy-aligned datapoint integrity
-* strict separation between metadata and answer state
+disclosure_question → metadata definition  
+disclosure_answer → report snapshot answers  
+vsme_datapoint → canonical datapoint semantics  
+report → scope configuration
+
+Questionnaire UX metadata:
+
+question_group  
+question_group_item  
+question_interaction_rule
+
+These tables shape questionnaire UX only.
+
+They must never define:
+
+- scope
+- progress
+- export logic
+
+Scope authority always comes from RPC.
 
 ---
 
-# 1) New GPT thread bootstrap
+# 1 – New GPT Thread Bootstrap
 
-Paste this into new GPT threads:
+Paste this at the start of a new GPT conversation.
 
-You are working on a VSME Reporting SaaS platform.
+You are assisting with a VSME Reporting SaaS platform.
 
-Read and respect:
+Before proposing any solution, read and respect the following docs:
 
-* Project context
-* Architecture
-* DB schema (stable)
-* RLS rules
-* RPC contracts
-* Answer storage contract
-* Debug playbook
+- Project context
+- Architecture
+- DB schema
+- RPC contracts
+- Answer storage contract
+- RLS policies
+- Debug playbook
 
 Critical rules:
 
-* Do NOT propose destructive schema changes.
-* Do NOT bypass RLS.
-* Prefer deterministic RPC-based solutions.
-* Use get_vsme_questions_for_report_v2 for question loading.
-* disclosure_question defines metadata.
-* disclosure_answer defines answer state.
-* vsme_datapoint defines canonical datapoint semantics (including unit).
-* report.vsme_taxonomy_version defines taxonomy alignment.
+- Do NOT propose destructive schema changes.
+- Do NOT bypass RLS.
+- Prefer deterministic RPC solutions.
+- Always use get_vsme_questions_for_report_v2.
+- disclosure_question defines question metadata.
+- disclosure_answer defines report answers.
+- vsme_datapoint defines canonical datapoint semantics.
+- report.vsme_taxonomy_version defines taxonomy alignment.
+- questionnaire metadata tables shape UX only.
 
 Never mix these responsibilities.
 
-Keep changes minimal and testable.
+Keep changes minimal and deterministic.
 
-Current task: <describe task precisely>
+Current task:
+
+<describe task>
 
 ---
 
-# 2) Frontend patch request
+# 2 – Frontend Patch Request
 
-STEP 1 (context):
+STEP 1 – Context
 
 Read docs/AI_CONTEXT.md and respect it.
 
-STEP 2 (task):
+STEP 2 – Task
 
 We are modifying:
+
 <exact file path>
 
 Constraints:
-- DB schema stable (no new columns, no destructive schema changes)
-- RLS enforced (no bypass, no service role)
-- Use existing RPC contracts (03_rpc_contracts.md)
+
+- DB schema stable
+- No new columns
+- No destructive schema changes
+- RLS enforced
+- No service role in client
+- Use existing RPC contracts
 - No client-side scope logic
 - No client-side unit logic
-- Minimal changes limited to this file
+- Minimal change limited to this file
 
 Goal:
+
 <single precise goal>
 
 Return:
-- minimal diff-like patch only
-- list side effects (if any)
-- verification steps (how I can test in UI)
 
-Never implement scope logic client-side.
+- minimal patch
+- potential side effects
+- verification steps
+
 Scope must always come from RPC.
 
 ---
 
-# 3) RPC change request
+# 3 – Additive Schema Change Request
+
+Use this template only when schema expansion is explicitly intended.
+
+Context:
+
+Read docs/AI_CONTEXT.md.
+
+Task:
+
+We are modifying the database schema.
+
+Constraints:
+
+- additive changes only
+- no destructive changes
+- preserve existing table semantics
+- preserve RLS assumptions
+- preserve existing RPC contracts unless versioned
+
+Goal:
+
+<precise schema goal>
+
+Return:
+
+- SQL migration
+- validation queries
+- rollback notes
+- docs update text
+
+Example use cases:
+
+- question_group
+- question_group_item
+- question_interaction_rule
+- new supporting indexes
+
+---
+
+# 4 – RPC Change Request
 
 We are modifying RPC:
 
-<function_name + signature>
+<function name>
 
-Current contract (see 03_rpc_contracts.md):
+Current contract defined in:
 
-<paste return shape + rules>
+03_rpc_contracts.md
 
 Goal:
 
@@ -117,158 +193,179 @@ Goal:
 
 Constraints:
 
-* No destructive schema changes
-* Do not break existing RPC without versioning
-* Add new version instead (v3, etc.) if return shape changes
-* Deterministic scope logic only
-* Explicit columns only (never SELECT *)
-* Must respect report.vsme_taxonomy_version
+- no destructive schema changes
+- version RPC if return shape changes
+- deterministic scope logic
+- explicit column selection
+- respect report.vsme_taxonomy_version
 
-Provide:
+Return:
 
-* updated function SQL
-* updated contract text for 03_rpc_contracts.md
-* test queries (SQL)
-* migration-safe approach
+- updated SQL function
+- updated RPC contract text
+- test queries
+- migration-safe approach
 
-Never silently change RPC contract used by frontend.
+Never silently change RPC used by frontend.
 
 ---
 
-# 4) Question metadata changes
+# 5 – Question Metadata Changes
 
 We are modifying disclosure_question metadata.
 
-Fields may include:
+Possible fields:
 
-guidance_text
-example_answer
-question_text
-config_jsonb
-section_code
+guidance_text  
+example_answer  
+question_text  
+config_jsonb  
+section_code  
 vsme_level
 
 Constraints:
 
-* Must not affect disclosure_answer
-* Must not affect progress logic
-* Must not affect scope logic
-* Must remain read-only from frontend
-* Must respect enforce_vsme_question_type_match trigger
+- must not affect disclosure_answer
+- must not affect scope
+- must not affect progress
+- must remain read-only in UI
+- must respect enforce_vsme_question_type_match trigger
 
-Provide:
+Return:
 
-* safe SQL update script
-* validation queries
-* contract update text if needed
+- SQL update
+- validation queries
 
 Never store metadata in disclosure_answer.
 
 ---
 
-# 5) Security tightening (RLS / policies)
+# 6 – Questionnaire Interaction Metadata Request
 
-We are tightening RLS on:
+Tables involved:
 
-<table_name>
-
-Current policies:
-
-<paste policies>
+question_group  
+question_group_item  
+question_interaction_rule
 
 Goal:
 
-* prevent unauthorized access
-* preserve app functionality
+<precise interaction goal>
+
+Examples:
+
+- group B1 questions
+- conditional child questions
+- conditional group visibility
+- pair layout rendering
 
 Constraints:
 
-* no schema refactor
-* no service role usage in client
-* no SECURITY DEFINER bypass unless explicitly audited
-* no weakening of existing protections
+- must not affect scope
+- must not affect progress
+- must not affect export logic
+- must not bypass RPC scope logic
+- must remain deterministic
+- prefer ID matching over code heuristics
 
-Provide:
+Return:
 
-* minimal SQL changes
-* safe execution order
-* verification queries
-* role test checklist
+- SQL seed / migration
+- validation queries
+- minimal frontend patch if required
+
+Never treat interaction metadata as scope authority.
+
+---
+
+# 7 – Security Tightening (RLS)
+
+Target table:
+
+<table_name>
+
+Goal:
+
+Improve security without breaking functionality.
+
+Constraints:
+
+- no schema redesign
+- no service role in frontend
+- no SECURITY DEFINER bypass unless audited
+- no weakening of protections
+
+Return:
+
+- SQL policy change
+- execution order
+- validation queries
+- role test matrix
 
 Never weaken RLS for convenience.
 
 ---
 
-# 6) RPC version migration
+# 8 – RPC Version Migration
 
 Goal:
 
-Switch frontend safely from legacy RPC to newer version.
+Safely migrate frontend to new RPC version.
 
 Example:
 
 get_vsme_questions_for_report → get_vsme_questions_for_report_v2
 
-Provide:
+Return:
 
-* minimal frontend patch
-* verification steps
-* rollback strategy
+- minimal frontend patch
+- verification steps
+- rollback approach
 
 Never delete legacy RPC immediately.
 
 ---
 
-# 7) SECURITY DEFINER audit
+# 9 – SECURITY DEFINER Audit
 
 Goal:
 
-Find SECURITY DEFINER functions without search_path.
+Find SECURITY DEFINER functions without explicit search_path.
 
-Provide audit SQL:
+Audit query:
 
-select proname
-from pg_proc
-where prosecdef = true;
+select proname from pg_proc where prosecdef = true;
 
-Fix SQL:
+Fix pattern:
 
-alter function <function>
-set search_path = public;
+alter function <function_name> set search_path = public;
 
-Re-audit SQL.
-
-All SECURITY DEFINER functions must:
-
-* explicitly set search_path
-* not bypass RLS unintentionally
+Re-audit after fix.
 
 ---
 
-# 8) Performance audit
+# 10 – Performance Audit
 
-Query or RPC:
+Target query or RPC:
 
 <query>
 
-Provide:
+Return:
 
-* EXPLAIN ANALYZE interpretation
-* bottleneck identification
-* minimal index recommendation
-* tradeoffs
+- EXPLAIN ANALYZE interpretation
+- bottleneck identification
+- index recommendations if justified
+- tradeoffs
 
-Never recommend indexes without evidence.
-
-Never optimize before confirming real bottleneck.
+Never propose indexes without evidence.
 
 ---
 
-# 9) Debug template
+# 11 – Debug Template
 
 Bug:
 
-<exact error>
+<error>
 
 Observed:
 
@@ -280,37 +377,34 @@ Expected:
 
 Already verified:
 
-* DB contains expected data
-* RPC v2 output checked
-* RLS policies checked
-* Cache cleared
+- DB state correct
+- RPC output checked
+- RLS policies checked
+- cache cleared
 
-Provide:
+Return:
 
-* minimal diagnostic path
-* root cause
-* minimal fix
+- diagnostic steps
+- root cause
+- minimal fix
 
-Never propose architectural rewrite for isolated bug.
+Avoid architectural rewrites.
 
 ---
 
-# 10) Contract mismatch diagnostic template
+# 12 – Contract Mismatch Diagnostic
 
-Use when frontend fields are undefined.
+Used when frontend receives undefined fields.
 
-Verify in order:
+Verify:
 
 1. DB contains values
 
-select guidance_text
-from disclosure_question
-limit 5;
+select guidance_text from disclosure_question limit 5;
 
 2. RPC returns values
 
-select guidance_text
-from get_vsme_questions_for_report_v2('<report_id>');
+select guidance_text from get_vsme_questions_for_report_v2('<report_id>');
 
 3. Frontend calls correct RPC
 
@@ -318,55 +412,117 @@ supabase.rpc('get_vsme_questions_for_report_v2')
 
 4. Frontend types include field
 
-If any layer missing → fix that layer.
+Fix the layer where the mismatch occurs.
 
 Never patch UI blindly.
 
 ---
 
-# 11) Taxonomy alignment template
-
-Use when verifying 1:1 alignment with EFRAG VSME taxonomy.
+# 13 – Taxonomy Alignment Template
 
 Goal:
 
-Ensure vsme_datapoint catalog matches official taxonomy version.
+Ensure vsme_datapoint catalog matches VSME taxonomy.
 
 Verify:
 
-* report.vsme_taxonomy_version
-* vsme_datapoint count
-* no orphan disclosure_question.vsme_datapoint_id
-* no duplicate datapoint IDs
-* answer_type aligned with value_type
+- report.vsme_taxonomy_version
+- vsme_datapoint completeness
+- no orphan disclosure_question.vsme_datapoint_id
+- no duplicate datapoints
+- answer_type aligned with datapoint value_type
 
-Provide:
+Return:
 
-* audit SQL
-* mismatch list
-* safe correction script
+- audit SQL
+- mismatch list
+- correction script
 
-Never “approximate” taxonomy compliance.
+Never approximate taxonomy compliance.
 
 ---
 
-# 12) Safe change philosophy
+# 14 – Conditional Behaviour Debug Template
 
-Always prefer:
+Bug:
 
-* additive changes
-* versioned RPC evolution
-* deterministic DB logic
-* minimal frontend patches
-* explicit auditability
-* taxonomy version traceability
+<conditional behavior issue>
+
+Observed:
+
+<actual runtime behavior>
+
+Expected:
+
+<expected behavior>
+
+Verify:
+
+1. metadata rows exist
+2. frontend loads metadata
+3. ID-based matching used
+4. single source of truth visibility function
+5. render logic uses same visibility state
+
+Return:
+
+- root cause
+- minimal fix
+- cleanup steps
+
+Never hardcode question-code mappings if DB metadata exists.
+
+---
+
+# 15 – Table Style Section / Multi Member Datapoint Pattern
+
+Used for sections like B3 energy tables.
+
+Goal:
+
+<precise behaviour>
+
+Examples:
+
+- subtotal recomputation
+- grand total persistence
+- explicit zero support
+- deterministic clearing
+
+Constraints:
+
+- must not redefine scope
+- must not redefine progress
+- must not introduce alternate storage model
+- disclosure_answer remains source of truth
+- zero must be handled explicitly
+
+Return:
+
+- frontend patch
+- persistence rules
+- SQL validation queries
+
+---
+
+# 16 – Safe Change Philosophy
+
+Prefer:
+
+- additive schema changes
+- versioned RPC evolution
+- deterministic DB logic
+- minimal UI patches
+- explicit auditability
+- taxonomy version traceability
 
 Avoid:
 
-* destructive schema changes
-* silent contract changes
-* frontend workarounds for DB contract issues
-* bypassing RPC logic
-* weakening RLS
+- destructive schema changes
+- silent contract changes
+- frontend workarounds for DB logic
+- bypassing RPC
+- weakening RLS
+- heuristic matching instead of ID matching
 
 DB and RPC remain the single source of truth.

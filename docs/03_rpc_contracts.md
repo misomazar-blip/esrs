@@ -7,7 +7,7 @@ This file defines the exact data contracts between:
 - Progress / readiness logic
 
 DB/RPC are the source of truth.  
-UI must not reinterpret scope, answer state, unit resolution, progress logic, or company-profile prefill rules.
+UI must not reinterpret scope, answer state, unit resolution, progress logic, company-profile prefill rules, Questionnaire Interaction Metadata as scope logic, or table-style interaction patterns as alternative reporting logic.
 
 ---
 
@@ -22,12 +22,15 @@ UI must not reinterpret scope, answer state, unit resolution, progress logic, or
 - Topic permissions are enforced via RLS backed by company_member_topic_access.
 - UI may update optimistically, but must reconcile with RPC-confirmed results.
 - No implicit client-side filtering.
-- No hidden heuristics.
+- No hidden heuristics for scope/progress/unit resolution.
 - Avoid select * in RPC return shapes (explicit columns only).
 - RPC functions must not bypass RLS.
 - RPC contracts are versioned when return shape changes.
 - Deterministic edge cases must be handled explicitly (see Progress Edge Cases).
 - Helper RPCs that write data must remain deterministic and must never overwrite user-entered typed values unless explicitly intended.
+- Questionnaire Interaction Metadata (question_group, question_group_item, question_interaction_rule) is UI-structuring metadata only. It does not redefine scope or progress.
+- Technical / structural datapoints may be returned where needed for deterministic rendering support, but UI must decide presentation via metadata rather than reinterpreting scope.
+- Table-style sections may group multiple related datapoints into one visual block, but persistence and answer-state authority remain datapoint/answer-row based.
 
 ---
 
@@ -161,7 +164,7 @@ Introduced: 2026-02
 
 Return deterministic in-scope VSME question list including help text fields.
 
-This RPC is the **single source of truth for the question dataset used by UI.**
+This RPC is the single source of truth for the question dataset used by UI.
 
 ---
 
@@ -290,6 +293,80 @@ This prevents invalid combinations such as:
 
 numeric datapoint + date answer type.
 
+Important clarification:
+
+UI widget choice may still be richer than storage type.
+
+Example:
+
+- disclosure_question.answer_type = 'text'
+- config_jsonb.allowed_values present
+- UI renders dropdown/select
+- stored answer still goes to value_text
+
+This is valid as long as storage type compatibility remains intact.
+
+---
+
+## TECHNICAL / STRUCTURAL DATAPOINT CONTRACT
+
+Some sections may require technical or structural datapoints to support richer layouts.
+
+Examples include:
+
+- XBRL axes
+- XBRL table anchors
+- structural helper datapoints
+- technical rows used in table-style sections
+
+Important rule:
+
+Such datapoints may be included in the RPC dataset where required for deterministic rendering support.
+
+They are still part of the returned dataset, but UI must not automatically render every returned row as a normal question card.
+
+Rendering decisions for these rows belong to UI metadata and section rendering logic, not to alternative scope logic.
+
+Important implementation note for richer layouts:
+
+When datapoint catalog filtering is applied, the dataset may need to include both:
+
+- fact datapoints
+- xbrl_technical datapoints
+
+so that structurally required rows are not dropped from the authoritative dataset.
+
+---
+
+## MULTI-MEMBER DATAPOINT CONTRACT
+
+Some logical questionnaire blocks represent multiple related datapoints.
+
+Typical structure:
+
+- member datapoint A
+- member datapoint B
+- aggregated fact datapoint
+- optional grand total fact
+
+Example pattern:
+
+- renewable
+- non-renewable
+- total
+
+Important rule:
+
+The RPC still returns a flat question dataset.
+
+UI may group these rows into one visual table/block, but must not reinterpret them as a different storage model.
+
+Persistence, answer-state logic, and deterministic DB authority remain per answer row.
+
+This pattern is documented in detail in:
+
+- `12_multi_member_datapoint_pattern.md`
+
 ---
 
 ## CURRENCY DISPLAY CONTRACT (VSME TEMPLATE)
@@ -306,14 +383,40 @@ Example:
 
 EUR  
 USD  
+CZK  
 
-UI MAY use this value to display a currency suffix for monetary datapoints.
+UI MAY use this value as reporting currency context for display of monetary datapoints.
 
 This is display logic only.
 
 Stored numeric values remain unit-agnostic.
 
-Template currency does not override vsme_datapoint.unit.
+Template currency does NOT override vsme_datapoint.unit.
+
+vsme_datapoint.unit remains the canonical unit contract.
+
+---
+
+## BOOLEAN ANSWER CONTRACT
+
+Boolean answers are stored in:
+
+disclosure_answer.value_boolean
+
+UI may render boolean as a dropdown:
+
+- empty placeholder
+- Yes
+- No
+
+Expected mapping:
+
+- Yes -> value_boolean = true
+- No -> value_boolean = false
+- empty placeholder -> no answer row OR cleared boolean value, which operationally results in Missing
+
+Boolean rendering choice is a UI concern.  
+Boolean storage contract remains `value_boolean`.
 
 ---
 
@@ -360,6 +463,8 @@ It does NOT affect:
 If the user later edits a prefilled answer, UI/app save flow may switch source to:
 
 source = 'user'
+
+This is optional provenance behavior, not a scope/progress rule.
 
 ---
 
@@ -408,6 +513,17 @@ N/A:
 
 - explicit value_jsonb.na = true  
 - counted as Answered
+
+Important clarification:
+
+Manual user-driven N/A and system-driven conditional child deactivation may both result in `value_jsonb.na = true`.
+
+For progress purposes, both are treated identically:
+
+- counted as Answered
+- not counted as Missing
+
+The distinction is behavioral/UI-level, not progress-level.
 
 ---
 
@@ -475,6 +591,20 @@ Export readiness must be informative and never blocking.
 
 ---
 
+## Multi-member / table-style consistency requirement
+
+Table-style sections do NOT define an alternative progress model.
+
+Even if UI renders one visual block containing multiple related datapoints:
+
+- progress still derives from the in-scope question dataset
+- answer state still derives from disclosure_answer rows
+- grouped rendering must not collapse multiple answer rows into one artificial progress row unless DB/RPC explicitly defines that model
+
+This keeps progress deterministic and consistent with the returned question dataset.
+
+---
+
 # 4. prefill_company_profile_into_open_reports(p_company_id uuid)
 
 Status: Active / helper RPC
@@ -489,7 +619,7 @@ Purpose:
 - reduce duplicate typing in B1-style company identity fields
 - fill missing answers only
 
-This RPC is a **helper write action**, not a question-loading or progress authority RPC.
+This RPC is a helper write action, not a question-loading or progress authority RPC.
 
 ---
 
@@ -529,11 +659,16 @@ OR
   - value_integer null if relevant
   - value_date null
   - value_boolean null
+AND
+- value_jsonb.na is not true
 
 It must NOT overwrite an existing typed answer.
 
-If value_jsonb.na = true but there is no typed value, prefill may still occur if the implementation defines that state as missing-enough for prefill.  
 If any typed value exists, it must not be overwritten.
+
+If value_jsonb.na = true, prefill must skip the answer.
+
+This preserves explicit answer-state intent.
 
 ---
 
@@ -580,7 +715,79 @@ No client-side heuristics are allowed.
 
 ---
 
-# 5. Section Visibility Contract
+# 5. Questionnaire Interaction Metadata (non-RPC scope authority)
+
+Questionnaire Interaction Metadata is currently loaded separately from core question RPCs.
+
+Tables involved:
+
+- question_group
+- question_group_item
+- question_interaction_rule
+
+Used by UI for:
+
+- grouped rendering
+- conditional child/group visibility
+- pair layout
+- questionnaire flow improvements
+- technical row hiding
+- table/block rendering support
+
+Important contract:
+
+These tables are NOT scope authority.
+
+They do NOT replace:
+
+- get_vsme_questions_for_report_v2
+- get_vsme_ctas_for_report
+
+They only structure the already in-scope questionnaire dataset returned by RPC.
+
+---
+
+## Current B1 Pilot Behavior
+
+B1 currently uses Questionnaire Interaction Metadata for:
+
+- grouped rendering
+- hidden technical rows
+- legal form conditional child
+- previous-report follow-up conditional children
+- subsidiaries conditional group visibility
+- pilot auto-NA behavior for inactive conditional child questions
+
+Important clarification:
+
+For conditional child deactivation, current UI behavior may:
+
+- clear typed child values
+- set value_jsonb.na = true
+
+This is UI interaction behavior only.  
+Progress and scope still come from RPC + DB answer state.
+
+---
+
+## Current B3 Pilot Behavior
+
+B3 currently uses richer section rendering for a table-style datapoint pattern.
+
+Key principles:
+
+- multiple related datapoints may be rendered in one table row
+- local UI state may be used for stable editing / debounce behavior
+- deterministic persistence still happens per underlying datapoint / question row
+- subtotal and grand-total behavior must not redefine source-of-truth answer logic
+- clear semantics must result in deterministic DB state
+
+This is still UI interaction behavior only.  
+Scope and progress still come from RPC + DB answer state.
+
+---
+
+# 6. Section Visibility Contract
 
 Sections are derived from the RPC dataset.
 
@@ -603,7 +810,7 @@ No global numeric total should be shown in the header.
 
 ---
 
-# 6. Security Model
+# 7. Security Model
 
 Access control enforced by:
 
@@ -617,9 +824,11 @@ If SECURITY DEFINER is used, explicit membership checks must exist.
 
 Helper prefill RPCs must also respect tenant boundaries and must never write across unauthorized companies.
 
+Questionnaire Interaction Metadata is shared metadata and must not override RLS-protected answer/report access.
+
 ---
 
-# 7. Single Source of Truth
+# 8. Single Source of Truth
 
 Scope, progress and readiness MUST be computed in DB.
 
@@ -633,6 +842,10 @@ UI:
 - must not use company table values as a live substitute for disclosure_answer
 
 Company profile edits may trigger deterministic helper prefills, but disclosure_answer remains the report-facing snapshot.
+
+Questionnaire Interaction Metadata may shape UX, but must never become a second source of truth for scope or progress.
+
+Table-style interaction patterns may improve UX, but must never become an alternative source of truth for stored reporting state.
 
 If business logic changes:
 

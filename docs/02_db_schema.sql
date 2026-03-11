@@ -33,6 +33,9 @@
 -- - Report taxonomy snapshot is stored on report.vsme_taxonomy_version
 -- - Company-profile prefill into open reports is performed via helper RPC prefill_company_profile_into_open_reports(company_id)
 -- - disclosure_answer.value_jsonb is NOT NULL and uses '{}' as the empty metadata state
+-- - Some UI layouts may render multiple related datapoints as one table/block, but the DB model remains flat and datapoint-driven
+-- - Some datapoints may serve structural / technical XBRL purposes and should not automatically be assumed to be user-facing question cards
+-- - Multi-member reporting patterns may persist member values and aggregated facts separately, while keeping disclosure_answer as the report snapshot authority
 
 -- ============================================================
 -- 0) TABLE INVENTORY (public)

@@ -1,7 +1,8 @@
 # 04 – ANSWER STORAGE CONTRACT (VSME)
 
-This file defines the storage contract for answers in `disclosure_answer`,
-including explicit N/A support, metadata handling, and help-text separation.
+This file defines the storage contract for answers in disclosure_answer,
+including explicit N/A support, metadata handling, conditional behavior,
+and help-text separation.
 
 UI must follow this contract.
 DB/RPC logic assumes this contract.
@@ -12,20 +13,18 @@ DB/RPC logic assumes this contract.
 
 Identity / upsert key:
 
-```
 (report_id, question_id)
-```
 
 Use UPSERT with conflict target:
 
-```
 onConflict: 'report_id,question_id'
-```
 
 Note:
 
 DB currently contains duplicate UNIQUE constraints for this pair.
+
 Do not add another uniqueness rule and do not attempt to “fix” this as part of application work.
+
 Schema is considered stable.
 
 ---
@@ -34,58 +33,54 @@ Schema is considered stable.
 
 Each in-scope question is always in exactly one state.
 
-### Missing
+Missing
 
-No `disclosure_answer` row exists
+No disclosure_answer row exists
 OR
 
 Row exists but:
 
-* contains no valid typed value
-  AND
-* `value_jsonb.na` is not true
+- contains no valid typed value
+AND
+- value_jsonb.na is not true
 
----
-
-### Answered (with value)
+Answered (with value)
 
 A valid typed value exists in the correct column
 AND
-`value_jsonb.na` is not true (or absent).
+value_jsonb.na is not true (or absent).
 
----
+Answered as N/A
 
-### Answered as N/A
-
-```
 value_jsonb.na = true
-```
 
-N/A counts as **Answered** for progress.
+N/A counts as Answered for progress.
 
 ---
 
 # 3. Typed Value Storage (authoritative)
 
-Valid typed value must be stored in the correct column according to `question.answer_type`.
+Valid typed value must be stored in the correct column according to question.answer_type.
 
 Mapping:
 
-```
-text / string / select → value_text
-numeric → value_numeric
-number (legacy) → value_number
-integer → value_integer
-date → value_date
-boolean → value_boolean
-json → value_jsonb (excluding `na` key)
-```
+text / string / select → value_text  
+numeric → value_numeric  
+number (legacy) → value_number  
+integer → value_integer  
+date → value_date  
+boolean → value_boolean  
+json → value_jsonb (excluding the na key)
 
 Important:
 
-Empty string **does not count as answered**.
+Empty string does not count as answered.
 
-Values stored in wrong typed columns are treated as **Missing**.
+Values stored in wrong typed columns are treated as Missing.
+
+UI widgets (dropdown, select, boolean toggle) do not change storage rules.
+
+Storage always follows answer_type.
 
 ---
 
@@ -93,9 +88,7 @@ Values stored in wrong typed columns are treated as **Missing**.
 
 N/A is stored in:
 
-```
-disclosure_answer.value_jsonb -> { "na": true }
-```
+value_jsonb → { "na": true }
 
 ---
 
@@ -105,26 +98,22 @@ When marking N/A:
 
 Upsert row with:
 
-```
-report_id
+report_id  
 question_id
-```
 
-value_jsonb =
+value_jsonb must be merged:
 
-```
 jsonb_set(
   coalesce(existing_jsonb,'{}'::jsonb),
   '{na}',
   'true'::jsonb,
   true
 )
-```
 
 Rules:
 
-* Must merge JSON, not overwrite
-* Must not destroy existing typed values
+- Must merge JSON, not overwrite
+- Must not destroy existing metadata keys
 
 ---
 
@@ -132,33 +121,55 @@ Rules:
 
 When unmarking N/A:
 
-```
 value_jsonb =
 coalesce(existing_jsonb,'{}'::jsonb) - 'na'
-```
 
 Rules:
 
-* Must not delete row automatically
-* Must preserve typed values
+- Must not delete row automatically
+- Must preserve metadata keys other than na
 
 ---
 
-# 5. Preservation Rule (No Data Loss)
+# 5. Conditional Child Behavior (current B1 pattern)
 
-Toggling N/A must never destroy previously stored values.
+Some questions are conditional children.
 
 Example:
 
-User enters value → toggles N/A → later toggles N/A off.
+UndertakingsLegalForm → OtherUndertakingsLegalForm
 
-Previously entered value **must still exist** unless explicitly cleared.
+When the parent condition becomes false,
+the child question becomes inactive.
+
+Current UI contract (B1 pilot):
+
+When child becomes inactive:
+
+- typed value columns are cleared
+- value_jsonb.na = true
+
+Example stored row:
+
+value_text = NULL  
+value_numeric = NULL  
+value_date = NULL  
+value_jsonb = { "na": true }
+
+When the parent condition becomes true again:
+
+- na may be removed
+- user may enter value again
+
+Important:
+
+This behavior is currently implemented at the UI layer but follows the same answer-state contract used by progress logic.
 
 ---
 
 # 6. Save Rules (UI)
 
-### Writing Value
+## Writing Value
 
 When saving answer:
 
@@ -166,11 +177,11 @@ Write value to correct typed column.
 
 Recommended behavior:
 
-If value is entered → remove `value_jsonb.na`.
+If value is entered → remove value_jsonb.na.
 
 ---
 
-### Clearing Value
+## Clearing Value
 
 If user clears value AND does not mark N/A:
 
@@ -182,17 +193,17 @@ OR
 
 keep row with NULL values
 
-Both are treated as **Missing** by progress logic.
+Both are treated as Missing by progress logic.
 
 Recommended:
 
 Delete row when:
 
-* no typed values exist
-* no JSON business keys exist
+- no typed values exist
+- no JSON business keys exist
 
 Deleting rows is allowed for clearing values,
-but **must not be used as part of N/A toggle logic**.
+but must not be used as part of N/A toggle logic.
 
 ---
 
@@ -214,39 +225,34 @@ UI must not recompute progress independently.
 
 # 8. Question Help Text Contract (disclosure_question)
 
-Help text fields exist in `disclosure_question`.
+Help text fields exist in disclosure_question.
 
 Fields:
 
-```
-guidance_text TEXT NULL
+guidance_text TEXT NULL  
 example_answer TEXT NULL
-```
 
 These fields are delivered via:
 
-```
 get_vsme_questions_for_report_v2
-```
 
 ---
 
 ## Semantics
 
-### guidance_text
+guidance_text
 
 Displayed below question title.
+
 Explains what information the user should provide.
 
-### example_answer
+example_answer
 
 Displayed below the input field.
 
 Prefixed with:
 
-```
 Example:
-```
 
 Provides format guidance only.
 
@@ -256,20 +262,20 @@ Provides format guidance only.
 
 These fields:
 
-* are NOT stored in `disclosure_answer`
-* are NOT modified by UI save operations
-* are NOT part of UPSERT payload
-* may be NULL
+- are NOT stored in disclosure_answer
+- are NOT modified by UI save operations
+- are NOT part of UPSERT payload
+- may be NULL
 
 They do NOT affect:
 
-* answer validity
-* completion state
-* progress calculation
-* export readiness
-* scope logic
+- answer validity
+- completion state
+- progress calculation
+- export readiness
+- scope logic
 
-They are **UX-only metadata**.
+They are UX-only metadata.
 
 ---
 
@@ -277,29 +283,25 @@ They are **UX-only metadata**.
 
 Units are primarily resolved from:
 
-```
 vsme_datapoint.unit
-```
 
-`disclosure_answer.unit` exists only as an optional per-report override.
+disclosure_answer.unit exists only as an optional per-report override.
 
 Rules:
 
-UI SHOULD NOT write `unit` during normal flows.
+UI SHOULD NOT write unit during normal flows.
 
 If written, it must be a deliberate override.
 
 RPC resolves unit as:
 
-```
 coalesce(
   disclosure_answer.unit,
   vsme_datapoint.unit,
   disclosure_question.unit
 )
-```
 
-UI must always display the **RPC-returned unit**.
+UI must always display the RPC-returned unit.
 
 UI must never derive units from question text.
 
@@ -307,75 +309,57 @@ UI must never derive units from question text.
 
 # 10. Answer Metadata (value_jsonb)
 
-`value_jsonb` is used for **answer metadata flags**.
+value_jsonb is used for answer metadata flags.
 
-It must always be treated as a **mergeable JSON object**.
+It must always be treated as a mergeable JSON object.
 
 Empty state:
 
-```
 {}
-```
 
-The column is **NOT NULL** in the schema.
+The column is NOT NULL in the schema.
 
 ---
 
 ## Known Metadata Keys
 
-### na
+na
 
-```
 value_jsonb.na = true
-```
 
-Marks answer as **Not Applicable**.
+Marks answer as Not Applicable.
 
 ---
 
-### source
+source
 
-```
 value_jsonb.source
-```
 
-Indicates **origin of the answer value**.
+Indicates origin of the answer value.
 
 Possible values:
 
-```
-company_profile
-user
+company_profile  
+user  
 system
-```
 
 Example:
 
-```
-{
-  "source": "company_profile"
-}
-```
+{ "source": "company_profile" }
 
 ---
 
 ## Metadata Merge Rule (critical)
 
-When updating `value_jsonb`, implementations must **merge existing JSON**.
-
-Never overwrite entire JSON objects.
+When updating value_jsonb, implementations must merge existing JSON.
 
 Correct pattern:
 
-```
 coalesce(existing_jsonb,'{}'::jsonb) || new_jsonb
-```
 
 Incorrect pattern:
 
-```
 value_jsonb = '{...}'
-```
 
 which destroys existing metadata.
 
@@ -383,23 +367,21 @@ which destroys existing metadata.
 
 # 11. Company Profile Prefill Contract
 
-Some answers may be **prefilled from company profile data**.
+Some answers may be prefilled from company profile data.
 
 This is performed via RPC:
 
-```
 prefill_company_profile_into_open_reports(company_id)
-```
 
 Typical overlapping fields include:
 
-* company legal name
-* address
-* city
-* postal code
-* country code
-* registration number
-* VAT number
+- company legal name
+- address
+- city
+- postal code
+- country code
+- registration number
+- VAT number
 
 ---
 
@@ -407,16 +389,14 @@ Typical overlapping fields include:
 
 Prefill must follow these rules:
 
-* Only apply to **open / non-submitted reports**
-* Only fill **missing answers**
-* Must **never overwrite typed user values**
-* Must record provenance
+- Only apply to open / non-submitted reports
+- Only fill missing answers
+- Must never overwrite typed user values
+- Must record provenance
 
 Provenance is stored as:
 
-```
 value_jsonb.source = 'company_profile'
-```
 
 ---
 
@@ -424,43 +404,40 @@ value_jsonb.source = 'company_profile'
 
 When a user edits a prefilled value:
 
-* typed value becomes authoritative
-* UI may change metadata to:
+typed value becomes authoritative
 
-```
+UI may change metadata to:
+
 value_jsonb.source = 'user'
-```
 
 This change is optional and informational only.
 
-Prefill metadata **does not affect progress logic**.
+Prefill metadata does not affect progress logic.
 
 ---
 
 # 12. Separation of Concerns (critical)
 
-`disclosure_question` contains:
+disclosure_question contains:
 
-* question_text
-* guidance_text
-* example_answer
-* answer_type
-* scope metadata
+- question_text
+- guidance_text
+- example_answer
+- answer_type
+- scope metadata
 
-`disclosure_answer` contains:
+disclosure_answer contains:
 
-* actual answer values
-* na flag
-* metadata (value_jsonb)
-* timestamps
-* optional unit override
+- actual answer values
+- na flag
+- metadata (value_jsonb)
+- timestamps
+- optional unit override
 
 Principle:
 
-```
-disclosure_question → WHAT is asked
+disclosure_question → WHAT is asked  
 disclosure_answer → WHAT was answered
-```
 
 These responsibilities must never be mixed.
 
@@ -468,7 +445,7 @@ These responsibilities must never be mixed.
 
 # 13. Support / Debug Views (Settings Page)
 
-The Report Settings page contains a **collapsible Questions overview panel**.
+The Report Settings page contains a collapsible Questions overview panel.
 
 Purpose:
 
@@ -476,10 +453,10 @@ Support debugging and export troubleshooting.
 
 Displayed information:
 
-* question_text
-* section_code
-* answer_state
-* answer_preview
+- question_text
+- section_code
+- answer_state
+- answer_preview
 
 Answer preview is derived from typed value columns or NA flag.
 
@@ -489,34 +466,32 @@ This panel must be read-only and must never modify answers.
 
 # 14. Known Risks / Footguns
 
-### JSON overwrite risk
+JSON overwrite risk
 
-Never overwrite `value_jsonb` when updating NA or metadata.
+Never overwrite value_jsonb when updating NA or metadata.
 
 Always merge existing JSON.
 
 ---
 
-### Wrong typed column writes
+Wrong typed column writes
 
 Writing value to wrong column causes progress logic to treat the answer as Missing.
 
 ---
 
-### Help text overwrite risk
+Help text overwrite risk
 
 UI must never attempt to write:
 
-```
-guidance_text
+guidance_text  
 example_answer
-```
 
-These belong to `disclosure_question`.
+These belong to disclosure_question.
 
 ---
 
-### Unit confusion risk
+Unit confusion risk
 
 UI must never invent units.
 
@@ -524,7 +499,7 @@ Always display unit returned by RPC.
 
 ---
 
-### Prefill overwrite risk
+Prefill overwrite risk
 
 Company prefill logic must never overwrite existing typed answers.
 

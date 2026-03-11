@@ -1,6 +1,6 @@
 # AI CONTEXT — VSME Reporting SaaS
 
-You are helping build a guided ESG reporting tool for SMEs based on EFRAG VSME.
+You are helping build a guided ESG reporting tool for SMEs based on **EFRAG VSME**.
 
 Before proposing any solution, read and respect these docs (source of truth):
 
@@ -15,16 +15,19 @@ Before proposing any solution, read and respect these docs (source of truth):
 - docs/07_prompt_templates.md
 - docs/08_units_contract.md
 - docs/09_known_limits.md
-- docs/10_Product_logic.md
+- docs/10_product_logic.md
 - docs/11_prefill_contract.md
+- docs/12_multi_member_datapoint_pattern.md
+
+These documents define the authoritative system behaviour.
 
 ---
 
 # Core System Principles
 
-The platform is a guided ESG reporting tool for SMEs based on EFRAG VSME.
+The platform is a **guided ESG reporting tool for SMEs** based on EFRAG VSME.
 
-It is not a compliance enforcement system.
+It is **not a compliance enforcement system**.
 
 Design principles:
 
@@ -33,6 +36,34 @@ Design principles:
 - guided UX
 - non-blocking export
 - minimal cognitive load for SME users
+- deterministic database-driven logic
+
+---
+
+# Determinism Principle (CRITICAL)
+
+The system must behave deterministically.
+
+Given the same inputs:
+
+- report configuration
+- question catalog
+- existing answers
+- datapoint metadata
+
+the system must always produce the same results.
+
+This applies to:
+
+- question scope
+- progress calculation
+- unit resolution
+- export state
+- section visibility
+
+No client-side heuristics are allowed.
+
+All authoritative logic must live in DB / RPC.
 
 ---
 
@@ -40,40 +71,76 @@ Design principles:
 
 The following rules must never be violated.
 
-## Database
+---
 
-- DB schema is stable (no destructive changes unless explicitly requested).
-- Never introduce breaking schema changes.
-- disclosure_question is shared catalog metadata (read-only from UI).
-- disclosure_answer stores the report snapshot.
+# Database Rules
 
-## RLS
+- DB schema is considered **stable**.
+- No destructive schema changes unless explicitly requested.
+- Additive schema changes must be explicitly requested.
+- disclosure_question is shared **catalog metadata**.
+- disclosure_answer stores the **report snapshot**.
 
-- RLS is enforced.
-- Never bypass RLS with service role in client code.
-- All access must respect company_member and topic access rules.
+Core tables must never be reinterpreted.
 
-## RPC authority
+Stable core tables include:
 
-DB/RPC are the source of truth for:
+- company
+- report
+- disclosure_question
+- disclosure_answer
+- vsme_datapoint
+
+---
+
+# RLS Rules
+
+Row Level Security is enforced.
+
+Never bypass RLS using service role in client code.
+
+Access control must respect:
+
+- company_member
+- company_member_topic_access
+
+UI must never be treated as a security boundary.
+
+All access must be enforced at the database layer.
+
+---
+
+# RPC Authority
+
+DB / RPC are the source of truth for:
 
 - scope
 - progress
 - readiness
 - unit resolution
+- question ordering
+- section visibility
 
-UI must never recompute these.
+UI must never recompute these rules.
 
-## RPC contract stability
+UI is a **projection layer**, not a logic layer.
+
+---
+
+# RPC Contract Stability
 
 RPC contracts are versioned.
 
 Never silently change return shapes.
 
-Preferred RPC:
+Preferred RPC functions:
 
 - get_vsme_questions_for_report_v2
 - get_vsme_ctas_for_report
+
+Legacy RPCs may remain temporarily for compatibility.
+
+Never remove legacy RPC without explicit migration.
 
 ---
 
@@ -89,26 +156,42 @@ disclosure_question contains:
 - scope metadata
 - vsme_datapoint_id
 
-UI must never attempt to modify these fields.
+These fields are **catalog metadata**.
+
+They are:
+
+- read-only from UI
+- not part of answer state
+- not part of progress logic
+
+UI must never attempt to modify them.
 
 ---
 
 ## Answer storage
 
-disclosure_answer represents the report snapshot.
+disclosure_answer represents the **report snapshot**.
 
 Answer values must be stored in the correct typed column.
 
-Metadata stored in:
+Typed value columns include:
+
+- value_text
+- value_numeric
+- value_integer
+- value_date
+- value_boolean
+
+Optional metadata is stored in:
 
 value_jsonb
 
-Known keys:
+Known metadata keys:
 
 - na
 - source
 
-Example:
+Example metadata:
 
 { "na": true }
 
@@ -116,9 +199,9 @@ Example:
 
 ---
 
-## JSON Merge Rule (CRITICAL)
+# JSON Merge Rule (CRITICAL)
 
-value_jsonb must always be merged, never overwritten.
+value_jsonb must always be **merged**, never overwritten.
 
 Correct pattern:
 
@@ -132,12 +215,13 @@ Overwriting JSON destroys metadata such as:
 
 - na
 - source
+- future metadata fields
 
 This must never happen.
 
 ---
 
-## N/A semantics
+# N/A Semantics
 
 N/A stored as:
 
@@ -146,12 +230,27 @@ value_jsonb.na = true
 Rules:
 
 - N/A counts as answered for progress
-- N/A must not delete previously stored typed values
-- toggling NA must preserve previous values
+- toggling N/A must preserve metadata
+- N/A toggle must not overwrite other metadata keys
+
+Important clarification:
+
+There are two valid N/A-producing flows:
+
+1. Manual user-driven N/A  
+   - may preserve existing typed values
+
+2. System-driven conditional child deactivation  
+   - clears typed values
+   - then sets value_jsonb.na = true
+
+Both are valid under the contract.
+
+N/A is part of the **answer state model**, not scope control.
 
 ---
 
-## Company profile prefill
+# Company Profile Prefill
 
 Company profile data may be used to prefill report answers.
 
@@ -164,19 +263,20 @@ Rules:
 - Only applies to open / non-submitted reports
 - Only fills missing answers
 - Never overwrites typed answers
+- Must skip answers where value_jsonb.na = true
 - Must record provenance:
 
 value_jsonb.source = "company_profile"
 
-This metadata may be used by UI to show an informational hint:
+UI may show hint:
 
-"Prefilled from company profile"
+Prefilled from company profile.
 
-Prefill does not affect progress or scope.
+Prefill does not affect scope or progress.
 
 ---
 
-## Prefill Overwrite Prohibition (CRITICAL)
+# Prefill Overwrite Prohibition (CRITICAL)
 
 Prefill logic must never overwrite existing typed answers.
 
@@ -189,24 +289,25 @@ Not allowed:
 
 - replacing user-entered values
 - overwriting typed columns with company data
+- filling answers already marked with value_jsonb.na = true
 
 User answers always take precedence.
 
 ---
 
-## Report Snapshot Principle (CRITICAL)
+# Report Snapshot Principle (CRITICAL)
 
-Reports represent immutable snapshots of answers.
+Reports represent immutable **snapshots of answers**.
 
 Changing company profile data must not modify existing report answers.
 
-Prefill only assists with initial answer creation.
+Prefill only assists with **initial answer creation**.
 
-Report data must remain historically stable.
+Historical report data must remain stable.
 
 ---
 
-## Units
+# Units
 
 Canonical unit source:
 
@@ -220,9 +321,46 @@ coalesce(
   disclosure_question.unit
 )
 
-UI must always display RPC-returned unit.
+UI must always display the **RPC-returned unit**.
 
-Never infer units from question text.
+Never infer units from:
+
+- question text
+- user input
+- example answers
+
+Currency clarification:
+
+- vsme_datapoint.unit remains the canonical unit contract
+- template_currency defines reporting currency context for display
+- template_currency does NOT override vsme_datapoint.unit
+
+---
+
+# Questionnaire Interaction Metadata
+
+Questionnaire Interaction Metadata tables include:
+
+- question_group
+- question_group_item
+- question_interaction_rule
+
+These tables control:
+
+- grouped question layout
+- conditional child questions
+- pair question rendering
+- advanced questionnaire UX
+
+Important rule:
+
+These tables **do not define scope**.
+
+They **do not define progress**.
+
+They only influence **how in-scope questions are rendered**.
+
+Scope always comes from RPC.
 
 ---
 
@@ -232,13 +370,15 @@ Never infer units from question text.
 
 Returns:
 
-- questions
+- in-scope questions
 - existing answers
 - resolved unit
 - guidance_text
 - example_answer
 
-This RPC defines the authoritative question dataset.
+This RPC defines the authoritative **question dataset**.
+
+UI must rely entirely on this dataset for rendering.
 
 ---
 
@@ -250,7 +390,10 @@ Returns:
 - report progress
 - readiness metrics
 
-This RPC defines the authoritative completion state.
+This RPC defines the authoritative **completion state**.
+
+UI may optimistically update local progress state,
+but must reconcile with RPC results.
 
 ---
 
@@ -264,12 +407,14 @@ When proposing changes:
 - keep changes testable
 - respect existing RPC contracts
 
-Always include:
+Always include verification steps.
 
-How to verify:
+Example verification sequence:
 
-- 2–5 verification steps
-- clear UI or SQL tests
+1. SQL check
+2. RPC output check
+3. UI rendering check
+4. Progress calculation check
 
 ---
 
@@ -279,15 +424,25 @@ Documentation may be updated through GPT to reduce manual editing.
 
 Rules:
 
-- Updates must be lightweight
-- No structural rewrites
-- Only reflect real implemented behaviour
-- Preserve document structure where possible
+- updates must remain lightweight
+- no structural rewrites
+- only reflect real implemented behaviour
+- preserve document structure where possible
 
-Returned files should be copied into /docs as the new source of truth.
+Returned files should be copied into:
+
+/docs
 
 Documentation must remain consistent with:
 
 - DB schema
 - RPC contracts
 - answer storage contract
+- unit contract
+- RLS policies
+
+Docs act as the **single architectural reference** for the system.
+
+---
+
+END OF CONTEXT

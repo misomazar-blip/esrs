@@ -1,6 +1,11 @@
 # ARCHITECTURE – VSME Reporting SaaS
 
-## 1. Goal of the architecture
+Architecture version: v0.4  
+Last structural update: Question grouping model + structured questionnaire layer
+
+---
+
+# 1. Goal of the architecture
 
 Build a guided ESG reporting tool for SMEs (VSME) with:
 
@@ -11,12 +16,14 @@ Build a guided ESG reporting tool for SMEs (VSME) with:
 - guided UX via question metadata (guidance_text, example_answer)
 - pragmatic reuse of company profile data for report onboarding
 
-Key idea:  
-DB/RPC are the source of truth. UI is a projection.
+Key idea:
+
+DB/RPC are the source of truth.  
+UI is a projection.
 
 ---
 
-## 2. High-level flow (user journey)
+# 2. High-level flow (user journey)
 
 1) Sign in (Supabase Auth)  
 2) Company selection / creation  
@@ -30,9 +37,9 @@ Company profile editing exists on a separate profile/company page and may prefil
 
 ---
 
-## 3. Core concepts
+# 3. Core concepts
 
-### 3.1 Report
+## 3.1 Report
 
 A report is a snapshot for a company + year:
 
@@ -47,20 +54,20 @@ A report is a snapshot for a company + year:
 Uniqueness in DB:
 
 - One report per (company_id, reporting_year)
-- This uniqueness currently applies across all frameworks
+- This uniqueness currently applies across all frameworks  
   (DB does not differentiate by framework in unique constraint)
 
 Implication:
 
-- Running multiple frameworks in the same year would require schema adjustment.
-- For VSME-only flow this is correct and stable.
+Running multiple frameworks in the same year would require schema adjustment.  
+For VSME-only flow this is correct and stable.
 
 A report is a historical snapshot.  
 It must not behave like a live view directly bound to company master data.
 
 ---
 
-### 3.2 VSME Scope (no materiality)
+## 3.2 VSME Scope (no materiality)
 
 VSME flow does not use formal materiality assessment.
 
@@ -74,72 +81,104 @@ Scope is computed deterministically from:
 
 Mode semantics:
 
-- core → questions where section_code LIKE B%
-- core_plus → core + datapoints included by selected packs
-- comprehensive → core + questions where section_code LIKE C%
+core  
+→ questions where section_code LIKE B%
+
+core_plus  
+→ core + datapoints included by selected packs
+
+comprehensive  
+→ core + questions where section_code LIKE C%
 
 Important UI rule:
 
-- UI must never infer scope from static metadata alone (e.g. VSME_SECTION_META).
-- UI scope is derived from the RPC dataset returned by get_vsme_questions_for_report_v2(report_id).
+UI must never infer scope from static metadata alone.
 
-Scope can be adjusted from the **Report Settings** page.
+Scope always comes from RPC dataset returned by:
+
+get_vsme_questions_for_report_v2(report_id)
+
+Scope can be adjusted from the **Report Settings page**.
 
 N/A is not a scope control.  
 It is only an answer-state marker.
 
 ---
 
-### 3.3 Add-on packs (deterministic expansion)
+## 3.3 Add-on packs (deterministic expansion)
 
 Pack catalog:
 
-- report_pack defines valid pack codes
-- vsme_datapoint_pack maps (datapoint_id, pack_code)
-- disclosure_question.vsme_datapoint_id links questions to datapoints
+report_pack
+
+defines valid pack codes.
+
+Mapping:
+
+vsme_datapoint_pack
+
+maps datapoint → pack.
+
+Question link:
+
+disclosure_question.vsme_datapoint_id
 
 Important contract:
 
-- report.vsme_pack_codes must only contain values that exist in report_pack.code
-- Scope expansion must always derive from DB joins
-- UI must not hardcode pack logic
+- report.vsme_pack_codes must contain only valid pack codes
+- scope expansion must derive from DB joins
+- UI must never hardcode pack logic
 
 ---
 
-### 3.4 Role & permissions (topic-level)
+## 3.4 Role & permissions (topic-level)
+
+Roles:
+
+owner/admin  
+editor  
+viewer
+
+Permissions enforced via:
+
+Row Level Security (RLS)
+
+Permission table:
+
+company_member_topic_access
+
+Rules:
 
 - owner/admin: full access
-- editor: only topics explicitly allowed (view/edit)
-- viewer: only topics explicitly allowed (view)
+- editor: allowed topics editable
+- viewer: read-only
 
-Enforced by:
-
-- Row Level Security (RLS)
-- company_member_topic_access (per-member per-topic permission table)
-
-No UI-only enforcement. UI may hide, but DB must block.
+UI hiding alone is insufficient.  
+DB must enforce access.
 
 ---
 
-### 3.5 disclosure_question is shared
+## 3.5 disclosure_question is shared
 
-Single table for ESRS + VSME.  
-Separation through disclosure_question.framework.
+Single table used for both ESRS and VSME.
 
-No duplicate VSME-only runtime tables.
+Separation through:
 
-Question UX metadata lives here:
+disclosure_question.framework
 
-- guidance_text (optional)
-- example_answer (optional)
+UX metadata stored here:
+
+- guidance_text
+- example_answer
+- config_jsonb
 
 These are informational only and never stored in disclosure_answer.
 
 ---
 
-### 3.6 Company profile vs report answers
+## 3.6 Company profile vs report answers
 
-company stores reusable master data such as:
+company table stores reusable master data:
 
 - legal name
 - address
@@ -149,361 +188,401 @@ company stores reusable master data such as:
 - identification_number
 - vat_number
 
-disclosure_answer stores report-specific answers / snapshot values.
+disclosure_answer stores report-specific answers.
 
-Important rule:
+Rule:
 
-- company profile data is not rendered as report data directly
-- report-facing values must live in disclosure_answer
+Company profile data must never be used directly as report answers.
 
-To reduce duplicate entry, overlapping company profile fields may be prefilling candidates for open VSME reports, but only through explicit DB/RPC action.
-
----
-
-### 3.7 Report Settings (control panel)
-
-Each report exposes a **Report Settings page** used for configuration and support/debug visibility.
-
-Route:
-
-/reports/[id]/settings
-
-The page contains four functional areas.
+To reduce duplicate entry, overlapping company fields may be prefilled into open reports through explicit RPC action.
 
 ---
 
-#### 1) Report status
+# 4. Questionnaire Interaction Layer
 
-Shows:
+To support richer questionnaire UX without modifying the core question model, a separate metadata layer exists.
 
-- company
-- reporting year
-- reporting scope
-- question count
-- completion percentage
-- N/A count
+Tables:
 
-This information is derived from the same RPC dataset used by the answering pages.
-
----
-
-#### 2) Scope configuration
-
-Allows editing:
-
-- report.vsme_mode
-- report.vsme_pack_codes
-
-Supported modes:
-
-Core  
-→ base VSME dataset
-
-Core Plus  
-→ Core + optional add-on packs
-
-Comprehensive  
-→ full VSME dataset
-
-UX rules:
-
-- add-on packs are visible only when mode = core_plus
-- comprehensive disables add-on selection
-- packs are preserved when switching modes in UI until saved
-- saving scope updates report.vsme_mode and report.vsme_pack_codes
-
-After saving scope:
-
-- report row is updated
-- question scope is recomputed via RPC
-- question lists refresh deterministically
-
----
-
-#### 3) Sections overview
-
-Displays per-section completion derived from the RPC dataset.
-
-Rules:
-
-- sections with total = 0 are hidden
-- completion represents (Answered + N/A) / total
-
-This mirrors the same logic used on the answering page.
-
-Current section panel header convention:
-
-- left: Sections
-- right: Completion
-
-No global numeric total is shown in the header.  
-Completion values are shown at section-row level only.
-
----
-
-#### 4) All questions (advanced)
-
-A collapsible **support/debug panel** containing the full in-scope question list.
+question_group  
+question_group_item  
+question_interaction_rule
 
 Purpose:
 
-- troubleshooting
-- export validation
-- support diagnostics
+- group questions for UI rendering
+- support conditional question behaviour
+- keep UX metadata separate from reporting logic
 
-Features:
+Important rule:
 
-- collapsed by default
-- search by text / code / datapoint / section
-- filter by state (All / Missing / Answered / N/A)
-- per-question debug details
-- answer preview
-- copy debug bundle for support
+This layer **never affects scope or progress**.
 
-This panel is **not part of the normal SME answering flow** and exists primarily for diagnostics.
+Scope always derives from RPC.
 
 ---
 
-## 4. Answering Loop (core loop)
+## 4.1 Question grouping
 
-### 4.1 Deterministic data contract for UI
+Question groups define logical UI blocks inside a section.
 
-For a given report, UI needs:
+Example (B1):
 
-- question list in deterministic order
-- existing answers for those questions (if any)
-- question config (answer_type, allowed units/enums, UX help text)
+- Company identity
+- Company size
+- Reporting basis
+- Report continuity
+- Sites
+- Subsidiaries
+
+Group definitions stored in:
+
+question_group
+
+Group membership stored in:
+
+question_group_item
+
+Fields:
+
+group_code  
+question_code  
+sort_order  
+role
+
+role may be:
+
+primary  
+secondary  
+parent  
+child  
+entry  
+technical
+
+Technical rows (e.g. typed axis identifiers) are hidden from UI.
+
+---
+
+## 4.2 Group rendering types
+
+Two group types exist:
+
+block  
+pair
+
+block:
+
+vertical question list
+
+Example:
+
+Company identity  
+→ Legal name  
+→ Country  
+→ Address
+
+pair:
+
+two-column layout
+
+Example:
+
+Base year | Target year
+
+Layout implementation typically uses:
+
+grid grid-cols-1 md:grid-cols-2
+
+If fewer than two visible questions exist, UI falls back to block rendering.
+
+---
+
+## 4.3 Conditional interaction rules
+
+Conditional logic is defined via:
+
+question_interaction_rule
+
+Rule types currently used:
+
+conditional_child  
+conditional_group  
+pair
+
+Example:
+
+UndertakingsLegalForm  
+→ controls visibility of  
+OtherUndertakingsLegalForm
+
+Previous report reuse question  
+→ controls follow-up explanation fields.
+
+Conditional logic is evaluated **client-side**, but rule definitions live in DB metadata.
+
+This separation allows flexible UX without altering scope logic.
+
+---
+
+## 4.4 Conditional child behaviour
+
+When a child question becomes inactive:
+
+- typed values are cleared
+- disclosure_answer.value_jsonb.na = true
+
+When child becomes active again:
+
+- na flag removed
+- user can answer again
+
+This ensures:
+
+- no hidden invalid answers
+- deterministic export behaviour
+- consistent progress calculation.
+
+---
+
+# 5. Section Render Model
+
+Sections may contain both grouped and standalone questions.
+
+The UI constructs an internal **section render model**.
+
+Example:
+
+sectionRenderModel
+
+grouped_blocks  
+standalone_questions  
+consumed_question_ids  
+total_visible
+
+Purpose:
+
+- avoid duplicate rendering
+- support mixed layouts
+- compute visible question count
+
+Visible question count excludes:
+
+- technical rows
+- hidden children.
+
+---
+
+# 6. Answering Loop (core loop)
+
+## 6.1 Deterministic UI data contract
+
+For a given report the UI needs:
+
+- ordered question list
+- existing answers
+- question config
 - stable identifiers for save/upsert
 
 Source of truth:
 
-- get_vsme_questions_for_report_v2(report_id)
+get_vsme_questions_for_report_v2(report_id)
 
-UI must not recompute scope rules.
-
----
-
-### 4.2 Loading strategy
-
-Preferred:
-
-- Server Component loads report header + authorization sanity checks
-- Client Component loads questions via RPC:
-  - get_vsme_questions_for_report_v2(report_id)
-  - get_vsme_ctas_for_report(report_id) (for progress)
-
-Avoid heavy client-side joins.
+UI must never recompute scope.
 
 ---
 
-### 4.3 Save strategy (answers)
+## 6.2 Loading strategy
 
-Save must be predictable and idempotent:
+Preferred approach:
 
-- Upsert by (report_id, question_id)
-- Normalize value into correct typed column per answer_type
-- Support explicit N/A state
+Server Component:
 
-N/A representation (current DB contract):
+- loads report header
+- performs authorization checks
 
-- disclosure_answer.value_jsonb -> { "na": true }
+Client Component:
 
-Metadata representation (current DB contract):
+- loads questions via RPC
+- loads progress via RPC
 
-- disclosure_answer.value_jsonb is NOT NULL
-- empty metadata state is {}
+RPC used:
+
+get_vsme_questions_for_report_v2  
+get_vsme_ctas_for_report
+
+Avoid client-side joins.
+
+---
+
+## 6.3 Save strategy
+
+Saving answers must be idempotent.
+
+Upsert key:
+
+(report_id, question_id)
+
+Value stored in typed column depending on answer_type:
+
+value_text  
+value_numeric  
+value_date  
+value_boolean
+
+Boolean questions are rendered as dropdown (Yes / No).
+
+N/A representation:
+
+value_jsonb → { "na": true }
 
 Rules:
 
-- if na=true, value columns are ignored consistently
-- if na=false or absent, values must be stored in correct typed column
-- JSON metadata must be merged, not blindly replaced
-- save operations must preserve unrelated value_jsonb keys
+- if na=true → typed columns ignored
+- if na removed → values stored normally
+- JSON metadata must always be merged
 
 After save:
 
-- optimistic local update
-- refresh progress via get_vsme_ctas_for_report(report_id)
-
-If a prefilled answer is later edited by the user, source metadata may be switched from company_profile to user.
+- optimistic UI update
+- refresh progress via RPC.
 
 ---
 
-### 4.4 Data integrity safeguards
+## 6.4 Data integrity safeguards
 
-The following DB mechanisms protect consistency:
+Database triggers enforce consistency.
 
-- enforce_answer_framework_match() trigger  
-  → ensures question.framework matches report.framework
+Triggers:
 
-- set_updated_at() trigger  
-  → ensures answer timestamps are consistent
+enforce_answer_framework_match()
 
-RLS policies prevent cross-company or unauthorized topic access.
+Ensures question.framework matches report.framework.
 
-These protections must not be bypassed.
+set_updated_at()
 
----
+Maintains consistent timestamps.
 
-### 4.5 Sections Panel (scope-derived UI)
+RLS policies prevent cross-company access.
 
-Sections UI is derived from the same RPC dataset used for questions:
-
-- get_vsme_questions_for_report_v2(report_id) is the only source of truth.
-
-Derivations computed in frontend (from RPC result):
-
-- totalBySection[section_code]
-- completedBySection[section_code] (Answered + N/A)
-- totalByGroup[group] and completedByGroup[group]
-
-Chapters display rule:
-
-- show a chapter only if totalBySection[code] > 0
-- chapters with 0/0 are out-of-scope and must not be shown
-- (edge case safety: if current route sectionCode has 0 questions, keep it visible)
-
-Themes (groups) shown:
-
-- General Information
-- Environment
-- Social
-- Governance
-
-Grouping is deterministic and shared across:
-
-- building the chapter list
-- computing group totals
+These safeguards must never be bypassed.
 
 ---
 
-### 4.6 Section navigation (Prev / Next)
+# 7. Sections Panel
 
-Section-to-section navigation is derived from the same in-scope chapter list as the Sections panel.
+Sections panel derives entirely from RPC dataset:
 
-Source of truth:
-
-- get_vsme_questions_for_report_v2(report_id)
-- chapters included only if totalBySection[code] > 0
-
-Prev/Next rules:
-
-- Previous = nearest earlier chapter with totalBySection > 0
-- Next = nearest later chapter with totalBySection > 0
-- Chapters with 0/0 are excluded from navigation
-
----
-
-Sticky navigation behavior:
-
-Two navigation UI modes exist:
-
-1) Sticky navigation (floating)
-2) Footer navigation (anchored after last question)
-
-Sticky navigation visibility rules:
-
-- visible only after user scroll passes threshold (~450px)
-- automatically hidden when footer navigation enters viewport
-- implemented using IntersectionObserver on footer navigation element
-
-Footer navigation:
-
-- always rendered after the last question
-- acts as the final navigation anchor
-
-Both navigation modes use the same deterministic chapter list.
-
----
-
-### 4.7 Company profile prefill flow
-
-Company profile editing happens outside the report answering page, currently on:
-
-/[locale]/profile
-
-After successful company update, the app may call:
-
-- prefill_company_profile_into_open_reports(company_id)
-
-Purpose:
-
-- copy overlapping company-profile values into open/non-submitted VSME report answers
-- reduce duplicate typing in B1 onboarding fields
+get_vsme_questions_for_report_v2
 
 Rules:
 
-- prefill targets disclosure_answer, never UI-only state
-- prefill only applies when the target answer is missing
-- prefill never overwrites an existing typed answer
-- prefill marks provenance in value_jsonb.source = 'company_profile'
-- questionnaire UI may render:
-  "Prefilled from company profile"
+Show section only if total > 0.
 
-This is a helper action only.  
-It is not a scope/progress authority.
+Chapters grouped by section_code.
+
+Completion metric:
+
+(Answered + N/A) / total.
+
+Chapters with 0 questions are not shown.
 
 ---
 
-## 5. Progress calculation (rules)
+# 8. Section navigation
 
-Progress must be deterministic and consistent across:
+Prev/Next navigation uses same chapter list as sections panel.
 
-- dashboard overall progress
-- per-section progress
-- export readiness
+Rules:
+
+Previous → nearest earlier chapter with questions  
+Next → nearest later chapter with questions
+
+Zero-question chapters excluded.
+
+---
+
+# 9. Company profile prefill flow
+
+Company profile editing occurs on:
+
+/[locale]/profile
+
+After update the app may call:
+
+prefill_company_profile_into_open_reports(company_id)
+
+Purpose:
+
+copy overlapping company data into open VSME reports.
+
+Rules:
+
+- prefill only if answer is missing
+- never overwrite existing answers
+- skip answers where value_jsonb.na = true
+- mark provenance in metadata:
+
+value_jsonb.source = "company_profile"
+
+UI may show:
+
+"Prefilled from company profile".
+
+This RPC is a helper action only.
+
+---
+
+# 10. Progress calculation
+
+Progress must be deterministic.
 
 Metrics:
 
-- total_in_scope_questions
-- answered_count (includes N/A)
-- missing_count = total_in_scope - answered_count
-- completion_pct = answered_count / total_in_scope
+total_in_scope_questions  
+answered_count  
+missing_count  
+completion_pct
 
 Definitions:
 
-- In-scope: same eligibility logic as get_vsme_questions_for_report_v2
-- Answered: valid typed value OR value_jsonb.na = true
-- Missing: in-scope AND not answered
+Answered  
+→ typed value OR na=true
 
-Operationally, Missing means:
-
-- no disclosure_answer row exists
-- OR a row exists but all typed value columns are empty/null
-- AND value_jsonb.na is not true
+Missing  
+→ in-scope AND not answered
 
 Source of truth:
 
-- get_vsme_ctas_for_report
+get_vsme_ctas_for_report
 
 ---
 
-## 6. Export readiness philosophy (non-blocking)
+# 11. Export philosophy
 
 Export is always allowed.
 
-Before export, show:
+Before export show:
 
 - completion %
-- answered / missing counts
-- top gaps (max 3)
+- answered/missing counts
+- top gaps
 
-No blocking. No alarmist wording.
+No blocking.
 
-Readiness logic must match progress logic exactly.
+Export readiness must follow same logic as progress.
 
 ---
 
-## 7. Where logic lives (anti-drift rule)
+# 12. Where logic lives
 
-DB / RPC owns:
+DB/RPC owns:
 
 - scope determination
-- question selection and ordering
+- question selection
 - answer retrieval
 - progress calculation
 - missing logic
-- company-profile prefill action for report answers
+- company-profile prefill
 
 UI owns:
 
@@ -511,43 +590,37 @@ UI owns:
 - interactions
 - optimistic updates
 - navigation
-- showing informational prefill provenance hints
+- informational hints
 
-UI must not duplicate missing rules or scope rules.  
-UI must not use company table values as a live substitute for disclosure_answer.
-
----
-
-## 8. RPC contract versioning (important)
-
-When RPC return shape changes (new columns), do not modify the legacy function return type in place.
-
-Instead:
-
-- introduce a new version (v2, v3, ...)
-- update 03_rpc_contracts.md
-- switch frontend to the new version
-
-Legacy RPC can remain for backward compatibility.
-
-Current preferred question-loading RPC:
-
-- get_vsme_questions_for_report_v2
-
-Current helper prefill RPC:
-
-- prefill_company_profile_into_open_reports
-
-A narrower legacy prefill RPC may remain temporarily for backward compatibility, but should not be the preferred call from current UI.
+UI must never replicate scope logic.
 
 ---
 
-## 9. Non-negotiables
+# 13. RPC contract versioning
+
+RPC return shapes must never change in place.
+
+When extended:
+
+- introduce new version (v2, v3…)
+- update docs
+- migrate UI
+
+Preferred RPC:
+
+get_vsme_questions_for_report_v2
+
+Helper RPC:
+
+prefill_company_profile_into_open_reports
+
+---
+
+# 14. Non-negotiables
 
 - DB schema stable unless explicitly requested
-- disclosure_question remains shared (ESRS + VSME)
-- RLS is enforced (never bypass in app code)
-- Prefer small deterministic changes
+- disclosure_question shared between frameworks
+- RLS enforced
+- deterministic logic preferred
 - disclosure_answer is the report snapshot
-- company profile changes must not retroactively rewrite submitted reports
-- If uncertain about DB policy/trigger change → ask first
+- company profile must never rewrite submitted reports
