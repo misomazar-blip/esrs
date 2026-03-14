@@ -16,6 +16,38 @@ function hasAnyValue(a: any) {
   return t.length > 0 || n.length > 0 || d.length > 0 || b;
 }
 
+function isFactDatapoint(q: any) {
+  return String(q?.datapoint_kind ?? '').toLowerCase() === 'fact';
+}
+
+// ─── B3 GHG composite card constants ────────────────────────────────────────
+// Single source of truth for all B3 GHG datapoint codes. Referenced by
+// b3ComputedTotalsModel, b3DerivedPersistModel, b3IntensityModel, and
+// b3IntensityPersistModel so the strings are never repeated inline.
+const B3_GHG_SOURCE_CODES = {
+  scope1: 'GROSSSCOPE1GREENHOUSEGASEMISSIONS',
+  scope2Location: 'GROSSLOCATIONBASEDSCOPE2GREENHOUSEGASEMISSIONS',
+  scope2Market: 'GROSSMARKETBASEDSCOPE2GREENHOUSEGASEMISSIONS',
+} as const;
+
+const B3_GHG_TOTAL_CODES = {
+  location: 'TOTALGROSSLOCATIONBASEDSCOPE1ANDSCOPE2GHGEMISSIONS',
+  market: 'TOTALGROSSMARKETBASEDSCOPE1ANDSCOPE2GHGEMISSIONS',
+} as const;
+
+const B3_GHG_INTENSITY_DP = {
+  location: 'SCOPE1ANDSCOPE2GREENHOUSEGASEMISSIONSINTENSITYVALUELOCATIONBASED',
+  market: 'SCOPE1ANDSCOPE2GREENHOUSEGASEMISSIONSINTENSITYVALUEMARKETBASED',
+} as const;
+
+const B3_GHG_TURNOVER_DP = 'TURNOVER';
+// ─────────────────────────────────────────────────────────────────────────────
+
+function isB3IntensityQuestionCode(value: unknown) {
+  const normalized = String(value ?? '').trim().toUpperCase();
+  return normalized === B3_GHG_INTENSITY_DP.location || normalized === B3_GHG_INTENSITY_DP.market;
+}
+
 function normalizeExample(exampleAnswer: unknown) {
   let normalized = String(exampleAnswer ?? '').trim();
   if (!normalized) return '';
@@ -220,6 +252,8 @@ export default function VsmeSectionClient() {
     self_generated_electricity: null,
     fuels: null,
   });
+  const b3HydrationDoneRef = useRef(false);
+  const b3RecomputeTriggerRef = useRef<'source' | 'turnover' | 'other'>('other');
   const [reportCurrency, setReportCurrency] = useState<string | null>(null);
   const [scrolledPastThreshold, setScrolledPastThreshold] = useState(false);
   const [footerNavVisible, setFooterNavVisible] = useState(false);
@@ -240,6 +274,7 @@ export default function VsmeSectionClient() {
   useEffect(() => {
     if (normalizedSectionCode !== 'B3') {
       setB3TotalEnergyUserInteracted(false);
+      setB3EnergyBreakdownNa(false);
     }
   }, [normalizedSectionCode]);
 
@@ -478,12 +513,17 @@ export default function VsmeSectionClient() {
   }, [isBSection, normalizedSectionCode]);
 
   // Report-wide stats (NA included in Completed)  ✅
+  const factQuestions = useMemo(
+    () => (allQuestions as any[]).filter((q) => isFactDatapoint(q)),
+    [allQuestions],
+  );
+
   const reportStats = useMemo(() => {
-    const total = allQuestions.length;
+    const total = factQuestions.length;
     let naCount = 0;
     let completedCount = 0;
 
-    for (const q of allQuestions as any[]) {
+    for (const q of factQuestions) {
       const isNA = q?.value_jsonb?.na === true;
       const hasValue = hasAnyValue(q);
       if (isNA) naCount += 1;
@@ -492,14 +532,14 @@ export default function VsmeSectionClient() {
 
     const progressPct = total > 0 ? Math.round((completedCount / total) * 100) : 0;
     return { total, naCount, completedCount, progressPct };
-  }, [allQuestions]);
+  }, [factQuestions]);
 
   // Section aggregates for Sections panel
   const sectionAggregates = useMemo(() => {
     const totalBySection: Record<string, number> = {};
     const completedBySection: Record<string, number> = {};
 
-    for (const q of allQuestions as any[]) {
+    for (const q of factQuestions) {
       const sc = String(q.section_code ?? q.sectionCode ?? q.section ?? '').toUpperCase();
       if (!sc) continue;
 
@@ -511,7 +551,7 @@ export default function VsmeSectionClient() {
     }
 
     return { totalBySection, completedBySection };
-  }, [allQuestions]);
+  }, [factQuestions]);
 
   const groupAggregates = useMemo(() => {
     const totalByGroup: Record<SectionGroup, number> = {
@@ -527,7 +567,7 @@ export default function VsmeSectionClient() {
       Governance: 0,
     };
 
-    for (const q of allQuestions as any[]) {
+    for (const q of factQuestions) {
       const sc = String(q.section_code ?? q.sectionCode ?? q.section ?? '').toUpperCase();
       if (!sc) continue;
 
@@ -540,7 +580,7 @@ export default function VsmeSectionClient() {
     }
 
     return { totalByGroup, completedByGroup };
-  }, [allQuestions]);
+  }, [factQuestions]);
 
   const groupedSections = useMemo(() => {
     const groups: Record<
@@ -670,7 +710,7 @@ export default function VsmeSectionClient() {
   }, [normalizedSectionCode, sectionQuestions, allQuestions]);
 
   const sectionCompleteness = useMemo(() => {
-    const inSection = (allQuestions as any[]).filter((q: any) => {
+    const inSection = factQuestions.filter((q: any) => {
       const sc = String(q.section_code ?? q.sectionCode ?? q.section ?? '').toUpperCase();
       return sc === normalizedSectionCode;
     });
@@ -695,7 +735,7 @@ export default function VsmeSectionClient() {
     const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
 
     return { total, answered, na, missing, pct };
-  }, [allQuestions, normalizedSectionCode]);
+  }, [factQuestions, normalizedSectionCode]);
 
   const b1GroupedRenderModel = useMemo(() => {
     if (!isBSection) return null;
@@ -996,8 +1036,20 @@ export default function VsmeSectionClient() {
     if (normalizedSectionCode !== 'B3') {
       return {
         hiddenQuestionIds: new Set<string>(),
-        location: null as null | { questionId: string; title: string; value: number | null; unit: string },
-        market: null as null | { questionId: string; title: string; value: number | null; unit: string },
+        location: null as null | {
+          questionId: string;
+          title: string;
+          value: number | null;
+          unit: string;
+          state: 'numeric' | 'na' | 'missing';
+        },
+        market: null as null | {
+          questionId: string;
+          title: string;
+          value: number | null;
+          unit: string;
+          state: 'numeric' | 'na' | 'missing';
+        },
       };
     }
 
@@ -1007,33 +1059,53 @@ export default function VsmeSectionClient() {
       if (code) byCode.set(code, q);
     }
 
-    const sourceCodes = {
-      scope1: 'GROSSSCOPE1GREENHOUSEGASEMISSIONS',
-      scope2Location: 'GROSSLOCATIONBASEDSCOPE2GREENHOUSEGASEMISSIONS',
-      scope2Market: 'GROSSMARKETBASEDSCOPE2GREENHOUSEGASEMISSIONS',
-    } as const;
-
-    const totalCodes = {
-      location: 'TOTALGROSSLOCATIONBASEDSCOPE1ANDSCOPE2GHGEMISSIONS',
-      market: 'TOTALGROSSMARKETBASEDSCOPE1ANDSCOPE2GHGEMISSIONS',
-    } as const;
-
-    const getNumericValue = (q: any): number | null => {
+    const getSourceState = (q: any) => {
       if (!q) return null;
       const questionId = String(q?.question_id ?? '').trim();
       if (!questionId) return null;
 
-      const local = answersById[questionId] ?? {};
-      const isNa = local.na === true || q?.value_jsonb?.na === true;
-      if (isNa) return null;
+      const hasLocalAnswer = Object.prototype.hasOwnProperty.call(answersById, questionId);
+      const local = hasLocalAnswer ? (answersById[questionId] ?? {}) : {};
 
-      const raw = local.value_numeric !== undefined && local.value_numeric !== ''
-        ? local.value_numeric
-        : q?.value_numeric;
-      if (raw === undefined || raw === null || String(raw).trim() === '') return null;
+      const hasLocalNaOverride = Object.prototype.hasOwnProperty.call(local, 'na');
+      const isNa = hasLocalNaOverride ? local.na === true : q?.value_jsonb?.na === true;
 
-      const parsed = Number(raw);
-      return Number.isFinite(parsed) ? parsed : null;
+      const hasLocalNumericOverride = Object.prototype.hasOwnProperty.call(local, 'value_numeric');
+      const raw = hasLocalNumericOverride ? local.value_numeric : q?.value_numeric;
+      const numeric = raw === undefined || raw === null || String(raw).trim() === ''
+        ? null
+        : Number(raw);
+
+      return {
+        isNa,
+        numeric: Number.isFinite(numeric) ? numeric : null,
+      };
+    };
+
+    const deriveBranchTotal = (sources: any[]) => {
+      const states = sources
+        .map((q) => getSourceState(q))
+        .filter((v): v is { isNa: boolean; numeric: number | null } => v !== null);
+
+      if (states.length === 0) {
+        return { state: 'missing' as const, value: null as number | null };
+      }
+
+      const allNa = states.every((s) => s.isNa === true);
+      if (allNa) {
+        return { state: 'na' as const, value: null as number | null };
+      }
+
+      const activeNumericValues = states
+        .filter((s) => s.isNa !== true && s.numeric !== null)
+        .map((s) => s.numeric as number);
+
+      if (activeNumericValues.length > 0) {
+        const sum = activeNumericValues.reduce((acc, value) => acc + value, 0);
+        return { state: 'numeric' as const, value: sum };
+      }
+
+      return { state: 'missing' as const, value: null as number | null };
     };
 
     const resolveDisplayUnit = (q: any): string => {
@@ -1042,12 +1114,12 @@ export default function VsmeSectionClient() {
       return CURRENCY_UNITS.includes(unit as (typeof CURRENCY_UNITS)[number]) ? reportCurrency ?? unit : unit;
     };
 
-    const scope1 = getNumericValue(byCode.get(sourceCodes.scope1));
-    const scope2Location = getNumericValue(byCode.get(sourceCodes.scope2Location));
-    const scope2Market = getNumericValue(byCode.get(sourceCodes.scope2Market));
+    const scope1Question = byCode.get(B3_GHG_SOURCE_CODES.scope1);
+    const scope2LocationQuestion = byCode.get(B3_GHG_SOURCE_CODES.scope2Location);
+    const scope2MarketQuestion = byCode.get(B3_GHG_SOURCE_CODES.scope2Market);
 
-    const locationTotalQuestion = byCode.get(totalCodes.location);
-    const marketTotalQuestion = byCode.get(totalCodes.market);
+    const locationTotalQuestion = byCode.get(B3_GHG_TOTAL_CODES.location);
+    const marketTotalQuestion = byCode.get(B3_GHG_TOTAL_CODES.market);
 
     const hiddenQuestionIds = new Set<string>();
 
@@ -1055,7 +1127,7 @@ export default function VsmeSectionClient() {
       ? {
           questionId: String(locationTotalQuestion?.question_id ?? '').trim(),
           title: String(locationTotalQuestion?.question_text ?? locationTotalQuestion?.title ?? 'Total Scope 1 + Scope 2 (location-based)'),
-          value: scope1 !== null && scope2Location !== null ? scope1 + scope2Location : null,
+          ...deriveBranchTotal([scope1Question, scope2LocationQuestion]),
           unit: resolveDisplayUnit(locationTotalQuestion),
         }
       : null;
@@ -1064,13 +1136,551 @@ export default function VsmeSectionClient() {
       ? {
           questionId: String(marketTotalQuestion?.question_id ?? '').trim(),
           title: String(marketTotalQuestion?.question_text ?? marketTotalQuestion?.title ?? 'Total Scope 1 + Scope 2 (market-based)'),
-          value: scope1 !== null && scope2Market !== null ? scope1 + scope2Market : null,
+          ...deriveBranchTotal([scope1Question, scope2MarketQuestion]),
           unit: resolveDisplayUnit(marketTotalQuestion),
         }
       : null;
 
     return { hiddenQuestionIds, location, market };
   }, [normalizedSectionCode, sectionQuestions, answersById, reportCurrency]);
+
+  // Render-time computed intensity (local-override-aware, depends on b3ComputedTotalsModel)
+  const b3IntensityModel = useMemo(() => {
+    type IntensityBranch = {
+      questionId: string;
+      title: string;
+      state: 'numeric' | 'missing';
+      value: number | null;
+      warningKind: 'missing-inputs' | 'zero-turnover' | null;
+      unit: string;
+    };
+    const empty = {
+      location: null as IntensityBranch | null,
+      market: null as IntensityBranch | null,
+    };
+    if (normalizedSectionCode !== 'B3') return empty;
+
+    const normalizeDp = (v: unknown) => String(v ?? '').trim().toUpperCase();
+    const normalizeCode = (v: unknown) => String(v ?? '').trim().toUpperCase();
+
+    let locationIntQ: any = null;
+    let marketIntQ: any = null;
+    let turnoverQ: any = null;
+    let locationTotalQ: any = null;
+    let marketTotalQ: any = null;
+
+    for (const q of allQuestions as any[]) {
+      const dp = normalizeDp(q?.vsme_datapoint_id);
+      const section = String(q?.section_code ?? q?.sectionCode ?? q?.section ?? '').trim().toUpperCase();
+      const code = normalizeCode(q?.code);
+      if (dp === B3_GHG_INTENSITY_DP.location && !locationIntQ) locationIntQ = q;
+      if (dp === B3_GHG_INTENSITY_DP.market && !marketIntQ) marketIntQ = q;
+      if (dp === B3_GHG_TURNOVER_DP && !turnoverQ) turnoverQ = q;
+      if (section === 'B3' && code === B3_GHG_TOTAL_CODES.location && !locationTotalQ) locationTotalQ = q;
+      if (section === 'B3' && code === B3_GHG_TOTAL_CODES.market && !marketTotalQ) marketTotalQ = q;
+    }
+    for (const q of sectionQuestions as any[]) {
+      const dp = normalizeDp(q?.vsme_datapoint_id);
+      if (dp === B3_GHG_INTENSITY_DP.location && !locationIntQ) locationIntQ = q;
+      if (dp === B3_GHG_INTENSITY_DP.market && !marketIntQ) marketIntQ = q;
+    }
+
+    if (!locationIntQ && !marketIntQ) return empty;
+
+    // Read Turnover with local-override awareness
+    const getTurnoverState = (): { isNa: boolean; numeric: number | null } => {
+      if (!turnoverQ) return { isNa: false, numeric: null };
+      const qId = String(turnoverQ.question_id ?? '').trim();
+      const hasLocal = Object.prototype.hasOwnProperty.call(answersById, qId);
+      const local = hasLocal ? (answersById[qId] ?? {}) : {};
+      const hasLocalNa = Object.prototype.hasOwnProperty.call(local, 'na');
+      const isNa = hasLocalNa ? local.na === true : turnoverQ?.value_jsonb?.na === true;
+      const hasLocalNum = Object.prototype.hasOwnProperty.call(local, 'value_numeric');
+      const raw = hasLocalNum ? local.value_numeric : turnoverQ?.value_numeric;
+      const n = raw === undefined || raw === null || String(raw).trim() === '' ? null : Number(raw);
+      return { isNa, numeric: Number.isFinite(n) ? n : null };
+    };
+
+    const tvState = getTurnoverState();
+
+    const computeIntensityBranch = (
+      intQ: any,
+      ghgBranch: typeof b3ComputedTotalsModel.location,
+    ): IntensityBranch | null => {
+      if (!intQ) return null;
+      const questionId = String(intQ.question_id ?? '').trim();
+      const title = String(intQ.question_text ?? intQ.title ?? '');
+      const unit = String(intQ.unit ?? '').trim();
+      if (!ghgBranch || ghgBranch.state !== 'numeric' || ghgBranch.value === null) {
+        return { questionId, title, unit, state: 'missing', value: null, warningKind: 'missing-inputs' };
+      }
+      if (tvState.isNa || tvState.numeric === null) {
+        return { questionId, title, unit, state: 'missing', value: null, warningKind: 'missing-inputs' };
+      }
+      if (tvState.numeric === 0) {
+        return { questionId, title, unit, state: 'missing', value: null, warningKind: 'zero-turnover' };
+      }
+      return { questionId, title, unit, state: 'numeric', value: ghgBranch.value / tvState.numeric, warningKind: null };
+    };
+
+    return {
+      location: computeIntensityBranch(locationIntQ, b3ComputedTotalsModel.location),
+      market: computeIntensityBranch(marketIntQ, b3ComputedTotalsModel.market),
+    };
+  }, [normalizedSectionCode, allQuestions, sectionQuestions, answersById, b3ComputedTotalsModel]);
+
+  // ── B3 source fingerprint ─────────────────────────────────────────────────
+  // A stable string primitive derived from ONLY the three B3 GHG source
+  // question values. Because React compares primitive deps by value (Object.is),
+  // b3DerivedPersistModel won't re-run when Turnover or any other non-source
+  // question changes — even though allQuestions gets a new reference on every
+  // saveAnswer call. The effect for totals therefore stays quiescent on
+  // Turnover-only changes, preventing total rows from being incorrectly
+  // re-persisted with stale/empty source values.
+  const b3SourceKey = useMemo((): string => {
+    const sourceCodeSet = new Set([
+      B3_GHG_SOURCE_CODES.scope1,
+      B3_GHG_SOURCE_CODES.scope2Location,
+      B3_GHG_SOURCE_CODES.scope2Market,
+    ]);
+    const parts: string[] = [];
+    for (const q of allQuestions as any[]) {
+      const section = String(q?.section_code ?? q?.sectionCode ?? q?.section ?? '').trim().toUpperCase();
+      if (section !== 'B3') continue;
+      const code = String(q?.code ?? '').trim().toUpperCase();
+      if (!sourceCodeSet.has(code as (typeof B3_GHG_SOURCE_CODES)[keyof typeof B3_GHG_SOURCE_CODES])) continue;
+      const na = q?.value_jsonb?.na === true ? '1' : '0';
+      const num = q?.value_numeric != null ? String(q.value_numeric) : '';
+      parts.push(`${code}|${na}|${num}`);
+    }
+    return parts.sort().join('~');
+  }, [allQuestions]);
+
+  // Keep a ref so b3DerivedPersistModel can read the full allQuestions array
+  // without listing it as a dep (it only needs fresh data when b3SourceKey changes).
+  const allQuestionsRef = useRef<VsmeQuestion[]>(allQuestions);
+  allQuestionsRef.current = allQuestions;
+  // ─────────────────────────────────────────────────────────────────────────
+
+  const b3DerivedPersistModel = useMemo((): {
+    location: { questionId: string; state: 'numeric' | 'na' | 'missing'; value: number | null } | null;
+    market: { questionId: string; state: 'numeric' | 'na' | 'missing'; value: number | null } | null;
+  } => {
+    // Depends on b3SourceKey (not allQuestions directly) so this memo only
+    // re-runs when a B3 GHG source value actually changes.  Turnover changes
+    // do NOT change b3SourceKey, so totals are never recomputed for them.
+    const aq = allQuestionsRef.current;
+    const byCode = new Map<string, any>();
+    for (const q of aq as any[]) {
+      const section = String(q?.section_code ?? q?.sectionCode ?? q?.section ?? '').trim().toUpperCase();
+      if (section !== 'B3') continue;
+      const code = String(q?.code ?? '').trim().toUpperCase();
+      if (code) byCode.set(code, q);
+    }
+
+    const getPersistedSourceState = (q: any) => {
+      if (!q) return null;
+
+      const isNa = q?.value_jsonb?.na === true;
+      const numericRaw = q?.value_numeric;
+      const numeric = numericRaw === undefined || numericRaw === null || String(numericRaw).trim() === ''
+        ? null
+        : Number(numericRaw);
+
+      return {
+        isNa,
+        numeric: Number.isFinite(numeric) ? numeric : null,
+      };
+    };
+
+    const deriveBranchTotal = (sources: any[]) => {
+      const states = sources
+        .map((q) => getPersistedSourceState(q))
+        .filter((v): v is { isNa: boolean; numeric: number | null } => v !== null);
+
+      if (states.length === 0) {
+        return { state: 'missing' as const, value: null as number | null };
+      }
+
+      const allNa = states.every((s) => s.isNa === true);
+      if (allNa) {
+        return { state: 'na' as const, value: null as number | null };
+      }
+
+      const activeNumericValues = states
+        .filter((s) => s.isNa !== true && s.numeric !== null)
+        .map((s) => s.numeric as number);
+
+      if (activeNumericValues.length > 0) {
+        const sum = activeNumericValues.reduce((acc, value) => acc + value, 0);
+        return { state: 'numeric' as const, value: sum };
+      }
+
+      return { state: 'missing' as const, value: null as number | null };
+    };
+
+    const scope1Question = byCode.get(B3_GHG_SOURCE_CODES.scope1);
+    const scope2LocationQuestion = byCode.get(B3_GHG_SOURCE_CODES.scope2Location);
+    const scope2MarketQuestion = byCode.get(B3_GHG_SOURCE_CODES.scope2Market);
+
+    const locationTotalQuestion = byCode.get(B3_GHG_TOTAL_CODES.location);
+    const marketTotalQuestion = byCode.get(B3_GHG_TOTAL_CODES.market);
+
+    const location = locationTotalQuestion
+      ? {
+          questionId: String(locationTotalQuestion?.question_id ?? '').trim(),
+          ...deriveBranchTotal([scope1Question, scope2LocationQuestion]),
+        }
+      : null;
+
+    const market = marketTotalQuestion
+      ? {
+          questionId: String(marketTotalQuestion?.question_id ?? '').trim(),
+          ...deriveBranchTotal([scope1Question, scope2MarketQuestion]),
+        }
+      : null;
+
+    return { location, market };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [b3SourceKey]);
+
+  const b3DerivedPersistSignatureRef = useRef<string>('');
+
+  useEffect(() => {
+    if (!reportId) return;
+
+    const branches = [b3DerivedPersistModel.location, b3DerivedPersistModel.market]
+      .filter((b): b is { questionId: string; state: 'numeric' | 'na' | 'missing'; value: number | null } => Boolean(b?.questionId));
+
+    if (branches.length === 0) return;
+
+    const signature = JSON.stringify(
+      branches.map((b) => ({ questionId: b.questionId, state: b.state, value: b.value })),
+    );
+
+    if (b3DerivedPersistSignatureRef.current === signature) return;
+    b3DerivedPersistSignatureRef.current = signature;
+
+    let cancelled = false;
+
+    const run = async () => {
+      const supabase = createSupabaseBrowserClient();
+
+      for (const branch of branches) {
+        const questionId = branch.questionId;
+        if (!questionId) continue;
+
+        if (branch.state === 'missing') {
+          const { error } = await supabase
+            .from('disclosure_answer')
+            .delete()
+            .eq('report_id', reportId)
+            .eq('question_id', questionId);
+
+          if (error || cancelled) {
+            b3DerivedPersistSignatureRef.current = '';
+            if (error) console.error('B3 derived total delete failed', { questionId, error });
+            continue;
+          }
+
+          setAnswersById((prev) => ({
+            ...prev,
+            [questionId]: {
+              ...(prev[questionId] ?? {}),
+              value_text: '',
+              value_numeric: '',
+              value_date: '',
+              value_boolean: null,
+              na: false,
+            },
+          }));
+
+          setAllQuestions((prev) =>
+            prev.map((q: any) => {
+              if (String(q?.question_id ?? '') !== questionId) return q;
+              const currentJson = (q?.value_jsonb ?? {}) as any;
+              const nextJson = { ...currentJson };
+              delete nextJson.na;
+              return {
+                ...q,
+                value_text: '',
+                value_numeric: '',
+                value_date: '',
+                value_boolean: null,
+                value_jsonb: Object.keys(nextJson).length > 0 ? nextJson : {},
+              };
+            }),
+          );
+
+          continue;
+        }
+
+        const payload: any = {
+          report_id: reportId,
+          question_id: questionId,
+          value_text: null,
+          value_date: null,
+          value_boolean: null,
+          value_numeric: branch.state === 'numeric' ? branch.value : null,
+          value_jsonb: branch.state === 'na' ? { na: true } : {},
+        };
+
+        const { error } = await supabase
+          .from('disclosure_answer')
+          .upsert(payload, { onConflict: 'report_id,question_id' });
+
+        if (error || cancelled) {
+          b3DerivedPersistSignatureRef.current = '';
+          if (error) console.error('B3 derived total upsert failed', { questionId, error });
+          continue;
+        }
+
+        setAnswersById((prev) => ({
+          ...prev,
+          [questionId]: {
+            ...(prev[questionId] ?? {}),
+            value_text: '',
+            value_numeric: branch.state === 'numeric' && branch.value !== null ? String(branch.value) : '',
+            value_date: '',
+            value_boolean: null,
+            na: branch.state === 'na',
+          },
+        }));
+
+        setAllQuestions((prev) =>
+          prev.map((q: any) => {
+            if (String(q?.question_id ?? '') !== questionId) return q;
+            return {
+              ...q,
+              value_text: '',
+              value_numeric: branch.state === 'numeric' ? branch.value : null,
+              value_date: '',
+              value_boolean: null,
+              value_jsonb: branch.state === 'na' ? { ...(q?.value_jsonb ?? {}), na: true } : (() => {
+                const currentJson = (q?.value_jsonb ?? {}) as any;
+                const nextJson = { ...currentJson };
+                delete nextJson.na;
+                return Object.keys(nextJson).length > 0 ? nextJson : {};
+              })(),
+            };
+          }),
+        );
+      }
+    };
+
+    void run();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [reportId, b3DerivedPersistModel]);
+
+  // Persist-time intensity model. Reads allQuestions for intensity Q metadata and Turnover.
+  // GHG total inputs are selected by trigger type:
+  // - source save: use freshly derived totals from b3DerivedPersistModel
+  // - turnover/other save: use persisted B3 total rows from allQuestions
+  const b3IntensityPersistModel = useMemo(() => {
+    type IntensityPersistBranch = { questionId: string; state: 'numeric' | 'na' | 'missing'; value: number | null };
+    const empty = { location: null as IntensityPersistBranch | null, market: null as IntensityPersistBranch | null };
+    // No section guard — must fire from any section (Turnover lives in B1).
+
+    const normalizeDp = (v: unknown) => String(v ?? '').trim().toUpperCase();
+    const normalizeCode = (v: unknown) => String(v ?? '').trim().toUpperCase();
+
+    let locationIntQ: any = null;
+    let marketIntQ: any = null;
+    let turnoverQ: any = null;
+    let locationTotalQ: any = null;
+    let marketTotalQ: any = null;
+
+    for (const q of allQuestions as any[]) {
+      const dp = normalizeDp(q?.vsme_datapoint_id);
+      const section = String(q?.section_code ?? q?.sectionCode ?? q?.section ?? '').trim().toUpperCase();
+      const code = normalizeCode(q?.code);
+      if (dp === B3_GHG_INTENSITY_DP.location && !locationIntQ) locationIntQ = q;
+      if (dp === B3_GHG_INTENSITY_DP.market && !marketIntQ) marketIntQ = q;
+      if (dp === B3_GHG_TURNOVER_DP && !turnoverQ) turnoverQ = q;
+      if (section === 'B3' && code === B3_GHG_TOTAL_CODES.location && !locationTotalQ) locationTotalQ = q;
+      if (section === 'B3' && code === B3_GHG_TOTAL_CODES.market && !marketTotalQ) marketTotalQ = q;
+    }
+
+    if (!locationIntQ && !marketIntQ) return empty;
+
+    const derivedLocState: { isNa: boolean; numeric: number | null } | null = b3DerivedPersistModel.location
+      ? { isNa: b3DerivedPersistModel.location.state === 'na', numeric: b3DerivedPersistModel.location.state === 'numeric' ? b3DerivedPersistModel.location.value : null }
+      : null;
+    const derivedMktState: { isNa: boolean; numeric: number | null } | null = b3DerivedPersistModel.market
+      ? { isNa: b3DerivedPersistModel.market.state === 'na', numeric: b3DerivedPersistModel.market.state === 'numeric' ? b3DerivedPersistModel.market.value : null }
+      : null;
+
+    // Turnover: read from allQuestions (persisted state, no local-override awareness needed here)
+    const getPersistedState = (q: any): { isNa: boolean; numeric: number | null } | null => {
+      if (!q) return null;
+      const isNa = q?.value_jsonb?.na === true;
+      const raw = q?.value_numeric;
+      const n = raw === undefined || raw === null || String(raw).trim() === '' ? null : Number(raw);
+      return { isNa, numeric: Number.isFinite(n) ? n : null };
+    };
+    const persistedLocState = getPersistedState(locationTotalQ);
+    const persistedMktState = getPersistedState(marketTotalQ);
+    const tvState = getPersistedState(turnoverQ);
+
+    // Trigger split:
+    // - source change => intensities use freshly derived totals
+    // - turnover change => intensities use persisted total rows (totals don't depend on turnover)
+    const trigger = b3RecomputeTriggerRef.current;
+    const ghgLocState = trigger === 'source' ? (derivedLocState ?? persistedLocState) : persistedLocState;
+    const ghgMktState = trigger === 'source' ? (derivedMktState ?? persistedMktState) : persistedMktState;
+
+    const computePersistBranch = (
+      intQ: any,
+      ghgState: { isNa: boolean; numeric: number | null } | null,
+    ): IntensityPersistBranch | null => {
+      if (!intQ) return null;
+      const questionId = String(intQ.question_id ?? '').trim();
+      if (intQ?.value_jsonb?.na === true) return { questionId, state: 'na', value: null };
+      if (!ghgState || ghgState.isNa || ghgState.numeric === null) return { questionId, state: 'missing', value: null };
+      if (!tvState || tvState.isNa || tvState.numeric === null || tvState.numeric === 0) return { questionId, state: 'missing', value: null };
+      return { questionId, state: 'numeric', value: ghgState.numeric / tvState.numeric };
+    };
+
+    return {
+      location: computePersistBranch(locationIntQ, ghgLocState),
+      market: computePersistBranch(marketIntQ, ghgMktState),
+    };
+  }, [allQuestions, b3DerivedPersistModel]);
+
+  const b3IntensityPersistSignatureRef = useRef<string>('');
+
+  useEffect(() => {
+    if (!reportId) return;
+
+    const branches = [b3IntensityPersistModel.location, b3IntensityPersistModel.market]
+      .filter((b): b is { questionId: string; state: 'numeric' | 'na' | 'missing'; value: number | null } => Boolean(b?.questionId));
+
+    if (branches.length === 0) return;
+
+    const signature = JSON.stringify(
+      branches.map((b) => ({ questionId: b.questionId, state: b.state, value: b.value })),
+    );
+
+    if (b3IntensityPersistSignatureRef.current === signature) return;
+    b3IntensityPersistSignatureRef.current = signature;
+
+    let cancelled = false;
+
+    const run = async () => {
+      const supabase = createSupabaseBrowserClient();
+
+      for (const branch of branches) {
+        const questionId = branch.questionId;
+        if (!questionId) continue;
+
+        if (branch.state === 'missing') {
+          const { error } = await supabase
+            .from('disclosure_answer')
+            .delete()
+            .eq('report_id', reportId)
+            .eq('question_id', questionId);
+
+          if (error || cancelled) {
+            b3IntensityPersistSignatureRef.current = '';
+            if (error) console.error('B3 intensity delete failed', { questionId, error });
+            continue;
+          }
+
+          setAnswersById((prev) => ({
+            ...prev,
+            [questionId]: { ...(prev[questionId] ?? {}), value_text: '', value_numeric: '', value_date: '', value_boolean: null, na: false },
+          }));
+          setAllQuestions((prev) =>
+            prev.map((q: any) => {
+              if (String(q?.question_id ?? '') !== questionId) return q;
+              const currentJson = (q?.value_jsonb ?? {}) as any;
+              const nextJson = { ...currentJson };
+              delete nextJson.na;
+              return { ...q, value_text: '', value_numeric: null, value_date: '', value_boolean: null, value_jsonb: Object.keys(nextJson).length > 0 ? nextJson : {} };
+            }),
+          );
+          continue;
+        }
+
+        if (branch.state === 'na') {
+          const payload: any = {
+            report_id: reportId,
+            question_id: questionId,
+            value_text: null,
+            value_numeric: null,
+            value_date: null,
+            value_boolean: null,
+            value_jsonb: { na: true },
+          };
+
+          const { error } = await supabase
+            .from('disclosure_answer')
+            .upsert(payload, { onConflict: 'report_id,question_id' });
+
+          if (error || cancelled) {
+            b3IntensityPersistSignatureRef.current = '';
+            if (error) console.error('B3 intensity NA upsert failed', { questionId, error });
+            continue;
+          }
+
+          setAnswersById((prev) => ({
+            ...prev,
+            [questionId]: { ...(prev[questionId] ?? {}), value_text: '', value_numeric: '', value_date: '', value_boolean: null, na: true },
+          }));
+          setAllQuestions((prev) =>
+            prev.map((q: any) => {
+              if (String(q?.question_id ?? '') !== questionId) return q;
+              const currentJson = (q?.value_jsonb ?? {}) as any;
+              return { ...q, value_text: '', value_numeric: null, value_date: '', value_boolean: null, value_jsonb: { ...currentJson, na: true } };
+            }),
+          );
+          continue;
+        }
+
+        // state === 'numeric': persist as value_text (intensity answer_type is text per spec)
+        const textValue = branch.value !== null ? String(branch.value) : '';
+        const payload: any = {
+          report_id: reportId,
+          question_id: questionId,
+          value_text: textValue,
+          value_numeric: null,
+          value_date: null,
+          value_boolean: null,
+          value_jsonb: {},
+        };
+
+        const { error } = await supabase
+          .from('disclosure_answer')
+          .upsert(payload, { onConflict: 'report_id,question_id' });
+
+        if (error || cancelled) {
+          b3IntensityPersistSignatureRef.current = '';
+          if (error) console.error('B3 intensity upsert failed', { questionId, error });
+          continue;
+        }
+
+        setAnswersById((prev) => ({
+          ...prev,
+          [questionId]: { ...(prev[questionId] ?? {}), value_text: textValue, value_numeric: '', value_date: '', value_boolean: null, na: false },
+        }));
+        setAllQuestions((prev) =>
+          prev.map((q: any) => {
+            if (String(q?.question_id ?? '') !== questionId) return q;
+            const currentJson = (q?.value_jsonb ?? {}) as any;
+            const nextJson = { ...currentJson };
+            delete nextJson.na;
+            return { ...q, value_text: textValue, value_numeric: null, value_date: '', value_boolean: null, value_jsonb: Object.keys(nextJson).length > 0 ? nextJson : {} };
+          }),
+        );
+      }
+    };
+
+    void run();
+    return () => { cancelled = true; };
+  }, [reportId, b3IntensityPersistModel]);
 
   const displayedQuestionCount = useMemo(() => {
     if (!isBSection) return sectionQuestions.length;
@@ -1080,6 +1690,27 @@ export default function VsmeSectionClient() {
     const baseVisible = sectionRenderModel?.totalVisible ?? b1GroupedRenderModel.totalQuestions;
     return Math.max(0, baseVisible - hiddenCount + computedCount);
   }, [isBSection, sectionQuestions.length, b1GroupedRenderModel, sectionRenderModel, b3ComputedTotalsModel]);
+
+  const b3QuestionsByDatapoint = useMemo(() => {
+    const map = new Map<string, any>();
+    if (normalizedSectionCode !== 'B3') return map;
+
+    const normalizeDp = (value: unknown) => String(value ?? '').trim().toUpperCase();
+
+    for (const q of sectionQuestions as any[]) {
+      const dp = normalizeDp(q?.vsme_datapoint_id);
+      if (dp && !map.has(dp)) map.set(dp, q);
+    }
+
+    for (const q of allQuestions as any[]) {
+      const sc = String(q?.section_code ?? q?.sectionCode ?? q?.section ?? '').trim().toUpperCase();
+      if (sc !== 'B3') continue;
+      const dp = normalizeDp(q?.vsme_datapoint_id);
+      if (dp && !map.has(dp)) map.set(dp, q);
+    }
+
+    return map;
+  }, [normalizedSectionCode, sectionQuestions, allQuestions]);
 
   const b3RenderPlan = useMemo(() => {
     if (normalizedSectionCode !== 'B3' || !sectionRenderModel) return null;
@@ -1099,7 +1730,8 @@ export default function VsmeSectionClient() {
       .map((group) => {
         const visibleQuestions = group.visibleQuestions.filter((q: any) => {
           const questionId = String((q as any)?.question_id ?? '').trim();
-          return !hiddenQuestionIds.has(questionId);
+          const code = String((q as any)?.code ?? '').trim();
+          return !hiddenQuestionIds.has(questionId) && !isB3IntensityQuestionCode(code);
         });
         return { ...group, visibleQuestions };
       })
@@ -1107,7 +1739,8 @@ export default function VsmeSectionClient() {
 
     const visibleStandalone = sectionRenderModel.standaloneQuestions.filter((q: any) => {
       const questionId = String((q as any)?.question_id ?? '').trim();
-      return !hiddenQuestionIds.has(questionId);
+      const code = String((q as any)?.code ?? '').trim();
+      return !hiddenQuestionIds.has(questionId) && !isB3IntensityQuestionCode(code);
     });
 
     const groupsByCode = new Map<string, B3VisibleGroup>();
@@ -1168,6 +1801,23 @@ export default function VsmeSectionClient() {
       totalEnergyQuestion: totalEnergyQuestion ?? null,
     });
 
+    // Consume all energy-table breakdown questions so they are not re-rendered as standalone cards
+    const energyTableDatapointIds = [
+      'ENERGYCONSUMPTIONFROMELECTRICITY_RENEWABLEENERGYMEMBER',
+      'ENERGYCONSUMPTIONFROMELECTRICITY_NONRENEWABLEENERGYMEMBER',
+      'ENERGYCONSUMPTIONFROMELECTRICITY',
+      'ENERGYCONSUMPTIONFROMSELFGENERATEDELECTRICITY_RENEWABLEENERGYMEMBER',
+      'ENERGYCONSUMPTIONFROMSELFGENERATEDELECTRICITY_NONRENEWABLEENERGYMEMBER',
+      'ENERGYCONSUMPTIONFROMSELFGENERATEDELECTRICITY',
+      'ENERGYCONSUMPTIONFROMFUELS_RENEWABLEENERGYMEMBER',
+      'ENERGYCONSUMPTIONFROMFUELS_NONRENEWABLEENERGYMEMBER',
+      'ENERGYCONSUMPTIONFROMFUELS',
+    ];
+    for (const dpId of energyTableDatapointIds) {
+      const dpQ = b3QuestionsByDatapoint.get(dpId);
+      if (dpQ) consumeQuestion(dpQ);
+    }
+
     const scope1Question = standaloneByCode.get('GROSSSCOPE1GREENHOUSEGASEMISSIONS');
     const scope2Group = consumeGroupByCode('SCOPE2_EMISSIONS');
     const totalScope12Group = groupsByCode.get('TOTAL_SCOPE12_EMISSIONS');
@@ -1201,7 +1851,7 @@ export default function VsmeSectionClient() {
 
     const totalGhgIntensityGroup = consumeGroupByCode('TOTAL_GHG_INTENSITY');
     if (totalGhgIntensityGroup) {
-      plan.push({ kind: 'group', key: 'b3-total-ghg-intensity-group', group: totalGhgIntensityGroup });
+      // Keep intensity rows out of the standard group renderer; they are displayed inside the GHG composite card.
     }
 
     for (const group of visibleGroups) {
@@ -1223,28 +1873,80 @@ export default function VsmeSectionClient() {
     }
 
     return { plan };
-  }, [normalizedSectionCode, sectionRenderModel, b3ComputedTotalsModel]);
+  }, [normalizedSectionCode, sectionRenderModel, b3ComputedTotalsModel, b3QuestionsByDatapoint]);
 
-  const b3QuestionsByDatapoint = useMemo(() => {
-    const map = new Map<string, any>();
-    if (normalizedSectionCode !== 'B3') return map;
-
-    const normalizeDp = (value: unknown) => String(value ?? '').trim().toUpperCase();
-
-    for (const q of sectionQuestions as any[]) {
-      const dp = normalizeDp(q?.vsme_datapoint_id);
-      if (dp && !map.has(dp)) map.set(dp, q);
+  // Hydrate B3 energy table values from persisted answers (initial load only)
+  useEffect(() => {
+    // Only hydrate once per B3 session, and only when data is available
+    if (normalizedSectionCode !== 'B3' || b3HydrationDoneRef.current || Object.keys(answersById).length === 0 || !b3QuestionsByDatapoint.size) {
+      return;
     }
 
-    for (const q of allQuestions as any[]) {
-      const sc = String(q?.section_code ?? q?.sectionCode ?? q?.section ?? '').trim().toUpperCase();
-      if (sc !== 'B3') continue;
-      const dp = normalizeDp(q?.vsme_datapoint_id);
-      if (dp && !map.has(dp)) map.set(dp, q);
+    b3HydrationDoneRef.current = true;
+
+    const datapointMapping = {
+      electricity_purchased: {
+        renewable: 'EnergyConsumptionFromElectricity_RenewableEnergyMember',
+        nonRenewable: 'EnergyConsumptionFromElectricity_NonRenewableEnergyMember',
+        total: 'EnergyConsumptionFromElectricity',
+      },
+      self_generated_electricity: {
+        renewable: 'EnergyConsumptionFromSelfGeneratedElectricity_RenewableEnergyMember',
+        nonRenewable: 'EnergyConsumptionFromSelfGeneratedElectricity_NonRenewableEnergyMember',
+        total: 'EnergyConsumptionFromSelfGeneratedElectricity',
+      },
+      fuels: {
+        renewable: 'EnergyConsumptionFromFuels_RenewableEnergyMember',
+        nonRenewable: 'EnergyConsumptionFromFuels_NonRenewableEnergyMember',
+        total: 'EnergyConsumptionFromFuels',
+      },
+    } as const;
+
+    const updatedValues = { ...b3EnergyBreakdownValues };
+
+    for (const rowKey of ['electricity_purchased', 'self_generated_electricity', 'fuels'] as const) {
+      const mapping = datapointMapping[rowKey];
+
+      // Hydrate renewable (only if currently empty)
+      const renewableQ = b3QuestionsByDatapoint.get(String(mapping.renewable).trim().toUpperCase());
+      if (renewableQ && String(updatedValues[rowKey].renewable ?? '').trim() === '') {
+        const qId = String(renewableQ.question_id ?? '').trim();
+        if (qId && answersById[qId]) {
+          updatedValues[rowKey].renewable = String(answersById[qId].value_text ?? '');
+        }
+      }
+
+      // Hydrate nonRenewable (only if currently empty)
+      const nonRenewableQ = b3QuestionsByDatapoint.get(String(mapping.nonRenewable).trim().toUpperCase());
+      if (nonRenewableQ && String(updatedValues[rowKey].nonRenewable ?? '').trim() === '') {
+        const qId = String(nonRenewableQ.question_id ?? '').trim();
+        if (qId && answersById[qId]) {
+          updatedValues[rowKey].nonRenewable = String(answersById[qId].value_text ?? '');
+        }
+      }
+
+      // Hydrate total (only if currently empty)
+      const totalQ = b3QuestionsByDatapoint.get(String(mapping.total).trim().toUpperCase());
+      if (totalQ && String(updatedValues[rowKey].total ?? '').trim() === '') {
+        const qId = String(totalQ.question_id ?? '').trim();
+        if (qId && answersById[qId]) {
+          updatedValues[rowKey].total = String(answersById[qId].value_numeric ?? '');
+        }
+      }
     }
 
-    return map;
-  }, [normalizedSectionCode, sectionQuestions, allQuestions]);
+    setB3EnergyBreakdownValues(updatedValues);
+    b3EnergyBreakdownValuesRef.current = updatedValues;
+
+    // Hydrate card-level N/A flag from TotalEnergyConsumption question (shared N/A anchor)
+    const totalEnergyAnchorQ = b3QuestionsByDatapoint.get('TOTALENERGYCONSUMPTION');
+    if (totalEnergyAnchorQ) {
+      const qId = String(totalEnergyAnchorQ.question_id ?? '').trim();
+      if (qId) {
+        setB3EnergyBreakdownNa(answersById[qId]?.na === true);
+      }
+    }
+  }, [normalizedSectionCode, b3QuestionsByDatapoint]);
 
   useEffect(() => {
     if (!reportId) return;
@@ -1372,15 +2074,32 @@ export default function VsmeSectionClient() {
       value === undefined ||
       value === null ||
       (typeof value === 'string' && value.trim() === '');
+    const currentQuestion = (allQuestions as any[]).find(
+      (q: any) => String(q?.question_id ?? '') === questionId,
+    );
+    const currentCode = String((currentQuestion as any)?.code ?? '').trim().toUpperCase();
+    const currentDp = String((currentQuestion as any)?.vsme_datapoint_id ?? '').trim().toUpperCase();
+    const isB3SourceQuestion =
+      currentCode === B3_GHG_SOURCE_CODES.scope1 ||
+      currentCode === B3_GHG_SOURCE_CODES.scope2Location ||
+      currentCode === B3_GHG_SOURCE_CODES.scope2Market;
+    const isTurnoverQuestion = currentDp === B3_GHG_TURNOVER_DP;
+    const nextB3Trigger: 'source' | 'turnover' | 'other' = isB3SourceQuestion
+      ? 'source'
+      : isTurnoverQuestion
+        ? 'turnover'
+        : 'other';
 
     try {
-      if (!isNumericType && (value === undefined || value === '')) {
+      if ((isNumericType && isEmptyNumericValue) || (!isNumericType && (value === undefined || value === ''))) {
         const { error: deleteError } = await supabase
           .from('disclosure_answer')
           .delete()
           .eq('report_id', reportId)
           .eq('question_id', questionId);
         if (deleteError) throw deleteError;
+
+        b3RecomputeTriggerRef.current = nextB3Trigger;
 
         setAnswersById((prev) => ({
           ...prev,
@@ -1423,9 +2142,6 @@ export default function VsmeSectionClient() {
         return;
       }
 
-      const currentQuestion = (allQuestions as any[]).find(
-        (q: any) => String(q?.question_id ?? '') === questionId,
-      );
       const currentJson = (((currentQuestion as any)?.value_jsonb ?? {}) as any) || {};
       const nextValueJsonb = { ...currentJson };
       delete nextValueJsonb.na;
@@ -1455,6 +2171,8 @@ export default function VsmeSectionClient() {
         .from('disclosure_answer')
         .upsert(payload, { onConflict: 'report_id,question_id' });
       if (upsertError) throw upsertError;
+
+      b3RecomputeTriggerRef.current = nextB3Trigger;
 
       setAnswersById((prev) => {
         const current = prev[questionId] ?? {};
@@ -1816,11 +2534,14 @@ export default function VsmeSectionClient() {
     idx: number,
     total: number,
     mode: 'full' | 'compact' = 'full',
-    options?: { hideTopRow?: boolean; hideQuestionTitle?: boolean },
+    options?: { hideTopRow?: boolean; hideQuestionTitle?: boolean; hideGuidanceText?: boolean; customHeader?: any; compactShellClassName?: string },
   ) => {
     const isCompact = mode === 'compact';
     const hideTopRow = options?.hideTopRow === true;
     const hideQuestionTitle = options?.hideQuestionTitle === true;
+    const hideGuidanceText = options?.hideGuidanceText === true;
+    const customHeader = options?.customHeader ?? null;
+    const compactShellClassName = options?.compactShellClassName ?? null;
     const questionId = String(q.question_id ?? '');
     const t = String(q.answer_type ?? '').toLowerCase();
     const a = answersById[questionId] ?? {};
@@ -1866,12 +2587,16 @@ export default function VsmeSectionClient() {
       <li
         key={questionId}
         className={[
-          isCompact ? 'h-full flex flex-col p-2 transition-colors' : 'rounded-lg shadow border border-gray-200 border-l-4 p-4 transition-colors',
+          isCompact
+            ? (compactShellClassName ?? 'h-full flex flex-col p-2 transition-colors')
+            : 'rounded-lg shadow border border-gray-200 border-l-4 p-4 transition-colors',
           isCompact
             ? (isNa ? 'text-slate-500' : 'text-gray-900')
             : (isNa ? 'border-l-slate-300 bg-slate-50 text-slate-500' : 'border-l-blue-500 bg-white text-gray-900'),
         ].join(' ')}
       >
+        {customHeader}
+
         {!hideTopRow ? (
           <div className={isCompact ? 'flex items-center justify-between gap-4' : 'flex items-center justify-between gap-4 pb-2 border-b border-slate-100'}>
             {isCompact ? <div /> : (
@@ -1900,7 +2625,7 @@ export default function VsmeSectionClient() {
             {renderedQuestionText}
           </div>
         ) : null}
-        {guidanceText ? (
+        {guidanceText && !hideGuidanceText ? (
           <div className={["mt-1 text-sm leading-relaxed", isNa ? 'text-slate-500' : 'text-slate-600'].join(' ')}>{guidanceText}</div>
         ) : null}
 
@@ -2051,7 +2776,7 @@ export default function VsmeSectionClient() {
               <div className="mt-1 text-xs text-gray-400">Prefilled from company profile</div>
             ) : null}
 
-            <div className="mt-1 text-xs">
+            <div className="mt-1 min-h-[1rem] text-xs">
               {isSaving ? <span className="text-gray-500">Saving…</span> : null}
               {!isSaving && saveError ? <span className="text-red-600">Not saved</span> : null}
               {!isSaving && !saveError && recentlySaved ? <span className="text-emerald-600">Saved</span> : null}
@@ -2619,206 +3344,222 @@ export default function VsmeSectionClient() {
                         }
 
                         return (
-                          <div key={block.key} className="space-y-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-                            <div className="px-1 pb-2 text-base font-semibold text-gray-900 border-b border-gray-100">Energy consumption</div>
-                            <div className="text-sm text-gray-500">If you know the detailed energy breakdown, enter it here. Otherwise, you may provide only total energy consumption below.</div>
-
-                            <div className="pt-1">
-                              <div className="flex items-center justify-between gap-3">
-                                <div className="text-sm font-medium text-gray-700">1. Energy consumption breakdown (MWh)</div>
-                                <label className="flex items-center gap-3 shrink-0 select-none cursor-pointer bg-slate-50 rounded-full px-3 py-1">
-                                  <span className="text-xs text-slate-600">Not applicable</span>
-                                  <div className="relative">
-                                    <input
-                                      type="checkbox"
-                                      checked={b3EnergyBreakdownNa}
-                                      onChange={(e) => {
-                                        const nextChecked = e.target.checked;
-                                        setB3EnergyBreakdownNa(nextChecked);
-                                        if (nextChecked) {
-                                          clearScheduledPersistDetailRow('electricity_purchased');
-                                          clearScheduledPersistDetailRow('self_generated_electricity');
-                                          clearScheduledPersistDetailRow('fuels');
-                                          const cleared = {
-                                            electricity_purchased: { renewable: '', nonRenewable: '', total: '' },
-                                            self_generated_electricity: { renewable: '', nonRenewable: '', total: '' },
-                                            fuels: { renewable: '', nonRenewable: '', total: '' },
-                                          };
-                                          b3EnergyBreakdownValuesRef.current = cleared;
-                                          setB3EnergyBreakdownValues(cleared);
+                          <div key={block.key} className="space-y-4 rounded-lg shadow border border-gray-200 border-l-4 border-l-blue-500 bg-white p-4">
+                            {/* Card header with shared N/A toggle */}
+                            <div className="px-1 pb-2 border-b border-gray-100 flex items-center justify-between gap-3">
+                              <span className="text-base font-semibold text-gray-900">Energy consumption</span>
+                              <label className="flex items-center gap-3 shrink-0 select-none cursor-pointer bg-slate-50 rounded-full px-3 py-1">
+                                <span className="text-xs text-slate-600">Not applicable</span>
+                                <div className="relative">
+                                  <input
+                                    type="checkbox"
+                                    checked={b3EnergyBreakdownNa}
+                                    onChange={(e) => {
+                                      const nextChecked = e.target.checked;
+                                      setB3EnergyBreakdownNa(nextChecked);
+                                      // Persist N/A on TotalEnergyConsumption question (card-level anchor)
+                                      const totalEnergyAnchorQ = b3QuestionsByDatapoint.get('TOTALENERGYCONSUMPTION');
+                                      if (totalEnergyAnchorQ) {
+                                        const qId = String(totalEnergyAnchorQ.question_id ?? '').trim();
+                                        if (qId) {
+                                          void toggleNA(qId, nextChecked);
                                         }
-                                      }}
-                                      className="sr-only peer"
-                                    />
-                                    <div className="w-10 h-5 bg-gray-300 peer-checked:bg-gray-400 rounded-full transition-colors" />
-                                    <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5" />
-                                  </div>
-                                </label>
-                              </div>
-                              {isTotalOnlyMode ? (
-                                <div className="mt-2 text-xs text-slate-500">
-                                  To edit detailed breakdown values, clear the total value first.
+                                      }
+                                      if (nextChecked) {
+                                        // Cancel pending debounced writes; keep values visible (read-only)
+                                        // so they reappear immediately when N/A is turned back OFF.
+                                        clearScheduledPersistDetailRow('electricity_purchased');
+                                        clearScheduledPersistDetailRow('self_generated_electricity');
+                                        clearScheduledPersistDetailRow('fuels');
+                                      }
+                                    }}
+                                    className="sr-only peer"
+                                  />
+                                  <div className="w-10 h-5 bg-gray-300 peer-checked:bg-gray-400 rounded-full transition-colors" />
+                                  <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5" />
                                 </div>
-                              ) : null}
-                              <div className="mt-2 overflow-x-auto">
-                                <table className={[
-                                  'w-full text-sm border-collapse',
-                                  isTotalOnlyMode ? 'opacity-70' : '',
-                                ].join(' ')}>
-                                  <thead>
-                                    <tr>
-                                      <th className="text-left w-[32%] px-3 py-2 border-b border-gray-200 text-gray-600">Source</th>
-                                      <th className="text-left w-[21%] px-3 py-2 border-b border-gray-200 text-gray-600">Renewable</th>
-                                      <th className="text-left w-[21%] px-3 py-2 border-b border-gray-200 text-gray-600">Non-renewable</th>
-                                      <th className="text-left w-[26%] px-3 py-2 border-b border-gray-200 text-gray-600">Total</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {rowValues.map((row) => (
-                                      <tr key={row.key}>
-                                        <td className="px-3 py-2 border-b border-gray-100 text-gray-800">{row.label}</td>
-                                        <td className="px-3 py-2 border-b border-gray-100">
-                                          <input
-                                            type="number"
-                                            value={b3EnergyBreakdownValues[row.key].renewable}
-                                            onChange={(e) => {
-                                              const nextValue = e.target.value;
-                                              setB3EnergyBreakdownValues((prev) => {
-                                                const next = {
-                                                  ...prev,
-                                                  [row.key]: {
-                                                    ...prev[row.key],
-                                                    renewable: nextValue,
-                                                    total: nextValue !== '' || String(prev[row.key].nonRenewable ?? '') !== '' ? '' : prev[row.key].total,
-                                                  },
-                                                };
-                                                b3EnergyBreakdownValuesRef.current = next;
-                                                return next;
-                                              });
-                                              schedulePersistDetailRow(row.key);
-                                            }}
-                                            disabled={isBreakdownDisabled || row.isRowTotalMode}
-                                            className="w-full px-2 py-1 rounded border border-gray-300 bg-white text-gray-900 disabled:bg-slate-50 disabled:text-slate-500"
-                                            placeholder=""
-                                          />
-                                        </td>
-                                        <td className="px-3 py-2 border-b border-gray-100">
-                                          <input
-                                            type="number"
-                                            value={b3EnergyBreakdownValues[row.key].nonRenewable}
-                                            onChange={(e) => {
-                                              const nextValue = e.target.value;
-                                              setB3EnergyBreakdownValues((prev) => {
-                                                const next = {
-                                                  ...prev,
-                                                  [row.key]: {
-                                                    ...prev[row.key],
-                                                    nonRenewable: nextValue,
-                                                    total: nextValue !== '' || String(prev[row.key].renewable ?? '') !== '' ? '' : prev[row.key].total,
-                                                  },
-                                                };
-                                                b3EnergyBreakdownValuesRef.current = next;
-                                                return next;
-                                              });
-                                              schedulePersistDetailRow(row.key);
-                                            }}
-                                            disabled={isBreakdownDisabled || row.isRowTotalMode}
-                                            className="w-full px-2 py-1 rounded border border-gray-300 bg-white text-gray-900 disabled:bg-slate-50 disabled:text-slate-500"
-                                            placeholder=""
-                                          />
-                                        </td>
-                                        <td className="px-3 py-2 border-b border-gray-100">
-                                          {row.isRowDetailMode ? (
-                                            renderTotalValueWithUnit(
-                                              <span className="block w-full text-slate-700 font-medium">{row.rowTotal !== null ? row.rowTotal : '—'}</span>,
-                                              { shellClassName: 'bg-slate-50 text-slate-700' },
-                                            )
-                                          ) : (
-                                            <div className="space-y-1">
-                                              {renderTotalValueWithUnit(
-                                                <input
-                                                  type="number"
-                                                  value={b3EnergyBreakdownValues[row.key].total}
-                                                  onChange={(e) => {
-                                                    const nextValue = e.target.value;
-                                                    clearScheduledPersistDetailRow(row.key);
-                                                    setB3EnergyBreakdownValues((prev) => {
-                                                      const next = {
-                                                        ...prev,
-                                                        [row.key]: {
-                                                          ...prev[row.key],
-                                                          total: nextValue,
-                                                          renewable: nextValue !== '' ? '' : prev[row.key].renewable,
-                                                          nonRenewable: nextValue !== '' ? '' : prev[row.key].nonRenewable,
-                                                        },
-                                                      };
-                                                      b3EnergyBreakdownValuesRef.current = next;
-                                                      return next;
-                                                    });
-                                                  }}
-                                                  onBlur={(e) => {
-                                                    void persistRowTotalBlur(row.key, e.target.value);
-                                                  }}
-                                                  disabled={isBreakdownDisabled}
-                                                  className="w-full min-w-0 bg-transparent text-gray-900 placeholder:text-slate-400 outline-none disabled:text-slate-500"
-                                                  placeholder=""
-                                                />,
-                                                { shellClassName: isBreakdownDisabled ? 'bg-slate-50 text-slate-500' : 'bg-white text-gray-900' },
-                                              )}
-                                            </div>
-                                          )}
-                                        </td>
-                                      </tr>
-                                    ))}
-                                    <tr>
-                                      <td className="px-3 py-2 border-t border-gray-200 font-semibold text-gray-900">Total</td>
-                                      <td className="px-3 py-2 border-t border-gray-200">
-                                        <div className="w-full px-2 py-1 rounded border border-gray-300 bg-slate-50 text-slate-700 font-semibold">{renewableTotal !== null ? renewableTotal : '—'}</div>
-                                      </td>
-                                      <td className="px-3 py-2 border-t border-gray-200">
-                                        <div className="w-full px-2 py-1 rounded border border-gray-300 bg-slate-50 text-slate-700 font-semibold">{nonRenewableTotal !== null ? nonRenewableTotal : '—'}</div>
-                                      </td>
-                                      <td className="px-3 py-2 border-t border-gray-200">
-                                        {renderTotalValueWithUnit(
-                                          <span className="block w-full text-slate-800 font-semibold">{overallTotal !== null ? overallTotal : '—'}</span>,
-                                          { shellClassName: 'bg-slate-50 text-slate-800' },
-                                        )}
-                                      </td>
-                                    </tr>
-                                  </tbody>
-                                </table>
-                              </div>
-                              {hasRowTotalModeActive ? (
-                                <div className="mt-2 text-xs text-slate-500">
-                                  If you enter a row total, renewable and non-renewable values for that row are disabled. Clear the row total to enter the detailed breakdown.
-                                </div>
-                              ) : null}
+                              </label>
                             </div>
+                            <div className="text-sm font-medium text-gray-900">What was your total energy consumption during the reporting year?</div>
+                            <div className="text-sm text-gray-500">Include all energy used by your company during the reporting year (electricity, gas, district heating, fuels used on-site, etc.). If you have multiple sites, include all of them. If exact data are not available, a reasonable estimate based on utility bills or invoices is acceptable.</div>
+                            <div className="text-sm text-gray-500">If you know the detailed energy breakdown, enter it here. Otherwise, you may provide only total energy consumption below.</div>
+                            {b3EnergyBreakdownNa ? (
+                              <div className="text-xs text-slate-500">Marked as Not applicable (answer preserved)</div>
+                            ) : null}
 
-                            {totalEnergyQuestion ? (
-                              <div className="mt-6 pt-4 border-t border-gray-100">
-                                <div className="text-sm font-medium text-gray-700">2. Total energy consumption (MWh)</div>
-                                <div className="mt-2">
-                                  {isDetailDrivenMode ? (
-                                    <div className="rounded-md border border-slate-200 bg-slate-50 p-3 text-gray-900">
-                                      <div className="text-sm font-medium text-slate-700">Computed from energy breakdown</div>
-                                      <div className="mt-2 flex items-center gap-2">
-                                        {(() => {
-                                          const rawUnit = String(totalEnergyQuestion?.unit ?? '').trim();
-                                          if (!rawUnit) return null;
-                                          const unitLabel = rawUnit.toUpperCase() === 'MWH' ? 'MWh' : rawUnit;
-                                          return renderTotalValueWithUnit(
-                                            <span className="block w-full text-base font-semibold text-slate-800">{overallTotal !== null ? overallTotal : '—'}</span>,
-                                            { shellClassName: 'bg-white text-slate-800', unitLabel },
-                                          );
-                                        })()}
-                                      </div>
+                            {!b3EnergyBreakdownNa ? (
+                              <>
+                                <div className="pt-1">
+                                  <div className="text-sm font-medium text-gray-700">1. Energy consumption breakdown (MWh)</div>
+                                  {isTotalOnlyMode ? (
+                                    <div className="mt-2 text-xs text-slate-500">
+                                      To edit detailed breakdown values, clear the total value first.
                                     </div>
-                                  ) : (
-                                    renderQuestionCard(totalEnergyQuestion, sectionStart, total, 'compact')
-                                  )}
+                                  ) : null}
+                                  <div className="mt-2 overflow-x-auto">
+                                    <table className={[
+                                      'w-full text-sm border-collapse',
+                                      isTotalOnlyMode ? 'opacity-70' : '',
+                                    ].join(' ')}>
+                                      <thead>
+                                        <tr>
+                                          <th className="text-left w-[32%] px-3 py-2 border-b border-gray-200 text-gray-600">Source</th>
+                                          <th className="text-left w-[21%] px-3 py-2 border-b border-gray-200 text-gray-600">Renewable</th>
+                                          <th className="text-left w-[21%] px-3 py-2 border-b border-gray-200 text-gray-600">Non-renewable</th>
+                                          <th className="text-left w-[26%] px-3 py-2 border-b border-gray-200 text-gray-600">Total</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {rowValues.map((row) => (
+                                          <tr key={row.key}>
+                                            <td className="px-3 py-2 border-b border-gray-100 text-gray-800">{row.label}</td>
+                                            <td className="px-3 py-2 border-b border-gray-100">
+                                              <input
+                                                type="number"
+                                                value={b3EnergyBreakdownValues[row.key].renewable}
+                                                onChange={(e) => {
+                                                  const nextValue = e.target.value;
+                                                  setB3EnergyBreakdownValues((prev) => {
+                                                    const next = {
+                                                      ...prev,
+                                                      [row.key]: {
+                                                        ...prev[row.key],
+                                                        renewable: nextValue,
+                                                        total: nextValue !== '' || String(prev[row.key].nonRenewable ?? '') !== '' ? '' : prev[row.key].total,
+                                                      },
+                                                    };
+                                                    b3EnergyBreakdownValuesRef.current = next;
+                                                    return next;
+                                                  });
+                                                  schedulePersistDetailRow(row.key);
+                                                }}
+                                                disabled={isBreakdownDisabled || row.isRowTotalMode}
+                                                className="w-full px-2 py-1 rounded border border-gray-300 bg-white text-gray-900 disabled:bg-slate-50 disabled:text-slate-500"
+                                                placeholder=""
+                                              />
+                                            </td>
+                                            <td className="px-3 py-2 border-b border-gray-100">
+                                              <input
+                                                type="number"
+                                                value={b3EnergyBreakdownValues[row.key].nonRenewable}
+                                                onChange={(e) => {
+                                                  const nextValue = e.target.value;
+                                                  setB3EnergyBreakdownValues((prev) => {
+                                                    const next = {
+                                                      ...prev,
+                                                      [row.key]: {
+                                                        ...prev[row.key],
+                                                        nonRenewable: nextValue,
+                                                        total: nextValue !== '' || String(prev[row.key].renewable ?? '') !== '' ? '' : prev[row.key].total,
+                                                      },
+                                                    };
+                                                    b3EnergyBreakdownValuesRef.current = next;
+                                                    return next;
+                                                  });
+                                                  schedulePersistDetailRow(row.key);
+                                                }}
+                                                disabled={isBreakdownDisabled || row.isRowTotalMode}
+                                                className="w-full px-2 py-1 rounded border border-gray-300 bg-white text-gray-900 disabled:bg-slate-50 disabled:text-slate-500"
+                                                placeholder=""
+                                              />
+                                            </td>
+                                            <td className="px-3 py-2 border-b border-gray-100">
+                                              {row.isRowDetailMode ? (
+                                                renderTotalValueWithUnit(
+                                                  <span className="block w-full text-slate-700 font-medium">{row.rowTotal !== null ? row.rowTotal : '—'}</span>,
+                                                  { shellClassName: 'bg-slate-50 text-slate-700' },
+                                                )
+                                              ) : (
+                                                <div className="space-y-1">
+                                                  {renderTotalValueWithUnit(
+                                                    <input
+                                                      type="number"
+                                                      value={b3EnergyBreakdownValues[row.key].total}
+                                                      onChange={(e) => {
+                                                        const nextValue = e.target.value;
+                                                        clearScheduledPersistDetailRow(row.key);
+                                                        setB3EnergyBreakdownValues((prev) => {
+                                                          const next = {
+                                                            ...prev,
+                                                            [row.key]: {
+                                                              ...prev[row.key],
+                                                              total: nextValue,
+                                                              renewable: nextValue !== '' ? '' : prev[row.key].renewable,
+                                                              nonRenewable: nextValue !== '' ? '' : prev[row.key].nonRenewable,
+                                                            },
+                                                          };
+                                                          b3EnergyBreakdownValuesRef.current = next;
+                                                          return next;
+                                                        });
+                                                      }}
+                                                      onBlur={(e) => {
+                                                        void persistRowTotalBlur(row.key, e.target.value);
+                                                      }}
+                                                      disabled={isBreakdownDisabled}
+                                                      className="w-full min-w-0 bg-transparent text-gray-900 placeholder:text-slate-400 outline-none disabled:text-slate-500"
+                                                      placeholder=""
+                                                    />,
+                                                    { shellClassName: isBreakdownDisabled ? 'bg-slate-50 text-slate-500' : 'bg-white text-gray-900' },
+                                                  )}
+                                                </div>
+                                              )}
+                                            </td>
+                                          </tr>
+                                        ))}
+                                        <tr>
+                                          <td className="px-3 py-2 border-t border-gray-200 font-semibold text-gray-900">Total</td>
+                                          <td className="px-3 py-2 border-t border-gray-200">
+                                            <div className="w-full px-2 py-1 rounded border border-gray-300 bg-slate-50 text-slate-700 font-semibold">{renewableTotal !== null ? renewableTotal : '—'}</div>
+                                          </td>
+                                          <td className="px-3 py-2 border-t border-gray-200">
+                                            <div className="w-full px-2 py-1 rounded border border-gray-300 bg-slate-50 text-slate-700 font-semibold">{nonRenewableTotal !== null ? nonRenewableTotal : '—'}</div>
+                                          </td>
+                                          <td className="px-3 py-2 border-t border-gray-200">
+                                            {renderTotalValueWithUnit(
+                                              <span className="block w-full text-slate-800 font-semibold">{overallTotal !== null ? overallTotal : '—'}</span>,
+                                              { shellClassName: 'bg-slate-50 text-slate-800' },
+                                            )}
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                  {hasRowTotalModeActive ? (
+                                    <div className="mt-2 text-xs text-slate-500">
+                                      If you enter a row total, renewable and non-renewable values for that row are disabled. Clear the row total to enter the detailed breakdown.
+                                    </div>
+                                  ) : null}
                                 </div>
-                              </div>
+
+                                {totalEnergyQuestion ? (
+                                  <div className="mt-6 pt-4 border-t border-gray-100">
+                                    <div className="text-sm font-medium text-gray-700">2. Total energy consumption (MWh)</div>
+                                    <div className="mt-1">
+                                      {isDetailDrivenMode ? (
+                                        <div className="rounded-md border border-slate-200 bg-slate-50 p-3 text-gray-900">
+                                          <div className="text-sm font-medium text-slate-700">Computed from energy breakdown</div>
+                                          {overallTotal !== null ? (
+                                            <div className="mt-1 text-xs text-slate-500">To enter a total value manually, clear the breakdown values first.</div>
+                                          ) : null}
+                                          <div className="mt-2 flex items-center gap-2">
+                                            {(() => {
+                                              const rawUnit = String(totalEnergyQuestion?.unit ?? '').trim();
+                                              if (!rawUnit) return null;
+                                              const unitLabel = rawUnit.toUpperCase() === 'MWH' ? 'MWh' : rawUnit;
+                                              return renderTotalValueWithUnit(
+                                                <span className="block w-full text-base font-semibold text-slate-800">{overallTotal !== null ? overallTotal : '—'}</span>,
+                                                { shellClassName: 'bg-white text-slate-800', unitLabel },
+                                              );
+                                            })()}
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        renderQuestionCard(totalEnergyQuestion, sectionStart, total, 'compact', { hideTopRow: true, hideQuestionTitle: true, hideGuidanceText: true })
+                                      )}
+                                    </div>
+                                  </div>
+                                ) : null}
+                              </>
                             ) : null}
                           </div>
                         );
@@ -2864,8 +3605,19 @@ export default function VsmeSectionClient() {
                           };
                         });
 
+                        const intensityBranches = [b3IntensityModel.location, b3IntensityModel.market].filter(
+                          (b): b is NonNullable<typeof b3IntensityModel.location> => Boolean(b?.questionId),
+                        );
+                        const b1Href = `/${locale}/reports/${reportId}/sections/B1`;
+                        const fmtIntensity = (v: number) => {
+                          if (!Number.isFinite(v)) return '—';
+                          if (v === 0) return '0';
+                          if (Math.abs(v) < 0.0001 || Math.abs(v) >= 1e6) return v.toExponential(3);
+                          return parseFloat(v.toPrecision(4)).toString();
+                        };
+
                         return (
-                          <div key={block.key} className="space-y-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                          <div key={block.key} className="space-y-4 rounded-lg shadow border border-blue-200 border-l-4 border-l-blue-500 bg-white p-4">
                             <div className="px-1 pb-2 text-base font-semibold text-gray-900 border-b border-gray-100">Scope 1 and Scope 2 GHG emissions</div>
 
                             {scope1Question ? (
@@ -2904,10 +3656,34 @@ export default function VsmeSectionClient() {
                                 <ul className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2 items-stretch">
                                   {scope2Questions.map((q: any, idx: number) => {
                                     const questionId = String((q as any)?.question_id ?? '').trim();
+                                    const headline = String((q as any)?.question_text ?? (q as any)?.title ?? 'Untitled question');
+                                    const isNa = questionId ? answersById[questionId]?.na === true : false;
                                     return (
-                                      <div key={`${questionId || idx}-scope2`} className="h-full">
-                                        {renderQuestionCard(q, sectionStart + (scope1Question ? 1 : 0) + idx, total, 'compact')}
-                                      </div>
+                                      renderQuestionCard(q, sectionStart + (scope1Question ? 1 : 0) + idx, total, 'compact', {
+                                        hideTopRow: true,
+                                        hideQuestionTitle: true,
+                                        compactShellClassName: 'h-full flex flex-col rounded-md border border-gray-200 bg-gray-50 p-3 transition-colors',
+                                        customHeader: (
+                                          <div className="flex items-center justify-between gap-3 pb-2 border-b border-gray-100">
+                                            <div className="text-sm font-medium text-gray-700">{headline}</div>
+                                            {questionId ? (
+                                              <label className="flex items-center gap-3 shrink-0 select-none cursor-pointer bg-white rounded-full px-3 py-1">
+                                                <span className="text-xs text-slate-600">Not applicable</span>
+                                                <div className="relative">
+                                                  <input
+                                                    type="checkbox"
+                                                    checked={isNa}
+                                                    onChange={(e) => void toggleNA(questionId, e.target.checked)}
+                                                    className="sr-only peer"
+                                                  />
+                                                  <div className="w-10 h-5 bg-gray-300 peer-checked:bg-gray-400 rounded-full transition-colors" />
+                                                  <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5" />
+                                                </div>
+                                              </label>
+                                            ) : null}
+                                          </div>
+                                        ),
+                                      })
                                     );
                                   })}
                                 </ul>
@@ -2931,13 +3707,81 @@ export default function VsmeSectionClient() {
                                           </span>
                                         ) : null}
                                       </div>
-                                      <div className="mt-2 text-xs text-gray-500">
+                                      <div className="mt-2 text-xs text-slate-500 leading-relaxed">
                                         {item.value !== null
                                           ? 'Computed from Scope 1 and Scope 2 values.'
                                           : 'Computed automatically once required source values are available.'}
                                       </div>
                                     </li>
                                   ))}
+                                </ul>
+                              </div>
+                            ) : null}
+
+                            {intensityBranches.length > 0 ? (
+                              <div className="mt-6 pt-4 border-t border-gray-100">
+                                <div className="text-sm font-medium text-gray-700">4. GHG emissions intensity</div>
+                                <ul className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-2 items-stretch">
+                                  {intensityBranches.map((item, idx) => {
+                                    const isNa = item.questionId ? answersById[item.questionId]?.na === true : false;
+                                    return (
+                                      <li key={`${block.key}-intensity-${idx}`} className="h-full rounded-md border border-gray-200 bg-gray-50 p-3">
+                                        <div className="flex items-center justify-between gap-3 pb-2 border-b border-gray-100">
+                                          <div className="text-sm font-medium text-gray-700">{item.title}</div>
+                                          {item.questionId ? (
+                                            <label className="flex items-center gap-3 shrink-0 select-none cursor-pointer bg-white rounded-full px-3 py-1">
+                                              <span className="text-xs text-slate-600">Not applicable</span>
+                                              <div className="relative">
+                                                <input
+                                                  type="checkbox"
+                                                  checked={isNa}
+                                                  onChange={(e) => void toggleNA(item.questionId, e.target.checked)}
+                                                  className="sr-only peer"
+                                                />
+                                                <div className="w-10 h-5 bg-gray-300 peer-checked:bg-gray-400 rounded-full transition-colors" />
+                                                <div className="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-5" />
+                                              </div>
+                                            </label>
+                                          ) : null}
+                                        </div>
+                                        {isNa ? (
+                                          <div className="mt-2 text-xs text-slate-500 leading-relaxed">Marked as Not applicable (answer preserved)</div>
+                                        ) : (
+                                          <>
+                                            <div className="mt-2 flex items-end gap-2">
+                                              <div className={item.state === 'numeric' && item.value !== null
+                                                ? 'text-base font-semibold leading-none text-gray-900'
+                                                : 'text-base font-semibold leading-none text-gray-400'
+                                              }>
+                                                {item.state === 'numeric' && item.value !== null ? fmtIntensity(item.value) : '—'}
+                                              </div>
+                                              {item.state === 'numeric' && item.value !== null && item.unit ? (
+                                                <span className="text-xs font-medium text-slate-500 mb-0.5">{item.unit}</span>
+                                              ) : null}
+                                            </div>
+                                            {item.warningKind === 'missing-inputs' ? (
+                                              <div className="mt-2 text-xs text-amber-600 leading-relaxed">
+                                                Intensity cannot be calculated because GHG emissions or Turnover (in{' '}
+                                                <Link href={b1Href} className="underline font-medium hover:text-amber-800">section B1</Link>
+                                                ) is missing or marked as N/A. Please check the GHG totals in this section and Turnover in section B1. If intensity is not available for your report, you may mark this field as N/A.
+                                              </div>
+                                            ) : item.warningKind === 'zero-turnover' ? (
+                                              <div className="mt-2 text-xs text-amber-600 leading-relaxed">
+                                                Intensity cannot be calculated because Turnover (in{' '}
+                                                <Link href={b1Href} className="underline font-medium hover:text-amber-800">section B1</Link>
+                                                ) is 0. If your turnover is truly 0 for this reporting period, mark this field as N/A.
+                                              </div>
+                                            ) : (
+                                              <div className="mt-2 text-xs text-slate-500 leading-relaxed">
+                                                <div>Computed as: GHG total ÷ Turnover (section B1).</div>
+                                                <div>Unit: tCO₂e per 1 unit of Turnover.</div>
+                                              </div>
+                                            )}
+                                          </>
+                                        )}
+                                      </li>
+                                    );
+                                  })}
                                 </ul>
                               </div>
                             ) : null}
